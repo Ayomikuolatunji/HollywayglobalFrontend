@@ -26,7 +26,7 @@ const Search = () => {
                     placeholder="Search"
                 />
             </div>
-            <div className="search-btn w-[25%]">
+            <div className="search-btn">
                 <UI.Button
                     text='Search'
                     className="bg-bg-color-main p-4 text-white font-serif"
