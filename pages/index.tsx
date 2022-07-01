@@ -4,7 +4,7 @@ import TopNavBar  from "./Home/TopNav/TopNavBar";
 
 const Home: NextPage = () => {
   return (
-    <div className="block">
+    <div className="">
       <Head>
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
