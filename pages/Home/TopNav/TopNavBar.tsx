@@ -1,5 +1,5 @@
 import React from 'react'
-
+import * as UI from "../../../components"
 
 
 
@@ -8,7 +8,9 @@ const TopNavRightBar = () => {
         <div>
             <div className="header">
                 <div className="currency">
-                    
+                     <UI.DropDown 
+                        
+                     />
                 </div>
             </div>
         </div>
