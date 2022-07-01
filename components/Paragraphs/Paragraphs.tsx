@@ -15,10 +15,11 @@ const Paragraphs = (
         text,
         fontSize,
         color,
+        className
     }: ParagraphsProps
 ) => {
   return <p  
-     className={`${color} ${ fontSize}`}
+     className={`${color} ${ fontSize} ${className}`}
   >
     {text}
   </p>
