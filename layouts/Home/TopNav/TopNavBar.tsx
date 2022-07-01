@@ -18,16 +18,29 @@ const Cart = () => {
 
 const Search = () => {
     return (
-        <div className="search">
-            <input type="text" placeholder="Search" />
+        <div className="search border-2 border-[#888888] flex justify-between">
+            <div className="input-search-btn w-[75%]">
+                <UI.InputField
+                    type="search"
+                    className="bg-white text-sm p-4 border-0 hover:border-0 focus:border-0 hover:outline-none focus:outline-none"
+                    placeholder="Search"
+                />
+            </div>
+            <div className="search-btn w-[25%]">
+                <UI.Button
+                    text='Search'
+                    className="bg-bg-color-main"
+                    disabled={false}
+                />
+            </div>
         </div>
     )
 }
 
 const TopNavRightBar = () => {
     return (
-        <div className='w-[60%] border-2 border-[#d7d7d7] p-3'>
-            <div className="body flex justify-between">
+        <div className='w-[60%] border-2 border-[#d7d7d7]'>
+            <div className="body flex justify-between p-3">
                 <div className="list-items">
                     <ul className="topest--header flex items-center">
                         <li className="currency mr-3">
@@ -97,6 +110,7 @@ const TopNavRightBar = () => {
                 <Cart />
             </div>
             {/* search */}
+            <Search />
         </div>
     )
 }

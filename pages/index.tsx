@@ -1,6 +1,6 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import TopNavBar  from "./Home/TopNav/TopNavBar";
+import TopNavBar  from "../layouts/Home/TopNav/TopNavBar";
 
 const Home: NextPage = () => {
   return (

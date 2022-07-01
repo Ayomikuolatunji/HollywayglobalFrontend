@@ -1,8 +1,29 @@
 import React from 'react'
 
-const Buttons = () => {
+
+
+interface ButtonsProps {
+    text:string
+    className?:string
+    disabled?:boolean
+}
+
+
+const Buttons = ({
+    text,
+    className,
+    disabled
+}:ButtonsProps) => {
+
+
+
   return (
-    <div>Buttons</div>
+    <button
+      className={`${className}`}
+      disabled={disabled}
+    >
+        {text}
+    </button>
   )
 }
 

@@ -8,6 +8,7 @@ module.exports = {
     extend: {
       colors: {
         'paragraph-color': '#c41c1c',
+   
       }
     },
   },
