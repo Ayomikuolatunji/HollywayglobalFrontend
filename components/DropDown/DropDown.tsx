@@ -1,26 +1,35 @@
 import React from 'react'
 
+
+interface Item {
+    text: string;
+    value: string;
+}
+
 interface DropDownProps {
     apperance: boolean;
     className: string;
+    items: Item[];
 }
 
 const DropDown = (
     {
         apperance,
-        className
+        className,
+        items
     }: DropDownProps
 ) => {
   return (
     <div>
         {apperance ? 
         <select className={`appearance-none ${className}`}>
-            <option>Yes</option>
-            <option>No</option>
-            <option>Maybe</option>
+            {items.map((item, index) => {  
+                return <option key={index}>{item.text}</option>
+             })
+            }
         </select>
          : 
-         <select>
+         <select className={`${className}`}>
             <option>Yes</option>
             <option>No</option>
             <option>Maybe</option>
