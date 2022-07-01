@@ -8,7 +8,7 @@ module.exports = {
     extend: {
       colors: {
         'paragraph-color': '#c41c1c',
-   
+        'bg-color-main': '#c41c1c',
       }
     },
   },
