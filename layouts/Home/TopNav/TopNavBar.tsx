@@ -46,7 +46,7 @@ const TopNavRightBar = () => {
                         <li className="currency mr-3">
                             <UI.DropDown
                                 apperance={true}
-                                className="bg-white text-sm text-[#383838] hover:bg-none p-3"
+                                className="bg-white text-sm text-[#383838] hover:bg-none rounded-none cursor-pointer"
                                 items={[
                                     {text: 'USD', value: 'USD'},
                                     {text: 'EUR', value: 'EUR'},
@@ -58,7 +58,7 @@ const TopNavRightBar = () => {
                         <li className="language mr-3">
                             <UI.DropDown
                                 apperance={true}
-                                className="bg-white text-sm p-2"
+                                className="bg-white text-sm cursor-pointer rounded-none"
                                 items={[
                                     {text: 'English', value: 'English'},
                                     {text: 'Deutsch', value: 'Deutsch'},

@@ -26,24 +26,25 @@ const DropDown = (
   return (
     <div>
         {apperance ? 
-        <select className={`appearance-none ${className}`}
-            onChange={(e) => onChange(e.target.value)}
-            value={value}
-        >
+            <select className={`appearance-none ${className}`}
+                onChange={(e) => onChange(e.target.value)}
+                value={value}
+            >
+                {items.map((item, index) => {  
+                    return <option key={index}>{item.text}</option>
+                })
+                }
+            </select>
+            : 
+            <select className={`${className}`}
+                onChange={(e) => onChange(e.target.value)}
+                value={value}
+            >
             {items.map((item, index) => {  
-                return <option key={index}>{item.text}</option>
-             })
-            }
-        </select>
-         : 
-         <select className={`${className}`}
-            onChange={(e) => onChange(e.target.value)}
-            value={value}
-          >
-            <option>Yes</option>
-            <option>No</option>
-            <option>Maybe</option>
-         </select>  
+                    return <option key={index}>{item.text}</option>
+                })
+                }
+            </select>  
          }
     </div>
   )
