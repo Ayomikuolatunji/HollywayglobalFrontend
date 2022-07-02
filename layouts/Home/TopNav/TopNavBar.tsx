@@ -18,18 +18,18 @@ const Cart = () => {
 
 const Search = () => {
     return (
-        <div className="search border-t-[1px] border-b-[1px] border-[#888888] flex justify-between mt-4">
+        <div className="search border-t-[1px] border-b-[1px] border-[#bbbbbb] flex justify-between mt-4">
             <div className="input-search-btn w-[100%]">
                 <UI.InputField
                     type="search"
-                    className="bg-white text-sm p-4 border-0 hover:border-0 focus:border-0 hover:outline-none focus:outline-none w-full"
+                    className="bg-white text-sm p-3 border-0 hover:border-0 focus:border-0 hover:outline-none focus:outline-none w-full"
                     placeholder="Search entire store here"
                 />
             </div>
             <div className="search-btn">
                 <UI.Button
                     text='Search'
-                    className="bg-bg-color-main p-4 text-white font-serif hover:bg-gray-500 transition-[background-color] duration-500 ease-in-out font-[600]"
+                    className="bg-bg-color-main py-2.5 rounded-none cursor-pointer opacity-[1] pl-[20px] pr-[21px] text-white font-serif hover:bg-gray-500 transition-[background-color] duration-500 ease-in-out font-[600]"
                     disabled={false}
                 />
             </div>
@@ -58,7 +58,7 @@ const TopNavRightBar = () => {
                         <li className="language mr-3">
                             <UI.DropDown
                                 apperance={true}
-                                className="bg-white text-sm cursor-pointer rounded-none"
+                                className="bg-white text-sm text-[#383838] hover:bg-none rounded-none cursor-pointer"
                                 items={[
                                     {text: 'English', value: 'English'},
                                     {text: 'Deutsch', value: 'Deutsch'},
@@ -72,11 +72,11 @@ const TopNavRightBar = () => {
                             <UI.Paragraphs
                                 text="Welcome to our store"
                                 fontSize="text-[16px]"
-                                color="text-black"
+                                color="text-black font-[300]"
                             />
                         </li>
                     </ul>
-                    <ul className="topest--header flex mt-1">
+                    <ul className="topest--header flex mt-2">
                         <li className="currency">
                             <UI.Paragraphs
                                 text="Compare Products"
