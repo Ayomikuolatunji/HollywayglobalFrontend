@@ -7,29 +7,39 @@ interface Item {
 }
 
 interface DropDownProps {
-    apperance: boolean;
-    className: string;
-    items: Item[];
+    apperance: boolean
+    className: string
+    items: Item[]
+    onChange: (value: string) => void
+    value: string
 }
 
 const DropDown = (
     {
         apperance,
         className,
-        items
+        items,
+        onChange,
+        value
     }: DropDownProps
 ) => {
   return (
     <div>
         {apperance ? 
-        <select className={`appearance-none ${className}`}>
+        <select className={`appearance-none ${className}`}
+            onChange={(e) => onChange(e.target.value)}
+            value={value}
+        >
             {items.map((item, index) => {  
                 return <option key={index}>{item.text}</option>
              })
             }
         </select>
          : 
-         <select className={`${className}`}>
+         <select className={`${className}`}
+            onChange={(e) => onChange(e.target.value)}
+            value={value}
+          >
             <option>Yes</option>
             <option>No</option>
             <option>Maybe</option>
