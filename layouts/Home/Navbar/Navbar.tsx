@@ -19,7 +19,7 @@ const Navbar:React.FC = () => {
                 helpers.navItems.map((item:item, index) => {
                     return <Link className='nav-link' key={index} 
                     href={item.link}>
-                        <div className='py-[10px] px-[16px]  bg-black text-white uppercase relative font-[15px] border-r-[1px] border-r-[#fff]block font-normal cursor-pointer'>
+                        <div className='py-[10px] px-[16px]  bg-black text-white uppercase relative font-[15px] border-r-[1px] border-r-[#fff]block font-normal cursor-pointer hover:bg-red-color'>
                             {item.name}
                         </div>
                     </Link>
