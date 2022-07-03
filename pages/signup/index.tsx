@@ -2,7 +2,14 @@ import React from 'react'
 
 const Signup = () => {
   return (
-    <div>index</div>
+    <div>
+         <div className="personal-information">
+            
+        </div>
+        <div className="left-login-information">
+
+        </div>
+    </div>
   )
 }
 
