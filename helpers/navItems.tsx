@@ -22,6 +22,9 @@ const navbarItems=[
         },{
             name:"Ferrari",
             link:"/ferrari"
+        },{
+            name:"Porsche",
+            link:"/porsche"
         }
 ]
 

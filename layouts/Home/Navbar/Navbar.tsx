@@ -13,13 +13,13 @@ const Navbar:React.FC = () => {
 
 
   return (
-    <div className=''>
+    <div className='sm:mt-8'>
         <nav className='navbar border-b-8 border-red-color flex items-center'>
              {
                 helpers.navItems.map((item:item, index) => {
                     return <Link className='nav-link' key={index} 
                     href={item.link}>
-                        <div>
+                        <div className='py-[10px] px-[16px]  bg-black text-white uppercase relative font-[15px] border-r-[1px] border-r-[#fff]block font-normal cursor-pointer'>
                             {item.name}
                         </div>
                     </Link>
