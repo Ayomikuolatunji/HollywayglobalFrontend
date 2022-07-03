@@ -11,22 +11,31 @@ const Signup = () => {
                   Personal Information
                 </h1>
             </div>
-            <div className="form">
+            <div className="form w-[100%]">
                <div className="first-name flex mt-5">
-                  <label className=''>First Name</label>
-                  <span className='text-red-500 text-xl ml-4 mb-1'>*</span>
+                  <label className='text-[#69686c] font-bold'>First Name</label>
+                  <span className='text-red-500 text-xl ml-4 mb-5'>*</span>
                   <UI.InputField
                     type="text"
-                    className="first-name ml-8 bg-white border-[1px] border-[#dd] outline-none p-2"
+                    className="first-name ml-12 bg-white border-[1px] border-[#dd] outline-none p-1 w-[100%]"
                   />
                </div>
-               <div className="last-name flex mt-5">
-                  <label>Last Name</label>
+               <div className="last-name flex mt-5 w-[100%]">
+                  <label className='text-[#69686c] font-bold'>Last Name</label>
                   <span className='text-red-500 text-xl ml-4 mb-1'>*</span>
                   <UI.InputField
                     type="text"
-                    className="last-name border-2 ml-8 outline-none"
+                    className="last-name ml-12 bg-white border-[1px] border-[#dd] outline-none p-1 w-[100%]"
                   />
+               </div>
+               <div className="last-name flex mt-5 w-[100%]">
+                  <UI.InputField
+                    type="checkbox"
+                    className="last-name bg-white border-[1px] border-[#dd] outline-none p-1 w-[100%]"
+                  />
+                  <label className='text-[#69686c] font-bold'>
+                     Sign Up for Newsletter
+                  </label>
                </div>
             </div>
         </div>
