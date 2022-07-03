@@ -5,8 +5,6 @@ import TopNavBar from './TopNav/TopNavBar'
 const Home:React.FC = () => {
   return (
     <div>
-        <TopNavBar/>
-        <Navbar/>
     </div>
   )
 }
