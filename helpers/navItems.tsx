@@ -5,10 +5,10 @@ const navbarItems=[
             name:"Home",
             link:"/"
         },{
-            name:"/Mercedes",
+            name:"Mercedes",
             link:"/mercedes"
         },{
-            name:"/bmw",
+            name:"Bmw",
             link:"/bmw"
         },{
             name:"Huyndai",

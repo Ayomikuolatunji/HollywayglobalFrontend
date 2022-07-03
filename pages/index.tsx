@@ -1,6 +1,7 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import TopNavBar  from "../layouts/Home/TopNav/TopNavBar";
+import HomePage from "../layouts/Home"
+
 
 const Home: NextPage = () => {
   return (
@@ -10,11 +11,10 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-         {/* topNavBar */}
+         {/* Homepage */}
          
-         <TopNavBar />
+         <HomePage />
 
-       
     </div>
   )
 }

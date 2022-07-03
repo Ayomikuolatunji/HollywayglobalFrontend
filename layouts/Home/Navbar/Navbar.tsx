@@ -14,7 +14,7 @@ const Navbar:React.FC = () => {
 
   return (
     <div className=''>
-        <nav className='navbar navbar-expand-lg navbar-light bg-light'>
+        <nav className='navbar border-b-8 border-red-color flex items-center'>
              {
                 helpers.navItems.map((item:item, index) => {
                     return <Link className='nav-link' key={index} 
