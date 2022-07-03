@@ -28,12 +28,12 @@ const Signup = () => {
                     className="last-name ml-12 bg-white border-[1px] border-[#dd] outline-none p-1 w-[100%]"
                   />
                </div>
-               <div className="last-name flex mt-5 w-[100%]">
+               <div className="newletter flex mt-6 w-[100%] ml-36">
                   <UI.InputField
                     type="checkbox"
                     className="last-name bg-white border-[1px] border-[#dd] outline-none p-1 w-[100%]"
                   />
-                  <label className='text-[#69686c] font-bold'>
+                  <label className='text-[#69686c] font-bold ml-3'>
                      Sign Up for Newsletter
                   </label>
                </div>
