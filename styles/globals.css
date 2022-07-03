@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+
+body{
+    background: url("../public/assets/bg-body.jpg") repeat 0 0;
+    font-family: 'arial';
+    font-size: 14px;
+    color: #69686c;
+    font-weight: 400;
+    line-height: 20px;
+}
