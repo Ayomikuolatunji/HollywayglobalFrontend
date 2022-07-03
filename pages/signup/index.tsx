@@ -85,7 +85,7 @@ const Signup = () => {
               text="Create Account"
               />
          </div>
-         <span className='absolute bottom-0'>
+         <span className='absolute bottom-10 right-10 sm:block hidden'>
              Home
          </span>
     </div>
