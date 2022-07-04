@@ -7,6 +7,9 @@ import { useForm, SubmitHandler } from "react-hook-form";
 interface Inputs  {
   firstName: string,
   lastName: string,
+  email: string,
+  password: string,
+  confirmPassword: string
 };
 
 const Signup = () => {
@@ -88,7 +91,8 @@ const Signup = () => {
                           <div className='ml-12'>
                             <UI.InputField
                               type="text"
-                              className="first-name  bg-white border-[1px] border-[#dd] outline-none p-1 w-[100%]"
+                              className="email  bg-white border-[1px] border-[#dd] outline-none p-1 w-[100%]"
+                              {...register("email")}
                             />
                           </div>
                       </div>
@@ -97,7 +101,8 @@ const Signup = () => {
                           <span className='text-red-500 text-xl ml-4 mb-1'>*</span>
                           <UI.InputField
                             type="text"
-                            className="last-name ml-12 bg-white border-[1px] border-[#dd] outline-none p-1 w-[100%]"
+                            className="password ml-12 bg-white border-[1px] border-[#dd] outline-none p-1 w-[100%]"
+                            {...register("password")}
                           />
                       </div>
                       <div className="comfirm-password flex mt-8 w-[100%]">
@@ -105,7 +110,8 @@ const Signup = () => {
                           <span className='text-red-500 text-xl ml-4 mb-1'>*</span>
                           <UI.InputField
                             type="text"
-                            className="last-name ml-12 bg-white border-[1px] border-[#dd] outline-none p-1 w-full"
+                            className="confirm-password ml-12 bg-white border-[1px] border-[#dd] outline-none p-1 w-full"
+                            {...register("confirmPassword")}
                           />
                       </div>
                   </div>
