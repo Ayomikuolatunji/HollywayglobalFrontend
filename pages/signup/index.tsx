@@ -14,16 +14,12 @@ interface Inputs  {
 
 const Signup = () => {
   const { register, handleSubmit, watch, formState: { errors } } = useForm<Inputs>();
-
-
-  const submitSignup: SubmitHandler<{}> = async (data) => {
-    console.log(data)
-  }  
+  const onSubmit: SubmitHandler<Inputs> = data => console.log(data);
 
 
 
   return (
-    <div className='bg-white mt-4 border-[1px] border-[#d7d7d7] h-auto relative'>
+    <form className='bg-white mt-4 border-[1px] border-[#d7d7d7] h-auto relative'>
          <div className='flex items-center w-[100%]'>
               <div className="personal-information w-[50%] p-3">
                   <div className="title">
@@ -121,6 +117,8 @@ const Signup = () => {
               <UI.Button 
               className="text-white py-2 px-4 -ml-44 bg-red-color hover:bg-gray-500 transition-[background-color] duration-500 ease-in-out font-[600]"
               text="Create Account"
+              type="submit"
+              onClick={handleSubmit(onSubmit)}
               />
               <span className='ml-2 text-gray-900'>
                  <Link href={"/login"}>
@@ -131,7 +129,7 @@ const Signup = () => {
          <span className='absolute bottom-10 right-10 sm:block hidden cursor-pointer'>
              <Link href={"/"}>Home</Link>
          </span>
-    </div>
+    </form>
   )
 }
 

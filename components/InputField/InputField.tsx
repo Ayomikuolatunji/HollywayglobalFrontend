@@ -30,6 +30,7 @@ const InputField = ({
             />
             :
             <input  
+              {...props}
               type={type} 
               className={`${className}`}
               placeholder={placeholder}
