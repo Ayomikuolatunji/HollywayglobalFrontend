@@ -4,6 +4,13 @@ import * as UI from "../../components"
 
 
 const Signup = () => {
+
+
+    
+    
+
+
+
   return (
     <div className='bg-white mt-4 border-[1px] border-[#d7d7d7] h-auto relative'>
          <div className='flex items-center w-[100%]'>
