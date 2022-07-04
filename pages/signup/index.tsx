@@ -1,13 +1,21 @@
 import Link from 'next/link'
 import React from 'react'
 import * as UI from "../../components"
+import { useForm, SubmitHandler } from "react-hook-form";
 
+
+interface Inputs  {
+  firstName: string,
+  lastName: string,
+};
 
 const Signup = () => {
+  const { register, handleSubmit, watch, formState: { errors } } = useForm<Inputs>();
 
 
-    
-    
+  const submitSignup: SubmitHandler<{}> = async (data) => {
+    console.log(data)
+  }  
 
 
 
@@ -30,6 +38,7 @@ const Signup = () => {
                           <UI.InputField
                             type="text"
                             className="first-name  bg-white border-[1px] border-[#dd] outline-none p-1 w-[100%]"
+                            {...register("firstName")}
                           />
                           <span className='mt-1'>This is a required field.</span>
                         </div>
@@ -43,6 +52,7 @@ const Signup = () => {
                           <UI.InputField
                             type="text"
                             className="last-name  bg-white border-[1px] border-[#dd] outline-none p-1 w-[100%]"
+                            {...register("lastName")}
                           />
                           <span className='mt-1'>This is a required field.</span>
                         </div>

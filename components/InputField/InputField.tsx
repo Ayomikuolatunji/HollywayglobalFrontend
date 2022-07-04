@@ -6,13 +6,15 @@ interface InputFields{
     type: string
     className?: string
     placeholder?: string
+    props?: any
 }
 
 
 const InputField = ({
     type,
     className,
-    placeholder
+    placeholder,
+    ...props
 }:InputFields) => {
 
 
@@ -21,6 +23,7 @@ const InputField = ({
         {
             type ==="search" ?
             <input 
+              {...props}
               type={type} 
               className={`${className}`}
               placeholder={placeholder}
