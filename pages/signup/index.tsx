@@ -14,6 +14,8 @@ interface Inputs  {
 
 const Signup = () => {
   const { register, handleSubmit, watch, formState: { errors } } = useForm<Inputs>();
+
+
   const onSubmit: SubmitHandler<Inputs> = data => {
       console.log(data);
   }
@@ -36,10 +38,10 @@ const Signup = () => {
                           <span className='text-red-500 text-xl ml-4 mb-5'>*</span>
                         </div>
                         <div className='ml-12'>
-                          <UI.InputField
+                          <input
                             type="text"
                             className="first-name  bg-white border-[1px] border-[#dd] outline-none p-1 w-[100%]"
-                            {...register("firstName")}
+                            {...register("firstName"),{required:true}}
                           />
                           <span className='mt-1'>This is a required field.</span>
                         </div>
@@ -50,17 +52,17 @@ const Signup = () => {
                           <span className='text-red-500 text-xl ml-4 mb-1'>*</span>
                         </div>
                         <div className='ml-12'>
-                          <UI.InputField
+                          <input
                             type="text"
                             className="last-name  bg-white border-[1px] border-[#dd] outline-none p-1 w-[100%]"
-                            {...register("lastName")}
+                            {...register("lastName"),{required:true}}
                           />
                           <span className='mt-1'>This is a required field.</span>
                         </div>
                     </div>
                     <div className="newletter flex mt-6 w-[100%] ml-36 items-center">
                         <div>
-                          <UI.InputField
+                          <input
                             type="checkbox"
                             className="last-name bg-white border-[1px] border-[#dd] outline-none p-1 w-[100%]"
                           />
@@ -87,7 +89,7 @@ const Signup = () => {
                             <span className='text-red-500 text-xl ml-4 mb-5'>*</span>
                          </div>
                           <div className='ml-12'>
-                            <UI.InputField
+                            <input
                               type="text"
                               className="email  bg-white border-[1px] border-[#dd] outline-none p-1 w-[100%]"
                               {...register("email")}
@@ -97,18 +99,18 @@ const Signup = () => {
                       <div className="password flex mt-5 w-[100%]">
                           <label className='text-[#69686c] font-bold'>Password</label>
                           <span className='text-red-500 text-xl ml-4 mb-1'>*</span>
-                          <UI.InputField
+                          <input
                             type="text"
-                            className="password ml-12 bg-white border-[1px] border-[#dd] outline-none p-1 w-[100%]"
+                            className="password ml-12 bg-white border-[1px] border-[#dd] outline-none p-1 w-[70%]"
                             {...register("password")}
                           />
                       </div>
                       <div className="comfirm-password flex mt-8 w-[100%]">
                           <label className='text-[#69686c] font-bold'>Confirm Password</label>
                           <span className='text-red-500 text-xl ml-4 mb-1'>*</span>
-                          <UI.InputField
+                          <input
                             type="text"
-                            className="confirm-password ml-12 bg-white border-[1px] border-[#dd] outline-none p-1 w-full"
+                            className="confirm-password ml-12 bg-white border-[1px] border-[#dd] outline-none p-1 w-[70%]"
                             {...register("confirmPassword")}
                           />
                       </div>
@@ -127,6 +129,9 @@ const Signup = () => {
                     Or login
                  </Link>
               </span>
+         </div>
+         <div className="error">
+              <span className='text-red-500 text-xl'>{errors.email?.message || errors.confirmPassword?.message || errors.firstName?.message || errors.lastName?.message}</span>
          </div>
          <span className='absolute bottom-10 right-10 sm:block hidden cursor-pointer'>
              <Link href={"/"}>Home</Link>

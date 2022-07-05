@@ -6,13 +6,7 @@ interface InputFields{
     type: string
     className?: string
     placeholder?: string
-    props?: {
-        name?: string
-        value?: string
-        onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
-        min: number
-        max: number
-    }
+    props?: {}
 }
 
 
@@ -20,22 +14,20 @@ const InputField = ({
     type,
     className,
     placeholder,
-    props
+    ...props
 }:InputFields) => {
 
 
   return (
-    <div className=''>
-        {
-            <input  
-              type={type} 
-              className={`${className}`}
-              placeholder={placeholder}
-              {...props}
-            />
-        }
-    </div> 
+        <input  
+          type={type} 
+          className={`${className}`}
+          placeholder={placeholder}
+          {...props}
+        />
   )
 }
+
+
 
 export default InputField
