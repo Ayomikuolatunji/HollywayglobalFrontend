@@ -37,9 +37,10 @@ const Signup = () => {
         const {email,firstName,lastName,password,confirmPassword}=data
 
         if(password !==confirmPassword){
-            toast.error("password not correct",{
-              toastId:"signup-password-not-equal"
+            toast.error("password and confirm password not equal",{
+              toastId:"signup-password-not-equal-id"
             })
+            return
         }
         const response=await createAccount({
           username:`${firstName} ${lastName}`,
@@ -48,10 +49,15 @@ const Signup = () => {
           email:email,
           password:password
         },"/create_account")
-
         console.log(response)
-      } catch (error) {
+      } catch (error:any) {
           console.log(error)
+          if(error){
+            toast.error(error?.response?.data?.data.message,{
+              toastId:"main-response-error"
+            })
+          }
+      
       }
 
   }

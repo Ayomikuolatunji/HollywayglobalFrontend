@@ -3,7 +3,7 @@ import axios from "axios";
 const url="http://localhost:8080/api/v1";
 
 
-export const createAccount = async (account:{},endpoint:string) => {
+export const createAccount = async (account:{},endpoints:string) => {
      try {
          const response=await axios({
             method: "POST",
@@ -13,7 +13,7 @@ export const createAccount = async (account:{},endpoint:string) => {
             data: JSON.stringify({
                 ...account
             }),
-            url: url+endpoint,
+            url: url+endpoints,
          })
 
          return response.data;
