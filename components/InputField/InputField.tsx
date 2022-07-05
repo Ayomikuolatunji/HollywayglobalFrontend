@@ -6,7 +6,13 @@ interface InputFields{
     type: string
     className?: string
     placeholder?: string
-    props?: any
+    props?: {
+        name?: string
+        value?: string
+        onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
+        min: number
+        max: number
+    }
 }
 
 
@@ -14,26 +20,18 @@ const InputField = ({
     type,
     className,
     placeholder,
-    ...props
+    props
 }:InputFields) => {
 
 
   return (
     <div className=''>
         {
-            type ==="search" ?
-            <input 
-              {...props}
-              type={type} 
-              className={`${className}`}
-              placeholder={placeholder}
-            />
-            :
             <input  
-              {...props}
               type={type} 
               className={`${className}`}
               placeholder={placeholder}
+              {...props}
             />
         }
     </div> 
