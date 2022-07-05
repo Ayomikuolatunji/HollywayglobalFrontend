@@ -48,7 +48,7 @@ const InputField = ({
              name={name}
              className={`${className}`}
              placeholder={placeholder || ""}
-             onChange={(e) => onChange(e)}_
+              onChange={onChange}
            /> 
   )
 }
