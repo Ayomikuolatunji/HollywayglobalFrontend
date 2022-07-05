@@ -24,3 +24,22 @@ export const createAccount = async (account:{},endpoints:string) => {
      }
 }
 
+export const login = async (account:{},endpoints:string) => {
+        try {
+            const response=await axios({
+                method: "POST",
+                headers:{
+                    'Content-Type': 'application/json',
+                },
+                data: JSON.stringify({
+                    ...account
+                }),
+                url: url+endpoints,
+            })
+    
+            return response.data;
+        } catch (error) {
+            const err = error as AxiosError
+            throw err;
+        }
+}

@@ -6,6 +6,8 @@ import * as yup from "yup";
 import { toast } from "react-toastify"
 import * as UI from "../../components"
 import { IFormValues } from '../../components/InputField/InputField';
+import { login } from '../../hooks/apis';
+import axios from 'axios';
 
 
 
@@ -35,6 +37,15 @@ const Login = () => {
 
   const onSubmit: SubmitHandler<IFormValues> =async (data) => {
        console.log(data)
+       try {
+           const response=await login({
+              email:data.email,
+              password:data.password
+           },"/login")
+           console.log(response)
+       } catch (error) {
+        console.log(error)
+       }
   }
 
 
