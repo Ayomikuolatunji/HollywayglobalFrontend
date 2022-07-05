@@ -31,7 +31,8 @@ const Signup = () => {
 
 
   const onSubmit: SubmitHandler<Inputs> = data => {
-      console.log(data);
+       const {email,firstName,lastName,password,confirmPassword}=data
+       
   }
 
   console.log(errors.email);
@@ -122,28 +123,36 @@ const Signup = () => {
                           </div>
                       </div>
                       <div className="password flex mt-5 w-[100%]">
-                          <label className='text-[#69686c] font-bold'>Password</label>
-                          <span className='text-red-500 text-xl ml-4 mb-1'>*</span>
-                          <UI.InputField
-                            type="text"
-                            className="password ml-12 bg-white border-[1px] border-[#dd] outline-none p-1 w-[70%]"
-                            isHookForm={true}
-                            label="password"
-                            register={register}
-                            required={true}
-                          />
+                          <div>
+                            <label className='text-[#69686c] font-bold'>Password</label>
+                            <span className='text-red-500 text-xl ml-4 mb-1'>*</span>
+                          </div>
+                          <div className='w-[70%]'>
+                            <UI.InputField
+                              type="text"
+                              className="password ml-12 bg-white border-[1px] border-[#dd] outline-none p-1 w-[70%]"
+                              isHookForm={true}
+                              label="password"
+                              register={register}
+                              required={true}
+                            />
+                          </div>
                       </div>
                       <div className="comfirm-password flex mt-8 w-[100%]">
-                          <label className='text-[#69686c] font-bold'>Confirm Password</label>
-                          <span className='text-red-500 text-xl ml-4 mb-1'>*</span>
-                          <UI.InputField
-                            type="text"
-                            className="confirm-password ml-12 bg-white border-[1px] border-[#dd] outline-none p-1 w-[70%]"
-                            isHookForm={true}
-                            label="confirmPassword"
-                            register={register}
-                            required={true}
-                          />
+                           <div>
+                              <label className='text-[#69686c] font-bold'>Confirm Password</label>
+                              <span className='text-red-500 text-xl ml-4 mb-1'>*</span>
+                          </div>
+                          <div className='w-[50%]'>
+                            <UI.InputField
+                              type="text"
+                              className="confirm-password ml-12 bg-white border-[1px] border-[#dd] outline-none p-1 w-[100%]"
+                              isHookForm={true}
+                              label="confirmPassword"
+                              register={register}
+                              required={true}
+                            />
+                         </div>
                       </div>
                   </div>
               </div>
