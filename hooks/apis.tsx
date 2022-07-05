@@ -1,4 +1,5 @@
-import axios from "axios";
+import axios,{ AxiosError }  from "axios";
+
 
 const url="http://localhost:8080/api/v1";
 
@@ -18,7 +19,8 @@ export const createAccount = async (account:{},endpoints:string) => {
 
          return response.data;
      } catch (error) {
-         return error;
+        const err = error as AxiosError
+         throw err;
      }
 }
 

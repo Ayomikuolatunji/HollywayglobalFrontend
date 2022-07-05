@@ -6,6 +6,7 @@ import * as yup from "yup";
 import { toast } from "react-toastify"
 import * as UI from "../../components"
 import { createAccount } from '../../hooks/apis';
+import axios from 'axios';
 
 
 interface Inputs  {
@@ -16,6 +17,16 @@ interface Inputs  {
   confirmPassword: string
 };
 
+
+interface Error {
+   response :{
+       data:{
+         data:{
+          message:string
+         }
+       }
+   }
+}
 
 const schema = yup.object({
   firstName: yup.string().required(),
@@ -51,13 +62,16 @@ const Signup = () => {
         },"/create_account")
         console.log(response)
       } catch (error:any) {
-          console.log(error)
-          if(error){
-            toast.error(error?.response?.data?.data.message,{
-              toastId:"main-response-error"
-            })
-          }
-      
+            const err = error as Error
+            if (axios.isAxiosError(error) && error.response) {
+              toast.error(err?.response?.data?.data.message,{
+                toastId:"main-response-error"
+              })
+            }else{
+              toast.error("something went wrong",{
+                toastId:"main-response-error-id__2"
+              })
+            }
       }
 
   }
