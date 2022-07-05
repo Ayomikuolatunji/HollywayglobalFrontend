@@ -4,6 +4,7 @@ import * as UI from "../../components"
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
+import { createAccount } from '../../hooks/apis';
 
 
 interface Inputs  {
@@ -25,17 +26,25 @@ const schema = yup.object({
 
 
 const Signup = () => {
-  const { register, handleSubmit, watch, formState: { errors } } = useForm<Inputs>({
+  const { register, handleSubmit, formState: { errors } } = useForm<Inputs>({
     resolver: yupResolver(schema)
   });
 
 
-  const onSubmit: SubmitHandler<Inputs> = data => {
-       const {email,firstName,lastName,password,confirmPassword}=data
-       
-  }
+  const onSubmit: SubmitHandler<Inputs> =async (data) => {
+      try {
+        const {email,firstName,lastName,password,confirmPassword}=data
+        const response=await createAccount({
+          first_name:firstName,
+          last_name:lastName,
+          email:password,
+          password:password
+        },"/create_account")
+      } catch (error) {
+         
+      }
 
-  console.log(errors.email);
+  }
 
 
 
