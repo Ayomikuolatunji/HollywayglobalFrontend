@@ -7,15 +7,9 @@ import { toast } from "react-toastify"
 import * as UI from "../../components"
 import { createAccount } from '../../hooks/apis';
 import axios from 'axios';
+import { IFormValues } from '../../components/InputField/InputField';
 
 
-interface Inputs  {
-  firstName: string,
-  lastName: string,
-  email: string,
-  password: string,
-  confirmPassword: string
-};
 
 
 interface Error {
@@ -38,12 +32,12 @@ const schema = yup.object({
 
 
 const Signup = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm<Inputs>({
+  const { register, handleSubmit, formState: { errors } } = useForm<IFormValues>({
     resolver: yupResolver(schema)
   });
 
 
-  const onSubmit: SubmitHandler<Inputs> =async (data) => {
+  const onSubmit: SubmitHandler<IFormValues> =async (data) => {
       try {
         const {email,firstName,lastName,password,confirmPassword}=data
 
@@ -61,6 +55,9 @@ const Signup = () => {
           password:password
         },"/create_account")
         console.log(response)
+        if(response){
+            window.location.href="/login"
+        }
       } catch (error:any) {
             const err = error as Error
             if (axios.isAxiosError(error) && error.response) {
@@ -72,6 +69,7 @@ const Signup = () => {
                 toastId:"main-response-error-id__2"
               })
             }
+            console.log(error)
       }
 
   }
@@ -199,7 +197,7 @@ const Signup = () => {
          <div className="create-account-btn mt-12 mb-9 text-center">
               <UI.Button 
               className="text-white py-2 px-4 -ml-44 bg-red-color hover:bg-gray-500 transition-[background-color] duration-500 ease-in-out font-[600]"
-              text="Create Account"
+              text="CREATE ACCOUNT"
               type="submit"
               onClick={handleSubmit(onSubmit)}
               />

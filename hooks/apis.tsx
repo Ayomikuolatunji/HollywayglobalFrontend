@@ -19,7 +19,7 @@ export const createAccount = async (account:{},endpoints:string) => {
 
          return response.data;
      } catch (error) {
-        const err = error as AxiosError
+         const err = error as AxiosError
          throw err;
      }
 }
