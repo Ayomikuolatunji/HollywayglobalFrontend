@@ -41,7 +41,7 @@ const Signup = () => {
                           <input
                             type="text"
                             className="first-name  bg-white border-[1px] border-[#dd] outline-none p-1 w-[100%]"
-                            {...register("firstName"),{required:true}}
+                            {...register("firstName",{required:true})}
                           />
                           <span className='mt-1'>This is a required field.</span>
                         </div>
@@ -55,7 +55,7 @@ const Signup = () => {
                           <input
                             type="text"
                             className="last-name  bg-white border-[1px] border-[#dd] outline-none p-1 w-[100%]"
-                            {...register("lastName"),{required:true}}
+                            {...register("lastName",{required:true})}
                           />
                           <span className='mt-1'>This is a required field.</span>
                         </div>
@@ -92,7 +92,7 @@ const Signup = () => {
                             <input
                               type="text"
                               className="email  bg-white border-[1px] border-[#dd] outline-none p-1 w-[100%]"
-                              {...register("email")}
+                              {...register("email",{required:true})}
                             />
                           </div>
                       </div>
@@ -102,7 +102,7 @@ const Signup = () => {
                           <input
                             type="text"
                             className="password ml-12 bg-white border-[1px] border-[#dd] outline-none p-1 w-[70%]"
-                            {...register("password")}
+                            {...register("password",{required:true})}
                           />
                       </div>
                       <div className="comfirm-password flex mt-8 w-[100%]">
@@ -111,7 +111,7 @@ const Signup = () => {
                           <input
                             type="text"
                             className="confirm-password ml-12 bg-white border-[1px] border-[#dd] outline-none p-1 w-[70%]"
-                            {...register("confirmPassword")}
+                            {...register("confirmPassword",{required:true})}
                           />
                       </div>
                   </div>
