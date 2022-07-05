@@ -2,6 +2,8 @@ import Link from 'next/link'
 import React from 'react'
 import * as UI from "../../components"
 import { useForm, SubmitHandler } from "react-hook-form";
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from "yup";
 
 
 interface Inputs  {
@@ -12,13 +14,27 @@ interface Inputs  {
   confirmPassword: string
 };
 
+
+const schema = yup.object({
+  firstName: yup.string().required(),
+  lastName: yup.string().required(),
+  email: yup.string().required(),
+  password: yup.string().required(),
+  confirmPassword: yup.string().required(),
+}).required();
+
+
 const Signup = () => {
-  const { register, handleSubmit, watch, formState: { errors } } = useForm<Inputs>();
+  const { register, handleSubmit, watch, formState: { errors } } = useForm<Inputs>({
+    resolver: yupResolver(schema)
+  });
 
 
   const onSubmit: SubmitHandler<Inputs> = data => {
       console.log(data);
   }
+
+  console.log(errors.email);
 
 
 
@@ -38,10 +54,13 @@ const Signup = () => {
                           <span className='text-red-500 text-xl ml-4 mb-5'>*</span>
                         </div>
                         <div className='ml-12'>
-                          <input
+                          <UI.InputField
                             type="text"
                             className="first-name  bg-white border-[1px] border-[#dd] outline-none p-1 w-[100%]"
-                            {...register("firstName",{required:true})}
+                            isHookForm={true}
+                            label="firstName"
+                            register={register}
+                            required={true}
                           />
                           <span className='mt-1'>This is a required field.</span>
                         </div>
@@ -52,10 +71,13 @@ const Signup = () => {
                           <span className='text-red-500 text-xl ml-4 mb-1'>*</span>
                         </div>
                         <div className='ml-12'>
-                          <input
+                          <UI.InputField
                             type="text"
                             className="last-name  bg-white border-[1px] border-[#dd] outline-none p-1 w-[100%]"
-                            {...register("lastName",{required:true})}
+                            isHookForm={true}
+                            label="lastName"
+                            register={register}
+                            required={true}
                           />
                           <span className='mt-1'>This is a required field.</span>
                         </div>
@@ -89,29 +111,38 @@ const Signup = () => {
                             <span className='text-red-500 text-xl ml-4 mb-5'>*</span>
                          </div>
                           <div className='ml-12'>
-                            <input
+                            <UI.InputField
                               type="text"
                               className="email  bg-white border-[1px] border-[#dd] outline-none p-1 w-[100%]"
-                              {...register("email",{required:true})}
+                              isHookForm={true}
+                              label="email"
+                              register={register}
+                              required={true}
                             />
                           </div>
                       </div>
                       <div className="password flex mt-5 w-[100%]">
                           <label className='text-[#69686c] font-bold'>Password</label>
                           <span className='text-red-500 text-xl ml-4 mb-1'>*</span>
-                          <input
+                          <UI.InputField
                             type="text"
                             className="password ml-12 bg-white border-[1px] border-[#dd] outline-none p-1 w-[70%]"
-                            {...register("password",{required:true})}
+                            isHookForm={true}
+                            label="password"
+                            register={register}
+                            required={true}
                           />
                       </div>
                       <div className="comfirm-password flex mt-8 w-[100%]">
                           <label className='text-[#69686c] font-bold'>Confirm Password</label>
                           <span className='text-red-500 text-xl ml-4 mb-1'>*</span>
-                          <input
+                          <UI.InputField
                             type="text"
                             className="confirm-password ml-12 bg-white border-[1px] border-[#dd] outline-none p-1 w-[70%]"
-                            {...register("confirmPassword",{required:true})}
+                            isHookForm={true}
+                            label="confirmPassword"
+                            register={register}
+                            required={true}
                           />
                       </div>
                   </div>
@@ -130,8 +161,8 @@ const Signup = () => {
                  </Link>
               </span>
          </div>
-         <div className="error">
-              <span className='text-red-500 text-xl'>{errors.email?.message || errors.confirmPassword?.message || errors.firstName?.message || errors.lastName?.message}</span>
+         <div className="error text-center">
+              <span className='text-red-500 text-xl'>{(errors.email?.type || errors.confirmPassword?.type || errors.firstName?.type || errors.lastName?.message) && "All fields are required"}</span>
          </div>
          <span className='absolute bottom-10 right-10 sm:block hidden cursor-pointer'>
              <Link href={"/"}>Home</Link>

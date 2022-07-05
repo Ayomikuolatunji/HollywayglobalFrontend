@@ -2,16 +2,19 @@ import React from 'react'
 import {  UseFormRegister,Path } from "react-hook-form";
 
 
-interface IFormValues {
-  valueText: string;
-  valueNumber: number;
+export interface IFormValues {
+  firstName: string,
+  lastName: string,
+  email: string,
+  password: string,
+  confirmPassword: string
 }
 
 interface InputFields{
-    type: string
-    value: string
-    name: string
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+    type?: string
+    value?: string
+    name?: string
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
     className?: string
     placeholder?: string
     isHookForm?:boolean
@@ -39,6 +42,7 @@ const InputField = ({
          isHookForm ? 
          <input 
            {...register(label, { required })} 
+            type={type}
             className={`${className}`} 
             placeholder={placeholder}
          />
@@ -48,11 +52,10 @@ const InputField = ({
              name={name}
              className={`${className}`}
              placeholder={placeholder || ""}
-              onChange={onChange}
+             onChange={onChange}
            /> 
   )
 }
-
 
 
 export default InputField
