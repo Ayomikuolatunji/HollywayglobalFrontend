@@ -5,7 +5,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { toast } from "react-toastify"
 import * as UI from "../../components"
-import axios from 'axios';
 import { IFormValues } from '../../components/InputField/InputField';
 
 
@@ -103,6 +102,13 @@ const Login = () => {
                       Creating an account has many benefits: check out faster, keep more than one address, track orders and more.
                       </h3>
                   </div>
+                  <div className="create-account-btn mt-12 mb-9 text-center">
+                  <Link href={"/signup"} passHref>
+                    <a  className="text-white py-2 px-4 -ml-44 bg-red-color hover:bg-gray-500 transition-[background-color] duration-500 ease-in-out font-[600]">
+                       CREATE AN ACCOUNT
+                    </a>
+                  </Link>
+         </div>
               </div>
          </div>
          <div className="create-account-btn mt-12 mb-9 text-center">
