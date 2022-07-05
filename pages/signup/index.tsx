@@ -1,9 +1,10 @@
 import Link from 'next/link'
 import React from 'react'
-import * as UI from "../../components"
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
+import { toast } from "react-toastify"
+import * as UI from "../../components"
 import { createAccount } from '../../hooks/apis';
 
 
@@ -34,14 +35,23 @@ const Signup = () => {
   const onSubmit: SubmitHandler<Inputs> =async (data) => {
       try {
         const {email,firstName,lastName,password,confirmPassword}=data
+
+        if(password !==confirmPassword){
+            toast.error("password not correct",{
+              toastId:"signup-password-not-equal"
+            })
+        }
         const response=await createAccount({
+          username:`${firstName} ${lastName}`,
           first_name:firstName,
           last_name:lastName,
-          email:password,
+          email:email,
           password:password
         },"/create_account")
+
+        console.log(response)
       } catch (error) {
-         
+          console.log(error)
       }
 
   }
@@ -122,7 +132,7 @@ const Signup = () => {
                          </div>
                           <div className='ml-12'>
                             <UI.InputField
-                              type="text"
+                              type="email"
                               className="email  bg-white border-[1px] border-[#dd] outline-none p-1 w-[100%]"
                               isHookForm={true}
                               label="email"

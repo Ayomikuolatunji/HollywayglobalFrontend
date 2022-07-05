@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const url="http://localhost:8080/api/v1/";
+const url="http://localhost:8080/api/v1";
 
 
 export const createAccount = async (account:{},endpoint:string) => {
@@ -9,9 +9,10 @@ export const createAccount = async (account:{},endpoint:string) => {
             method: "POST",
             headers:{
                 'Content-Type': 'application/json',
-                'Accept': 'application/json',
             },
-            data: JSON.stringify(account),
+            data: JSON.stringify({
+                ...account
+            }),
             url: url+endpoint,
          })
 
