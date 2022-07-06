@@ -18,11 +18,9 @@ import { toast } from 'react-toastify';
 
 interface Error {
    response :{
-       data:{
          data:{
           message:string
          }
-       }
    }
 }
 
@@ -40,22 +38,23 @@ const Login = () => {
 
 
   const onSubmit: SubmitHandler<IFormValues> =async (data) => {
-       console.log(data)
        try {
            const response=await login({
               email:data.email,
               password:data.password
            },"/login")
-           console.log(response)
            if(response.status===200){
                LoginStorage(response.data.token,rememberMe)
                window.localStorage.setItem("token", response.data.token);
-              //  window.location.href="/";
+               toast.success("login successful",{
+                  toastId:"login-success-id"
+               })
+               window.location.href="/";
            }
        } catch (error:any) {
           const err = error as Error
-          if (axios.isAxiosError(err) && error.response) {
-            toast.error(err?.response?.data?.data.message,{
+          if (axios.isAxiosError(err)) {
+            toast.error(err?.response?.data?.message,{
               toastId:"login-response-error"
             })
           }else{
