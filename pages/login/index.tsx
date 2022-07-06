@@ -9,6 +9,7 @@ import * as UI from "../../components"
 import { IFormValues } from '../../components/InputField/InputField';
 import { login } from '../../hooks/apis';
 import LoginStorage from '../../helpers/LoginStorage';
+import { toast } from 'react-toastify';
 
 
 
@@ -52,7 +53,17 @@ const Login = () => {
               window.localStorage.setItem("token", response.data.token);
            }
        } catch (error) {
-        console.log(error)
+          const err = error as Error
+          if (axios.isAxiosError(error) && error.response) {
+            toast.error(err?.response?.data?.data.message,{
+              toastId:"login-response-error"
+            })
+          }else{
+            toast.error("something went wrong",{
+              toastId:"login-response-error-id__2"
+            })
+          }
+          console.log(error)
        }
   }
 
