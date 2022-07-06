@@ -2,7 +2,7 @@ import Cookies from 'universal-cookie';
 
 const cookies = new Cookies();
 
-class CookiesClass {
+class CookiesSession {
 
     get(key: string) {
         return cookies.get(key);
@@ -18,4 +18,4 @@ class CookiesClass {
 }
 
 
-export default new CookiesClass();
+export default new CookiesSession();

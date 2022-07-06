@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import React from 'react'
+import React, { useState } from 'react'
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
@@ -29,6 +29,7 @@ const schema = yup.object({
 
 
 const Login = () => {
+  const [rememberMe, setRememberMe] = useState(false);
   const { register, handleSubmit, formState: { errors } } = useForm<IFormValues>({
     resolver: yupResolver(schema)
   });
@@ -42,12 +43,13 @@ const Login = () => {
               password:data.password
            },"/login")
            console.log(response)
+           
        } catch (error) {
         console.log(error)
        }
   }
 
-
+  console.log(rememberMe)
 
   return (
     <form className='bg-white mt-4 border-[1px] border-[#d7d7d7] h-auto relative'>
@@ -82,7 +84,7 @@ const Login = () => {
                           <span className='mt-1'>This is a required field.</span>
                         </div>
                     </div>
-                    <div className="last-name flex mt-5 w-[100%] items-center">
+                    <div className="password flex mt-5 w-[100%] items-center">
                         <div>
                           <label className='text-[#69686c] font-bold'>
                              Password
@@ -101,6 +103,22 @@ const Login = () => {
                           <span className='mt-1'>This is a required field.</span>
                         </div>
                     </div>
+                    <div className="newletter flex mt-6 w-[100%] ml-36 items-center">
+                        <div>
+                          <input
+                            type="checkbox"
+                            className="last-name bg-white border-[1px] border-[#dd] outline-none p-1 w-[100%]"
+                            onChange={() => setRememberMe(!rememberMe)}
+                            checked={rememberMe}
+                          />
+                        </div>  
+                         <div>
+                          <label className='text-[#69686c] font-normal ml-3'>
+                             Remember me on this device
+                          </label>
+                         </div>
+                    </div>
+                  
                   </div>
               </div>
               <div className="left-login-information w-[50%] block p-3">

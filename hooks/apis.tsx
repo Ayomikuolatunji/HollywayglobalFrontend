@@ -37,7 +37,7 @@ export const login = async (account:{},endpoints:string) => {
                 url: url+endpoints,
             })
     
-            return response.data;
+            return response;
         } catch (error) {
             const err = error as AxiosError
             throw err;

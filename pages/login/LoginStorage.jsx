@@ -1,4 +1,8 @@
 
-export const LoginStorage = () => {
-    
+
+
+export const LoginStorage = (token,checked) => {
+    if(checked){
+        CookiesSession.set('token',token);
+    }
 }
