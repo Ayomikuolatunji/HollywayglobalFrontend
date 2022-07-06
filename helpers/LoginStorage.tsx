@@ -14,6 +14,15 @@ const LoginStorage = (token:string,checked:boolean) => {
         }
         );
     }
+    CookiesSession.set(
+        "token",
+        token,
+        {
+          path:"/",
+          secure:true,
+          sameSite:"strict"
+        }
+    )
 }
 
 export default LoginStorage;

@@ -3,6 +3,8 @@ import React, { useState } from 'react'
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
+import axios from 'axios';
+
 import * as UI from "../../components"
 import { IFormValues } from '../../components/InputField/InputField';
 import { login } from '../../hooks/apis';
@@ -46,7 +48,8 @@ const Login = () => {
            console.log(response)
            if(response.status===200){
                LoginStorage(response.data.token,rememberMe)
-              //  window.location.href="/";
+               window.location.href="/";
+              window.localStorage.setItem("token", response.data.token);
            }
        } catch (error) {
         console.log(error)
