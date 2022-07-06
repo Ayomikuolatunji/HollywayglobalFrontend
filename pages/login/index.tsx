@@ -6,6 +6,7 @@ import * as yup from "yup";
 import * as UI from "../../components"
 import { IFormValues } from '../../components/InputField/InputField';
 import { login } from '../../hooks/apis';
+import LoginStorage from '../../helpers/LoginStorage';
 
 
 
@@ -43,7 +44,10 @@ const Login = () => {
               password:data.password
            },"/login")
            console.log(response)
-           
+           if(response.status===200){
+               LoginStorage(response.data.token,rememberMe)
+              //  window.location.href="/";
+           }
        } catch (error) {
         console.log(error)
        }
