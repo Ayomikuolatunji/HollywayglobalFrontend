@@ -24,13 +24,15 @@ const Search = () => {
                     type="search"
                     className="bg-white text-sm p-3 border-0 hover:border-0 focus:border-0 hover:outline-none focus:outline-none w-full"
                     placeholder="Search entire store here"
+                    isHookForm={false}
                 />
             </div>
             <div className="search-btn">
                 <UI.Button
                     text='Search'
-                    className="bg-bg-color-main py-2.5 rounded-none cursor-pointer opacity-[1] pl-[20px] pr-[21px] text-white font-serif hover:bg-gray-500 transition-[background-color] duration-500 ease-in-out font-[600]"
+                    className="bg-bg-color-main py-4 rounded-none cursor-pointer opacity-[1] pl-[20px] pr-[21px] text-white font-serif hover:bg-gray-500 transition-[background-color] duration-500 ease-in-out font-[600]"
                     disabled={false}
+
                 />
             </div>
         </div>
@@ -102,11 +104,16 @@ const TopNavRightBar = () => {
                             />
                         </li>
                         <li className="welcome-msg">
-                            <UI.Paragraphs
-                                text="Sign In"
-                                fontSize="text-[13px]"
-                                color="text-paragraph-color"
-                            />
+                            <UI.RouteLink 
+                               href='/login'
+                            >
+                                <UI.Paragraphs
+                                    text="Sign In"
+                                    fontSize="text-[13px]"
+                                    color="text-paragraph-color"
+                                    className='cursor-pointer'
+                                />
+                            </UI.RouteLink>
                         </li>
                     </ul>
                 </div>

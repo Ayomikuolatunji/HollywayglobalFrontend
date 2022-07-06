@@ -20,7 +20,7 @@ interface InputFields{
     isHookForm?:boolean
     label: Path<IFormValues>;
     register: UseFormRegister<IFormValues>;
-    required: boolean;
+    required?: boolean;
 }
 
 

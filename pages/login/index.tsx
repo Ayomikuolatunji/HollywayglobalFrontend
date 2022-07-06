@@ -62,7 +62,6 @@ const Login = () => {
               toastId:"login-response-error-id__2"
             })
           }
-          console.log(error)
        }
   }
 
@@ -152,8 +151,8 @@ const Login = () => {
                        CREATE AN ACCOUNT
                     </a>
                   </Link>
-         </div>
               </div>
+            </div>
          </div>
          <div className="create-account-btn mt-12 mb-9 text-center">
               <UI.Button 

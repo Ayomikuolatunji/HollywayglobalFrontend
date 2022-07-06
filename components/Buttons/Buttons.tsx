@@ -6,7 +6,7 @@ interface ButtonsProps {
     text:string
     className?:string
     disabled?:boolean
-    type:string
+    type?:string
     onClick?:()=>void
 }
 
