@@ -133,7 +133,6 @@ const Signup = () => {
                           </label>
                          </div>
                     </div>
-                  
                   </div>
               </div>
               <div className="left-login-information w-[50%] h-auto block p-3">
