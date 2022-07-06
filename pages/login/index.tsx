@@ -49,12 +49,12 @@ const Login = () => {
            console.log(response)
            if(response.status===200){
                LoginStorage(response.data.token,rememberMe)
-               window.location.href="/";
-              window.localStorage.setItem("token", response.data.token);
+               window.localStorage.setItem("token", response.data.token);
+              //  window.location.href="/";
            }
-       } catch (error) {
+       } catch (error:any) {
           const err = error as Error
-          if (axios.isAxiosError(error) && error.response) {
+          if (axios.isAxiosError(err) && error.response) {
             toast.error(err?.response?.data?.data.message,{
               toastId:"login-response-error"
             })
@@ -67,7 +67,6 @@ const Login = () => {
        }
   }
 
-  console.log(rememberMe)
 
   return (
     <form className='bg-white mt-4 border-[1px] border-[#d7d7d7] h-auto relative'>
