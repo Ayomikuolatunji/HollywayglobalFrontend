@@ -36,12 +36,12 @@ export default function Category() {
                 {
                     navItems.map((item: CategoryProps, index) => (
                         <RouteLink href={item.link} key={index}>
-                            <li className="flex justify-between items-center flex-col first:hidden border-b-[1px] border-[#bdbbbb] text-[#222222]"
+                            <li className="flex justify-between items-center flex-col first:hidden border-b-[1px] border-[#bdbbbb] text-[#222222] cursor-pointer"
                             >
                                 <div className='w-full flex justify-between items-center p-3'
                                    onClick={() => handleClick(item.name)}
                                 >
-                                    <a>{item.name}</a>
+                                    <a className='hover:text-red-color font-bold'>{item.name}</a>
                                     <span className='cursor-pointer'
                                     >
                                         {
@@ -59,7 +59,7 @@ export default function Category() {
                                     <ul className="sub-nav w-full text-left">
                                         {
                                             item.subNav.map((subItem, index2) => (
-                                                <li key={index2} className="p-3 border-b-[1px] border-[#bdbbbb] flex items-center first:border-t-[1px]">
+                                                <li key={index2} className="p-3 border-b-[1px] border-[#bdbbbb] flex items-center first:border-t-[1px] hover:text-red-color hover:font-bold">
                                                     <img 
                                                     src="http://plazathemes.com/demo/carstore/pub/static/frontend/Carstore/carstore4/en_US/images/icon-menu.png" alt="icon" 
                                                     className='mr-3'
