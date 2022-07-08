@@ -14,9 +14,9 @@ export default function RouteLink({
 }: RouteLinkProps) {
   return (
     <Link href={href}>
-        <div>
+        <>
            {children}
-        </div>
+        </>
     </Link>
   )
 }
