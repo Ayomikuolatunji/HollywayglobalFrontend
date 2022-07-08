@@ -28,7 +28,7 @@ export default function Category() {
 
 
     return (
-        <div className='border-2 w-[95%] mt-5 border-[lightgray] shadow-lg'>
+        <div className='border-2 w-[95%] mt-5 border-[#c5c5c5] shadow-lg bg-none'>
             <div className="title bg-black text-white p-3 border-2">
                 <h3 className='font-[600] text-[16px] font-sans'>Category</h3>
             </div>
@@ -36,10 +36,11 @@ export default function Category() {
                 {
                     navItems.map((item: CategoryProps, index) => (
                         <RouteLink href={item.link} key={index}>
-                            <li className="flex justify-between items-center flex-col first:hidden border-b-[1px] border-[#bdbbbb]"
-                                onClick={() => handleClick(item.name)}
+                            <li className="flex justify-between items-center flex-col first:hidden border-b-[1px] border-[#bdbbbb] text-[#222222]"
                             >
-                                <div className='w-full flex justify-between items-center p-3'>
+                                <div className='w-full flex justify-between items-center p-3'
+                                   onClick={() => handleClick(item.name)}
+                                >
                                     <a>{item.name}</a>
                                     <span className='cursor-pointer'
                                     >
@@ -58,7 +59,7 @@ export default function Category() {
                                     <ul className="sub-nav w-full text-left">
                                         {
                                             item.subNav.map((subItem, index2) => (
-                                                <li key={index2} className="p-3 border-b-[1px] border-[#bdbbbb] flex items-center">
+                                                <li key={index2} className="p-3 border-b-[1px] border-[#bdbbbb] flex items-center first:border-t-[1px]">
                                                     <img 
                                                     src="http://plazathemes.com/demo/carstore/pub/static/frontend/Carstore/carstore4/en_US/images/icon-menu.png" alt="icon" 
                                                     className='mr-3'
