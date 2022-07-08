@@ -38,18 +38,18 @@ export default function Category() {
                         <RouteLink href={item.link} key={index}>
                             <li className="flex justify-between items-center flex-col first:hidden border-b-[1px] border-[#bdbbbb] text-[#222222] cursor-pointer"
                             >
-                                <div className='w-full flex justify-between items-center p-3'
-                                   onClick={() => handleClick(item.name)}
+                                <div className='w-full flex justify-between items-center px-3 py-4'
+                                    onClick={() => handleClick(item.name)}
                                 >
                                     <a className='hover:text-red-color font-bold'>{item.name}</a>
                                     <span className='cursor-pointer'
                                     >
                                         {
                                             openSubMenu && activeItem === item.name ? (
-                                                <span>{"-"}</span>
+                                                <span className='text-xl'>{"-"}</span>
                                             )
                                                 : (
-                                                    <span>{"+"}</span>
+                                                    <span className='text-xl'>{"+"}</span>
                                                 )
                                         }
                                     </span>
@@ -60,9 +60,9 @@ export default function Category() {
                                         {
                                             item.subNav.map((subItem, index2) => (
                                                 <li key={index2} className="p-3 border-b-[1px] border-[#bdbbbb] flex items-center first:border-t-[1px] hover:text-red-color hover:font-bold">
-                                                    <img 
-                                                    src="http://plazathemes.com/demo/carstore/pub/static/frontend/Carstore/carstore4/en_US/images/icon-menu.png" alt="icon" 
-                                                    className='mr-3'
+                                                    <img
+                                                        src="http://plazathemes.com/demo/carstore/pub/static/frontend/Carstore/carstore4/en_US/images/icon-menu.png" alt="icon"
+                                                        className='mr-3'
                                                     />
                                                     <a>{subItem.name}</a>
                                                 </li>
