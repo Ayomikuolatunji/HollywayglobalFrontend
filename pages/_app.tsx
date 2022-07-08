@@ -8,7 +8,7 @@ import PageWrapper from '../layouts/wrapper/PageWrapper';
 
 
 function MyApp({ Component, pageProps }: AppProps) {
-  return <div className='sm:w-[70%] mx-auto w-[97%]'>
+  return <div className='sm:w-[65%] mx-auto w-[97%]'>
     <HeaderWrapper>
       <PageWrapper>
         <Component {...pageProps} />

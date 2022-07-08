@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import React from 'react'
 import * as UI from "../../../components"
 
@@ -103,16 +104,15 @@ const TopNavRightBar = () => {
                             />
                         </li>
                         <li className="welcome-msg">
-                            <UI.RouteLink 
+                            <Link 
                                href='/login'
                             >
-                                <UI.Paragraphs
-                                    text="Sign In"
-                                    fontSize="text-[13px]"
-                                    color="text-paragraph-color"
-                                    className='cursor-pointer'
-                                />
-                            </UI.RouteLink>
+                                <a
+                                    className='cursor-pointer text-paragraph-color'
+                                >
+                                    Login
+                                </a>
+                            </Link>
                         </li>
                     </ul>
                 </div>
