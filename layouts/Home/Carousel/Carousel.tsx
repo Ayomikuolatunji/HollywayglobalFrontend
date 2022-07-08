@@ -15,7 +15,7 @@ export default function Carosel() {
     infinite: true,
     slidesToShow: 1,
     slidesToScroll: 1,
-    autoplay: true,
+    // autoplay: true,
     speed: 2000,
     cssEase: "linear"
   };
@@ -28,8 +28,16 @@ export default function Carosel() {
           <img src="/assets/bg4-slider.jpg" alt="slider-img"
             className='object-cover w-full max-w-full'
           />
-          <div className="content absolute h-[100%] w-[40%] top-0 right-0 bottom-0 bg-black">
-              
+          <div className="content absolute h-[100%] w-[40%] top-0 right-0 bottom-0 bg-red-500 text-white">
+            <div id="pt-banner-caption1" className="pt-banner-caption pt-caption" >
+              <div className="pt-banner-content ptslider-1">
+                <h1 className="pt-title1"><span>Wheels</span></h1>
+                <h2 className="pt-title2"><span>Luxury, Racing, Forged</span></h2>														<div className="pt-banner-des">
+                  <p>29.<span>99$</span></p>
+                </div>
+                <a href="#" className="shopnow">Read more</a>
+              </div>
+            </div>
           </div>
         </div>
         <div className='max-w-full w-full'>
