@@ -6,7 +6,7 @@ interface InputFields{
     value?: string
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
     className?: string
-    placeholder
+    placeholder:string
 }
 
 

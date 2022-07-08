@@ -7,7 +7,7 @@ import TopNavBar from '../Home/TopNav/TopNavBar'
 interface Props  {
     children?: JSX.Element | JSX.Element[];
 };
-const PageWrapper = ({children }: Props) => {
+const HeaderWrapper = ({children }: Props) => {
   return (
     <div>
         <TopNavBar/>
@@ -18,4 +18,4 @@ const PageWrapper = ({children }: Props) => {
     </div>
   )
 }
-export default PageWrapper
+export default HeaderWrapper

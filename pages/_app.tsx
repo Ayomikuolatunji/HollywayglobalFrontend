@@ -3,12 +3,12 @@ import type { AppProps } from 'next/app'
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 
-import PageWrapper from '../layouts/wrapper/PageWrapper'
+import HeaderWrapper from '../layouts/wrapper/HeaderWrapper'
 
 
 function MyApp({ Component, pageProps }: AppProps) {
   return <div className='sm:w-[70%] mx-auto w-[97%]'>
-    <PageWrapper>
+    <HeaderWrapper>
       <Component {...pageProps} />
       <ToastContainer 
         limit={1}
@@ -23,7 +23,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         draggable
         pauseOnHover
       />
-    </PageWrapper>
+    </HeaderWrapper>
 </div>
 }
 
