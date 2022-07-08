@@ -1,6 +1,6 @@
 import React from 'react'
-import Navbar from '../Home/Navbar/Navbar'
-import TopNavBar from '../Home/TopNav/TopNavBar'
+import Navbar from './Navbar/Navbar'
+import TopNavBar from './TopNav/TopNavBar'
 
 
 

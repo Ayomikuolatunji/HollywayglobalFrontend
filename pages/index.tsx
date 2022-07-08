@@ -1,6 +1,6 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import HomePage from "../layouts/Home"
+
 
 
 const Home: NextPage = () => {
@@ -12,9 +12,7 @@ const Home: NextPage = () => {
       </Head>
 
          {/* Homepage */}
-         
-         <HomePage />
-
+     
     </div>
   )
 }
