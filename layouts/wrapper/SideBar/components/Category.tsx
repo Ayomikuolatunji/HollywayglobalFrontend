@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import React from 'react'
+import React, { useCallback } from 'react'
 import { navItems } from "../../../../helpers"
 import { RouteLink } from '../../../../components'
 
@@ -19,10 +19,10 @@ export default function Category() {
     const [activeItem, setActiveItem] = React.useState('')
 
 
-    const handleClick = (item: string) => {
+    const handleClick = useCallback((item:string)=>{
         setActiveItem(item)
         setOpenSubMenu(!openSubMenu)
-    }
+    },[])
 
 
 

@@ -41,7 +41,7 @@ const Search = () => {
 const TopNavRightBar = () => {
     return (
         <div className='w-[60%] border-2 border-[#d7d7d7] bg-white'>
-            <div className="body flex justify-between p-2">
+            <div className="body flex justify-between p-3">
                 <div className="list-items">
                     <ul className="topest--header flex items-center">
                         <li className="currency mr-3">
