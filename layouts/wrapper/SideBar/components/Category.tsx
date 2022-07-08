@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import React, { useCallback } from 'react'
+import React from 'react'
 import { navItems } from "../../../../helpers"
 import { RouteLink } from '../../../../components'
 
@@ -19,10 +19,10 @@ export default function Category() {
     const [activeItem, setActiveItem] = React.useState('')
 
 
-    const handleClick = useCallback((item:string)=>{
+    const handleClick = (item: string) => {
         setActiveItem(item)
         setOpenSubMenu(!openSubMenu)
-    },[])
+    }
 
 
 
@@ -58,7 +58,7 @@ export default function Category() {
                                     <ul className="sub-nav w-full text-left">
                                         {
                                             item.subNav.map((subItem, index2) => (
-                                                <li key={index2} className="first:hidden p-3 border-b-[1px] border-[#bdbbbb] ">
+                                                <li key={index2} className="p-3 border-b-[1px] border-[#bdbbbb] ">
                                                     <a>{subItem.name}</a>
                                                 </li>
                                             ))
