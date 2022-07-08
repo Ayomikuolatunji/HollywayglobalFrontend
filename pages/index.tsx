@@ -1,6 +1,6 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import Carosel from '../layouts/Home/Carousel/Carousel'
+import Carousel from '../layouts/Home/Carousel/Carousel'
 
 
 
@@ -13,7 +13,7 @@ const Home: NextPage = () => {
       </Head>
 
          {/* Homepage */}
-         <Carosel/>
+         <Carousel/>
     </div>
   )
 }
