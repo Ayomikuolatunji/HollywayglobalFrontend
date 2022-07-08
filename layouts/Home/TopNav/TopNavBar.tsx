@@ -20,11 +20,11 @@ const Search = () => {
     return (
         <div className="search border-t-[1px] border-b-[1px] border-[#bbbbbb] flex justify-between mt-4">
             <div className="input-search-btn w-[100%]">
-                <UI.InputField
-                    type="search"
+                <UI.Search
                     className="bg-white text-sm p-3 border-0 hover:border-0 focus:border-0 hover:outline-none focus:outline-none w-full"
                     placeholder="Search entire store here"
-                    isHookForm={false}
+                    onChange={() => { }}
+                    value=""
                 />
             </div>
             <div className="search-btn">
