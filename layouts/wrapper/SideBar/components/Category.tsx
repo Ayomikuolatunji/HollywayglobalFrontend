@@ -44,10 +44,10 @@ export default function Category() {
                                 >
                                     {
                                         openSubMenu && activeItem === item.name ? (
-                                            <span>{item.closeIcon}</span>
+                                            <span>{"-"}</span>
                                         )
                                         : (
-                                            <span>{item.openIcon}</span>
+                                            <span>{"+"}</span>
                                         )
                                     }
                                 </span>
