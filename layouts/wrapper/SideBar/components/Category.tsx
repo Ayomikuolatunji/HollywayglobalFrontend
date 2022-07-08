@@ -58,7 +58,11 @@ export default function Category() {
                                     <ul className="sub-nav w-full text-left">
                                         {
                                             item.subNav.map((subItem, index2) => (
-                                                <li key={index2} className="p-3 border-b-[1px] border-[#bdbbbb] ">
+                                                <li key={index2} className="p-3 border-b-[1px] border-[#bdbbbb] flex items-center">
+                                                    <img 
+                                                    src="http://plazathemes.com/demo/carstore/pub/static/frontend/Carstore/carstore4/en_US/images/icon-menu.png" alt="icon" 
+                                                    className='mr-3'
+                                                    />
                                                     <a>{subItem.name}</a>
                                                 </li>
                                             ))
