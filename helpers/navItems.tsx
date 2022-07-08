@@ -1,14 +1,12 @@
-import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 
 const navbarItems = [
     {
         name: "Home",
         link: "/",
+        subNav: []
     }, {
         name: "Mercedes",
         link: "/mercedes",
-        openIcon: <AiOutlinePlus />,
-        closeIcon: <AiOutlineMinus />,
         subNav: [
             {
                 name: "Spear Part",
@@ -25,8 +23,6 @@ const navbarItems = [
     }, {
         name: "Bmw",
         link: "/bmw",
-        openIcon: <AiOutlinePlus />,
-        closeIcon: <AiOutlineMinus />,
         subNav: [
             {
                 name: "Spear Part",
@@ -40,8 +36,6 @@ const navbarItems = [
     }, {
         name: "Huyndai",
         link: "/huyndai",
-        openIcon: <AiOutlinePlus />,
-        closeIcon: <AiOutlineMinus />,
         subNav: [
             {
                 name: "Spear Part",
@@ -55,8 +49,6 @@ const navbarItems = [
     }, {
         name: "Toyota",
         link: "/toyota",
-        openIcon: <AiOutlinePlus />,
-        closeIcon: <AiOutlineMinus />,
         subNav: [
             {
                 name: "Spear Part",
@@ -70,8 +62,6 @@ const navbarItems = [
     }, {
         name: "Lamborghini",
         link: "/lamborghini",
-        openIcon: <AiOutlinePlus />,
-        closeIcon: <AiOutlineMinus />,
         subNav: [
             {
                 name: "Spear Part",
@@ -82,8 +72,6 @@ const navbarItems = [
     }, {
         name: "Ferrari",
         link: "/ferrari",
-        openIcon: <AiOutlinePlus />,
-        closeIcon: <AiOutlineMinus />,
         subNav: [
             {
                 name: "Spear Part",
@@ -96,8 +84,6 @@ const navbarItems = [
     }, {
         name: "Porsche",
         link: "/porsche",
-        openIcon: <AiOutlinePlus />,
-        closeIcon: <AiOutlineMinus />,
         subNav: [
             {
                 name: "Spear Part",

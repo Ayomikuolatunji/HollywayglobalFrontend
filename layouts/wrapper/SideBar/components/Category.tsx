@@ -3,15 +3,15 @@ import React from 'react'
 import { navItems } from "../../../../helpers"
 import { RouteLink } from '../../../../components'
 
+interface subNavItem {
+    name: string
+    link: string
+}
+
 interface CategoryProps {
     name: string;
-    link:string
-    openIcon: string;
-    closeIcon: string;
-    subNav: {
-        name: string;
-        link: string;
-    }
+    link: string
+    subNav: subNavItem[] | []
 }
 
 export default function Category() {
@@ -24,7 +24,7 @@ export default function Category() {
         setOpenSubMenu(!openSubMenu)
     }
 
-    
+
 
 
     return (
@@ -34,35 +34,37 @@ export default function Category() {
             </div>
             <ul>
                 {
-                    navItems.map((item:any, index) => (
+                    navItems.map((item: CategoryProps, index) => (
                         <RouteLink href={item.link} key={index}>
-                            <li  className="flex justify-between items-center first:hidden p-3 border-b-[1px] border-[#bdbbbb]"
-                              onClick={() => handleClick(item.name)}
+                            <li className="flex justify-between items-center flex-col first:hidden border-b-[1px] border-[#bdbbbb]"
+                                onClick={() => handleClick(item.name)}
                             >
-                                <a>{item.name}</a>
-                                <span className='cursor-pointer'
-                                >
-                                    {
-                                        openSubMenu && activeItem === item.name ? (
-                                            <span>{"-"}</span>
-                                        )
-                                        : (
-                                            <span>{"+"}</span>
-                                        )
-                                    }
-                                </span>
-                                  {/* subnav */}
-                                   { openSubMenu && activeItem === item.name ? (
-                                    <ul className="sub-nav">
+                                <div className='w-full flex justify-between items-center p-3'>
+                                    <a>{item.name}</a>
+                                    <span className='cursor-pointer'
+                                    >
                                         {
-                                            item.subNav.map((subItem:any, index:number) => (
-                                                <li>
+                                            openSubMenu && activeItem === item.name ? (
+                                                <span>{"-"}</span>
+                                            )
+                                                : (
+                                                    <span>{"+"}</span>
+                                                )
+                                        }
+                                    </span>
+                                </div>
+                                {/* subnav */}
+                                {openSubMenu && activeItem === item.name ? (
+                                    <ul className="sub-nav w-full text-left">
+                                        {
+                                            item.subNav.map((subItem, index2) => (
+                                                <li key={index2} className="first:hidden p-3 border-b-[1px] border-[#bdbbbb] ">
                                                     <a>{subItem.name}</a>
                                                 </li>
                                             ))
                                         }
                                     </ul>
-                                ):""}
+                                ) : ""}
                             </li>
                         </RouteLink>
                     )
