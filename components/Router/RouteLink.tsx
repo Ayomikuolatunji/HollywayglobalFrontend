@@ -5,7 +5,7 @@ import React from 'react'
 
 interface RouteLinkProps {
     href: string
-    children?: JSX.Element | JSX.Element[];
+    children?: JSX.Element;
 }
 
 export default function RouteLink({
@@ -13,8 +13,10 @@ export default function RouteLink({
     children
 }: RouteLinkProps) {
   return (
-    <Link href={href} passHref>
-      {children}
+    <Link href={href}>
+        <div>
+           {children}
+        </div>
     </Link>
   )
 }

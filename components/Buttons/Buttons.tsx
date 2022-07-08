@@ -3,21 +3,21 @@ import React from 'react'
 
 
 interface ButtonsProps {
-    text:string
-    className?:string
-    disabled?:boolean
-    type?:string
-    onClick?:()=>void
+  text: string
+  className?: string
+  disabled?: boolean
+  type?: string
+  onClick?: () => void
 }
 
 
 const Buttons = ({
-    text,
-    className,
-    disabled,
-    type,
-    onClick
-}:ButtonsProps) => {
+  text,
+  className,
+  disabled,
+  type,
+  onClick
+}: ButtonsProps) => {
 
 
 
@@ -28,7 +28,7 @@ const Buttons = ({
       disabled={disabled}
       onClick={onClick}
     >
-        {text}
+      {text}
     </button>
   )
 }

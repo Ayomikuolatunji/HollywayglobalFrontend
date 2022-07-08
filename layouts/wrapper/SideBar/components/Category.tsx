@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import React from 'react'
 import { navItems } from "../../../../helpers"
+import { RouteLink } from '../../../../components'
 
 export default function Category() {
     return (
@@ -11,14 +12,14 @@ export default function Category() {
             <ul>
                 {
                     navItems.map((item, index) => (
-                        <Link href={item.link}>
-                            <li key={index} className="flex justify-between items-center first:hidden p-3 border-b-[1px] border-[#bdbbbb]">
+                        <RouteLink href={item.link} key={index}>
+                            <li  className="flex justify-between items-center first:hidden p-3 border-b-[1px] border-[#bdbbbb]">
                                 <a>{item.name}</a>
                                 <span>
                                     {item.openIcon}
                                 </span>
                             </li>
-                        </Link>
+                        </RouteLink>
                     )
                     )
                 }

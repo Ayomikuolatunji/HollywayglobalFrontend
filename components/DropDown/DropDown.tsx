@@ -23,31 +23,31 @@ const DropDown = (
         value
     }: DropDownProps
 ) => {
-  return (
-    <div>
-        {apperance ? 
-            <select className={`appearance-none ${className}`}
-                onChange={(e) => onChange(e.target.value)}
-                value={value}
-            >
-                {items.map((item, index) => {  
-                    return <option key={index}>{item.text}</option>
-                })
-                }
-            </select>
-            : 
-            <select className={`${className}`}
-                onChange={(e) => onChange(e.target.value)}
-                value={value}
-            >
-            {items.map((item, index) => {  
-                    return <option key={index}>{item.text}</option>
-                })
-                }
-            </select>  
-         }
-    </div>
-  )
+    return (
+        <div>
+            {apperance ?
+                <select className={`appearance-none ${className}`}
+                    onChange={(e) => onChange(e.target.value)}
+                    value={value}
+                >
+                    {items.map((item, index) => {
+                        return <option key={index}>{item.text}</option>
+                    })
+                    }
+                </select>
+                :
+                <select className={`${className}`}
+                    onChange={(e) => onChange(e.target.value)}
+                    value={value}
+                >
+                    {items.map((item, index) => {
+                        return <option key={index}>{item.text}</option>
+                    })
+                    }
+                </select>
+            }
+        </div>
+    )
 }
 
 export default DropDown
