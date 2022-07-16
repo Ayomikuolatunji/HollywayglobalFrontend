@@ -104,15 +104,15 @@ const TopNavRightBar = () => {
                             />
                         </li>
                         <li className="welcome-msg">
-                            <Link 
+                            <UI.RouteLink 
                                href='/login'
                             >
                                 <a
                                     className='cursor-pointer text-paragraph-color'
                                 >
-                                    Login
+                                    Sign In
                                 </a>
-                            </Link>
+                            </UI.RouteLink>
                         </li>
                     </ul>
                 </div>
