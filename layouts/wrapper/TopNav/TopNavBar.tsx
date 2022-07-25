@@ -84,7 +84,7 @@ const TopNavRightBar = () => {
                                 text="Compare Products"
                                 fontSize="text-[13px]"
                                 color="text-paragraph-color"
-                                className='mr-3'
+                                className='mr-3 cursor-pointer'
                             />
                         </li>
                         <li className="language">
@@ -92,15 +92,15 @@ const TopNavRightBar = () => {
                                 text="My Account"
                                 fontSize="text-[13px]"
                                 color="text-paragraph-color"
-                                className='mr-3'
+                                className='mr-3 cursor-pointer'
                             />
                         </li>
                         <li className="welcome-msg">
                             <UI.Paragraphs
-                                text="My Wish list"
+                                text="My Wish List"
                                 fontSize="text-[13px]"
                                 color="text-paragraph-color"
-                                className='mr-3'
+                                className='mr-3 cursor-pointer'
                             />
                         </li>
                         <li className="welcome-msg">
