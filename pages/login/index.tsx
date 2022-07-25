@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
@@ -10,6 +10,7 @@ import { IFormValues } from '../../components/InputField/InputField';
 import { login } from '../../hooks/apis';
 import LoginStorage from '../../helpers/LoginStorage';
 import { toast } from 'react-toastify';
+import Cookies from '../../helpers/Cookies';
 
 
 
@@ -37,6 +38,13 @@ const Login = () => {
   });
 
 
+  useEffect(()=>{
+     if(Cookies.get("token")){
+        window.location.href = '/'
+     }
+  },[])
+
+
   const onSubmit: SubmitHandler<IFormValues> =async (data) => {
        try {
            const response=await login({
@@ -49,7 +57,6 @@ const Login = () => {
                toast.success("login successful",{
                   toastId:"login-success-id"
                })
-               window.location.href="/";
            }
        } catch (error:any) {
           const err = error as Error
