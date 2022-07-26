@@ -21,6 +21,7 @@ export const authApi = apiService.injectEndpoints({
     }),
     signup: build.mutation<void, signupTypings>({
       query: (body) => {
+          console.log(body)
         return {
           url: "/signup",
           method: "POST",

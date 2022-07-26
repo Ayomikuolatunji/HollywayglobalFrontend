@@ -8,6 +8,7 @@ import * as UI from "../../components"
 import { createAccount } from '../../hooks/apis';
 import axios from 'axios';
 import { IFormValues } from '../../components/InputField/InputField';
+import { useSignupMutation } from '../../redux/apis/authApi';
 
 
 
@@ -36,6 +37,7 @@ const Signup = () => {
     resolver: yupResolver(schema)
   });
 
+  const [signup]=useSignupMutation()
 
   const onSubmit: SubmitHandler<IFormValues> =async (data) => {
       try {
@@ -47,17 +49,17 @@ const Signup = () => {
             })
             return
         }
-        const response=await createAccount({
+        const response=await signup({
           username:`${firstName} ${lastName}`,
           first_name:firstName,
           last_name:lastName,
           email:email,
           password:password
-        },"/create_account")
+        })
         console.log(response)
-        if(response){
-            window.location.href="/login"
-        }
+        // if(response){
+        //     window.location.href="/login"
+        // }
       } catch (error:any) {
             const err = error as Error
             if (axios.isAxiosError(error) && error.response) {
