@@ -31,11 +31,11 @@ export const authApi = apiService.injectEndpoints({
     }),
     adminLogin: build.mutation<void, loginCredentails>({
       query: (credentials) => {
-          return {
-               url: "/admin_signin",
-               method: "POST",
-               body: credentials,
-             }
+        return {
+          url: "/admin_signin",
+          method: "POST",
+          body: credentials,
+        };
       },
     }),
   }),
