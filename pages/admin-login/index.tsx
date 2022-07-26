@@ -11,7 +11,7 @@ import { IFormValues } from "../../components/InputField/InputField";
 import LoginStorage from "../../helpers/LoginStorage";
 import { toast } from "react-toastify";
 import Cookies from "../../helpers/Cookies";
-import { useLoginMutation } from "../../redux/apis/authApi";
+import { useAdminLoginMutation } from "../../redux/apis/authApi";
 import { Error, loginData } from "../../models/authTypings";
 
 
@@ -29,7 +29,7 @@ const AdminLogin = () => {
 
 
 
-  const [login, { data }] = useLoginMutation();
+  const [adminLogin, { data }] = useAdminLoginMutation();
   const {
     register,
     handleSubmit,
@@ -39,7 +39,7 @@ const AdminLogin = () => {
   });
 
   useEffect(() => {
-    if (Cookies.get("token")) {
+    if (Cookies.get("admin_token")) {
         router.push("/")
     }
   }, [router]);
@@ -47,7 +47,7 @@ const AdminLogin = () => {
   useEffect(()=>{
     if(isLoggedIn){
        setTimeout(()=>{
-        window.location.href = "/";
+        window.location.href = "/dashboard";
        },2000)
     }
   },[isLoggedIn])
@@ -55,7 +55,7 @@ const AdminLogin = () => {
   useEffect(() => {
     if (data) {
       const getData = data as unknown as loginData;
-      LoginStorage(getData?.token, rememberMe);
+      LoginStorage("admin_token",getData?.token, rememberMe);
       toast.success("login successful", {
         toastId: "login-success-id",
       });
@@ -65,7 +65,7 @@ const AdminLogin = () => {
 
   const onSubmit: SubmitHandler<IFormValues> = async (data) => {
     try {
-      await login({
+      await adminLogin({
         email: data.email,
         password: data.password,
       }).unwrap();
@@ -80,6 +80,7 @@ const AdminLogin = () => {
           toastId: "login-response-error-id__2",
         });
       }
+      console.log(error);
     }
   };
 

@@ -17,14 +17,14 @@ const Cart = () => {
 
 const Auth = () => {
   const logout = () => {
-    if (helper.isAuthenticated()) {
-      Cookies.remove("token");
-      localStorage.removeItem("token");
+    if (helper.isAuthenticated("user_token")) {
+      Cookies.remove("user_token");
+      localStorage.removeItem("user_token");
       window.location.href = "/";
     }
   };
 
-  return helper.isAuthenticated() ? (
+  return helper.isAuthenticated("user_token" || "admin") ? (
     <li className="welcome-msg">
       <button onClick={logout}>
         <a className="cursor-pointer text-paragraph-color">Logout</a>

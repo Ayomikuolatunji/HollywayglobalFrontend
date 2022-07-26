@@ -1,8 +1,8 @@
 import Cookies from "./Cookies"
 
 
-const isAuthenticated = () => {
-   return Cookies.get("token") !== undefined;
+const isAuthenticated = (key:string) => {
+   return Cookies.get(key) !== undefined;
 }
 
 export default isAuthenticated

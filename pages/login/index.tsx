@@ -39,7 +39,7 @@ const Login = () => {
   });
 
   useEffect(() => {
-    if (Cookies.get("token")) {
+    if (Cookies.get("user_token")) {
         router.push("/")
     }
   }, [router]);
@@ -55,7 +55,7 @@ const Login = () => {
   useEffect(() => {
     if (data) {
       const getData = data as unknown as loginData;
-      LoginStorage(getData?.token, rememberMe);
+      LoginStorage("user_token",getData?.token, rememberMe);
       toast.success("login successful", {
         toastId: "login-success-id",
       });

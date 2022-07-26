@@ -30,14 +30,20 @@ export const authApi = apiService.injectEndpoints({
       }),
     }),
     adminLogin: build.mutation<void, loginCredentails>({
-          query: (credentials) => ({
-               url: "/login_admin",
+      query: (credentials) => {
+          return {
+               url: "/admin_signin",
                method: "POST",
                body: credentials,
-          })
-    })
+             }
+      },
+    }),
   }),
 });
 
-export const { useLoginMutation, useSignupMutation, useAdminSignupMutation } =
-  authApi;
+export const {
+  useLoginMutation,
+  useSignupMutation,
+  useAdminSignupMutation,
+  useAdminLoginMutation,
+} = authApi;
