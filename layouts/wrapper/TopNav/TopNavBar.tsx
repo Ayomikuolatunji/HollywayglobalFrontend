@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import * as UI from "../../../components";
-import { isAuthenticated } from "../../../helpers/Auth";
+import * as helper  from "../../../helpers";
 import Cookies from "../../../helpers/Cookies";
 
 const Cart = () => {
@@ -17,14 +17,14 @@ const Cart = () => {
 
 const Auth = () => {
   const logout = () => {
-    if (isAuthenticated()) {
+    if (helper.isAuthenticated()) {
       Cookies.remove("token");
       localStorage.removeItem("token");
       window.location.href = "/";
     }
   };
 
-  return isAuthenticated() ? (
+  return helper.isAuthenticated() ? (
     <li className="welcome-msg">
       <button onClick={logout}>
         <a className="cursor-pointer text-paragraph-color">Logout</a>

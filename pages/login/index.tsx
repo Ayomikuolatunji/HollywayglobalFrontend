@@ -2,6 +2,7 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useRouter } from 'next/router'
 import * as yup from "yup";
 
 
@@ -12,7 +13,7 @@ import { toast } from "react-toastify";
 import Cookies from "../../helpers/Cookies";
 import { useLoginMutation } from "../../redux/apis/authApi";
 import { Error, loginData } from "../../models/authTypings";
-import { useRouter } from 'next/router'
+
 
 const schema = yup
   .object({

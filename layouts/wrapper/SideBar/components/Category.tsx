@@ -2,17 +2,9 @@ import Link from "next/link";
 import React from "react";
 import { navItems } from "../../../../helpers";
 import { RouteLink } from "../../../../components";
+import { CategoryProps } from "../../../../models/catergory";
 
-interface subNavItem {
-  name: string;
-  link: string;
-}
 
-interface CategoryProps {
-  name: string;
-  link: string;
-  subNav: subNavItem[] | [];
-}
 
 export default function Category() {
   const [openSubMenu, setOpenSubMenu] = React.useState(false);
