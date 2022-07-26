@@ -20,14 +20,11 @@ export const authApi = apiService.injectEndpoints({
       }),
     }),
     signup: build.mutation<void, signupTypings>({
-      query: (body) => {
-          console.log(body)
-        return {
-          url: "/signup",
+      query: (body) => ({
+          url: "/create_account",
           method: "POST",
           body,
-        };
-      },
+      }),
     }),
   }),
 });
