@@ -1,14 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { loginCredentails } from "../../models/authTypings";
+import {
+  adminSignupTypings,
+  loginCredentails,
+  signupTypings,
+} from "../../models/authTypings";
 import { apiService } from "../service";
-
-interface signupTypings {
-  username: string;
-  first_name: string;
-  last_name: string;
-  email: string;
-  password: string;
-}
 
 export const authApi = apiService.injectEndpoints({
   endpoints: (build) => ({
@@ -21,12 +17,27 @@ export const authApi = apiService.injectEndpoints({
     }),
     signup: build.mutation<void, signupTypings>({
       query: (body) => ({
-          url: "/create_account",
-          method: "POST",
-          body,
+        url: "/create_account",
+        method: "POST",
+        body,
       }),
     }),
+    adminSignup: build.mutation<void, adminSignupTypings>({
+      query: (body) => ({
+        url: "/create_admin",
+        method: "POST",
+        body,
+      }),
+    }),
+    adminLogin: build.mutation<void, loginCredentails>({
+          query: (credentials) => ({
+               url: "/login_admin",
+               method: "POST",
+               body: credentials,
+          })
+    })
   }),
 });
 
-export const { useLoginMutation, useSignupMutation } = authApi;
+export const { useLoginMutation, useSignupMutation, useAdminSignupMutation } =
+  authApi;
