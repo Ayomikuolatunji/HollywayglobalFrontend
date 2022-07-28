@@ -1,9 +1,13 @@
 import Link from "next/link";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { toast } from "react-toastify";
+import { useRouter } from 'next/router'
+
+
+import Cookies from "../../helpers/Cookies"
 import * as UI from "../../components";
 import { IFormValues } from "../../components/InputField/InputField";
 import { useAdminSignupMutation  } from "../../redux/apis/authApi";
@@ -35,6 +39,13 @@ const AdminSignup = () => {
   });
 
   const [adminSignup] = useAdminSignupMutation();
+  const router = useRouter()
+  
+  useEffect(() => {
+    if (Cookies.get("admin_token")) {
+        router.push("/admin-dashboard")
+    }
+  }, [router]);
 
   const onSubmit: SubmitHandler<IFormValues> = async (data) => {
     try {

@@ -47,7 +47,7 @@ const AdminLogin = () => {
   useEffect(()=>{
     if(isLoggedIn){
        setTimeout(()=>{
-        window.location.href = "/dashboard";
+        window.location.href = "/admin-dashboard";
        },2000)
     }
   },[isLoggedIn])

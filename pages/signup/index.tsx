@@ -3,12 +3,11 @@ import React, { useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useRouter } from 'next/router'
+import { useRouter } from "next/router";
 import { toast } from "react-toastify";
 
-
 import * as UI from "../../components";
-import Cookies from "../../helpers/Cookies"
+import Cookies from "../../helpers/Cookies";
 import { IFormValues } from "../../components/InputField/InputField";
 import { useSignupMutation } from "../../redux/apis/authApi";
 
@@ -38,14 +37,14 @@ const Signup = () => {
   } = useForm<IFormValues>({
     resolver: yupResolver(schema),
   });
-  
-  const router = useRouter()
+
+  const router = useRouter();
 
   const [signup] = useSignupMutation();
 
   useEffect(() => {
-    if (Cookies.get("admin_token")) {
-        router.push("/")
+    if (Cookies.get("user_token")) {
+      router.push("/");
     }
   }, [router]);
 
