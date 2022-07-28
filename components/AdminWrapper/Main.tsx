@@ -1,11 +1,9 @@
 import React, { useEffect } from 'react'
 import { useRouter } from 'next/router'
 
-
-
-
 import AdminSidebar from './AdminSidebar'
 import Cookies from '../../helpers/Cookies'
+import Header from './Header'
 
 
 
@@ -34,6 +32,7 @@ const AdminWrapper = ({
            <AdminSidebar/>
         </div>
         <main className='w-[80%] bg-[white]'> 
+           <Header/>
            {children}
         </main>
     </div>

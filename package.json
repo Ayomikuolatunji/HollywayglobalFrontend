@@ -10,6 +10,7 @@
     "@reduxjs/toolkit": "^1.8.3",
     "@tippyjs/react": "^4.2.6",
     "axios": "^0.27.2",
+    "mui-datatables": "^4.2.2",
     "next": "latest",
     "react": "18.1.0",
     "react-cookie": "^4.1.1",
