@@ -13,26 +13,26 @@ export const sideBarItems = [
   {
     name: "Products",
     icon: <RiGroupFill className="text-xl" />,
-    path: "/products",
+    path: "/admin-dashboard/products",
   },
   {
     name: "Categories",
     icon: <AiFillTags className="text-xl" />,
-    path: "/categories",
+    path: "/admin-dashboard/categories",
   },{
     name: "Orders",
     icon: <FaMoneyBill className="text-xl" />,
-    path: "/orders",
+    path: "/admin-dashboard/orders",
   },
   {
     name: "Users",
     icon: <FaMoneyBill className="text-xl" />,
-    path: "/users",
+    path: "/admin-dashboard/users",
   },
   {
     name: "Transactions",
     icon: <FaMoneyBill className="text-xl" />,
-    path: "/transactions",
+    path: "/admin-dashboard/transactions",
   },
 ];
 

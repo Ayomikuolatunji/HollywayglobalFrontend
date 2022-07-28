@@ -15,7 +15,7 @@ import * as helper from "../helpers";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router=useRouter()
-    if(router.pathname.startsWith("/admin-dashboard")) {
+    if(["/admin-dashboard", "/admin-dashboard/products"].includes(router.pathname)) {
         return (
           <div className="lg:w-[65%] md:w-[70%] sm:w-[80%] mx-auto w-[97%]">
           <Provider store={store}>
