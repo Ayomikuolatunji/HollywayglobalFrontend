@@ -2,7 +2,7 @@ const tableData = [
   {
     id: 1,
     first_name: "Temitope",
-    location: "Festac",
+    location: "Ajegunle",
     last_name: "Adejumoke",
     phone_number: " +234800 000 0000",
     partner: "Xpress Rewards",
