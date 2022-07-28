@@ -2,9 +2,8 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useRouter } from 'next/router'
+import { useRouter } from "next/router";
 import * as yup from "yup";
-
 
 import * as UI from "../../components";
 import { IFormValues } from "../../components/InputField/InputField";
@@ -13,7 +12,6 @@ import { toast } from "react-toastify";
 import Cookies from "../../helpers/Cookies";
 import { useAdminLoginMutation } from "../../redux/apis/authApi";
 import { Error, loginData } from "../../models/authTypings";
-
 
 const schema = yup
   .object({
@@ -25,9 +23,7 @@ const schema = yup
 const AdminLogin = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const router = useRouter()
-
-
+  const router = useRouter();
 
   const [adminLogin, { data }] = useAdminLoginMutation();
   const {
@@ -40,26 +36,26 @@ const AdminLogin = () => {
 
   useEffect(() => {
     if (Cookies.get("admin_token")) {
-        router.push("/")
+      router.push("/");
     }
   }, [router]);
 
-  useEffect(()=>{
-    if(isLoggedIn){
-       setTimeout(()=>{
+  useEffect(() => {
+    if (isLoggedIn) {
+      setTimeout(() => {
         window.location.href = "/admin-dashboard";
-       },2000)
+      }, 2000);
     }
-  },[isLoggedIn])
+  }, [isLoggedIn]);
 
   useEffect(() => {
     if (data) {
       const getData = data as unknown as loginData;
-      LoginStorage("admin_token",getData?.token, rememberMe);
+      LoginStorage("admin_token", getData?.token, rememberMe);
       toast.success("login successful", {
         toastId: "login-success-id",
       });
-      setIsLoggedIn(true)
+      setIsLoggedIn(true);
     }
   }, [data]);
 
@@ -151,7 +147,7 @@ const AdminLogin = () => {
         </div>
         <div className="left-login-information w-[50%] block p-3">
           <div className="title">
-            <h1 className="text-black text-lg font-extrabold">New Customers</h1>
+            <h1 className="text-black text-lg font-extrabold">New Admin</h1>
             <h3 className="mt-5">
               Creating an account has many benefits: check out faster, keep more
               than one address, track orders and more.
@@ -183,4 +179,4 @@ const AdminLogin = () => {
   );
 };
 
-export default  AdminLogin;
+export default AdminLogin;
