@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 
 
 import AdminSidebar from './AdminSidebar'
-import Cookies from '../../../helpers/Cookies'
+import Cookies from '../../helpers/Cookies'
 
 
 

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React from "react";
 import { navItems } from "../../../../helpers";
-import { RouteLink } from "../../../../components";
+import { RouteLink } from "../../..";
 import { CategoryProps } from "../../../../models/catergory";
 
 

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import React from "react";
-import * as UI from "../../../components";
+import * as UI from "../..";
 import * as helper  from "../../../helpers";
 import Cookies from "../../../helpers/Cookies";
 

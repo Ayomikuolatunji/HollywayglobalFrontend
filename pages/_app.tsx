@@ -6,10 +6,10 @@ import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { useRouter } from 'next/router'
 
-import HeaderWrapper from "../layouts/wrapper/HeaderWrapper";
-import PageWrapper from "../layouts/wrapper/PageWrapper";
+import HeaderWrapper from "../components/Wrapper/HeaderWrapper";
+import PageWrapper from "../components/Wrapper/PageWrapper";
 import { store, persistor } from "../redux/store";
-import AdminWrapper from "../layouts/wrapper/AdminWrapper/Main";
+import AdminWrapper from "../components/AdminWrapper/Main";
 import * as helper from "../helpers";
 
 
