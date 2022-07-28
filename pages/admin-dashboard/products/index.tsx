@@ -86,14 +86,14 @@ const VerifierHeader = () => {
           <BsSearch className="text-[#c9c9c9] text-xl absolute left-4 top-3.5" />
           <input
             type="text"
-            placeholder="Name/Phone no / Location"
+            placeholder="Search products"
             className="w-full py-3 px-5 indent-8 border-2"
           />
         </div>
         <div className="ml-5">
           <button className="bg-blue-500 hover:bg-blue-700 text-white font-medium  font-serif px-3 py-3 flex items-center">
             <FiPlus className="text-2xl inline mr-2" />
-            <span>Create project</span>
+            <span>New Product</span>
           </button>
         </div>
       </div>

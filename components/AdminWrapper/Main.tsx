@@ -28,10 +28,10 @@ const AdminWrapper = ({
 
   return (
     <div className='flex bg-white h-[100vh]'>
-        <div className='w-[20%] bg-[white]'>
+        <div className='w-[20%] bg-[white] h-[100vh]'>
            <AdminSidebar/>
         </div>
-        <main className='w-[80%] bg-[white]'> 
+        <main className='w-[80%] bg-[white] h-[100vh] overflow-scroll'> 
            <Header/>
            {children}
         </main>
