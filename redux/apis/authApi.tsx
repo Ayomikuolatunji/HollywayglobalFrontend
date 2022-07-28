@@ -4,6 +4,7 @@ import {
   loginCredentails,
   signupTypings,
 } from "../../models/authTypings";
+
 import { apiService } from "../service";
 
 export const authApi = apiService.injectEndpoints({
@@ -16,7 +17,7 @@ export const authApi = apiService.injectEndpoints({
       }),
     }),
     signup: build.mutation<void, signupTypings>({
-      query: (body) => ({
+      query: (body: any) => ({
         url: "/create_account",
         method: "POST",
         body,

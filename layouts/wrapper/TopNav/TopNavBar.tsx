@@ -24,7 +24,7 @@ const Auth = () => {
     }
   };
 
-  return helper.isAuthenticated("user_token" || "admin") ? (
+  return helper.isAuthenticated("user_token") ? (
     <li className="welcome-msg">
       <button onClick={logout}>
         <a className="cursor-pointer text-paragraph-color">Logout</a>
