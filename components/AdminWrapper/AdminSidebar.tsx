@@ -48,7 +48,7 @@ function AdminSidebar() {
           {sideBarItems.map((item, index) => {
             return (
               <Link href={item.path} key={index}>
-                <div className="flex items-center pl-7 p-2 nav-items mt-3 py- ml-3 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-[#F2FAFF] dark:hover:bg-gray-700">
+                <div className="flex items-center pl-7 p-2 nav-items mt-3 py- ml-3 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-[#F2FAFF] dark:hover:bg-gray-700 cursor-pointer">
                   <span>{item.icon}</span>
                   <span className="sidebar-item-name p-2 text-xl">
                     {item.name}

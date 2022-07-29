@@ -52,8 +52,8 @@ const AdminLogin = () => {
     if (data) {
       const getData = data as unknown as loginData;
       LoginStorage("admin_token", getData?.token, rememberMe);
-      toast.success("login successful", {
-        toastId: "login-success-id",
+      toast.success("Login successful", {
+        toastId: "ogin-success-id",
       });
       setIsLoggedIn(true);
     }
@@ -86,7 +86,7 @@ const AdminLogin = () => {
         <div className="personal-information w-[50%] p-3">
           <div className="title">
             <h1 className="text-black text-lg font-extrabold">
-              Personal Information
+              Admin Login
             </h1>
 
             <h3 className="mt-10">
