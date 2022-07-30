@@ -42,11 +42,8 @@ export const authApi = apiService.injectEndpoints({
     authAdmin:build.query<adminIdTypings, string>({
       query:(id)=>{
           return {
-            url:"/oneAdmin",
+            url:"/admin/"+ id,
             method:"GET",
-            params:{
-              adminId:id
-            }
           }
       }
    })  

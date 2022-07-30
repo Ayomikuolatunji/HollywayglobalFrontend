@@ -21,8 +21,13 @@ const AdminWrapper = ({
   const admin_id = getAppCredentials("admin_token")?.admin_id;
 
   if(admin_id){
-    const { data }=useAuthAdminQuery(admin_id)
-    console.log(data)
+    const { data, error }=useAuthAdminQuery(admin_id)
+    console.log(error)
+    if(error){
+      Cookies.remove("admin_token")
+      localStorage.removeItem("admin_id")
+      window.location.href="/admin-login"
+    }
   }
 
 
