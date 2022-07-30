@@ -29,3 +29,7 @@ export interface adminSignupTypings {
   email: string;
   password: string;
 }
+
+export interface adminIdTypings {
+  adminId:string
+}

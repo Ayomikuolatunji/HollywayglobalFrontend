@@ -1,4 +1,5 @@
 import {
+  adminIdTypings,
   adminSignupTypings,
   loginCredentails,
   signupTypings,
@@ -36,8 +37,19 @@ export const authApi = apiService.injectEndpoints({
           method: "POST",
           body: credentials,
         };
-      },
+      }
     }),
+    authAdmin:build.query<adminIdTypings, string>({
+      query:(id)=>{
+          return {
+            url:"/oneAdmin",
+            method:"GET",
+            params:{
+              adminId:id
+            }
+          }
+      }
+   })  
   }),
 });
 
@@ -46,4 +58,5 @@ export const {
   useSignupMutation,
   useAdminSignupMutation,
   useAdminLoginMutation,
+  useAuthAdminQuery
 } = authApi;

@@ -4,6 +4,8 @@ import { useRouter } from 'next/router'
 import AdminSidebar from './AdminSidebar'
 import Cookies from '../../helpers/Cookies'
 import Header from './Header'
+import { getAppCredentials } from "../../helpers/Auth";
+import { useAuthAdminQuery } from '../../redux/apis/authApi'
 
 
 
@@ -16,6 +18,14 @@ interface Props {
 const AdminWrapper = ({
   children
 }:Props) => {
+  const admin_id = getAppCredentials("admin_token")?.admin_id;
+
+  if(admin_id){
+    const { data }=useAuthAdminQuery(admin_id)
+    console.log(data)
+  }
+
+
     const router = useRouter()
     useEffect(() => {
       if (!Cookies.get("admin_token")) {
