@@ -3,7 +3,9 @@ import { FiPlus } from "react-icons/fi";
 
 
 
-const VerifierHeader = () => {
+const ProductHeader = () => {
+  
+
     return (
       <div className="flex justify-between">
         {/* select dropwdown */}
@@ -19,14 +21,6 @@ const VerifierHeader = () => {
           </select>
         </div>
         <div className="flex items-center">
-          <div className="search relative">
-            <BsSearch className="text-[#c9c9c9] text-xl absolute left-4 top-3.5" />
-            <input
-              type="text"
-              placeholder="Search products"
-              className="w-full py-3 px-5 indent-8 border-2"
-            />
-          </div>
           <div className="ml-5">
             <button className="bg-blue-500 hover:bg-blue-700 text-white font-medium  font-serif px-3 py-3 flex items-center">
               <FiPlus className="text-2xl inline mr-2" />
@@ -37,4 +31,4 @@ const VerifierHeader = () => {
       </div>
     );
   }
-export default VerifierHeader;
+export default ProductHeader 
