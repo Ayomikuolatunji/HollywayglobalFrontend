@@ -1,4 +1,4 @@
 export interface modalConditions {
-    isOpen:boolean
-    setIsOpen:(val:boolean)=>boolean
+    isOpen?:boolean
+    setIsOpen?:(val:boolean)=>void
 }

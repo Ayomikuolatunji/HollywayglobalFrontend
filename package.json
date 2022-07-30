@@ -3,6 +3,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "rollup": "rollup -c",
     "start": "next start"
   },
   "dependencies": {

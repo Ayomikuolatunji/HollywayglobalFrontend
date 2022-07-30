@@ -2,6 +2,7 @@ import React from "react";
 import MUIDataTable from "mui-datatables";
 
 import * as helper from "../../../../helpers";
+import { number } from "yup/lib/locale";
 
 const columns = [
   {
@@ -65,7 +66,7 @@ const columns = [
 export default function ProductTable() {
   const options = {
     filterType: "checkbox",
-    sort:true
+    caseSensitive:false
   };
 
   return (
