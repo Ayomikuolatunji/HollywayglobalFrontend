@@ -14,6 +14,8 @@ import * as helper from "../helpers";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
+
+  
   if (router.pathname.startsWith("/admin-login") || router.pathname.startsWith("/admin-signup")) {
     return (
       <div className="lg:w-[55%] flex justify-center items-center h-screen md:w-[70%] sm:w-[80%] mx-auto w-[97%]">
