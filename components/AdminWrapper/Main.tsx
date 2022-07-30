@@ -1,57 +1,46 @@
-import React, { useEffect } from 'react'
-import { useRouter } from 'next/router'
+import React, { useEffect } from "react";
+import { useRouter } from "next/router";
 
-import AdminSidebar from './AdminSidebar'
-import Cookies from '../../helpers/Cookies'
-import Header from './Header'
+import AdminSidebar from "./AdminSidebar";
+import Cookies from "../../helpers/Cookies";
+import Header from "./Header";
 import { getAppCredentials } from "../../helpers/Auth";
-import { useAuthAdminQuery } from '../../redux/apis/authApi'
-
-
+import { useAuthAdminQuery } from "../../redux/apis/authApi";
 
 interface Props {
-  children:JSX.Element | JSX.Element[]
+  children: JSX.Element | JSX.Element[];
 }
 
-
-
-const AdminWrapper = ({
-  children
-}:Props) => {
+const AdminWrapper = ({ children }: Props) => {
   const admin_id = getAppCredentials("admin_token")?.admin_id;
 
-  if(admin_id){
-    const { data, error }=useAuthAdminQuery(admin_id)
-    console.log(error)
-    if(error){
-      Cookies.remove("admin_token")
-      localStorage.removeItem("admin_id")
-      window.location.href="/admin-login"
+  if (admin_id) {
+    const { error } = useAuthAdminQuery(admin_id);
+    if (error) {
+      Cookies.remove("admin_token");
+      localStorage.removeItem("admin_id");
+      window.location.href = "/admin-login";
     }
   }
 
-
-    const router = useRouter()
-    useEffect(() => {
-      if (!Cookies.get("admin_token")) {
-          router.push("/admin-login")
-      }
-    }, [router]);
-  
-
-
+  const router = useRouter();
+  useEffect(() => {
+    if (!Cookies.get("admin_token")) {
+      router.push("/admin-login");
+    }
+  }, [router]);
 
   return (
-    <div className='flex bg-white h-[100vh]'>
-        <div className='w-[15%] bg-[white] h-[100vh]'>
-           <AdminSidebar/>
-        </div>
-        <main className='w-[85%] bg-[white] h-[100vh] overflow-scroll'> 
-           <Header/>
-           {children}
-        </main>
+    <div className="flex bg-white h-[100vh]">
+      <div className="w-[15%] bg-[white] h-[100vh]">
+        <AdminSidebar />
+      </div>
+      <main className="w-[85%] bg-[white] h-[100vh] overflow-scroll">
+        <Header />
+        {children}
+      </main>
     </div>
-  )
-}
+  );
+};
 
-export default AdminWrapper
+export default AdminWrapper;

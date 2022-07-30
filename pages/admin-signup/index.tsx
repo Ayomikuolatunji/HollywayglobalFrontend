@@ -47,6 +47,8 @@ const AdminSignup = () => {
     }
   }, [router]);
 
+  
+
   const onSubmit: SubmitHandler<IFormValues> = async (data) => {
     try {
       const { email, name, password, confirmPassword } = data;
