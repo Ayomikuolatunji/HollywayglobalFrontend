@@ -1,10 +1,10 @@
 export interface productTypings {
-    id:string
+    adminId:string
     name:string
     price:string
     description:string
     type:string
     image:string
     createdAt:Date
-    updatedAt:Date
+    updatedAt?:Date
 }
