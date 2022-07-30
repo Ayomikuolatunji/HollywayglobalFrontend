@@ -4,7 +4,7 @@ import Cookies from "../../helpers/Cookies";
 const Logout = () => {
   const logout = () => {
     if (Cookies.get("admin_token")) {
-      localStorage.removeItem("admin_token");
+      localStorage.removeItem("admin_id");
       Cookies.remove("admin_token");
       window.location.href = "/admin-login";
     }

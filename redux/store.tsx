@@ -13,7 +13,7 @@ import {
 
 import storage from "redux-persist/lib/storage";
 
-import { apiService } from "./service";
+import { apiService, secureApiService } from "./service";
 
 const persistConfig = {
   key: "root",
@@ -23,6 +23,7 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   [apiService.reducerPath]: apiService.reducer,
+  [secureApiService.reducerPath]: secureApiService.reducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -34,7 +35,7 @@ const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }).concat(apiService.middleware),
+    }).concat([apiService.middleware, secureApiService.middleware]),
 });
 setupListeners(store.dispatch);
 

@@ -3,15 +3,15 @@ import { Dialog } from "@headlessui/react";
 import { modalConditions } from "../../../../models/modal";
 import {
   Formik,
-  FormikHelpers,
-  FormikProps,
   Form,
   Field,
-  FieldProps,
 } from "formik";
 import { productTypings } from "../../../../models/product";
+import { usePostProductMutation } from "../../../../redux/apis/productApi";
 
 const AddProductModal = ({ isOpen, setIsOpen }: modalConditions) => {
+  const [postProdcts]=usePostProductMutation(); 
+
   const initialValues: productTypings = {
     adminId: "",
     name: "",
@@ -36,10 +36,11 @@ const AddProductModal = ({ isOpen, setIsOpen }: modalConditions) => {
           <Formik
             initialValues={initialValues}
             onSubmit={(values, actions) => {
-              console.log({ values, actions });
-
-              alert(JSON.stringify(values, null, 2));
-
+              postProdcts(values).then((data) => {
+                setIsOpen(false);
+                console.log(data);
+              })
+              .catch(err=>console.log(err));
               actions.setSubmitting(false);
             }}
           >
