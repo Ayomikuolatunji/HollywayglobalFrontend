@@ -1,6 +1,6 @@
 import CookiesSession from "./Cookies";
 
-const LoginStorage = (key: string, token: string, checked: boolean) => {
+const LoginStorage = (auth_id:string,key: string, token: string, checked: boolean) => {
   if (checked) {
     CookiesSession.set(key, token, {
       path: "/",
@@ -8,12 +8,14 @@ const LoginStorage = (key: string, token: string, checked: boolean) => {
       sameSite: "strict",
       secure: true,
     });
+    localStorage.setItem(auth_id, token);
   } else {
     CookiesSession.set(key, token, {
       path: "/",
       secure: true,
       sameSite: "strict",
     });
+    localStorage.setItem(auth_id, token);
   }
 };
 

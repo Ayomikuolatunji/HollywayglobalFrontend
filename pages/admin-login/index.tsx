@@ -51,7 +51,7 @@ const AdminLogin = () => {
   useEffect(() => {
     if (data) {
       const getData = data as unknown as loginData;
-      LoginStorage("admin_token", getData?.token, rememberMe);
+      LoginStorage("admin_id","admin_token", getData?.token, rememberMe);
       toast.success("Login successful", {
         toastId: "ogin-success-id",
       });

@@ -62,18 +62,20 @@ const AddProductModal = ({ isOpen, setIsOpen }: modalConditions) => {
                 id="description"
                 name="description"
                 placeholder="product description"
-                type="textArea"
+                as="textarea"
                 className="w-[90%] mx-auto border-2 border-gray-400 my-2 p-[5px]"
               />
               <Field
                 id="image"
                 name="image"
+                type="file"
                 placeholder="product image"
                 className="w-[90%] mx-auto border-2 border-gray-400 my-2 p-[5px]"
               />
               <Field
                 as="select"
-                name="color"
+                name="type"
+                id="type"
                 className="w-[90%] mx-auto border-2 border-gray-400 my-2 p-[5px]"
               >
                 <option value="red">Red</option>
@@ -82,9 +84,9 @@ const AddProductModal = ({ isOpen, setIsOpen }: modalConditions) => {
 
                 <option value="blue">Blue</option>
               </Field>
-              <div className="w-[90%] mx-auto my-2 p-[5px]">
-                <button onClick={() => setIsOpen(false)}>Cancel</button>
-                <button type="submit">Submit</button>
+              <div className="w-[40%] mx-auto my-2 p-[5px]">
+                <button onClick={() => setIsOpen(false)} className="text-blue-500 mx-3 font-extrabold">Cancel</button>
+                <button type="submit" className="py-[6px] px-[15px] mx-3 bg-blue-500 text-white">Submit</button>
               </div>
             </Form>
           </Formik>

@@ -55,7 +55,7 @@ const Login = () => {
   useEffect(() => {
     if (data) {
       const getData = data as unknown as loginData;
-      LoginStorage("user_token",getData?.token, rememberMe);
+      LoginStorage("user_id","user_token",getData?.token, rememberMe);
       toast.success("login successful", {
         toastId: "login-success-id",
       });
