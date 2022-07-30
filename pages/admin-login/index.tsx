@@ -51,9 +51,15 @@ const AdminLogin = () => {
   useEffect(() => {
     if (data) {
       const getData = data as unknown as loginData;
-      LoginStorage("admin_id","admin_token", getData?.token, rememberMe);
+      LoginStorage(
+        "admin_id",
+        getData?.adminId,
+        "admin_token",
+        getData?.token,
+        rememberMe
+      );
       toast.success("Login successful", {
-        toastId: "ogin-success-id",
+        toastId: "login-success-id",
       });
       setIsLoggedIn(true);
     }
@@ -85,9 +91,7 @@ const AdminLogin = () => {
       <div className="flex w-[100%]">
         <div className="personal-information w-[50%] p-3">
           <div className="title">
-            <h1 className="text-black text-lg font-extrabold">
-              Admin Login
-            </h1>
+            <h1 className="text-black text-lg font-extrabold">Admin Login</h1>
 
             <h3 className="mt-10">
               If you have an account, sign in with your email address

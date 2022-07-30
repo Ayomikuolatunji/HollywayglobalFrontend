@@ -2,9 +2,8 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useRouter } from 'next/router'
+import { useRouter } from "next/router";
 import * as yup from "yup";
-
 
 import * as UI from "../../components";
 import { IFormValues } from "../../components/InputField/InputField";
@@ -13,7 +12,6 @@ import { toast } from "react-toastify";
 import Cookies from "../../helpers/Cookies";
 import { useLoginMutation } from "../../redux/apis/authApi";
 import { Error, loginData } from "../../models/authTypings";
-
 
 const schema = yup
   .object({
@@ -25,9 +23,7 @@ const schema = yup
 const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const router = useRouter()
-
-
+  const router = useRouter();
 
   const [login, { data }] = useLoginMutation();
   const {
@@ -40,26 +36,32 @@ const Login = () => {
 
   useEffect(() => {
     if (Cookies.get("user_token")) {
-        router.push("/")
+      router.push("/");
     }
   }, [router]);
 
-  useEffect(()=>{
-    if(isLoggedIn){
-       setTimeout(()=>{
+  useEffect(() => {
+    if (isLoggedIn) {
+      setTimeout(() => {
         window.location.href = "/";
-       },2000)
+      }, 2000);
     }
-  },[isLoggedIn])
+  }, [isLoggedIn]);
 
   useEffect(() => {
     if (data) {
       const getData = data as unknown as loginData;
-      LoginStorage("user_id","user_token",getData?.token, rememberMe);
+      LoginStorage(
+        "user_id",
+        "user_token",
+        getData?.userId,
+        getData?.token,
+        rememberMe
+      );
       toast.success("login successful", {
         toastId: "login-success-id",
       });
-      setIsLoggedIn(true)
+      setIsLoggedIn(true);
     }
   }, [data]);
 

@@ -1,25 +1,60 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Dialog } from "@headlessui/react";
+
+
 import { modalConditions } from "../../../../models/modal";
-import {
-  Formik,
-  Form,
-  Field,
-} from "formik";
 import { productTypings } from "../../../../models/product";
 import { usePostProductMutation } from "../../../../redux/apis/productApi";
+import * as helper from "../../../../helpers"
 
 const AddProductModal = ({ isOpen, setIsOpen }: modalConditions) => {
-  const [postProdcts]=usePostProductMutation(); 
-
-  const initialValues: productTypings = {
+  const [postProdcts] = usePostProductMutation();
+  const [file, setFile] = useState("");
+  const [initialValues, setInitialValues] = useState<productTypings>({
     adminId: "",
     name: "",
     price: "",
     description: "",
-    image: "",
-    type: "",
-    createdAt: new Date(),
+    type: ""
+  });
+
+  const handleFileChange = (e: any) => {
+    const file = e.target.files[0];
+    setFile(file);
+  };
+
+  const onSubmit = (e: any) => {
+    e.preventDefault();
+    if (file) {
+      const fileData = new FormData();
+      fileData.append("file", file);
+      fetch("http://localhost:8080/images", {
+        method: "POST",
+        body: fileData,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          postProdcts({ ...initialValues, image: data.imageUrl })
+            .unwrap()
+            .then((data: any) => {
+              if(data.message==="Product created successfully"){
+                  setIsOpen(false);
+              }
+              console.log(data);
+            })
+            .catch((err) => console.log(err));
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+
+  const handleChange = (e: any) => {
+    const { name, value } = e.target;
+
+    setInitialValues({ ...initialValues, [name]: value });
   };
 
   return (
@@ -33,68 +68,71 @@ const AddProductModal = ({ isOpen, setIsOpen }: modalConditions) => {
         <Dialog.Title className="p-4">Add a new Product</Dialog.Title>
         <hr className="w-full" />
         <Dialog.Description className="flex justify-center items-center w-[100%]">
-          <Formik
-            initialValues={initialValues}
-            onSubmit={(values, actions) => {
-              postProdcts(values).then((data) => {
-                setIsOpen(false);
-                console.log(data);
-              })
-              .catch(err=>console.log(err));
-              actions.setSubmitting(false);
-            }}
-          >
-            <Form className="flex flex-col w-[100%]">
-              <Field
+          <form onSubmit={onSubmit} className="w-full">
+            <div className="flex flex-col w-[100%]">
+              <input
                 id="name"
                 name="name"
                 placeholder="product name"
+                onChange={(e) => handleChange(e)}
+                value={initialValues.name}
                 type="text"
                 className="w-[90%] mx-auto border-2 border-gray-400 my-2 p-[5px]"
               />
-              <Field
+              <input
                 id="price"
                 name="price"
                 placeholder="product price"
                 type="number"
+                onChange={(e) => handleChange(e)}
+                value={initialValues.price}
                 className="w-[90%] mx-auto border-2 border-gray-400 my-2 p-[5px]"
               />
-              <Field
+              <textarea
                 id="description"
                 name="description"
                 placeholder="product description"
-                as="textarea"
+                value={initialValues.description}
+                onChange={(e) => handleChange(e)}
                 className="w-[90%] mx-auto border-2 border-gray-400 my-2 p-[5px]"
               />
-              <Field
+              <input
                 id="image"
                 name="image"
                 type="file"
+                onChange={(e) => handleFileChange(e)}
                 placeholder="product image"
                 className="w-[90%] mx-auto border-2 border-gray-400 my-2 p-[5px]"
               />
-              <Field
-                as="select"
+              <select
                 name="type"
                 id="type"
+                onChange={(e) => handleChange(e)}
+                value={initialValues.type}
                 className="w-[90%] mx-auto border-2 border-gray-400 my-2 p-[5px]"
               >
-                <option value="red">Red</option>
-
-                <option value="green">Green</option>
-
-                <option value="blue">Blue</option>
-              </Field>
+                <option value="">Select Auto Type</option>
+                {helper.navItems.map()}
+              </select>
               <div className="w-[40%] mx-auto my-2 p-[5px]">
-                <button onClick={() => setIsOpen(false)} className="text-blue-500 mx-3 font-extrabold">Cancel</button>
-                <button type="submit" className="py-[6px] px-[15px] mx-3 bg-blue-500 text-white">Submit</button>
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="text-blue-500 mx-3 font-extrabold"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="py-[6px] px-[15px] mx-3 bg-blue-500 text-white"
+                >
+                  Submit
+                </button>
               </div>
-            </Form>
-          </Formik>
+            </div>
+          </form>
         </Dialog.Description>
       </Dialog.Panel>
     </Dialog>
   );
 };
-
 export default AddProductModal;

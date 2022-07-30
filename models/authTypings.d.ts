@@ -12,6 +12,8 @@ export interface Error {
 export interface loginData {
   token: string;
   message: string;
+  adminId: string;
+  userId: string;
 }
 
 export interface signupTypings {
