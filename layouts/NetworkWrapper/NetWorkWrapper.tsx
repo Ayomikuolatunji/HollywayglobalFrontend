@@ -41,7 +41,5 @@ export default function NetWorkWrapper({ children }: Props) {
           }
       },[]) 
 
-  return (
-    <div>{children}</div>
-  )
+  return <div>{children}</div>
 }
