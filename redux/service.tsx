@@ -29,5 +29,7 @@ export const secureApiService = createApi({
       return headers;
     },
   }),
+  refetchOnReconnect: true,
+  tagTypes: ["Product"],
   endpoints: () => ({}),
 });

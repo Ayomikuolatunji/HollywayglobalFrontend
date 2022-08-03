@@ -7,37 +7,29 @@ import { useGetProductsQuery } from "../../../../redux/apis/productApi";
 
 
 export default function ProductTable() {
-  const {data}=useGetProductsQuery()
+  const {data,isFetching }=useGetProductsQuery()
   console.log(data)
   const columns =useMemo(()=>{
      return  [
       {
-        name: "produtId",
-        label: "Product ID",
-        options: {
-          filter: true,
-          sort: true,
-        }
-      },
-      {
-        name: "Car Name",
-        label: "Car Name",
+        name: "name",
+        label: "name",
         options: {
           filter: true,
           sort: true,
         },
       },
       {
-        name: "Car Price",
-        label: "Car Price",
+        name: "price",
+        label: "price",
         options: {
           filter: true,
           sort: false,
         },
       },
       {
-        name: "Type",
-        label: "Type",
+        name: "type",
+        label: "type",
         options: {
           filter: true,
           sort: false,
@@ -53,12 +45,12 @@ export default function ProductTable() {
 
   return (
     <div className="mt-10">
-      {/* <MUIDataTable
+      {isFetching?<div className="flex h-screen justify-center items-center">Loading...</div>: <MUIDataTable
         title={"Products List"}
-        data={helper.FakeProduct}
+        data={data.products}
         columns={columns}
         options={options}
-      /> */}
+      />}
     </div>
   );
 }

@@ -13,18 +13,16 @@ export const productApis = secureApiService.injectEndpoints({
           adminId: admin_id,
         },
       }),
+      providesTags: ['Product'],
     }),
     postProduct: build.mutation<void, productTypings>({
-      query: (body) => {
-        console.log(admin_id);
-        return {
+      query: (body) => ({
           url: `/products`,
           method: "POST",
           body: { ...body, adminId: admin_id && admin_id }
-        };
-      },
+      }),
     }),
-  }),
+  })
 });
 
 export const { useGetProductsQuery, usePostProductMutation } = productApis;
