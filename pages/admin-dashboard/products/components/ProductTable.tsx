@@ -45,12 +45,7 @@ export default function ProductTable() {
 
   return (
     <div className="mt-10">
-      {isFetching?<div className="flex h-screen justify-center items-center">Loading...</div>: <MUIDataTable
-        title={"Products List"}
-        data={data.products}
-        columns={columns}
-        options={options}
-      />}
+      {isFetching?<div className="flex h-screen justify-center items-center">Loading...</div>: ""}
     </div>
   );
 }
