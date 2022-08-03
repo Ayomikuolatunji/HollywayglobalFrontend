@@ -12,28 +12,16 @@ export default function ProductTable() {
   const columns =useMemo(()=>{
      return  [
       {
-        name: "name",
-        label: "name",
-        options: {
-          filter: true,
-          sort: true,
-        },
+        column: "name",
+        accessor: "name",
       },
       {
-        name: "price",
-        label: "price",
-        options: {
-          filter: true,
-          sort: false,
-        },
+        column: "price",
+        accessor: "price",
       },
       {
-        name: "type",
-        label: "type",
-        options: {
-          filter: true,
-          sort: false,
-        },
+        column: "type",
+        accessor: "type",
       },
     
     ]

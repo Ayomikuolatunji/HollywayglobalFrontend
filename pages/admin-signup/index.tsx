@@ -15,12 +15,7 @@ import { Error } from "../../models/AxioError";
 const schema = yup
   .object({
     name: yup.string().required(),
-    email: yup.object().shape({
-      email: yup
-        .string()
-        .email("Invalid email format")
-        .required("Email is required"),
-    }),
+    email: yup.string().email().required("Email is required"),
     password: yup.string().required(),
     confirmPassword: yup.string().required(),
   })
@@ -30,10 +25,11 @@ const AdminSignup = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<IFormValues>({
     resolver: yupResolver(schema),
   });
+
 
   const [adminSignup] = useAdminSignupMutation();
   const router = useRouter();
