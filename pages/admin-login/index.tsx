@@ -36,14 +36,14 @@ const AdminLogin = () => {
 
   useEffect(() => {
     if (Cookies.get("admin_token")) {
-      router.push("/");
+        router.push("/admin-dashboard");
     }
-  }, [router]);
+  }, [router, Cookies]);
 
   useEffect(() => {
     if (isLoggedIn) {
       setTimeout(() => {
-        window.location.href = "/admin-dashboard";
+        router.push("/admin-dashboard");
       }, 2000);
     }
   }, [isLoggedIn]);

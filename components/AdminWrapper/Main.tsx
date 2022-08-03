@@ -14,20 +14,22 @@ interface Props {
 const AdminWrapper = ({ children }: Props) => {
   const admin_id = getAppCredentials("admin_token")?.admin_id;
   const { error } = useAuthAdminQuery(admin_id || "");
- 
+
   const router = useRouter();
+
   useEffect(() => {
     if (!Cookies.get("admin_token")) {
+       router.push("/admin-login");
+    } 
+  }, [router, admin_id, error, Cookies]);
+
+  useEffect(()=>{
+    if(error){
+      Cookies.remove("admin_token");
+      localStorage.removeItem("admin_id");
       router.push("/admin-login");
     }
-    if (admin_id) {
-      if (error && Cookies.get("admin_token")) {
-        Cookies.remove("admin_token");
-        localStorage.removeItem("admin_id");
-        router.push("/admin-login");
-      }
-    }
-  }, [router, admin_id, error, Cookies]);
+  },[error, router])
 
   return (
     <div className="flex bg-white h-[100vh]">
