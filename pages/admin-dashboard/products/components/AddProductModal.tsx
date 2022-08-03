@@ -10,18 +10,23 @@ import * as helper from "../../../../helpers"
 const AddProductModal = ({ isOpen, setIsOpen }: modalConditions) => {
   const [postProdcts] = usePostProductMutation();
   const [file, setFile] = useState("");
+  const [productAvailable,setProductAvailable] = useState(false);
   const [initialValues, setInitialValues] = useState<productTypings>({
     adminId: "",
     name: "",
     price: "",
     description: "",
-    type: ""
+    type: "",
   });
 
   const handleFileChange = (e: any) => {
     const file = e.target.files[0];
     setFile(file);
   };
+
+  const handleProductAvailable=(e:any)=>{
+    setProductAvailable(e.target.checked)
+  }
 
   const onSubmit = (e: any) => {
     e.preventDefault();
@@ -35,7 +40,7 @@ const AddProductModal = ({ isOpen, setIsOpen }: modalConditions) => {
         .then((res) => res.json())
         .then((data) => {
           console.log(data);
-          postProdcts({ ...initialValues, image: data.imageUrl })
+          postProdcts({ ...initialValues,productAvailable,image: data.imageUrl })
             .unwrap()
             .then((data: any) => {
               if(data.message==="Product created successfully"){
@@ -43,7 +48,7 @@ const AddProductModal = ({ isOpen, setIsOpen }: modalConditions) => {
               }
               console.log(data);
             })
-            .catch((err) => console.log(err));
+            .catch((err:any) => console.log(err));
         })
         .catch((err) => {
           console.log(err);
@@ -51,9 +56,11 @@ const AddProductModal = ({ isOpen, setIsOpen }: modalConditions) => {
     }
   };
 
-  const handleChange = (e: any) => {
-    const { name, value } = e.target;
+  console.log(productAvailable)
 
+  const handleChange = (e: any) => {
+    // for checkbox onchange event
+    const { name, value } = e.target;
     setInitialValues({ ...initialValues, [name]: value });
   };
 
@@ -104,6 +111,19 @@ const AddProductModal = ({ isOpen, setIsOpen }: modalConditions) => {
                 placeholder="product image"
                 className="w-[90%] mx-auto border-2 border-gray-400 my-2 p-[5px]"
               />
+              {/* is product available checkbox */}
+               <div className="flex items-center w-[100%]">
+               <label htmlFor="productAvailable">
+                   Is product available?
+                </label>
+                <input
+                  id="productAvailable"
+                  name="productAvailable"
+                  type="checkbox"
+                  onChange={(e)=>handleProductAvailable(e)}
+                  className="mx-auto border-2 border-gray-400 my-2 p-[5px]"
+                />
+                </div> 
               <select
                 name="type"
                 id="type"

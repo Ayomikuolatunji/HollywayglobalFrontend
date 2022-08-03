@@ -3,6 +3,7 @@ export interface productTypings {
     name:string
     price:string
     description:string
+    productAvailable?:boolean
     type:string
     image?:string
     createdAt?:Date

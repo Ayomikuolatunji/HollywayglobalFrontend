@@ -7,7 +7,7 @@ export const productApis = secureApiService.injectEndpoints({
   endpoints: (build) => ({
     getProducts: build.query<productTypings[], void>({
       query: () => ({
-        url: `/products/`,
+        url: `/products`,
         method: "GET",
         params: {
           adminId: admin_id,
