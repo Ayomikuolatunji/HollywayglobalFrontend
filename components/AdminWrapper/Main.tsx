@@ -29,7 +29,7 @@ const AdminWrapper = ({ children }: Props) => {
       localStorage.removeItem("admin_id");
       router.push("/admin-login");
     }
-  },[error, router])
+  },[error])
 
   return (
     <div className="flex bg-white h-[100vh]">

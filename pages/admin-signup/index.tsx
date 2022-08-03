@@ -4,26 +4,23 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { toast } from "react-toastify";
-import { useRouter } from 'next/router'
+import { useRouter } from "next/router";
 
-
-import Cookies from "../../helpers/Cookies"
+import Cookies from "../../helpers/Cookies";
 import * as UI from "../../components";
 import { IFormValues } from "../../components/InputField/InputField";
-import { useAdminSignupMutation  } from "../../redux/apis/authApi";
-
-interface Error {
-  data: {
-    data: {
-      message: string;
-    };
-  };
-}
+import { useAdminSignupMutation } from "../../redux/apis/authApi";
+import { Error } from "../../models/AxioError";
 
 const schema = yup
   .object({
-    name:yup.string().required(),
-    email: yup.string().required(),
+    name: yup.string().required(),
+    email: yup.object().shape({
+      email: yup
+        .string()
+        .email("Invalid email format")
+        .required("Email is required"),
+    }),
     password: yup.string().required(),
     confirmPassword: yup.string().required(),
   })
@@ -39,15 +36,13 @@ const AdminSignup = () => {
   });
 
   const [adminSignup] = useAdminSignupMutation();
-  const router = useRouter()
-  
+  const router = useRouter();
+
   useEffect(() => {
     if (Cookies.get("admin_token")) {
-        router.push("/admin-dashboard")
+      router.push("/admin-dashboard");
     }
   }, [router]);
-
-  
 
   const onSubmit: SubmitHandler<IFormValues> = async (data) => {
     try {
@@ -68,7 +63,7 @@ const AdminSignup = () => {
     } catch (error: any) {
       const err = error as Error;
       if (error) {
-        toast.error(err?.data?.data.message, {
+        toast.error(err?.data.message, {
           toastId: "main-response-error",
         });
       } else {
@@ -76,7 +71,7 @@ const AdminSignup = () => {
           toastId: "main-response-error-id__2",
         });
       }
-      console.log(err)
+      console.log(err);
     }
   };
 
