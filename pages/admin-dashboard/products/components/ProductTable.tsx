@@ -1,19 +1,18 @@
 import React, { useMemo } from "react";
-import { useTable } from "react-table";
+import moment from 'moment';
+import Table from "../../../../components/Table/Table";
 
-import * as helper from "../../../../helpers";
 import {
   fetchProductTypings,
-  productColumns,
   productTypings,
 } from "../../../../models/product";
 import { useGetProductsQuery } from "../../../../redux/apis/productApi";
 
 export default function ProductTable() {
   const { data, isFetching } = useGetProductsQuery();
-  const getData = data as unknown as fetchProductTypings;
+  const getData = data as fetchProductTypings;
 
-  const columns:any= useMemo(() => {
+  const columns: any = useMemo(() => {
     return [
       {
         Header: "name",
@@ -31,60 +30,42 @@ export default function ProductTable() {
         Header: "onsales",
         accessor: "onsales",
       },
+      {
+        Header:"createdAt",
+        accessor:"createdAt",
+      },{
+        Header:"updatedAt",
+        accessor:"updatedAt",
+      }
     ];
   }, []);
 
   const dataTable = useMemo(() => {
     return getData?.products?.map((product: productTypings) => {
       return {
+        id:product.id,
         name: product.name,
         price: product.price,
         type: product.type,
         onsales: product.productAvailable,
+        createdAt: moment(product.createdAt).format("MMMM Do YYYY"),
+        updatedAt: moment(product.updatedAt).format("MMMM Do YYYY"),
       };
     });
   }, [getData]);
 
-  const { getTableProps, getTableBodyProps, rows, headerGroups, prepareRow } =
-    useTable({
-      columns,
-      data: dataTable || [],
-    });
-
   return (
-    <div className="mt-10">
+    <div className="mt-10 ">
       {isFetching ? (
         <div className="flex h-screen justify-center items-center">
           Loading...
         </div>
-      ) : (
-        <table {...getTableProps()}>
-          <thead>
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <th {...column.getHeaderProps()}>
-                    {column.render("Header")}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody {...getTableBodyProps()}>
-            {rows.map((row, i) => {
-              prepareRow(row);
-              return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map((cell) => {
-                    return (
-                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
-                    );
-                  })}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+      ) : dataTable && dataTable.length > 0 ? (
+        <Table columns={columns} dataTable={dataTable} />
+      ): (
+        <div className="flex justify-center items-center w-full border-2">
+          Your products lists is empty
+        </div>
       )}
     </div>
   );

@@ -1,4 +1,5 @@
 export interface productTypings {
+    id:string
     adminId?:string
     name:string
     price:string
@@ -19,5 +20,5 @@ export interface productColumns {
     name:string
     price:string
     type:string
-    onSales:string
+    onsales:string
 }

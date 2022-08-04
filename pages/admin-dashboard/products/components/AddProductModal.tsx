@@ -132,7 +132,7 @@ const AddProductModal = ({ isOpen, setIsOpen }: modalConditions) => {
                 className="w-[90%] mx-auto border-2 border-gray-400 my-2 p-[5px]"
               >
                 <option value="">Select Auto Type</option>
-                {helper.navItems.map((option,index)=>(
+                {helper.navItems.slice(1,helper.navItems.length).map((option,index)=>(
                   <option value={option.name}>{option.name}</option>
                 ))}
               </select>

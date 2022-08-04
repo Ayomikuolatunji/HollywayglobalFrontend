@@ -21,6 +21,7 @@ export const productApis = secureApiService.injectEndpoints({
           method: "POST",
           body: { ...body, adminId: admin_id && admin_id }
       }),
+      invalidatesTags: ['Product'],
     }),
   })
 });
