@@ -1,44 +1,81 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useRowSelect, useTable } from "react-table";
-import { productTypings, productColumns } from "../../models/product";
 import Tbody from "./Tbody";
 import Thead from "./Thead";
 
 interface Props {
   dataTable: any;
   columns: any;
+  selectedRows:any, 
+  setSelectedRows:any,
 }
 
-export default function Table({ columns, dataTable }: Props) {
-  const { getTableProps, getTableBodyProps, rows, headerGroups, prepareRow } =
-    useTable({
+const IndeterminateCheckbox = React.forwardRef(
+  ({ indeterminate, ...rest }: any, ref: any) => {
+    const defaultRef = React.useRef();
+    const resolvedRef = ref || defaultRef;
+    React.useEffect(() => {
+      resolvedRef.current.indeterminate = indeterminate;
+    }, [resolvedRef, indeterminate]);
+
+    return (
+      <>
+        <input type="checkbox" ref={resolvedRef} {...rest} />
+      </>
+    );
+  }
+);
+
+export default function Table({ columns, dataTable,selectedRows, setSelectedRows, }: Props) {
+  const {
+    getTableProps,
+    getTableBodyProps,
+    rows,
+    headerGroups,
+    prepareRow,
+    // get selected rows
+    selectedFlatRows,
+    state,
+    // 
+  } = useTable(
+    {
       columns,
       data: dataTable || [],
-    },useRowSelect,  hooks => {
-        hooks.visibleColumns.push(columns => [
-          // Let's make a column for selection
-          {
-            id: 'selection',
-            Header: (prop:any) => {
-                return (
-                    (
-                    <div>
-                        ID
-                    </div>
-                    )
-                )
-            },
-            Cell: ({ row }:any) => {
-                return <input type="checkbox" {...row.getToggleRowSelectedProps()} />
-            },
+    },
+    useRowSelect,
+    (hooks) => {
+      hooks.visibleColumns.push((columns) => [
+        // Let's make a column for selection
+        {
+          id: "selection",
+          Header: (prop: any) => {
+            return (
+              <div>
+                <IndeterminateCheckbox
+                  {...prop.getToggleAllRowsSelectedProps()}
+                />
+              </div>
+            );
           },
-          ...columns,
-        ])
-      });
+          accessor: "id",
+          Cell: ({ row }: any) => {
+            return (
+              <input type="checkbox" {...row.getToggleRowSelectedProps()} />
+            );
+          },
+        },
+        ...columns,
+      ]);
+    }
+  );
 
-      console.log(useRowSelect)
 
-    // add id field to columns
+
+  useEffect(() => {
+    setSelectedRows(selectedFlatRows)
+  },[selectedFlatRows])
+
+  // add id field to columns
 
   return (
     <table

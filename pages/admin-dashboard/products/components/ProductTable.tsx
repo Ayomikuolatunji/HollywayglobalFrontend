@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import moment from 'moment';
 import Table from "../../../../components/Table/Table";
 
@@ -11,6 +11,7 @@ import { useGetProductsQuery } from "../../../../redux/apis/productApi";
 export default function ProductTable() {
   const { data, isFetching } = useGetProductsQuery();
   const getData = data as fetchProductTypings;
+  const [selectedRows, setSelectedRows] = useState([]);
 
   const columns: any = useMemo(() => {
     return [
@@ -36,7 +37,26 @@ export default function ProductTable() {
       },{
         Header:"updatedAt",
         accessor:"updatedAt",
+      },
+     //add delete and edit button
+      {
+        Header: "Action",
+        Cell: (props: any) => {
+          return (
+            <div className="">
+              <button
+                onClick={() => {
+                  console.log(props.row.original);
+                }
+                }
+              >
+                Edit
+              </button>
+            </div>
+          );
+        }
       }
+
     ];
   }, []);
 
@@ -54,6 +74,8 @@ export default function ProductTable() {
     });
   }, [getData]);
 
+  console.log(selectedRows);
+
   return (
     <div className="mt-10 ">
       {isFetching ? (
@@ -61,7 +83,10 @@ export default function ProductTable() {
           Loading...
         </div>
       ) : dataTable && dataTable.length > 0 ? (
-        <Table columns={columns} dataTable={dataTable} />
+        <Table columns={columns} dataTable={dataTable} 
+        selectedRows={selectedRows}
+        setSelectedRows={setSelectedRows}
+        />
       ): (
         <div className="flex justify-center items-center w-full border-2">
           Your products lists is empty
