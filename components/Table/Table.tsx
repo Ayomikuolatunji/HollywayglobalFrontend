@@ -14,19 +14,29 @@ export default function Table({ columns, dataTable }: Props) {
     useTable({
       columns,
       data: dataTable || [],
-    },useRowSelect,
-    hooks=>{
-        hooks.visibleColumns.push(columns=>{
-            columns.push({
-                id:"selection",
-                Header:()=>null,
-                accessor:"selection",
-                Cell:(props:any)=>{
-                    return <input type="checkbox" {...props.getToggleRowSelectedProps()} />
-                }
-            })
-        })
-    });
+    },useRowSelect,  hooks => {
+        hooks.visibleColumns.push(columns => [
+          // Let's make a column for selection
+          {
+            id: 'selection',
+            Header: (prop:any) => {
+                return (
+                    (
+                    <div>
+                        ID
+                    </div>
+                    )
+                )
+            },
+            Cell: ({ row }:any) => {
+                return <input type="checkbox" {...row.getToggleRowSelectedProps()} />
+            },
+          },
+          ...columns,
+        ])
+      });
+
+      console.log(useRowSelect)
 
     // add id field to columns
 

@@ -1,5 +1,5 @@
 export interface productTypings {
-    id:string
+    id?:string
     adminId?:string
     name:string
     price:string
