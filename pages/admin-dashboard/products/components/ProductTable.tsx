@@ -1,39 +1,91 @@
 import React, { useMemo } from "react";
-import MUIDataTable from "mui-datatables";
+import { useTable } from "react-table";
 
 import * as helper from "../../../../helpers";
+import {
+  fetchProductTypings,
+  productColumns,
+  productTypings,
+} from "../../../../models/product";
 import { useGetProductsQuery } from "../../../../redux/apis/productApi";
 
-
-
 export default function ProductTable() {
-  const {data,isFetching }=useGetProductsQuery()
-  console.log(data)
-  const columns =useMemo(()=>{
-     return  [
+  const { data, isFetching } = useGetProductsQuery();
+  const getData = data as unknown as fetchProductTypings;
+
+  const columns:any= useMemo(() => {
+    return [
       {
-        column: "name",
+        Header: "name",
         accessor: "name",
       },
       {
-        column: "price",
+        Header: "price",
         accessor: "price",
       },
       {
-        column: "type",
+        Header: "type",
         accessor: "type",
       },
-    
-    ]
-  },[]);
-  const options = {
-    filterType: "checkbox",
-    caseSensitive:false
-  };
+      {
+        Header: "onsales",
+        accessor: "onsales",
+      },
+    ];
+  }, []);
+
+  const dataTable = useMemo(() => {
+    return getData?.products?.map((product: productTypings) => {
+      return {
+        name: product.name,
+        price: product.price,
+        type: product.type,
+        onsales: product.productAvailable,
+      };
+    });
+  }, [getData]);
+
+  const { getTableProps, getTableBodyProps, rows, headerGroups, prepareRow } =
+    useTable({
+      columns,
+      data: dataTable || [],
+    });
 
   return (
     <div className="mt-10">
-      {isFetching?<div className="flex h-screen justify-center items-center">Loading...</div>: ""}
+      {isFetching ? (
+        <div className="flex h-screen justify-center items-center">
+          Loading...
+        </div>
+      ) : (
+        <table {...getTableProps()}>
+          <thead>
+            {headerGroups.map((headerGroup) => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column) => (
+                  <th {...column.getHeaderProps()}>
+                    {column.render("Header")}
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {rows.map((row, i) => {
+              prepareRow(row);
+              return (
+                <tr {...row.getRowProps()}>
+                  {row.cells.map((cell) => {
+                    return (
+                      <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                    );
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 }

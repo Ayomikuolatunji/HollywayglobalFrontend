@@ -1,11 +1,11 @@
 import { secureApiService } from "../service";
 import { getAppCredentials } from "../../helpers/Auth";
-import { productTypings } from "../../models/product";
+import { fetchProductTypings, productTypings } from "../../models/product";
 const admin_id = getAppCredentials("admin_token")?.admin_id;
 
 export const productApis = secureApiService.injectEndpoints({
   endpoints: (build) => ({
-    getProducts: build.query<productTypings[], void>({
+    getProducts: build.query<fetchProductTypings, void>({
       query: () => ({
         url: `/products`,
         method: "GET",
