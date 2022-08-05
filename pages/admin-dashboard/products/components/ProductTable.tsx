@@ -65,7 +65,7 @@ export default function ProductTable() {
       return {
         id:product.id,
         name: product.name,
-        price: product.price,
+        price: ` ${product.currency} ${product.price}`,
         type: product.type,
         onsales: product.productAvailable,
         createdAt: moment(product.createdAt).format("MMMM Do YYYY"),
@@ -92,6 +92,7 @@ export default function ProductTable() {
           Your products lists is empty
         </div>
       )}
+
     </div>
   );
 }

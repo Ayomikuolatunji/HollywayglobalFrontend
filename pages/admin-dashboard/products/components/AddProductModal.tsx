@@ -1,23 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Dialog } from "@headlessui/react";
-
 
 import { modalConditions } from "../../../../models/modal";
 import { productTypings } from "../../../../models/product";
 import { usePostProductMutation } from "../../../../redux/apis/productApi";
-import * as helper from "../../../../helpers"
+import { currencyOptions } from "../../../../helpers/utils";
+import * as helper from "../../../../helpers";
 
 const AddProductModal = ({ isOpen, setIsOpen }: modalConditions) => {
   const [postProdcts] = usePostProductMutation();
   const [file, setFile] = useState("");
-  const [productAvailable,setProductAvailable] = useState(false);
+  const [productAvailable, setProductAvailable] = useState(false);
   const [initialValues, setInitialValues] = useState<productTypings>({
     adminId: "",
     name: "",
     price: "",
     description: "",
     type: "",
-    currency:""
+    currency: "",
   });
 
   const handleFileChange = (e: any) => {
@@ -25,9 +25,9 @@ const AddProductModal = ({ isOpen, setIsOpen }: modalConditions) => {
     setFile(file);
   };
 
-  const handleProductAvailable=(e:any)=>{
-    setProductAvailable(e.target.checked)
-  }
+  const handleProductAvailable = (e: any) => {
+    setProductAvailable(e.target.checked);
+  };
 
   const onSubmit = (e: any) => {
     e.preventDefault();
@@ -40,22 +40,24 @@ const AddProductModal = ({ isOpen, setIsOpen }: modalConditions) => {
       })
         .then((res) => res.json())
         .then((data) => {
-          postProdcts({ ...initialValues,productAvailable,image: data.imageUrl })
+          postProdcts({
+            ...initialValues,
+            productAvailable,
+            image: data.imageUrl,
+          })
             .unwrap()
             .then((data: any) => {
-              if(data.message==="Product created successfully"){
-                  setIsOpen(false);
+              if (data.message === "Product created successfully") {
+                setIsOpen(false);
               }
             })
-            .catch((err:any) => console.log(err));
+            .catch((err: any) => console.log(err));
         })
         .catch((err) => {
           console.log(err);
         });
     }
   };
-
-  console.log(productAvailable)
 
   const handleChange = (e: any) => {
     // for checkbox onchange event
@@ -102,6 +104,22 @@ const AddProductModal = ({ isOpen, setIsOpen }: modalConditions) => {
                 onChange={(e) => handleChange(e)}
                 className="w-[90%] mx-auto border-2 border-gray-400 my-2 p-[5px]"
               />
+              {/* currency selection  */}
+              <select
+                name="currency"
+                onChange={(e) => handleChange(e)}
+                value={initialValues.currency}
+                className="w-[90%] mx-auto border-2 border-gray-400 my-2 p-[5px]"
+              >
+                <option value="">select sales currency</option>
+                {Object.values(currencyOptions).map((key) => {
+                  return (
+                    <option value={key.symbol_native} key={key.symbol_native}>
+                      {key.symbol_native}
+                    </option>
+                  );
+                })}
+              </select>
               <input
                 id="image"
                 name="image"
@@ -111,18 +129,16 @@ const AddProductModal = ({ isOpen, setIsOpen }: modalConditions) => {
                 className="w-[90%] mx-auto border-2 border-gray-400 my-2 p-[5px]"
               />
               {/* is product available checkbox */}
-               <div className="flex items-center w-[100%]">
-               <label htmlFor="productAvailable">
-                   Is product available?
-                </label>
+              <div className="flex items-center w-[100%]">
+                <label htmlFor="productAvailable">Is product available?</label>
                 <input
                   id="productAvailable"
                   name="productAvailable"
                   type="checkbox"
-                  onChange={(e)=>handleProductAvailable(e)}
+                  onChange={(e) => handleProductAvailable(e)}
                   className="mx-auto border-2 border-gray-400 my-2 p-[5px]"
                 />
-                </div> 
+              </div>
               <select
                 name="type"
                 id="type"
@@ -131,10 +147,13 @@ const AddProductModal = ({ isOpen, setIsOpen }: modalConditions) => {
                 className="w-[90%] mx-auto border-2 border-gray-400 my-2 p-[5px]"
               >
                 <option value="">Select Auto Type</option>
-                {helper.navItems.slice(1,helper.navItems.length).map((option,index)=>(
-                  <option value={option.name}>{option.name}</option>
-                ))}
+                {helper.navItems
+                  .slice(1, helper.navItems.length)
+                  .map((option, index) => (
+                    <option value={option.name}>{option.name}</option>
+                  ))}
               </select>
+
               <div className="w-[40%] mx-auto my-2 p-[5px]">
                 <button
                   onClick={() => setIsOpen(false)}
