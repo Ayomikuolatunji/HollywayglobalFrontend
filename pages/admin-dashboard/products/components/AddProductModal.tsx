@@ -17,6 +17,7 @@ const AddProductModal = ({ isOpen, setIsOpen }: modalConditions) => {
     price: "",
     description: "",
     type: "",
+    currency:""
   });
 
   const handleFileChange = (e: any) => {
@@ -39,14 +40,12 @@ const AddProductModal = ({ isOpen, setIsOpen }: modalConditions) => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           postProdcts({ ...initialValues,productAvailable,image: data.imageUrl })
             .unwrap()
             .then((data: any) => {
               if(data.message==="Product created successfully"){
                   setIsOpen(false);
               }
-              console.log(data);
             })
             .catch((err:any) => console.log(err));
         })

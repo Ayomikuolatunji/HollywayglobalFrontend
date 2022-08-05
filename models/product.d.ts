@@ -9,6 +9,7 @@ export interface productTypings {
     image?:string
     createdAt?:Date
     updatedAt?:Date
+    currency?:string
 }
 
 export type fetchProductTypings ={
