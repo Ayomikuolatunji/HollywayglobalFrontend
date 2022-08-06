@@ -23,6 +23,15 @@ export const productApis = secureApiService.injectEndpoints({
       }),
       invalidatesTags: ['Product'],
     }),
+    deleteProduct: build.mutation<void, string>({
+      query: (productId) => ({
+          url: `/products/${productId}`,
+          method: "DELETE",
+          params: {
+              adminId: admin_id && admin_id
+          }
+      })
+    })
   })
 });
 
