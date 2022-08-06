@@ -1,39 +1,24 @@
-import { Dialog, Transition } from '@headlessui/react'
-import { Fragment, useState } from 'react'
+import { Dialog, Transition } from "@headlessui/react";
+import { Fragment, useState } from "react";
 
 interface modalConditions {
-    isOpen: boolean;
-    setIsOpen: (isOpen: boolean) => void;
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
 }
 
-const Modal=({
-    isOpen,
-    setIsOpen
-}:modalConditions)=> {
- 
-
+const Modal = ({ isOpen, setIsOpen }: modalConditions) => {
   function closeModal() {
-    setIsOpen(false)
-  }   
+    setIsOpen(false);
+  }
 
   function openModal() {
-    setIsOpen(true)
+    setIsOpen(true);
   }
 
   return (
-    <>
-      <div className="fixed inset-0 flex items-center justify-center">
-        <button
-          type="button"
-          onClick={openModal}
-          className="rounded-md bg-black bg-opacity-20 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
-        >
-          Open dialog
-        </button>
-      </div>
-
+    <div className="z-[999]">
       <Transition appear show={isOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={closeModal}>
+        <Dialog as="div" className="relative z-[999]" onClose={closeModal}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -86,9 +71,8 @@ const Modal=({
           </div>
         </Dialog>
       </Transition>
-    </>
-  )
-}
-
+    </div>
+  );
+};
 
 export default Modal;

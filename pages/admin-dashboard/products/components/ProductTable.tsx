@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import moment from "moment";
-import { Table, ActionDropDown } from "../../../../components";
+import { Table, ActionDropDown, Modal } from "../../../../components";
 
 import {
   fetchProductTypings,
@@ -12,13 +12,14 @@ import { DeleteActiveIcon, EditActiveIcon, MoveInactiveIcon } from "../../../../
 export default function ProductTable() {
   const { data, isFetching } = useGetProductsQuery();
   const getData = data as fetchProductTypings;
+  const [isOpen, setIsOpen] = useState(false);
   const [selectedRows, setSelectedRows] = useState([]);
 
 
   const  actionHandler = (id: string, type:string) => {
     console.log("id",id);
     if(type === "delete"){
-      window.confirm("Are you sure you want to delete this item?")
+       setIsOpen(true);
     }
     
     console.log("type",type)
@@ -131,6 +132,10 @@ export default function ProductTable() {
           Your products lists is empty
         </div>
       )}
+      <Modal 
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+      />
     </div>
   );
 }
