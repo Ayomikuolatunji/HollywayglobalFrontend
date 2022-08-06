@@ -1,17 +1,28 @@
 import React, { useMemo, useState } from "react";
-import moment from 'moment';
-import Table from "../../../../components/Table/Table";
+import moment from "moment";
+import { Table, ActionDropDown } from "../../../../components";
 
 import {
   fetchProductTypings,
   productTypings,
 } from "../../../../models/product";
 import { useGetProductsQuery } from "../../../../redux/apis/productApi";
+import { DeleteActiveIcon, EditActiveIcon, MoveInactiveIcon } from "../../../../helpers/Icons";
 
 export default function ProductTable() {
   const { data, isFetching } = useGetProductsQuery();
   const getData = data as fetchProductTypings;
   const [selectedRows, setSelectedRows] = useState([]);
+
+
+  const  actionHandler = (id: string, type:string) => {
+    console.log("id",id);
+    if(type === "delete"){
+      window.confirm("Are you sure you want to delete this item?")
+    }
+    
+    console.log("type",type)
+  }
 
   const columns: any = useMemo(() => {
     return [
@@ -32,38 +43,66 @@ export default function ProductTable() {
         accessor: "onsales",
       },
       {
-        Header:"createdAt",
-        accessor:"createdAt",
-      },{
-        Header:"updatedAt",
-        accessor:"updatedAt",
+        Header: "createdAt",
+        accessor: "createdAt",
       },
-     //add delete and edit button
+      {
+        Header: "updatedAt",
+        accessor: "updatedAt",
+      },
+      //add delete and edit button
       {
         Header: "Action",
         Cell: (props: any) => {
+          // get single data id 
+          const { id } = props.row.original;
           return (
-            <div className="">
-              <button
-                onClick={() => {
-                  console.log(props.row.original);
-                }
-                }
-              >
-                Edit
-              </button>
-            </div>
+            <ActionDropDown
+              items={[
+                {
+                  id: id,
+                  text: "Edit product",
+                  type: "edit",
+                  Icon: (
+                    <EditActiveIcon
+                      className="mr-2 h-5 w-5"
+                      aria-hidden="true"
+                    />
+                  ),
+                },{
+                  id: id,
+                  text: "Delete product",
+                  type: "delete",
+                  Icon: (
+                    <DeleteActiveIcon
+                      className="mr-2 h-5 w-5"
+                      aria-hidden="true"
+                    />
+                  ),
+                },{
+                  id: id,
+                  text: "Deactivate product",
+                  type: "deactivate",
+                  Icon: (
+                    <MoveInactiveIcon
+                      className="mr-2 h-5 w-5"
+                      aria-hidden="true"
+                    />
+                  ),
+                },
+              ]}
+              getselectedItemAction={actionHandler}
+            />
           );
-        }
-      }
-
+        },
+      },
     ];
   }, []);
 
   const dataTable = useMemo(() => {
     return getData?.products?.map((product: productTypings) => {
       return {
-        id:product.id,
+        id: product.id,
         name: product.name,
         price: ` ${product.currency} ${product.price}`,
         type: product.type,
@@ -74,8 +113,6 @@ export default function ProductTable() {
     });
   }, [getData]);
 
-  console.log(selectedRows);
-
   return (
     <div className="mt-10 ">
       {isFetching ? (
@@ -83,16 +120,17 @@ export default function ProductTable() {
           Loading...
         </div>
       ) : dataTable && dataTable.length > 0 ? (
-        <Table columns={columns} dataTable={dataTable} 
-        selectedRows={selectedRows}
-        setSelectedRows={setSelectedRows}
+        <Table
+          columns={columns}
+          dataTable={dataTable}
+          selectedRows={selectedRows}
+          setSelectedRows={setSelectedRows}
         />
-      ): (
+      ) : (
         <div className="flex justify-center items-center w-full border-2">
           Your products lists is empty
         </div>
       )}
-
     </div>
   );
 }

@@ -5,4 +5,6 @@ export {default as InputField} from "./InputField/InputField";
 export {default as Button} from "./Buttons/Buttons";
 export {default as RouteLink} from "./Router/RouteLink";
 export {default as Search} from "./search/Search";
+export {default as ActionDropDown} from "./DropDown/ActionDropDown";
+export {default as Table} from "./Table/Table";
 
