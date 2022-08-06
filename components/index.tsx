@@ -7,4 +7,5 @@ export {default as RouteLink} from "./Router/RouteLink";
 export {default as Search} from "./search/Search";
 export {default as ActionDropDown} from "./DropDown/ActionDropDown";
 export {default as Table} from "./Table/Table";
+export {default as Modal} from "./Modal/Modal";
 
