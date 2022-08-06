@@ -6,10 +6,10 @@ interface modalConditions {
     setIsOpen: (isOpen: boolean) => void;
 }
 
-const Modal({
+const Modal=({
     isOpen,
     setIsOpen
-}:modalConditions) {
+}:modalConditions)=> {
  
 
   function closeModal() {
