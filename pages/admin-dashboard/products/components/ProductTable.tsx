@@ -1,29 +1,55 @@
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import moment from "moment";
-import { Table, ActionDropDown, Modal } from "../../../../components";
+import { Table, ActionDropDown } from "../../../../components";
 
 import {
   fetchProductTypings,
   productTypings,
 } from "../../../../models/product";
-import { useGetProductsQuery } from "../../../../redux/apis/productApi";
-import { DeleteActiveIcon, EditActiveIcon, MoveInactiveIcon } from "../../../../helpers/Icons";
+import {
+  useGetProductsQuery,
+  useDeleteProductMutation,
+} from "../../../../redux/apis/productApi";
+import {
+  DeleteActiveIcon,
+  EditActiveIcon,
+  MoveInactiveIcon,
+} from "../../../../helpers/Icons";
+import DeleteProductModal from "./DeleteProductModal";
 
 export default function ProductTable() {
   const { data, isFetching } = useGetProductsQuery();
+  const [IdType, setIdType] = useState<string>("");
   const getData = data as fetchProductTypings;
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [deleteProduct, { isLoading, isSuccess }] = useDeleteProductMutation();
   const [selectedRows, setSelectedRows] = useState([]);
 
-
-  const  actionHandler = (id: string, type:string) => {
-    console.log("id",id);
-    if(type === "delete"){
-       setIsOpen(true);
+  const actionHandler = (id: string, type: string) => {
+     setIdType(id);
+    if (type === "delete") {
+      setIsOpen(true);
     }
-    
-    console.log("type",type)
-  }
+  };
+
+  useEffect(() => {
+    if (isSuccess) {
+      setIsOpen(false);
+      setIdType("");
+    }
+  }, [isSuccess]);
+
+  const deleteHandler = useCallback(async () => {
+    try {
+      if(IdType) {
+         await deleteProduct({
+          productId: IdType,
+        }).unwrap();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, [IdType]);
 
   const columns: any = useMemo(() => {
     return [
@@ -55,7 +81,7 @@ export default function ProductTable() {
       {
         Header: "Action",
         Cell: (props: any) => {
-          // get single data id 
+          // get single data id
           const { id } = props.row.original;
           return (
             <ActionDropDown
@@ -70,7 +96,8 @@ export default function ProductTable() {
                       aria-hidden="true"
                     />
                   ),
-                },{
+                },
+                {
                   id: id,
                   text: "Delete product",
                   type: "delete",
@@ -80,7 +107,8 @@ export default function ProductTable() {
                       aria-hidden="true"
                     />
                   ),
-                },{
+                },
+                {
                   id: id,
                   text: "Deactivate product",
                   type: "deactivate",
@@ -132,9 +160,11 @@ export default function ProductTable() {
           Your products lists is empty
         </div>
       )}
-      <Modal 
+      <DeleteProductModal
         isOpen={isOpen}
         setIsOpen={setIsOpen}
+        deleteHandler={deleteHandler}
+        isLoading={isLoading}
       />
     </div>
   );

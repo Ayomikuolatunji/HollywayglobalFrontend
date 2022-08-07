@@ -20,7 +20,9 @@ export default function ActionDropDown({
     getselectedItemAction
 }:ActionDropDownProps) {
  
-    const clickHandler = (id:string, type:string) => getselectedItemAction && getselectedItemAction(id,type)
+    const clickHandler = (id:string, type:string) =>{
+      return   getselectedItemAction && getselectedItemAction(id,type)
+    }
 
 
   return (
