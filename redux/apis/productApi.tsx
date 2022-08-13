@@ -26,7 +26,6 @@ export const productApis = secureApiService.injectEndpoints({
     }),
     deleteProduct: build.mutation<void, productIdTypings>({
       query: ({ productId }) => {
-        console.log("productId", productId);
         return {
           url: `products/${productId}`,
           method: "DELETE",

@@ -18,9 +18,6 @@ const DeleteProductModal = ({
     setIsOpen(false);
   }
 
-  function openModal() {
-    setIsOpen(true);
-  }
 
   return (
     <div className="z-[999]">
