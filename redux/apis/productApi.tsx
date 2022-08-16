@@ -41,17 +41,18 @@ export const productApis = secureApiService.injectEndpoints({
     changeProductStatus: build.mutation<void, changeProductStatusTypings>({
       query: ({ids,status}) => {
         return {
-          url: `products/product_status`,
+          url: `/products/product_status`,
           method: "PATCH",
           params: {
             adminId: admin_id && admin_id,
           },
           body:{
-            ids:ids,
+            productIds:ids,
             status:status
           }
         };
-      }
+      },
+      invalidatesTags: ["Product"]
     })
   }),
 });

@@ -27,9 +27,10 @@ export interface productColumns {
 
 export interface productIds {
     ids:string
+    status:string
 }
 
 interface changeProductStatusTypings {
     ids: productIdTypings[];
-    status: boolean;
+    status: status[];
 }
