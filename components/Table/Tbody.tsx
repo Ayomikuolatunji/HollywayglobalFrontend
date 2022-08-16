@@ -11,7 +11,7 @@ export default function Tbody({ rows, getTableBodyProps, prepareRow }: any) {
             className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
           >
             {row.cells.map((cell: any) => {
-            //   change cell.value equal to onsale text to red and bold
+            //  if cell when status is true display green else red
               return (
                 <td
                   {...cell.getCellProps()}

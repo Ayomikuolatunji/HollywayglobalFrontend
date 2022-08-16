@@ -4,8 +4,8 @@ import {
   loginCredentails,
   signupTypings,
 } from "../../models/authTypings";
-
 import { apiService } from "../service";
+
 
 export const authApi = apiService.injectEndpoints({
   endpoints: (build) => ({
@@ -37,16 +37,9 @@ export const authApi = apiService.injectEndpoints({
           method: "POST",
           body: credentials,
         };
-      }
-    }),
-    authAdmin:build.query<adminIdTypings, string>({
-      query:(id)=>{
-          return {
-            url:"admin/"+ id,
-            method:"GET",
-          }
-      }
-   })  
+      },
+      invalidatesTags: ["Product","admin"],
+    })
   }),
 });
 
@@ -54,6 +47,5 @@ export const {
   useLoginMutation,
   useSignupMutation,
   useAdminSignupMutation,
-  useAdminLoginMutation,
-  useAuthAdminQuery
+  useAdminLoginMutation
 } = authApi;

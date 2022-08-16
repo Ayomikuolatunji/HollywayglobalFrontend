@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Dialog } from "@headlessui/react";
+import { FaCarAlt } from "react-icons/fa";
 
 import { modalConditions } from "../../../../models/modal";
 import { productTypings } from "../../../../models/product";
@@ -10,7 +11,7 @@ import * as helper from "../../../../helpers";
 const AddProductModal = ({ isOpen, setIsOpen }: modalConditions) => {
   const [postProdcts] = usePostProductMutation();
   const [file, setFile] = useState("");
-  const [productAvailable, setProductAvailable] = useState(false);
+  const [carStatus, setCarStatus] = useState(false);
   const [initialValues, setInitialValues] = useState<productTypings>({
     adminId: "",
     name: "",
@@ -26,7 +27,7 @@ const AddProductModal = ({ isOpen, setIsOpen }: modalConditions) => {
   };
 
   const handleProductAvailable = (e: any) => {
-    setProductAvailable(e.target.checked);
+    setCarStatus(e.target.checked);
   };
 
   const onSubmit = (e: any) => {
@@ -42,7 +43,7 @@ const AddProductModal = ({ isOpen, setIsOpen }: modalConditions) => {
         .then((data) => {
           postProdcts({
             ...initialValues,
-            productAvailable,
+            status:carStatus,
             image: data.imageUrl,
           })
             .unwrap()
@@ -72,8 +73,11 @@ const AddProductModal = ({ isOpen, setIsOpen }: modalConditions) => {
       className="w-full h-[100vh] absolute top-0 right-0 left-0 bottom-0 flex justify-center items-center 
       bg-[rgba(0,0,0,0.5)] z-[999]"
     >
-      <Dialog.Panel className="bg-white border  flex justify-center flex-col items-center w-[30%]">
-        <Dialog.Title className="p-4">Add a new Product</Dialog.Title>
+      <Dialog.Panel className="bg-white border flex justify-center flex-col items-center w-[30%] rounded-md">
+        <Dialog.Title className="p-4 text-blue-500 font-extrabold flex items-center text-2xl">
+          <FaCarAlt/>
+          Add a New Car
+        </Dialog.Title>
         <hr className="w-full" />
         <Dialog.Description className="flex justify-center items-center w-[100%]">
           <form onSubmit={onSubmit} className="w-full">
@@ -81,7 +85,7 @@ const AddProductModal = ({ isOpen, setIsOpen }: modalConditions) => {
               <input
                 id="name"
                 name="name"
-                placeholder="product name"
+                placeholder="Enter car name"
                 onChange={(e) => handleChange(e)}
                 value={initialValues.name}
                 type="text"
@@ -90,7 +94,7 @@ const AddProductModal = ({ isOpen, setIsOpen }: modalConditions) => {
               <input
                 id="price"
                 name="price"
-                placeholder="product price"
+                placeholder="Enter car price"
                 type="number"
                 onChange={(e) => handleChange(e)}
                 value={initialValues.price}
@@ -99,7 +103,7 @@ const AddProductModal = ({ isOpen, setIsOpen }: modalConditions) => {
               <textarea
                 id="description"
                 name="description"
-                placeholder="product description"
+                placeholder="Enter car description"
                 value={initialValues.description}
                 onChange={(e) => handleChange(e)}
                 className="w-[90%] mx-auto border-2 border-gray-400 my-2 p-[5px]"
@@ -112,7 +116,7 @@ const AddProductModal = ({ isOpen, setIsOpen }: modalConditions) => {
                 className="w-[90%] mx-auto border-2 border-gray-400 my-2 p-[5px]"
               >
                 <option value="">select sales currency</option>
-                {Object.values(currencyOptions).map((key) => {
+                {Object.values(currencyOptions).slice(0,3).map((key) => {
                   return (
                     <option value={key.symbol_native} key={key.symbol_native}>
                       {key.symbol_native}
@@ -129,8 +133,8 @@ const AddProductModal = ({ isOpen, setIsOpen }: modalConditions) => {
                 className="w-[90%] mx-auto border-2 border-gray-400 my-2 p-[5px]"
               />
               {/* is product available checkbox */}
-              <div className="flex items-center w-[100%]">
-                <label htmlFor="productAvailable">Is product available?</label>
+              <div className="flex items-center w-[40%] mx-auto">
+                <label htmlFor="productAvailable">Is car available available?</label>
                 <input
                   id="productAvailable"
                   name="productAvailable"
@@ -146,15 +150,15 @@ const AddProductModal = ({ isOpen, setIsOpen }: modalConditions) => {
                 value={initialValues.type}
                 className="w-[90%] mx-auto border-2 border-gray-400 my-2 p-[5px]"
               >
-                <option value="">Select Auto Type</option>
+                <option value="">Select Car Type</option>
                 {helper.navItems
                   .slice(1, helper.navItems.length)
                   .map((option, index) => (
-                    <option value={option.name}>{option.name}</option>
+                    <option value={option.name} key={index}>{option.name}</option>
                   ))}
               </select>
 
-              <div className="w-[40%] mx-auto my-2 p-[5px]">
+              <div className="w-[50%] mx-auto my-2 p-[5px]">
                 <button
                   onClick={() => setIsOpen(false)}
                   className="text-blue-500 mx-3 font-extrabold"

@@ -43,7 +43,7 @@ const AdminLogin = () => {
   useEffect(() => {
     if (isLoggedIn) {
       setTimeout(() => {
-        router.push("/admin-dashboard");
+        window.location.href="/admin-dashboard";
       }, 2000);
     }
   }, [isLoggedIn]);

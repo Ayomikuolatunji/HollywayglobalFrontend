@@ -37,7 +37,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     ["/admin-dashboard", "/admin-dashboard/products"].includes(router.pathname)
   ) {
     return (
-      <div className="lg:w-[90%] md:w-[70%] sm:w-[80%] mx-auto w-[97%] h-[100%]">
+      <div className="lg:w-[100%] md:w-[70%] sm:w-[80%] mx-auto w-[97%] h-[100%]">
         <NetWorkWrapper>
           <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>

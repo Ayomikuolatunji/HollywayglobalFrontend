@@ -66,8 +66,8 @@ export default function ProductTable() {
         accessor: "type",
       },
       {
-        Header: "onsales",
-        accessor: "onsales",
+        Header: "status",
+        accessor: "status",
       },
       {
         Header: "createdAt",
@@ -135,7 +135,7 @@ export default function ProductTable() {
         name: product.name,
         price: ` ${product.currency} ${product.price}`,
         type: product.type,
-        onsales: product.productAvailable,
+        status: product.status ? "Active" : "Inactive",
         createdAt: moment(product.createdAt).format("MMMM Do YYYY"),
         updatedAt: moment(product.updatedAt).format("MMMM Do YYYY"),
       };

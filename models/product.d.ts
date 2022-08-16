@@ -4,7 +4,7 @@ export interface productTypings {
     name:string
     price:string
     description?:string
-    productAvailable?:boolean
+    status?:boolean
     type:string
     image?:string
     createdAt?:Date
