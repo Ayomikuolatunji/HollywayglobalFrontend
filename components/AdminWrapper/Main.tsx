@@ -15,8 +15,6 @@ const AdminWrapper = ({ children }: Props) => {
   const admin_id = getAppCredentials("admin_token")?.admin_id;
   const { error, isLoading } = useAuthAdminQuery(admin_id || "");
  
-  console.log("error", error);
-
   const router = useRouter();
 
   useEffect(() => {

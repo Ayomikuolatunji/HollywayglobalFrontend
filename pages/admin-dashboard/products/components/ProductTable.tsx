@@ -53,21 +53,22 @@ export default function ProductTable() {
     }
   }, [IdType]);
 
-  const changeProductStatusFunc = useCallback(async () => {
+  const changeProductStatusFunc =async (selectedRows:any) => {
     try {
       if (selectedRows) {
         const ids = selectedRows.map((row: any) => row.original.id);
-        const status = selectedRows.map((row: any) => row.original.status);
+        const status = selectedRows.map((row: any) => row.original.status==="Active" ? false : true);
         // update status of selected products status
-        const paylaod=await changeProductStatus({
+        await changeProductStatus({
           ids: ids,
           status: status
         }).unwrap();
+        console.log(status);
       }
     } catch (error) {
       console.log(error);
     }
-  }, [selectedRows]);
+  }
 
   const columns: any = useMemo(() => {
     return [
@@ -165,7 +166,7 @@ export default function ProductTable() {
                 </span>
                 <button
                   className="deactive-btn flex items-center ml-3"
-                  onClick={() => changeProductStatusFunc()}
+                  onClick={() => changeProductStatusFunc(selectedRows)}
                 >
                   <MoveInactiveIcon className="mr-2 h-5 w-5" />
                   <span className="text-sm font-semibold">Deactivate</span>
