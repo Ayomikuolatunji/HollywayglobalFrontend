@@ -7,6 +7,7 @@ import { productTypings } from "../../../../models/product";
 import { usePostProductMutation } from "../../../../redux/apis/productApi";
 import { currencyOptions } from "../../../../helpers/utils";
 import * as helper from "../../../../helpers";
+import { toast } from "react-toastify";
 
 const AddProductModal = ({ isOpen, setIsOpen }: modalConditions) => {
   const [postProdcts] = usePostProductMutation();
@@ -21,15 +22,6 @@ const AddProductModal = ({ isOpen, setIsOpen }: modalConditions) => {
     currency: "",
   });
 
-  interface fileType {
-    File: {
-      lastModified: Date;
-      name: string;
-      size: number;
-      type: string;
-      webkitRelativePath: string;
-    };
-  }
 
   const handleFileChange = (e:React.ChangeEvent<HTMLInputElement>) => {
     const file:any = e.currentTarget.files;;
@@ -42,6 +34,13 @@ const AddProductModal = ({ isOpen, setIsOpen }: modalConditions) => {
 
   const onSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
+    // check if inputs are empty
+    if (!initialValues.name || !initialValues.price || !initialValues.description || !initialValues.type || initialValues.currency) {
+      toast.error("Please fill all the fields",{
+        toastId: "emptyFields-toast-product-id",
+      });
+      return;
+    }
     if (file) {
       const fileData = new FormData();
       fileData.append("file", file);
