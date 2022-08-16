@@ -25,8 +25,11 @@ export interface productColumns {
 }
 
 
+export interface productIds {
+    ids:string
+}
 
 interface changeProductStatusTypings {
-    productId: productIdTypings;
-    status: string;
+    ids: productIdTypings[];
+    status: boolean;
 }

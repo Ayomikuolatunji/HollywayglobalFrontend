@@ -9,6 +9,7 @@ import {
 import {
   useGetProductsQuery,
   useDeleteProductMutation,
+  useChangeProductStatusMutation
 } from "../../../../redux/apis/productApi";
 import {
   DeleteActiveIcon,
@@ -23,6 +24,7 @@ export default function ProductTable() {
   const getData = data as fetchProductTypings;
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [deleteProduct, { isLoading, isSuccess }] = useDeleteProductMutation();
+  const [changeProductStatus, {error}]=useChangeProductStatusMutation()
   const [selectedRows, setSelectedRows] = useState([]);
 
   const actionHandler = (id: string, type: string) => {
@@ -51,11 +53,18 @@ export default function ProductTable() {
     }
   }, [IdType]);
 
-  const changeProductStatus = useCallback(
-    async (id: string, status: boolean) => {
-      
+  const changeProductStatusFunc = useCallback(
+    async (selectedRows:any) => {
+      try {
+      const ids=selectedRows.map((row:any)=>row.original.id);
+      console.log(ids)
+      changeProductStatus({ids:ids, status:true})
+      .unwrap()
+      } catch (error) {
+        console.log(error);
+      }
     },
-    []
+    [selectedRows]
   );
 
   const columns: any = useMemo(() => {
@@ -138,7 +147,6 @@ export default function ProductTable() {
     });
   }, [getData]);
 
-  console.log(selectedRows);
 
   return (
     <div className="mt-10 ">
@@ -151,14 +159,14 @@ export default function ProductTable() {
           {selectedRows.length > 0 && (
             <div className="flex justify-between items-center mb-3 ml-1">
               <div className="flex items-center">
-                <span className="text-sm font-semibold">
-                  {selectedRows.length} items selected
-                </span>
-                <button className="deactive-btn flex items-center ml-3">
-                  <MoveInactiveIcon className="mr-2 h-5 w-5" />
-                  <span className="text-sm font-semibold">Deactivate</span>
-                </button>
-              </div>
+                  <span className="text-sm font-semibold">
+                    {selectedRows.length} items selected
+                  </span>
+                  <button className="deactive-btn flex items-center ml-3" onClick={()=>changeProductStatusFunc(selectedRows)}>
+                    <MoveInactiveIcon className="mr-2 h-5 w-5" />
+                    <span className="text-sm font-semibold">Deactivate</span>
+                  </button>
+                </div>
             </div>
           )}
           <Table
