@@ -65,7 +65,6 @@ export default function ProductTable() {
           ids: ids,
           status: statuses,
         }).unwrap();
-        console.log(status);
       }
     } catch (error) {
       console.log(error);
