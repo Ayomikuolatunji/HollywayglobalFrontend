@@ -1,8 +1,10 @@
 import { secureApiService } from "../service";
 import { getAppCredentials } from "../../helpers/Auth";
-import { fetchProductTypings, productTypings } from "../../models/product";
+import { changeProductStatusTypings, fetchProductTypings, productTypings } from "../../models/product";
 import { productIdTypings } from "../../models/authTypings";
 const admin_id = getAppCredentials("admin_token")?.admin_id;
+
+
 
 export const productApis = secureApiService.injectEndpoints({
   endpoints: (build) => ({
@@ -36,6 +38,18 @@ export const productApis = secureApiService.injectEndpoints({
       },
       invalidatesTags: ["Product"],
     }),
+    changeProductStatus: build.mutation<void, changeProductStatusTypings>({
+      query: ({ productId, status }) => {
+        return {
+          url: `product_status/${productId}`,
+          method: "PATCH",
+          params: {
+            adminId: admin_id && admin_id,
+          },
+          body: status,
+        };
+      }
+    })
   }),
 });
 

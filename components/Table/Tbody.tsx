@@ -15,7 +15,7 @@ export default function Tbody({ rows, getTableBodyProps, prepareRow }: any) {
               return (
                 <td
                   {...cell.getCellProps()}
-                  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 p-[12px]"
+                  className={`bg-white border-b dark:bg-gray-800 dark:border-gray-700 p-[12px] font-bold ${cell.value === "Active" ? "text-green-500": cell.value=== "Inactive" ? "text-red-500" : ""}`}
                 >
                   {cell.render("Cell")}
                 </td>

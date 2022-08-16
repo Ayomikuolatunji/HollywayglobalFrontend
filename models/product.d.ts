@@ -23,3 +23,10 @@ export interface productColumns {
     type:string
     onsales:string
 }
+
+
+
+interface changeProductStatusTypings {
+    productId: productIdTypings;
+    status: string;
+}

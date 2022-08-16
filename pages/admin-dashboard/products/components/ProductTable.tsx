@@ -26,7 +26,7 @@ export default function ProductTable() {
   const [selectedRows, setSelectedRows] = useState([]);
 
   const actionHandler = (id: string, type: string) => {
-     setIdType(id);
+    setIdType(id);
     if (type === "delete") {
       setIsOpen(true);
     }
@@ -41,8 +41,8 @@ export default function ProductTable() {
 
   const deleteHandler = useCallback(async () => {
     try {
-      if(IdType) {
-         await deleteProduct({
+      if (IdType) {
+        await deleteProduct({
           productId: IdType,
         }).unwrap();
       }
@@ -50,6 +50,13 @@ export default function ProductTable() {
       console.log(error);
     }
   }, [IdType]);
+
+  const changeProductStatus = useCallback(
+    async (id: string, status: boolean) => {
+      
+    },
+    []
+  );
 
   const columns: any = useMemo(() => {
     return [
@@ -108,23 +115,12 @@ export default function ProductTable() {
                     />
                   ),
                 },
-                {
-                  id: id,
-                  text: "Deactivate product",
-                  type: "deactivate",
-                  Icon: (
-                    <MoveInactiveIcon
-                      className="mr-2 h-5 w-5"
-                      aria-hidden="true"
-                    />
-                  ),
-                },
               ]}
               getselectedItemAction={actionHandler}
             />
           );
         },
-      }
+      },
     ];
   }, []);
 
@@ -142,6 +138,8 @@ export default function ProductTable() {
     });
   }, [getData]);
 
+  console.log(selectedRows);
+
   return (
     <div className="mt-10 ">
       {isFetching ? (
@@ -149,12 +147,27 @@ export default function ProductTable() {
           Loading...
         </div>
       ) : dataTable && dataTable.length > 0 ? (
-        <Table
-          columns={columns}
-          dataTable={dataTable}
-          selectedRows={selectedRows}
-          setSelectedRows={setSelectedRows}
-        />
+        <div>
+          {selectedRows.length > 0 && (
+            <div className="flex justify-between items-center mb-3 ml-1">
+              <div className="flex items-center">
+                <span className="text-sm font-semibold">
+                  {selectedRows.length} items selected
+                </span>
+                <button className="deactive-btn flex items-center ml-3">
+                  <MoveInactiveIcon className="mr-2 h-5 w-5" />
+                  <span className="text-sm font-semibold">Deactivate</span>
+                </button>
+              </div>
+            </div>
+          )}
+          <Table
+            columns={columns}
+            dataTable={dataTable}
+            selectedRows={selectedRows}
+            setSelectedRows={setSelectedRows}
+          />
+        </div>
       ) : (
         <div className="flex justify-center items-center w-full border-2">
           Your products lists is empty

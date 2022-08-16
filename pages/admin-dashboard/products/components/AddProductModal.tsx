@@ -22,9 +22,8 @@ const AddProductModal = ({ isOpen, setIsOpen }: modalConditions) => {
     currency: "",
   });
 
-
-  const handleFileChange = (e:React.ChangeEvent<HTMLInputElement>) => {
-    const file:any = e.currentTarget.files;;
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file: any = e.currentTarget.files;
     setFile(file[0] || "");
   };
 
@@ -32,14 +31,45 @@ const AddProductModal = ({ isOpen, setIsOpen }: modalConditions) => {
     setCarStatus(e.target.checked);
   };
 
+  const validate = (values: productTypings) => {
+    if (!values.name) {
+      toast.error("Product name is required", {
+        toastId: "emptyFields-toast-product-id",
+      });
+      return false;
+    }
+    if (!values.price) {
+      toast.error("Price is required", {
+        toastId: "emptyFields-toast-product-id",
+      });
+      return false;
+    }
+    if (!values.description) {
+      toast.error("Description is required", {
+        toastId: "emptyFields-toast-product-id",
+      });
+      return false;
+    }
+    if (!values.type) {
+      toast.error("Type is required", {
+        toastId: "emptyFields-toast-product-id",
+      });
+      return false;
+    }
+    if (!values.currency) {
+      toast.error("Currency is required", {
+        toastId: "emptyFields-toast-product-id",
+      });
+      return false;
+    }
+    return true;
+  }
+
   const onSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
     // check if inputs are empty
-    if (!initialValues.name || !initialValues.price || !initialValues.description || !initialValues.type || initialValues.currency) {
-      toast.error("Please fill all the fields",{
-        toastId: "emptyFields-toast-product-id",
-      });
-      return;
+    if (!validate(initialValues)) {
+         return;
     }
     if (file) {
       const fileData = new FormData();
