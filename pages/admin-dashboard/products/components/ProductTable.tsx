@@ -53,22 +53,24 @@ export default function ProductTable() {
     }
   }, [IdType]);
 
-  const changeProductStatusFunc =async (selectedRows:any) => {
+  const changeProductStatusFunc = async (selectedRows: any) => {
     try {
       if (selectedRows) {
         const ids = selectedRows.map((row: any) => row.original.id);
-        const status = selectedRows.map((row: any) => row.original.status==="Active" ? false : true);
+        const statuses = selectedRows.map((row: any) =>
+          row.original.status === "Active" ? false : true
+        );
         // update status of selected products status
         await changeProductStatus({
           ids: ids,
-          status: status
+          status: statuses,
         }).unwrap();
         console.log(status);
       }
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   const columns: any = useMemo(() => {
     return [
@@ -162,7 +164,8 @@ export default function ProductTable() {
             <div className="flex justify-between items-center mb-3 ml-1">
               <div className="flex items-center">
                 <span className="text-sm font-semibold">
-                  {selectedRows.length} items selected
+                  {selectedRows.length}{" "}
+                  {selectedRows.length === 1 ? "item" : "items"} selected
                 </span>
                 <button
                   className="deactive-btn flex items-center ml-3"
