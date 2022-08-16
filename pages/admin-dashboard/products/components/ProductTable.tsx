@@ -66,16 +66,16 @@ export default function ProductTable() {
         accessor: "type",
       },
       {
-        Header: "status",
-        accessor: "status",
-      },
-      {
         Header: "createdAt",
         accessor: "createdAt",
       },
       {
         Header: "updatedAt",
         accessor: "updatedAt",
+      },
+      {
+        Header: "status",
+        accessor: "status",
       },
       //add delete and edit button
       {
@@ -124,7 +124,7 @@ export default function ProductTable() {
             />
           );
         },
-      },
+      }
     ];
   }, []);
 
@@ -135,9 +135,9 @@ export default function ProductTable() {
         name: product.name,
         price: ` ${product.currency} ${product.price}`,
         type: product.type,
-        status: product.status ? "Active" : "Inactive",
         createdAt: moment(product.createdAt).format("MMMM Do YYYY"),
         updatedAt: moment(product.updatedAt).format("MMMM Do YYYY"),
+        status: product.status ? "Active" : "Inactive",
       };
     });
   }, [getData]);

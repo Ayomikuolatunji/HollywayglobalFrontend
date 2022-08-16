@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ReactHTML, useEffect, useState } from "react";
 import { Dialog } from "@headlessui/react";
 import { FaCarAlt } from "react-icons/fa";
 
@@ -21,16 +21,26 @@ const AddProductModal = ({ isOpen, setIsOpen }: modalConditions) => {
     currency: "",
   });
 
-  const handleFileChange = (e: any) => {
-    const file = e.target.files[0];
-    setFile(file);
+  interface fileType {
+    File: {
+      lastModified: Date;
+      name: string;
+      size: number;
+      type: string;
+      webkitRelativePath: string;
+    };
+  }
+
+  const handleFileChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+    const file:any = e.currentTarget.files;;
+    setFile(file[0] || "");
   };
 
-  const handleProductAvailable = (e: any) => {
+  const handleProductAvailable = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCarStatus(e.target.checked);
   };
 
-  const onSubmit = (e: any) => {
+  const onSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
     if (file) {
       const fileData = new FormData();
@@ -43,7 +53,7 @@ const AddProductModal = ({ isOpen, setIsOpen }: modalConditions) => {
         .then((data) => {
           postProdcts({
             ...initialValues,
-            status:carStatus,
+            status: carStatus,
             image: data.imageUrl,
           })
             .unwrap()
@@ -60,7 +70,12 @@ const AddProductModal = ({ isOpen, setIsOpen }: modalConditions) => {
     }
   };
 
-  const handleChange = (e: any) => {
+  const handleChange = (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLSelectElement>
+      | React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
     // for checkbox onchange event
     const { name, value } = e.target;
     setInitialValues({ ...initialValues, [name]: value });
@@ -75,7 +90,7 @@ const AddProductModal = ({ isOpen, setIsOpen }: modalConditions) => {
     >
       <Dialog.Panel className="bg-white border flex justify-center flex-col items-center w-[30%] rounded-md">
         <Dialog.Title className="p-4 text-blue-500 font-extrabold flex items-center text-2xl">
-          <FaCarAlt/>
+          <FaCarAlt />
           Add a New Car
         </Dialog.Title>
         <hr className="w-full" />
@@ -116,13 +131,15 @@ const AddProductModal = ({ isOpen, setIsOpen }: modalConditions) => {
                 className="w-[90%] mx-auto border-2 border-gray-400 my-2 p-[5px]"
               >
                 <option value="">select sales currency</option>
-                {Object.values(currencyOptions).slice(0,3).map((key) => {
-                  return (
-                    <option value={key.symbol_native} key={key.symbol_native}>
-                      {key.symbol_native}
-                    </option>
-                  );
-                })}
+                {Object.values(currencyOptions)
+                  .slice(0, 3)
+                  .map((key) => {
+                    return (
+                      <option value={key.symbol_native} key={key.symbol_native}>
+                        {key.symbol_native}
+                      </option>
+                    );
+                  })}
               </select>
               <input
                 id="image"
@@ -134,7 +151,9 @@ const AddProductModal = ({ isOpen, setIsOpen }: modalConditions) => {
               />
               {/* is product available checkbox */}
               <div className="flex items-center w-[40%] mx-auto">
-                <label htmlFor="productAvailable">Is car available available?</label>
+                <label htmlFor="productAvailable">
+                  Is car available available?
+                </label>
                 <input
                   id="productAvailable"
                   name="productAvailable"
@@ -154,7 +173,9 @@ const AddProductModal = ({ isOpen, setIsOpen }: modalConditions) => {
                 {helper.navItems
                   .slice(1, helper.navItems.length)
                   .map((option, index) => (
-                    <option value={option.name} key={index}>{option.name}</option>
+                    <option value={option.name} key={index}>
+                      {option.name}
+                    </option>
                   ))}
               </select>
 
