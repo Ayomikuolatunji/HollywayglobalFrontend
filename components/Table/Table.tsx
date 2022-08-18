@@ -6,7 +6,7 @@ import {
   useGlobalFilter,
 } from "react-table";
 
-import { DndProvider, useDrag, useDrop } from "react-dnd";
+import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import update from "immutability-helper";
 import Row from "./Row";
@@ -73,7 +73,7 @@ export default function Table({
         // Let's make a column for selection
         {
           id: "selection",
-          Header: (prop: any) => {
+          Header: (prop) => {
             return (
               <div>
                 <IndeterminateCheckbox
@@ -98,7 +98,7 @@ export default function Table({
     setSelectedRows(selectedFlatRows);
   }, [selectedFlatRows]);
 
-  const moveRow = (dragIndex: any, hoverIndex: any) => {
+  const moveRow = (dragIndex: number, hoverIndex:number) => {
     const dragRecord = records[dragIndex];
     setRecords(
       update(records, {
@@ -109,6 +109,7 @@ export default function Table({
       })
     );
   };
+
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -153,7 +154,7 @@ export default function Table({
           ))}
         </thead>
         <tbody {...getTableBodyProps()}>
-          {rows.map((row: any, index: any) => {
+          {rows.map((row, index: number) => {
             prepareRow(row);
             return (
               <Row
@@ -171,10 +172,3 @@ export default function Table({
   );
 }
 
-function matchSorter(
-  rows: any,
-  filterValue: any,
-  arg2: { keys: ((row: any) => any)[] }
-) {
-  throw new Error("Function not implemented.");
-}

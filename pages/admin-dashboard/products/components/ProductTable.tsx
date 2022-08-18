@@ -14,7 +14,6 @@ import {
 import {
   DeleteActiveIcon,
   EditActiveIcon,
-  MoveInactiveIcon,
 } from "../../../../helpers/Icons";
 import DeleteProductModal from "./DeleteProductModal";
 
@@ -56,8 +55,9 @@ export default function ProductTable() {
   const changeProductStatusFunc = async (selectedRows: any) => {
     try {
       if (selectedRows) {
-        const ids = selectedRows.map((row: any) => row.original.id);
-        const statuses = selectedRows.map((row: any) =>
+        console.log(selectedRows)
+        const ids = selectedRows.map((row: { original: { id: string; }; }) => row.original.id);
+        const statuses = selectedRows.map((row:{original:{status:string}}) =>
           row.original.status === "Active" ? false : true
         );
         // update status of selected products status
