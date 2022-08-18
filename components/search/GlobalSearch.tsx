@@ -21,7 +21,7 @@ function GlobalFilter({
   }, 200);
 
   return (
-    <div className="mb-5">
+    <div className="mb-5 w-full">
       <input
         value={value || ""}
         onChange={(e) => {
@@ -29,7 +29,7 @@ function GlobalFilter({
           onChange(e.target.value);
         }}
         placeholder={`search records...`}
-         className="p-[6px] rounded-sm border-2 border-gray-400"
+         className="p-[6px] rounded-sm border-2 border-gray-400 w-[30%]"
       />
     </div>
   );

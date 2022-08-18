@@ -9,6 +9,7 @@ import {
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import update from "immutability-helper";
+import {matchSorter} from 'match-sorter'
 import Row from "./Row";
 import GlobalFilter from "../search/GlobalSearch";
 import { MoveInactiveIcon } from "../../helpers/Icons";
@@ -36,6 +37,28 @@ const IndeterminateCheckbox = React.forwardRef(
     );
   }
 );
+// Define a default UI for filtering
+function DefaultColumnFilter({
+  column: { filterValue, preFilteredRows, setFilter },
+}:any) {
+  const count = preFilteredRows.length
+
+  return (
+    <input
+      value={filterValue || ''}
+      onChange={e => {
+        setFilter(e.target.value || undefined) // Set undefined to remove the filter entirely
+      }}
+      placeholder={`Search ${count} records...`}
+    />
+  )
+}
+function fuzzyTextFilterFn(rows: any, id: string | number, filterValue: any) {
+  return matchSorter(rows, filterValue, { keys: [(row: any) => row.values[id]] })
+}
+
+// Let the table remove the filter if the string is empty
+fuzzyTextFilterFn.autoRemove = (val: any) => !val
 
 export default function Table({
   columns,
@@ -45,27 +68,53 @@ export default function Table({
   changeProductStatusFunc,
 }: Props) {
   const [records, setRecords] = React.useState(dataTable);
+  const filterTypes:any = React.useMemo(
+    () => ({
+      // Add a new fuzzyTextFilterFn filter type.
+      fuzzyText: fuzzyTextFilterFn,
+      // Or, override the default text filter to use
+      // "startWith"
+      text: (rows: any[], id: string | number, filterValue: any) => {
+        return rows.filter((row:any) => {
+          const rowValue = row.values[id]
+          return rowValue !== undefined
+            ? String(rowValue)
+                .toLowerCase()
+                .startsWith(String(filterValue).toLowerCase())
+            : true
+        })
+      },
+    }),
+    []
+  )
 
+  const DefaultFilterForColumn:any= React.useMemo(
+    () => ({
+      // Let's set up our default Filter UI
+      Filter: DefaultColumnFilter,
+    }),
+    []
+  )
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
     rows,
     prepareRow,
+    state,
     visibleColumns,
     preGlobalFilteredRows,
     setGlobalFilter,
-    selectedFlatRows,
-    state,
-
+    selectedFlatRows
     //
   } = useTable(
     {
       columns,
-      data: dataTable || [],
+      data: dataTable || [],     
+      filterTypes, 
+      defaultColumn: DefaultFilterForColumn 
     },
-    useFilters,
-    useFilters, // useFilters!
+    useFilters,// useFilters!
     useGlobalFilter, // useGlobalFilter!
     useRowSelect,
     (hooks) => {
@@ -88,6 +137,8 @@ export default function Table({
               <input type="checkbox" {...row.getToggleRowSelectedProps()} />
             );
           },
+          // hide filters on this column
+          Filter: false,
         },
         ...columns,
       ]);
@@ -98,7 +149,7 @@ export default function Table({
     setSelectedRows(selectedFlatRows);
   }, [selectedFlatRows]);
 
-  const moveRow = (dragIndex: number, hoverIndex:number) => {
+  const moveRow = (dragIndex: number, hoverIndex: number) => {
     const dragRecord = records[dragIndex];
     setRecords(
       update(records, {
@@ -110,16 +161,13 @@ export default function Table({
     );
   };
 
-
   return (
     <DndProvider backend={HTML5Backend}>
-      <div>
-        <GlobalFilter
-          preGlobalFilteredRows={preGlobalFilteredRows}
-          globalFilter={state.globalFilter}
-          setGlobalFilter={setGlobalFilter}
-        />
-      </div>
+      <GlobalFilter
+        preGlobalFilteredRows={preGlobalFilteredRows}
+        globalFilter={state.globalFilter}
+        setGlobalFilter={setGlobalFilter}
+      />
       {selectedRows.length > 0 && (
         <div className="flex justify-between items-center mb-3 ml-1">
           <div className="flex items-center">
@@ -144,12 +192,16 @@ export default function Table({
         <thead className="text-xs text-gray-700 uppercase bg-white dark:bg-gray-700 dark:text-gray-400 border-b-2 border-t-2 border-t-gray-50">
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps()} className="p-[12px]">
-                  {column.render("Header")}
-                  {/* Render the columns filter UI */}
-                </th>
-              ))}
+              {headerGroup.headers.map((column) =>{
+                 return  (
+                  <th {...column.getHeaderProps()} className="p-[12px]">
+                    {column.render("Header")}
+                    {/* Render the columns filter UI filtered */}
+                    {column.render('Filter') }
+                    
+                  </th>
+                )
+              })}
             </tr>
           ))}
         </thead>
@@ -171,4 +223,3 @@ export default function Table({
     </DndProvider>
   );
 }
-

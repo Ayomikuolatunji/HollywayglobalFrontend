@@ -5,6 +5,8 @@ import { Table, ActionDropDown } from "../../../../components";
 import {
   fetchProductTypings,
   productTypings,
+  selectedTypings,
+  tableProduct,
 } from "../../../../models/product";
 import {
   useGetProductsQuery,
@@ -52,12 +54,12 @@ export default function ProductTable() {
     }
   }, [IdType]);
 
-  const changeProductStatusFunc = async (selectedRows: any) => {
+
+  const changeProductStatusFunc = async (selectedRows:selectedTypings) => {
     try {
       if (selectedRows) {
-        console.log(selectedRows)
-        const ids = selectedRows.map((row: { original: { id: string; }; }) => row.original.id);
-        const statuses = selectedRows.map((row:{original:{status:string}}) =>
+        const ids = selectedRows.map((row:tableProduct) => row.original.id);
+        const statuses = selectedRows.map((row:tableProduct) =>
           row.original.status === "Active" ? false : true
         );
         // update status of selected products status
@@ -77,7 +79,7 @@ function SelectColumnFilter({
 }:any) {
   // Calculate the options for filtering
   // using the preFilteredRows
-  const options:any= React.useMemo(() => {
+  const options= React.useMemo(() => {
     const options:any= new Set()
     preFilteredRows.forEach((row:any)=> {
       options.add(row.values[id])
@@ -92,7 +94,6 @@ function SelectColumnFilter({
       onChange={e => {
         setFilter(e.target.value || undefined)
       }}
-      className="bg-black p-4 text-white"
     >
       <option value="">All</option>
       {options.map((option:string, i:number) => (
@@ -108,22 +109,28 @@ function SelectColumnFilter({
       {
         Header: "name",
         accessor: "name",
+        // disable filter for this column
+        Filter: false,
       },
       {
         Header: "price",
         accessor: "price",
+        Filter: false,
       },
       {
         Header: "type",
         accessor: "type",
+        Filter: false,
       },
       {
         Header: "createdAt",
         accessor: "createdAt",
+        Filter: false,
       },
       {
         Header: "updatedAt",
         accessor: "updatedAt",
+        Filter: false,
       },
       {
         Header: "status",
@@ -180,6 +187,7 @@ function SelectColumnFilter({
             />
           );
         },
+        Filter: false,
       },
     ];
   }, []);
@@ -199,7 +207,7 @@ function SelectColumnFilter({
   }, [getData]);
 
   return (
-    <div className="mt-10 ">
+    <div className="mt-6">
       {isFetching ? (
         <div className="flex h-screen justify-center items-center">
           Loading...

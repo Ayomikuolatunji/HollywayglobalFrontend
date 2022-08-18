@@ -34,3 +34,17 @@ interface changeProductStatusTypings {
     ids: productIdTypings[];
     status: status[];
 }
+
+interface tableProduct {
+    id: string;
+    original : {
+      id: string
+      status: string;
+    }
+  }
+
+   interface selectedTypings {
+      [x: string]: any;
+      // array of selected rows
+      selectedRows: tableProduct[];
+  }

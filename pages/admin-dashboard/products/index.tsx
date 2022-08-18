@@ -9,7 +9,7 @@ export default function AdminDashboard() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="my-10 w-[95%] mx-auto">
+    <div className="mt-5 w-[95%] mx-auto">
       {/* header */}
       <ProductAction setIsOpen={setIsOpen}/>
       {/* table */}
