@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { useRowSelect, useTable } from "react-table";
-import { DndProvider, useDrag, useDrop } from 'react-dnd'
 import Tbody from "./Tbody";
 import Thead from "./Thead";
 
@@ -28,9 +27,6 @@ const IndeterminateCheckbox = React.forwardRef(
 );
 
 export default function Table({ columns, dataTable,selectedRows, setSelectedRows, }: Props) {
-  const [records, setRecords] = React.useState(dataTable);
-
-
   const {
     getTableProps,
     getTableBodyProps,
@@ -73,17 +69,7 @@ export default function Table({ columns, dataTable,selectedRows, setSelectedRows
     }
   );
 
-  const moveRow = (dragIndex: string | number, hoverIndex: any) => {
-    const dragRecord = records[dragIndex]
-    setRecords(
-      update(records, {
-        $splice: [
-          [dragIndex, 1],
-          [hoverIndex, 0, dragRecord],
-        ],
-      })
-    )
-  }
+
 
   useEffect(() => {
     setSelectedRows(selectedFlatRows)
