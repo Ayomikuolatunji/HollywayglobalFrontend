@@ -70,7 +70,39 @@ export default function ProductTable() {
       console.log(error);
     }
   };
+ // This is a custom filter UI for selecting
+// a unique option from a list
+function SelectColumnFilter({
+  column: { filterValue, setFilter, preFilteredRows, id },
+}:any) {
+  // Calculate the options for filtering
+  // using the preFilteredRows
+  const options:any= React.useMemo(() => {
+    const options:any= new Set()
+    preFilteredRows.forEach((row:any)=> {
+      options.add(row.values[id])
+    })
+    return [...options.values()]
+  }, [id, preFilteredRows])
 
+  // Render a multi-select box
+  return (
+    <select
+      value={filterValue}
+      onChange={e => {
+        setFilter(e.target.value || undefined)
+      }}
+      className="bg-black p-4 text-white"
+    >
+      <option value="">All</option>
+      {options.map((option:string, i:number) => (
+        <option key={i} value={option}>
+          {option}
+        </option>
+      ))}
+    </select>
+  )
+}
   const columns: any = useMemo(() => {
     return [
       {
@@ -96,7 +128,7 @@ export default function ProductTable() {
       {
         Header: "status",
         accessor: "status",
-        Cell:({row}:any)=>{
+        Cell:({ row }:any)=>{
            return (
                <div className={`${
                  row.original.status === "Active"
@@ -108,7 +140,9 @@ export default function ProductTable() {
                   {row.original.status}
                </div>
            )
-        }
+        },
+        Filter: SelectColumnFilter,
+        filter: 'includes',
       },
       //add delete and edit button
       {
@@ -154,9 +188,9 @@ export default function ProductTable() {
     return getData?.products?.map((product: productTypings) => {
       return {
         id: product.id,
-        name: product.name,
+        name: product.name.toLocaleUpperCase(),
         price: ` ${product.currency} ${product.price}`,
-        type: product.type,
+        type: product.type.toLocaleUpperCase(),
         createdAt: moment(product.createdAt).format("MMMM Do YYYY"),
         updatedAt: moment(product.updatedAt).format("MMMM Do YYYY"),
         status: product.status ? "Active" : "Inactive",
@@ -172,28 +206,12 @@ export default function ProductTable() {
         </div>
       ) : dataTable && dataTable.length > 0 ? (
         <div>
-          {selectedRows.length > 0 && (
-            <div className="flex justify-between items-center mb-3 ml-1">
-              <div className="flex items-center">
-                <span className="text-sm font-semibold">
-                  {selectedRows.length}{" "}
-                  {selectedRows.length === 1 ? "item" : "items"} selected
-                </span>
-                <button
-                  className="deactive-btn flex items-center ml-3"
-                  onClick={() => changeProductStatusFunc(selectedRows)}
-                >
-                  <MoveInactiveIcon className="mr-2 h-5 w-5" />
-                  <span className="text-sm font-semibold">Change Status</span>
-                </button>
-              </div>
-            </div>
-          )}
           <Table
             columns={columns}
             dataTable={dataTable}
             selectedRows={selectedRows}
             setSelectedRows={setSelectedRows}
+            changeProductStatusFunc={changeProductStatusFunc}
           />
         </div>
       ) : (

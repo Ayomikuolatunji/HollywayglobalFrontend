@@ -14,7 +14,7 @@ interface Props {
 const AdminWrapper = ({ children }: Props) => {
   const admin_id = getAppCredentials("admin_token")?.admin_id;
   const { error, isLoading } = useAuthAdminQuery(admin_id || "");
- 
+
   const router = useRouter();
 
   useEffect(() => {
@@ -36,10 +36,14 @@ const AdminWrapper = ({ children }: Props) => {
       <div className="w-[15%] bg-[white] h-[100vh]">
         <AdminSidebar />
       </div>
-     {isLoading ?  "Loading..." : <main className="w-[85%] bg-[white] h-[100vh] overflow-scroll">
-        <Header />
-        {children}
-      </main>}
+      {isLoading ? (
+        "Loading..."
+      ) : (
+        <main className="w-[85%] bg-[white] h-[100vh]">
+          <Header />
+          {children}
+        </main>
+      )}
     </div>
   );
 };

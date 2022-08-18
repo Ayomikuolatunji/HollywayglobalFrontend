@@ -1,13 +1,24 @@
 import React, { useEffect } from "react";
-import { useRowSelect, useTable } from "react-table";
-import Tbody from "./Tbody";
-import Thead from "./Thead";
+import {
+  useRowSelect,
+  useTable,
+  useFilters,
+  useGlobalFilter,
+} from "react-table";
+
+import { DndProvider, useDrag, useDrop } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
+import update from "immutability-helper";
+import Row from "./Row";
+import GlobalFilter from "../search/GlobalSearch";
+import { MoveInactiveIcon } from "../../helpers/Icons";
 
 interface Props {
   dataTable: any;
   columns: any;
-  selectedRows:any, 
-  setSelectedRows:any,
+  selectedRows: any;
+  setSelectedRows: any;
+  changeProductStatusFunc: (status: any) => void;
 }
 
 const IndeterminateCheckbox = React.forwardRef(
@@ -26,22 +37,36 @@ const IndeterminateCheckbox = React.forwardRef(
   }
 );
 
-export default function Table({ columns, dataTable,selectedRows, setSelectedRows, }: Props) {
+export default function Table({
+  columns,
+  dataTable,
+  setSelectedRows,
+  selectedRows,
+  changeProductStatusFunc,
+}: Props) {
+  const [records, setRecords] = React.useState(dataTable);
+
   const {
     getTableProps,
     getTableBodyProps,
-    rows,
     headerGroups,
+    rows,
     prepareRow,
-    // get selected rows
+    visibleColumns,
+    preGlobalFilteredRows,
+    setGlobalFilter,
     selectedFlatRows,
     state,
-    // 
+
+    //
   } = useTable(
     {
       columns,
       data: dataTable || [],
     },
+    useFilters,
+    useFilters, // useFilters!
+    useGlobalFilter, // useGlobalFilter!
     useRowSelect,
     (hooks) => {
       hooks.visibleColumns.push((columns) => [
@@ -69,25 +94,87 @@ export default function Table({ columns, dataTable,selectedRows, setSelectedRows
     }
   );
 
-
-
   useEffect(() => {
-    setSelectedRows(selectedFlatRows)
-  },[selectedFlatRows])
+    setSelectedRows(selectedFlatRows);
+  }, [selectedFlatRows]);
 
-  // add id field to columns
+  const moveRow = (dragIndex: any, hoverIndex: any) => {
+    const dragRecord = records[dragIndex];
+    setRecords(
+      update(records, {
+        $splice: [
+          [dragIndex, 1],
+          [hoverIndex, 0, dragRecord],
+        ],
+      })
+    );
+  };
 
   return (
-    <table
-      {...getTableProps()}
-      className="w-full text-sm text-left text-gray-500 dark:text-gray-400 border-2"
-    >
-      <Thead headerGroups={headerGroups} />
-      <Tbody
-        rows={rows}
-        getTableBodyProps={getTableBodyProps}
-        prepareRow={prepareRow}
-      />
-    </table>
+    <DndProvider backend={HTML5Backend}>
+      <div>
+        <GlobalFilter
+          preGlobalFilteredRows={preGlobalFilteredRows}
+          globalFilter={state.globalFilter}
+          setGlobalFilter={setGlobalFilter}
+        />
+      </div>
+      {selectedRows.length > 0 && (
+        <div className="flex justify-between items-center mb-3 ml-1">
+          <div className="flex items-center">
+            <span className="text-sm font-semibold">
+              {selectedRows.length}{" "}
+              {selectedRows.length === 1 ? "item" : "items"} selected
+            </span>
+            <button
+              className="deactive-btn flex items-center ml-3"
+              onClick={() => changeProductStatusFunc(selectedRows)}
+            >
+              <MoveInactiveIcon className="mr-2 h-5 w-5" />
+              <span className="text-sm font-semibold">Change Status</span>
+            </button>
+          </div>
+        </div>
+      )}
+      <table
+        {...getTableProps()}
+        className="w-full text-sm text-left text-gray-500 dark:text-gray-400 border-2"
+      >
+        <thead className="text-xs text-gray-700 uppercase bg-white dark:bg-gray-700 dark:text-gray-400 border-b-2 border-t-2 border-t-gray-50">
+          {headerGroups.map((headerGroup) => (
+            <tr {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map((column) => (
+                <th {...column.getHeaderProps()} className="p-[12px]">
+                  {column.render("Header")}
+                  {/* Render the columns filter UI */}
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody {...getTableBodyProps()}>
+          {rows.map((row: any, index: any) => {
+            prepareRow(row);
+            return (
+              <Row
+                index={index}
+                row={row}
+                prepareRow={prepareRow}
+                moveRow={moveRow}
+                {...row.getRowProps()}
+              />
+            );
+          })}
+        </tbody>
+      </table>
+    </DndProvider>
   );
+}
+
+function matchSorter(
+  rows: any,
+  filterValue: any,
+  arg2: { keys: ((row: any) => any)[] }
+) {
+  throw new Error("Function not implemented.");
 }
