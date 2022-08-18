@@ -96,6 +96,19 @@ export default function ProductTable() {
       {
         Header: "status",
         accessor: "status",
+        Cell:({row}:any)=>{
+           return (
+               <div className={`${
+                 row.original.status === "Active"
+                  ? "text-green-500"
+                  : row.original.status === "Inactive"
+                  ? "text-red-500"
+                  : "text-black"
+              }`}>
+                  {row.original.status}
+               </div>
+           )
+        }
       },
       //add delete and edit button
       {
@@ -171,7 +184,7 @@ export default function ProductTable() {
                   onClick={() => changeProductStatusFunc(selectedRows)}
                 >
                   <MoveInactiveIcon className="mr-2 h-5 w-5" />
-                  <span className="text-sm font-semibold">Deactivate</span>
+                  <span className="text-sm font-semibold">Change Status</span>
                 </button>
               </div>
             </div>
