@@ -72,6 +72,7 @@ export const productApis = secureApiService.injectEndpoints({
         params: {
           adminId: admin_id && admin_id,
         },
+        transformResponse: (response: { data : fetchProductTypings  }, meta: any, arg: any) => response.data.message,
       }),
     }),
   }),
