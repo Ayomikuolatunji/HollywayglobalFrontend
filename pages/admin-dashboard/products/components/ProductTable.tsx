@@ -26,6 +26,7 @@ export default function ProductTable() {
   const [IdType, setIdType] = useState<string>("");
   const getData = data as fetchProductTypings;
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isOpenEdit, setIsOpenEdit] = useState<boolean>(false);
   const [deleteProduct, { isLoading, isSuccess }] = useDeleteProductMutation();
   const [changeProductStatus, { error }] = useChangeProductStatusMutation();
   const [selectedRows, setSelectedRows] = useState([]);
@@ -36,7 +37,7 @@ export default function ProductTable() {
       setIsOpen(true);
     }
     if (type === "edit") {
-      setIsOpen(true);
+      setIsOpenEdit(true);
     }
   };
 
@@ -209,11 +210,11 @@ export default function ProductTable() {
         isLoading={isLoading}
       />
 
-         {isOpen && (
+         {isOpenEdit && (
         <ProductActionModal
-          isOpen={isOpen}
-          setIsOpen={setIsOpen}
-          actionType="add-products"
+          isOpen={isOpenEdit}
+          setIsOpen={setIsOpenEdit}
+          actionType="edit"
         />
       )}
     </div>

@@ -124,7 +124,7 @@ const ProductActionModal = ({
       <Dialog.Panel className="bg-white border flex justify-center flex-col items-center w-[30%] rounded-md">
         <Dialog.Title className="p-4 text-blue-500 font-extrabold flex items-center text-2xl">
           <FaCarAlt />
-          Add a New Car
+          {actionType === "create" ? "Create Product" : "Edit Product"}
         </Dialog.Title>
         <hr className="w-full" />
         <Dialog.Description className="flex justify-center items-center w-[100%]">

@@ -19,7 +19,7 @@ export default function AdminDashboard() {
         <AddProductModal
           isOpen={isOpen}
           setIsOpen={setIsOpen}
-          actionType="add-products"
+          actionType="create"
         />
       )}
     </div>

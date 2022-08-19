@@ -12,7 +12,7 @@ const ProductAction = ({ setIsOpen }:modalConditions) => {
         {/* select dropwdown */}
         <div className="flex items-center">
           <div className="ml-5">
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-medium  font-serif px-3 py-3 flex items-center" 
+            <button className="bg-blue-500 hover:bg-blue-700 text-white font-medium  font-serif px-3 py-2 flex items-center" 
             onClick={()=>setIsOpen(true)}>
               <FiPlus className="text-2xl inline mr-2" />
               <span>New Product</span>
