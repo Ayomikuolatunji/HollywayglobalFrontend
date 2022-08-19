@@ -2,14 +2,18 @@ import React, { ReactHTML, useEffect, useState } from "react";
 import { Dialog } from "@headlessui/react";
 import { FaCarAlt } from "react-icons/fa";
 
-import { modalConditions } from "../../../../models/modal";
+import { modalActionType, modalConditions } from "../../../../models/modal";
 import { productTypings } from "../../../../models/product";
 import { usePostProductMutation } from "../../../../redux/apis/productApi";
 import { currencyOptions } from "../../../../helpers/utils";
 import * as helper from "../../../../helpers";
 import { toast } from "react-toastify";
 
-const AddProductModal = ({ isOpen, setIsOpen }: modalConditions) => {
+const ProductActionModal = ({
+  isOpen,
+  setIsOpen,
+  actionType,
+}: modalConditions & modalActionType) => {
   const [postProdcts] = usePostProductMutation();
   const [file, setFile] = useState("");
   const [carStatus, setCarStatus] = useState(false);
@@ -63,13 +67,13 @@ const AddProductModal = ({ isOpen, setIsOpen }: modalConditions) => {
       return false;
     }
     return true;
-  }
+  };
 
   const onSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
     // check if inputs are empty
     if (!validate(initialValues)) {
-         return;
+      return;
     }
     if (file) {
       const fileData = new FormData();
@@ -229,4 +233,4 @@ const AddProductModal = ({ isOpen, setIsOpen }: modalConditions) => {
     </Dialog>
   );
 };
-export default AddProductModal;
+export default ProductActionModal;

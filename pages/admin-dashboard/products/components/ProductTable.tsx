@@ -19,6 +19,7 @@ import {
 } from "../../../../helpers/Icons";
 import DeleteProductModal from "./DeleteProductModal";
 import SelectColumnFilter from "../../../../components/search/SelectColumnFilter";
+import ProductActionModal from "./ProductActionModal";
 
 export default function ProductTable() {
   const { data, isFetching } = useGetProductsQuery();
@@ -32,6 +33,9 @@ export default function ProductTable() {
   const actionHandler = (id: string, type: string) => {
     setIdType(id);
     if (type === "delete") {
+      setIsOpen(true);
+    }
+    if (type === "edit") {
       setIsOpen(true);
     }
   };
@@ -204,6 +208,14 @@ export default function ProductTable() {
         deleteHandler={deleteHandler}
         isLoading={isLoading}
       />
+
+         {isOpen && (
+        <ProductActionModal
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          actionType="add-products"
+        />
+      )}
     </div>
   );
 }
