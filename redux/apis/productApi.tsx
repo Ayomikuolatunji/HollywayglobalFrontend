@@ -53,6 +53,14 @@ export const productApis = secureApiService.injectEndpoints({
         };
       },
       invalidatesTags: ["Product"]
+    }),
+    editProduct: build.mutation<void, productTypings>({
+      query: (body) => ({
+        url: `products`,
+        method: "POST",
+        body: { ...body, adminId: admin_id && admin_id },
+      }),
+      invalidatesTags: ["Product"],
     })
   }),
 });
@@ -62,4 +70,5 @@ export const {
   usePostProductMutation,
   useDeleteProductMutation,
   useChangeProductStatusMutation,
+  useEditProductMutation
 } = productApis;
