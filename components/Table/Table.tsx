@@ -131,6 +131,9 @@ export default function Table({
               </div>
             );
           },
+          Filter: () => {
+            return null
+          },
           accessor: "id",
           Cell: ({ row }: any) => {
             return (
@@ -138,7 +141,6 @@ export default function Table({
             );
           },
           // hide filters on this column
-          Filter: false,
         },
         ...columns,
       ]);

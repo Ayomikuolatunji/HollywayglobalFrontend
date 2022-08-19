@@ -18,6 +18,7 @@ import {
   EditActiveIcon,
 } from "../../../../helpers/Icons";
 import DeleteProductModal from "./DeleteProductModal";
+import SelectColumnFilter from "../../../../components/search/SelectColumnFilter";
 
 export default function ProductTable() {
   const { data, isFetching } = useGetProductsQuery();
@@ -73,37 +74,7 @@ export default function ProductTable() {
     }
   };
  // This is a custom filter UI for selecting
-// a unique option from a list
-function SelectColumnFilter({
-  column: { filterValue, setFilter, preFilteredRows, id },
-}:any) {
-  // Calculate the options for filtering
-  // using the preFilteredRows
-  const options= React.useMemo(() => {
-    const options:any= new Set()
-    preFilteredRows.forEach((row:any)=> {
-      options.add(row.values[id])
-    })
-    return [...options.values()]
-  }, [id, preFilteredRows])
 
-  // Render a multi-select box
-  return (
-    <select
-      value={filterValue}
-      onChange={e => {
-        setFilter(e.target.value || undefined)
-      }}
-    >
-      <option value="">All</option>
-      {options.map((option:string, i:number) => (
-        <option key={i} value={option}>
-          {option}
-        </option>
-      ))}
-    </select>
-  )
-}
   const columns: any = useMemo(() => {
     return [
       {
@@ -137,7 +108,7 @@ function SelectColumnFilter({
         accessor: "status",
         Cell:({ row }:any)=>{
            return (
-               <div className={`${
+               <div className={`mb-3 ${
                  row.original.status === "Active"
                   ? "text-green-500"
                   : row.original.status === "Inactive"
