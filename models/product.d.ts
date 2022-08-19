@@ -48,3 +48,7 @@ interface tableProduct {
       // array of selected rows
       selectedRows: tableProduct[];
   }
+
+  export interface productIdTypings {
+    productId:string
+  }

@@ -19,14 +19,14 @@ import {
 } from "../../../../helpers/Icons";
 import DeleteProductModal from "./DeleteProductModal";
 import SelectColumnFilter from "../../../../components/search/SelectColumnFilter";
-import ProductActionModal from "./ProductActionModal";
+import EditProductModal from "./EditProductModal";
 
 export default function ProductTable() {
   const { data, isFetching } = useGetProductsQuery();
   const [IdType, setIdType] = useState<string>("");
   const getData = data as fetchProductTypings;
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [isOpenEdit, setIsOpenEdit] = useState<boolean>(false);
+  const [isEditOpened, setIsEditOpened] = useState<boolean>(false);
   const [deleteProduct, { isLoading, isSuccess }] = useDeleteProductMutation();
   const [changeProductStatus, { error }] = useChangeProductStatusMutation();
   const [selectedRows, setSelectedRows] = useState([]);
@@ -35,9 +35,8 @@ export default function ProductTable() {
     setIdType(id);
     if (type === "delete") {
       setIsOpen(true);
-    }
-    if (type === "edit") {
-      setIsOpenEdit(true);
+    }else {
+      setIsEditOpened(true);
     }
   };
 
@@ -209,14 +208,8 @@ export default function ProductTable() {
         deleteHandler={deleteHandler}
         isLoading={isLoading}
       />
-
-         {isOpenEdit && (
-        <ProductActionModal
-          isOpen={isOpenEdit}
-          setIsOpen={setIsOpenEdit}
-          actionType="edit"
-        />
-      )}
+      {isEditOpened &&  <EditProductModal productId={IdType}/>}
+      
     </div>
   );
 }

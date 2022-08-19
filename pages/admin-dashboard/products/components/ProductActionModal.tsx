@@ -2,18 +2,14 @@ import React, { ReactHTML, useEffect, useState } from "react";
 import { Dialog } from "@headlessui/react";
 import { FaCarAlt } from "react-icons/fa";
 
-import { modalActionType, modalConditions } from "../../../../models/modal";
+import { modalConditions } from "../../../../models/modal";
 import { productTypings } from "../../../../models/product";
 import { usePostProductMutation } from "../../../../redux/apis/productApi";
 import { currencyOptions } from "../../../../helpers/utils";
 import * as helper from "../../../../helpers";
-import { toast } from "react-toastify";
+import validate from "./ValidateProduct";
 
-const ProductActionModal = ({
-  isOpen,
-  setIsOpen,
-  actionType,
-}: modalConditions & modalActionType) => {
+const ProductActionModal = ({ isOpen, setIsOpen }: modalConditions) => {
   const [postProdcts] = usePostProductMutation();
   const [file, setFile] = useState("");
   const [carStatus, setCarStatus] = useState(false);
@@ -35,45 +31,13 @@ const ProductActionModal = ({
     setCarStatus(e.target.checked);
   };
 
-  const validate = (values: productTypings) => {
-    if (!values.name) {
-      toast.error("Product name is required", {
-        toastId: "emptyFields-toast-product-id",
-      });
-      return false;
-    }
-    if (!values.price) {
-      toast.error("Price is required", {
-        toastId: "emptyFields-toast-product-id",
-      });
-      return false;
-    }
-    if (!values.description) {
-      toast.error("Description is required", {
-        toastId: "emptyFields-toast-product-id",
-      });
-      return false;
-    }
-    if (!values.type) {
-      toast.error("Type is required", {
-        toastId: "emptyFields-toast-product-id",
-      });
-      return false;
-    }
-    if (!values.currency) {
-      toast.error("Currency is required", {
-        toastId: "emptyFields-toast-product-id",
-      });
-      return false;
-    }
-    return true;
-  };
+
 
   const onSubmit = (e: { preventDefault: () => void }) => {
     e.preventDefault();
     // check if inputs are empty
     if (!validate(initialValues)) {
-      return;
+         return;
     }
     if (file) {
       const fileData = new FormData();
@@ -124,7 +88,7 @@ const ProductActionModal = ({
       <Dialog.Panel className="bg-white border flex justify-center flex-col items-center w-[30%] rounded-md">
         <Dialog.Title className="p-4 text-blue-500 font-extrabold flex items-center text-2xl">
           <FaCarAlt />
-          {actionType === "create" ? "Create Product" : "Edit Product"}
+          Add a New Car
         </Dialog.Title>
         <hr className="w-full" />
         <Dialog.Description className="flex justify-center items-center w-[100%]">
@@ -233,4 +197,4 @@ const ProductActionModal = ({
     </Dialog>
   );
 };
-export default ProductActionModal;
+export default  ProductActionModal;

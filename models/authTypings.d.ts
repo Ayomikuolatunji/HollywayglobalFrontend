@@ -33,7 +33,3 @@ export interface adminSignupTypings {
 export interface adminIdTypings {
   adminId:string
 }
-
-export interface productIdTypings {
-  productId:string
-}

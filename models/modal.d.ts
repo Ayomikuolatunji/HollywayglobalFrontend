@@ -5,5 +5,6 @@ export interface modalConditions {
 
 export interface modalActionType {
     actionType: string;
+    editId?: string;
   }
   

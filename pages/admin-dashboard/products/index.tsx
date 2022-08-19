@@ -11,17 +11,11 @@ export default function AdminDashboard() {
   return (
     <div className="mt-5 w-[95%] mx-auto">
       {/* header */}
-      <ProductAction setIsOpen={setIsOpen} />
+      <ProductAction setIsOpen={setIsOpen}/>
       {/* table */}
       <ProductTable />
 
-      {isOpen && (
-        <AddProductModal
-          isOpen={isOpen}
-          setIsOpen={setIsOpen}
-          actionType="create"
-        />
-      )}
+      {isOpen && <AddProductModal isOpen={isOpen} setIsOpen={setIsOpen} />}
     </div>
   );
 }
