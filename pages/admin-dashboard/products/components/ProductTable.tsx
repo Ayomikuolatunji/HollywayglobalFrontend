@@ -208,7 +208,10 @@ export default function ProductTable() {
         deleteHandler={deleteHandler}
         isLoading={isLoading}
       />
-      {isEditOpened &&  <EditProductModal productId={IdType}/>}
+      {isEditOpened &&  <EditProductModal productId={IdType}
+        setIsOpen={setIsEditOpened}
+        isOpen={isEditOpened}
+      />}
       
     </div>
   );

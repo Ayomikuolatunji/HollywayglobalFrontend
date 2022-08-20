@@ -14,11 +14,11 @@ export interface productTypings {
 
 export type fetchProductTypings ={
     message:string
-    product:productTypings[]
+    products:productTypings[]
 }
 export interface singleProductTypings {
     message:string
-    product:productTypings[]
+    product:productTypings
 }
 
 export interface productColumns {

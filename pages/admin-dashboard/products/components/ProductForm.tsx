@@ -1,31 +1,20 @@
 import React from 'react'
 import { currencyOptions } from "../../../../helpers/utils";
 import * as helper from "../../../../helpers";
+import { productIdTypings, productTypings } from '../../../../models/product';
 
 interface productFormTypings {
-    onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-    handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    onProductAvailable: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    handleProductAvailable: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onSubmit: (e:any) => void;
+    handleChange: (e: any) => void;
+    handleFileChange: (e: any) => void;
+    handleProductAvailable: (e: any) => void;
     setIsOpen: (isOpen: boolean) => void;
-    initialValues: {
-        name: string;
-        price: string;
-        description: string;
-        type: string;
-        currency: string;
-    },
-    file: string;
-    carStatus: boolean;
-    currency: string;
-    type: string;
+    initialValues:productTypings, 
 }
 
 export default function ProductForm({
     onSubmit,
     handleChange,
-    onProductAvailable,
     handleFileChange,
     handleProductAvailable,
     setIsOpen,
@@ -33,7 +22,7 @@ export default function ProductForm({
 }: productFormTypings) {
   return (
     <form onSubmit={onSubmit} className="w-full">
-    <div className="flex flex-col w-[100%]">    
+     <div className="flex flex-col w-[100%]">    
       <input
         id="name"
         name="name"
