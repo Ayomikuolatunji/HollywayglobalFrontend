@@ -5,6 +5,7 @@ import {
   fetchProductTypings,
   productIdTypings,
   productTypings,
+  singleProductTypings,
 } from "../../models/product";
 
 const admin_id = getAppCredentials("admin_token")?.admin_id;
@@ -66,14 +67,15 @@ export const productApis = secureApiService.injectEndpoints({
       invalidatesTags: ["Product"],
     }),
     getProduct: build.query<productIdTypings, string>({
-      query: (productId ) => ({
+      query: (productId) => ({
         url: `products/${productId}`,
         method: "GET",
         params: {
           adminId: admin_id && admin_id,
         },
-        transformResponse: (response: { data : fetchProductTypings  }, meta: any, arg: any) => response.data.message,
       }),
+      transformResponse: (res: singleProductTypings | any) => res.product,
+      providesTags: ["Product"],
     }),
   }),
 });

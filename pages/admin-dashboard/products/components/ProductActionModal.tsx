@@ -1,4 +1,4 @@
-import React, { ReactHTML, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Dialog } from "@headlessui/react";
 import { FaCarAlt } from "react-icons/fa";
 

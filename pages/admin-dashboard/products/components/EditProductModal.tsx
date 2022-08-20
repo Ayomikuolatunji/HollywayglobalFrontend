@@ -1,10 +1,15 @@
-import React, { useEffect, useState } from 'react'
-import { productIdTypings, productTypings } from '../../../../models/product';
+import React, { useEffect, useState } from "react";
+import { Dialog } from "@headlessui/react";
+import { FaCarAlt } from "react-icons/fa"
+import {
+  productIdTypings,
+  productTypings
+} from "../../../../models/product";
 
-import { useGetProductQuery } from '../../../../redux/apis/productApi';
+import { useGetProductQuery } from "../../../../redux/apis/productApi";
 
-export default function EditProductModal({productId}:productIdTypings) {
-  const {data}=useGetProductQuery(productId);
+export default function EditProductModal({ productId }: productIdTypings) {
+  const { data } = useGetProductQuery(productId);
   const [initialValues, setInitialValues] = useState<productTypings>({
     adminId: "",
     name: "",
@@ -15,22 +20,22 @@ export default function EditProductModal({productId}:productIdTypings) {
   });
 
   useEffect(() => {
-    // if(data){
-    //   setInitialValues({
-    //     adminId: data.adminId,
-    //     name: data.name,
-    //     price: data.price,
-    //     description: data.description,
-    //     type: data.type,
-    //     currency: data.currency,
-    //   });
-    // }   
-  })
+    const getData: productTypings | any= data!
+    if (getData) {
+      setInitialValues({
+        adminId: getData.adminId,
+        name: getData.name,
+        price: getData.price,
+        description: getData.description,
+        type: getData.type,
+        currency: getData.currency,
+      });
+    }
+  }, [data]);
 
-  console.log(data)
+  console.log(initialValues);
 
-
-  return (
-    <div>EditProductModal</div>
-  )
+  return <div>
+         
+  </div>;
 }
