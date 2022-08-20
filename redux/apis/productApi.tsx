@@ -59,10 +59,13 @@ export const productApis = secureApiService.injectEndpoints({
       invalidatesTags: ["Product"],
     }),
     editProduct: build.mutation<void, productTypings>({
-      query: (body) => ({
-        url: `products/${body.id}`,
+      query: ({id,...body}) => ({
+        url: `products/${id}`,
         method: "PATCH",
-        body: { ...body, adminId: admin_id && admin_id },
+        body: { ...body },
+        params: {
+          adminId: admin_id && admin_id,
+        },
       }),
       invalidatesTags: ["Product"],
     }),

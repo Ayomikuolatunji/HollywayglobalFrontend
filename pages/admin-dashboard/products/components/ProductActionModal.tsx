@@ -9,6 +9,7 @@ import { currencyOptions } from "../../../../helpers/utils";
 import * as helper from "../../../../helpers";
 import validate from "./ValidateProduct";
 import ProductForm from "./ProductForm";
+import { toast } from "react-toastify";
 
 const ProductActionModal = ({ isOpen, setIsOpen }: modalConditions) => {
   const [postProdcts] = usePostProductMutation();
@@ -63,6 +64,10 @@ const ProductActionModal = ({ isOpen, setIsOpen }: modalConditions) => {
         .catch((err) => {
           console.log(err);
         });
+    }else{
+      toast.error("Please upload an image",{
+        toastId: "imageUploadError",
+      });
     }
   };
 

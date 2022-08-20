@@ -3,9 +3,11 @@ import { Dialog } from "@headlessui/react";
 import { FaCarAlt } from "react-icons/fa";
 import { productIdTypings, productTypings } from "../../../../models/product";
 
-import { useGetProductQuery } from "../../../../redux/apis/productApi";
-import { modalActionType, modalConditions } from "../../../../models/modal";
+import { useGetProductQuery,useEditProductMutation} from "../../../../redux/apis/productApi";
+import { modalConditions } from "../../../../models/modal";
 import ProductForm from "./ProductForm";
+import validate from "./ValidateProduct";
+import { toast } from "react-toastify";
 
 export default function EditProductModal({
   productId,
@@ -13,6 +15,7 @@ export default function EditProductModal({
   setIsOpen,
 }: productIdTypings & modalConditions) {
   const { data } = useGetProductQuery(productId);
+  const [editProduct] = useEditProductMutation();
   const [file, setFile] = useState("");
   const [carStatus, setCarStatus] = useState(false);
   const [initialValues, setInitialValues] = useState<productTypings>({
@@ -28,6 +31,7 @@ export default function EditProductModal({
     const getData: productTypings | any = data!;
     if (getData) {
       setInitialValues({
+        id:productId,
         adminId: getData.adminId,
         name: getData.name,
         price: getData.price,
@@ -37,8 +41,16 @@ export default function EditProductModal({
       });
     }
   }, [data]);
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file: any = e.currentTarget.files;
+    setFile(file[0] || "");
+  };
 
-  console.log(initialValues);
+  const handleProductAvailable = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCarStatus(e.target.checked);
+  };
+
+
   const onSubmit = (e: any) => {
     e.preventDefault();
     // check if inputs are empty
@@ -54,14 +66,14 @@ export default function EditProductModal({
       })
         .then((res) => res.json())
         .then((data) => {
-          postProdcts({
+          editProduct({
             ...initialValues,
             status: carStatus,
-            image: data.imageUrl,
+            image: data.imageUrl
           })
             .unwrap()
             .then((data: any) => {
-              if (data.message === "Product created successfully") {
+              if (data.message === "Product updated successfully") {
                 setIsOpen(false);
               }
             })
@@ -70,8 +82,23 @@ export default function EditProductModal({
         .catch((err) => {
           console.log(err);
         });
+    }else{
+      toast.error("Please upload an image",{
+        toastId: "imageUploadError",
+      });
     }
   };
+  const handleChange = (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLSelectElement>
+      | React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    // for checkbox onchange event
+    const { name, value } = e.target;
+    setInitialValues({ ...initialValues, [name]: value });
+  };
+
 
   return (
     <Dialog
