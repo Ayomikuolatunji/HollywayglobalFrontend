@@ -82,17 +82,17 @@ export default function ProductForm({
           />
         </div>
         {/* display image if it exist on product edit */}
-        <div className="w-full flex justify-center">
           {imageExist && (
             <div className="w-full flex justify-center">
               <img
-                src={imagePreview ? imageUrl : `"http://localhost:8080/"${imageUrl}`}
+                src={imagePreview ? imageUrl : `http://localhost:8080/${imageUrl}`}
                 alt="uploaded-img"
-                className="max-w-sm"
+                width={300}
+                height={100}
+                className="border-2 border-blue-500"
               />
             </div>
           )}
-        </div>
         {/* is product available checkbox */}
         <div className="flex items-center w-[40%] mx-auto">
           <label htmlFor="productAvailable">Is car available available?</label>

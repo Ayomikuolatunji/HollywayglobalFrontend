@@ -96,8 +96,6 @@ export default function EditProductModal({
   };
 
 
-  console.log("http://localhost:8080/images/"+previousImage)
-
   return (
     <Dialog
       open={isOpen}
