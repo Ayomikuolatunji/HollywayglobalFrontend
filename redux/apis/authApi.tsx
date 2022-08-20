@@ -1,5 +1,4 @@
 import {
-  adminIdTypings,
   adminSignupTypings,
   loginCredentails,
   signupTypings,

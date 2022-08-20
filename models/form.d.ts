@@ -14,5 +14,6 @@ export interface productFormTypings {
   setIsOpen: (isOpen: boolean) => void;
   initialValues: productTypings;
   imageExist?:boolean,
-  imageurl?:string
+  imageUrl?:string
+  imagePreview?:boolean
 }

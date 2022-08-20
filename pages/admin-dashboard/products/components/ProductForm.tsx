@@ -12,12 +12,14 @@ export default function ProductForm({
   setIsOpen,
   initialValues,
   imageExist = false,
-  imageurl,
+  imageUrl,
+  imagePreview=false
 }: productFormTypings) {
+    console.log(imageUrl)
   return (
     <form onSubmit={onSubmit} className="w-full">
       <div className="flex flex-col w-[100%]">
-        <div>
+        <div className="w-full flex justify-center">
           <input
             id="name"
             name="name"
@@ -25,10 +27,10 @@ export default function ProductForm({
             onChange={(e) => handleChange(e)}
             value={initialValues.name}
             type="text"
-            className="w-[90%] mx-auto border-2 border-gray-400 my-2 p-[5px]"
+            className="w-[98%] mx-auto border-2 border-gray-400 my-2 p-[5px]"
           />
         </div>
-        <div>
+        <div className="w-full flex justify-center">
           <input
             id="price"
             name="price"
@@ -36,26 +38,26 @@ export default function ProductForm({
             type="number"
             onChange={(e) => handleChange(e)}
             value={initialValues.price}
-            className="w-[90%] mx-auto border-2 border-gray-400 my-2 p-[5px]"
+            className="w-[98%] mx-auto border-2 border-gray-400 my-2 p-[5px]"
           />
         </div>
-        <div>
+        <div className="w-full flex justify-center">
           <textarea
             id="description"
             name="description"
             placeholder="Enter car description"
             value={initialValues.description}
             onChange={(e) => handleChange(e)}
-            className="w-[90%] mx-auto border-2 border-gray-400 my-2 p-[5px]"
+            className="w-[98%] mx-auto border-2 border-gray-400 my-2 p-[5px]"
           />
         </div>
         {/* currency selection  */}
-        <div>
+        <div className="w-full flex justify-center">
           <select
             name="currency"
             onChange={(e) => handleChange(e)}
             value={initialValues.currency}
-            className="w-[90%] mx-auto border-2 border-gray-400 my-2 p-[5px]"
+            className="w-[98%] mx-auto border-2 border-gray-400 my-2 p-[5px]"
           >
             <option value="">select sales currency</option>
             {Object.values(currencyOptions)
@@ -69,22 +71,28 @@ export default function ProductForm({
               })}
           </select>
         </div>
-        <div>
+        <div className="w-full flex justify-center">
           <input
             id="image"
             name="image"
             type="file"
             onChange={(e) => handleFileChange(e)}
             placeholder="product image"
-            className="w-[90%] mx-auto border-2 border-gray-400 my-2 p-[5px]"
+            className="w-[98%] mx-auto border-2 border-gray-400 my-2 p-[5px]"
           />
         </div>
         {/* display image if it exist on product edit */}
-        {imageExist && (
-          <div>
-            <img src={imageurl} alt="uploaded-img" />
-          </div>
-        )}
+        <div className="w-full flex justify-center">
+          {imageExist && (
+            <div className="w-full flex justify-center">
+              <img
+                src={imagePreview ? imageUrl : `"http://localhost:8080/"${imageUrl}`}
+                alt="uploaded-img"
+                className="max-w-sm"
+              />
+            </div>
+          )}
+        </div>
         {/* is product available checkbox */}
         <div className="flex items-center w-[40%] mx-auto">
           <label htmlFor="productAvailable">Is car available available?</label>
@@ -96,13 +104,13 @@ export default function ProductForm({
             className="mx-auto border-2 border-gray-400 my-2 p-[5px]"
           />
         </div>
-        <div>
+        <div className="w-full flex justify-center">
           <select
             name="type"
             id="type"
             onChange={(e) => handleChange(e)}
             value={initialValues.type}
-            className="w-[90%] mx-auto border-2 border-gray-400 my-2 p-[5px]"
+            className="w-[98%] mx-auto border-2 border-gray-400 my-2 p-[5px]"
           >
             <option value="">Select Car Type</option>
             {helper.navItems

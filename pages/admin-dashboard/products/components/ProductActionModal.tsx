@@ -1,12 +1,10 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Dialog } from "@headlessui/react";
 import { FaCarAlt } from "react-icons/fa";
 
 import { modalConditions } from "../../../../models/modal";
 import { productTypings } from "../../../../models/product";
 import { usePostProductMutation } from "../../../../redux/apis/productApi";
-import { currencyOptions } from "../../../../helpers/utils";
-import * as helper from "../../../../helpers";
 import validate from "./ValidateProduct";
 import ProductForm from "./ProductForm";
 import { toast } from "react-toastify";
@@ -15,6 +13,8 @@ const ProductActionModal = ({ isOpen, setIsOpen }: modalConditions) => {
   const [postProdcts] = usePostProductMutation();
   const [file, setFile] = useState("");
   const [carStatus, setCarStatus] = useState(false);
+  const [imageExist, setImageExist]= useState(false);
+  const [imagePreview, setImagePreview] = useState("");
   const [initialValues, setInitialValues] = useState<productTypings>({
     adminId: "",
     name: "",
@@ -25,13 +25,16 @@ const ProductActionModal = ({ isOpen, setIsOpen }: modalConditions) => {
   });
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setImageExist(true);
     const file: any = e.currentTarget.files;
     setFile(file[0] || "");
+    setImagePreview(URL.createObjectURL(file[0]));
   };
 
   const handleProductAvailable = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCarStatus(e.target.checked);
   };
+
 
   const onSubmit = (e: any) => {
     e.preventDefault();
@@ -58,14 +61,15 @@ const ProductActionModal = ({ isOpen, setIsOpen }: modalConditions) => {
               if (data.message === "Product created successfully") {
                 setIsOpen(false);
               }
+              setImageExist(false);
             })
             .catch((err: any) => console.log(err));
         })
         .catch((err) => {
           console.log(err);
         });
-    }else{
-      toast.error("Please upload an image",{
+    } else {
+      toast.error("Please upload an image", {
         toastId: "imageUploadError",
       });
     }
@@ -103,6 +107,9 @@ const ProductActionModal = ({ isOpen, setIsOpen }: modalConditions) => {
             handleProductAvailable={handleProductAvailable}
             setIsOpen={setIsOpen}
             initialValues={initialValues}
+            imageExist={imageExist}
+            imagePreview={true}
+            imageUrl={imagePreview}
           />
         </Dialog.Panel>
       </Dialog.Panel>
