@@ -17,6 +17,7 @@ export default function EditProductModal({
   const { data } = useGetProductQuery(productId);
   const [editProduct] = useEditProductMutation();
   const [file, setFile] = useState("");
+  const [previousImage,setPreviousImage] = useState("");
   const [carStatus, setCarStatus] = useState(false);
   const [initialValues, setInitialValues] = useState<productTypings>({
     adminId: "",
@@ -39,6 +40,7 @@ export default function EditProductModal({
         type: getData.type,
         currency: getData.currency,
       });
+      setPreviousImage(getData.image);
     }
   }, [data]);
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,7 +59,6 @@ export default function EditProductModal({
     if (!validate(initialValues)) {
       return;
     }
-    if (file) {
       const fileData = new FormData();
       fileData.append("file", file);
       fetch("http://localhost:8080/images", {
@@ -69,7 +70,7 @@ export default function EditProductModal({
           editProduct({
             ...initialValues,
             status: carStatus,
-            image: data.imageUrl
+            image: data.imageUrl || previousImage,
           })
             .unwrap()
             .then((data: any) => {
@@ -82,11 +83,6 @@ export default function EditProductModal({
         .catch((err) => {
           console.log(err);
         });
-    }else{
-      toast.error("Please upload an image",{
-        toastId: "imageUploadError",
-      });
-    }
   };
   const handleChange = (
     e:
