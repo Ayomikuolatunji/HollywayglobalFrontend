@@ -102,7 +102,6 @@ export default function Table({
     rows,
     prepareRow,
     state,
-    visibleColumns,
     preGlobalFilteredRows,
     setGlobalFilter,
     selectedFlatRows
@@ -189,7 +188,7 @@ export default function Table({
       )}
       <table
         {...getTableProps()}
-        className="w-full text-sm text-left text-gray-500 dark:text-gray-400 border-2"
+        className="w-full text-sm text-left text-gray-500 dark:text-gray-400 border-2 relative"
       >
         <thead className="text-xs text-gray-700 uppercase bg-white dark:bg-gray-700 dark:text-gray-400 border-b-2 border-t-2 border-t-gray-50">
           {headerGroups.map((headerGroup) => (
@@ -207,7 +206,8 @@ export default function Table({
             </tr>
           ))}
         </thead>
-        <tbody {...getTableBodyProps()}>
+        {
+          dataTable.length > 0 ? <tbody {...getTableBodyProps()}>
           {rows.map((row, index: number) => {
             prepareRow(row);
             return (
@@ -221,6 +221,12 @@ export default function Table({
             );
           })}
         </tbody>
+        :(
+          <div className="absolute text-center  w-full p-5">
+              <h1>Your car product lists is currently</h1>
+          </div>
+        )
+        }
       </table>
     </DndProvider>
   );

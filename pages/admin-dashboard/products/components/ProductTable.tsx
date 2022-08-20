@@ -13,10 +13,7 @@ import {
   useDeleteProductMutation,
   useChangeProductStatusMutation,
 } from "../../../../redux/apis/productApi";
-import {
-  DeleteActiveIcon,
-  EditActiveIcon,
-} from "../../../../helpers/Icons";
+import { DeleteActiveIcon, EditActiveIcon } from "../../../../helpers/Icons";
 import DeleteProductModal from "./DeleteProductModal";
 import SelectColumnFilter from "../../../../components/search/SelectColumnFilter";
 import EditProductModal from "./EditProductModal";
@@ -35,7 +32,7 @@ export default function ProductTable() {
     setIdType(id);
     if (type === "delete") {
       setIsOpen(true);
-    }else {
+    } else {
       setIsEditOpened(true);
     }
   };
@@ -59,12 +56,11 @@ export default function ProductTable() {
     }
   }, [IdType]);
 
-
-  const changeProductStatusFunc = async (selectedRows:selectedTypings) => {
+  const changeProductStatusFunc = async (selectedRows: selectedTypings) => {
     try {
       if (selectedRows) {
-        const ids = selectedRows.map((row:tableProduct) => row.original.id);
-        const statuses = selectedRows.map((row:tableProduct) =>
+        const ids = selectedRows.map((row: tableProduct) => row.original.id);
+        const statuses = selectedRows.map((row: tableProduct) =>
           row.original.status === "Active" ? false : true
         );
         // update status of selected products status
@@ -77,7 +73,7 @@ export default function ProductTable() {
       console.log(error);
     }
   };
- // This is a custom filter UI for selecting
+  // This is a custom filter UI for selecting
 
   const columns: any = useMemo(() => {
     return [
@@ -110,21 +106,23 @@ export default function ProductTable() {
       {
         Header: "status",
         accessor: "status",
-        Cell:({ row }:any)=>{
-           return (
-               <div className={`mb-3 ${
-                 row.original.status === "Active"
+        Cell: ({ row }: any) => {
+          return (
+            <div
+              className={`mb-3 ${
+                row.original.status === "Active"
                   ? "text-green-500"
                   : row.original.status === "Inactive"
                   ? "text-red-500"
                   : "text-black"
-              }`}>
-                  {row.original.status}
-               </div>
-           )
+              }`}
+            >
+              {row.original.status}
+            </div>
+          );
         },
         Filter: SelectColumnFilter,
-        filter: 'includes',
+        filter: "includes",
       },
       //add delete and edit button
       {
@@ -187,7 +185,7 @@ export default function ProductTable() {
         <div className="flex h-screen justify-center items-center">
           Loading...
         </div>
-      ) : dataTable && dataTable.length > 0 ? (
+      ) : (
         <div>
           <Table
             columns={columns}
@@ -197,10 +195,6 @@ export default function ProductTable() {
             changeProductStatusFunc={changeProductStatusFunc}
           />
         </div>
-      ) : (
-        <div className="flex justify-center items-center w-full border-2">
-          Your products lists is empty
-        </div>
       )}
       <DeleteProductModal
         isOpen={isOpen}
@@ -208,11 +202,13 @@ export default function ProductTable() {
         deleteHandler={deleteHandler}
         isLoading={isLoading}
       />
-      {isEditOpened &&  <EditProductModal productId={IdType}
-        setIsOpen={setIsEditOpened}
-        isOpen={isEditOpened}
-      />}
-      
+      {isEditOpened && (
+        <EditProductModal
+          productId={IdType}
+          setIsOpen={setIsEditOpened}
+          isOpen={isEditOpened}
+        />
+      )}
     </div>
   );
 }
