@@ -3,6 +3,7 @@ import { getAppCredentials } from "../../helpers/Auth";
 import {
   changeProductStatusTypings,
   fetchProductTypings,
+  productIds,
   productIdTypings,
   productTypings,
   singleProductTypings,
@@ -45,7 +46,7 @@ export const productApis = secureApiService.injectEndpoints({
     changeProductStatus: build.mutation<void, changeProductStatusTypings>({
       query: ({ ids, status }) => {
         return {
-          url: `/products/product_status`,
+          url: `products/product_status`,
           method: "PATCH",
           params: {
             adminId: admin_id && admin_id,
@@ -59,7 +60,7 @@ export const productApis = secureApiService.injectEndpoints({
       invalidatesTags: ["Product"],
     }),
     editProduct: build.mutation<void, productTypings>({
-      query: ({id,...body}) => ({
+      query: ({ id, ...body }) => ({
         url: `products/${id}`,
         method: "PATCH",
         body: { ...body },
@@ -80,6 +81,19 @@ export const productApis = secureApiService.injectEndpoints({
       transformResponse: (res: singleProductTypings | any) => res.product,
       providesTags: ["Product"],
     }),
+    bulkyDelete: build.mutation<void, productIds>({
+      query: ({ids}) => ({
+          url: "products/delete_many",
+          method: "DELETE",
+          body:{
+            productIds: ids
+          },
+          params: {
+            adminId: admin_id && admin_id,
+          }
+        }),
+      invalidatesTags: ["Product"],
+    }),
   }),
 });
 
@@ -90,4 +104,5 @@ export const {
   useChangeProductStatusMutation,
   useEditProductMutation,
   useGetProductQuery,
+  useBulkyDeleteMutation,
 } = productApis;

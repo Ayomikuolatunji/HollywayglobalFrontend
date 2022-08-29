@@ -30,8 +30,8 @@ export interface productColumns {
 
 
 export interface productIds {
-    ids:string
-    status:string
+    ids?:string
+    status?:string
 }
 
 interface changeProductStatusTypings {

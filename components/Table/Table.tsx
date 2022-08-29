@@ -12,14 +12,16 @@ import update from "immutability-helper";
 import {matchSorter} from 'match-sorter'
 import Row from "./Row";
 import GlobalFilter from "../search/GlobalSearch";
-import { MoveInactiveIcon } from "../../helpers/Icons";
+import { DeleteActiveIcon, MoveInactiveIcon } from "../../helpers/Icons";
+import { selectedTypings } from "../../models/product";
 
 interface Props {
   dataTable: any;
   columns: any;
   selectedRows: any;
   setSelectedRows: any;
-  changeProductStatusFunc: (status: any) => void;
+  changeProductStatusFunc: (status: selectedTypings) => void;
+  bulkyDelectFunc:(status:selectedTypings)=>void
 }
 
 const IndeterminateCheckbox = React.forwardRef(
@@ -66,6 +68,7 @@ export default function Table({
   setSelectedRows,
   selectedRows,
   changeProductStatusFunc,
+  bulkyDelectFunc
 }: Props) {
   const [records, setRecords] = React.useState(dataTable);
   const filterTypes:any = React.useMemo(
@@ -182,6 +185,16 @@ export default function Table({
             >
               <MoveInactiveIcon className="mr-2 h-5 w-5" />
               <span className="text-sm font-semibold">Change Status</span>
+            </button>
+            <button 
+              className="deactive-btn flex items-center ml-3"
+              onClick={()=>bulkyDelectFunc(selectedRows)}
+            >
+                  <DeleteActiveIcon
+                      className="mr-2 h-5 w-5"
+                      aria-hidden="true"
+                    />
+                 <span className="text-sm font-semibold">Bulky delete</span>
             </button>
           </div>
         </div>

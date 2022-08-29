@@ -12,6 +12,7 @@ import {
   useGetProductsQuery,
   useDeleteProductMutation,
   useChangeProductStatusMutation,
+  useBulkyDeleteMutation,
 } from "../../../../redux/apis/productApi";
 import { DeleteActiveIcon, EditActiveIcon } from "../../../../helpers/Icons";
 import DeleteProductModal from "./DeleteProductModal";
@@ -20,6 +21,7 @@ import EditProductModal from "./EditProductModal";
 
 export default function ProductTable() {
   const { data, isFetching } = useGetProductsQuery();
+  const [bulkyDelete]=useBulkyDeleteMutation()
   const [IdType, setIdType] = useState<string>("");
   const getData = data as fetchProductTypings;
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -55,6 +57,21 @@ export default function ProductTable() {
       console.log(error);
     }
   }, [IdType]);
+
+  const bulkyDelectFunc= async(selectedRows: selectedTypings)=>{
+       try {
+          if(selectedRows){
+             const ids=selectedRows.map((row:tableProduct)=>row.original.id)
+             const res=await bulkyDelete({
+                ids
+             })
+             .unwrap()
+             console.log(res)
+          }
+       } catch (error) {
+           console.log(error);
+       }
+  }
 
   const changeProductStatusFunc = async (selectedRows: selectedTypings) => {
     try {
@@ -191,6 +208,7 @@ export default function ProductTable() {
             columns={columns}
             dataTable={dataTable}
             selectedRows={selectedRows}
+            bulkyDelectFunc={bulkyDelectFunc}
             setSelectedRows={setSelectedRows}
             changeProductStatusFunc={changeProductStatusFunc}
           />

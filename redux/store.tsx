@@ -10,13 +10,11 @@ import {
   PURGE,
   REGISTER,
 } from "redux-persist";
-
 import storage from "redux-persist/lib/storage";
-
 import { apiService, secureApiService } from "./service";
 
 const persistConfig = {
-  key: "root",
+  key: "ecommerce",
   storage,
   whitelist: ["auth"],
 };

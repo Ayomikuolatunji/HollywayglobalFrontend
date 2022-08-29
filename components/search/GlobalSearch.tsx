@@ -22,7 +22,7 @@ function GlobalFilter({
 
   return (
     <div className="mb-5 w-full">
-      <form className="w-[40%]">
+      <div className="w-[40%]">
         <label
           htmlFor="default-search"
           className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-gray-300"
@@ -65,7 +65,7 @@ function GlobalFilter({
             Search
           </button>
         </div>
-      </form>
+      </div>
     </div>
   );
 }
