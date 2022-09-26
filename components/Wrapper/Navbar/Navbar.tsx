@@ -1,5 +1,9 @@
 import Link from "next/link";
 import React from "react";
+// import component 👇
+import Drawer from "react-modern-drawer";
+//import styles 👇
+import "react-modern-drawer/dist/index.css";
 import * as helpers from "../../../helpers";
 
 interface item {
@@ -8,19 +12,21 @@ interface item {
 }
 
 const Navbar: React.FC = () => {
+  const [isOpen, setIsOpen] = React.useState(false);
+  const toggleDrawer = () => {
+    setIsOpen((prevState) => !prevState);
+  };
   return (
     <div className="sm:mt-8 lg:w-[70%] mx-auto">
-      <nav className="navbar border-b-8 border-red-color flex items-center">
-        {helpers.navItems.map((item: item, index) => {
-          return (
-            <Link key={index} href={item.link} passHref>
-              <div className="py-[10px] px-[16px]  bg-black text-white uppercase relative font-[15px] border-r-[1px] border-r-[#fff]block font-normal cursor-pointer hover:bg-red-color">
-                {item.name}
-              </div>
-            </Link>
-          );
-        })}
-      </nav>
+      <button onClick={toggleDrawer}>Show</button>
+      <Drawer
+        open={isOpen}
+        onClose={toggleDrawer}
+        direction="left"
+        className="bla bla bla"
+      >
+        <div>Hello World</div>
+      </Drawer>
     </div>
   );
 };

@@ -18,8 +18,8 @@ const Home: NextPage = () => {
       </Head>
   
          {/* Homepage */}
-         <Carousel/>
-         <Products/>
+         {/* <Carousel/>
+         <Products/> */}
     </div>
   )
 }
