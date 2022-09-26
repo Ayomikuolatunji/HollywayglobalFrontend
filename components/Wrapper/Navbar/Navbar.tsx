@@ -9,7 +9,7 @@ interface item {
 
 const Navbar: React.FC = () => {
   return (
-    <div className="sm:mt-8">
+    <div className="sm:mt-8 lg:w-[70%] mx-auto">
       <nav className="navbar border-b-8 border-red-color flex items-center">
         {helpers.navItems.map((item: item, index) => {
           return (

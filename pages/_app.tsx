@@ -57,7 +57,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   }
 
   return (
-    <div className="lg:w-[65%] md:w-[70%] sm:w-[80%] mx-auto w-[97%]">
+    <div className="lg:w-[100%] md:w-[1000%] sm:w-[80%] mx-auto w-[97%]">
       <ThemeProvider theme={theme}>
       <NetWorkWrapper>
         <Provider store={store}>

@@ -11,7 +11,7 @@ const HeaderWrapper = ({children }: Props) => {
   return (
     <div>
         <TopNavBar/>
-        <Navbar/>
+        {/* <Navbar/> */}
        <main>
          {children}
        </main>
