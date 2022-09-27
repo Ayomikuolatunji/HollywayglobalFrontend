@@ -2,30 +2,26 @@ import React, { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import Cookies from '../../helpers/Cookies'
 import Sidebar from './SideBar/Sidebar'
+import Navbar from './Navbar/Navbar'
+import Carosel from '../../layouts/Home/Carousel/Carousel'
 
 
-interface Props {
-  children:JSX.Element | JSX.Element[]
-}
 
-const HomeRightLeftWrapper = ({
-  children
-}:Props) => {
+const HomeRightLeftWrapper = () => {
 
   const router = useRouter()
     useEffect(() => {
-      if (!Cookies.get("admin_token")) {
-          router.push("/admin-login")
-      }
+      
     }, [router]);
   
   return (
-    <div className='flex bg-white h-[100vh]'>
+    <div className='flex bg-white h-[100vh] w-[65%] mx-auto'>
         <div className='w-[20%] bg-[white]'>
            <Sidebar/>
         </div>
         <main className='w-[80%] bg-[white]'> 
-          
+           <Navbar/>
+           <Carosel/>
         </main>
     </div>
   )
