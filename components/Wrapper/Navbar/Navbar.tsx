@@ -2,17 +2,12 @@ import Link from "next/link";
 import React from "react";
 import { AiFillHeart } from "react-icons/ai";
 import { GiShoppingBag } from "react-icons/gi";
-
+import { BsTelephoneFill } from "react-icons/bs";
 // import component 👇
 import Drawer from "react-modern-drawer";
 //import styles 👇
 import "react-modern-drawer/dist/index.css";
 import { navItems } from "../../../helpers";
-
-interface item {
-  name: string;
-  link: string;
-}
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -50,7 +45,38 @@ const Navbar: React.FC = () => {
             <GiShoppingBag className="text-3xl text-[#1c1c1c]" />
           </div>
           <div>
-            items: <span className="text-[#1c1c1c] font-extrabold">${"0.00"}</span>
+            items:{" "}
+            <span className="text-[#1c1c1c] font-extrabold">${"0.00"}</span>
+          </div>
+        </div>
+      </div>
+      <div className="search relative mt-4 flex justify-between items-center">
+        <div className="search-warapper border-[1px] outline-0 border-gray-200 w-[60%]">
+          <select
+            name=""
+            id=""
+            className="w-[25%] border-0 outline-none p-3.5 bg-white text-black font-bold"
+          >
+            <option value="">All Category</option>
+            <option value="export">Export</option>
+            <option value="local production">Local product</option>
+          </select>
+          <input
+            type="text"
+            placeholder="What do you need?"
+            className="border-0 w-[50%] p-3 outline-0"
+          />
+          <button className="bg-[#7fad39] p-3.5 w-[25%] font-[800] text-white">
+            SEARCH
+          </button>
+        </div>
+        <div className="contact">
+          <span className="p-4 flex justify-center items-center bg-[#f5f5f5] w-[50px] h-[50px] rounded-full text-[#7fad39]">
+            <BsTelephoneFill text-xl />
+          </span>
+          <div className="support">
+             <h1>+2349025252652</h1>
+             <p>support 24/7 time</p>
           </div>
         </div>
       </div>
