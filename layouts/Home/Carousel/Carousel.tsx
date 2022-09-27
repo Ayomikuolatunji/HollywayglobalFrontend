@@ -16,7 +16,7 @@ export default function Carosel() {
   };
 
   return (
-    <div className="border-2 w-[100%] block h-[40vh] max-w-full">
+    <div className="w-[100%] block h-[40vh] max-w-full p-3">
       <Slider {...settings}>
         <div className="h-[full] max-w-full w-full relative">
           <img
