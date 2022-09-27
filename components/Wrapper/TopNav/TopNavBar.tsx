@@ -13,7 +13,7 @@ import { FaUserAlt } from "react-icons/fa";
 export default function TopNavBar() {
   return (
     <div className="p-4 bg-[#f5f5f5] w-full lg:block hidden">
-      <div className="md:w-[65%] mx-auto flex justify-between">
+      <div className="md:w-[70%] mx-auto flex justify-between">
         <div className="left">
           <ul className="flex space-x-2">
             <li className="flex items-center border-r-2 border-r-gray-300 pr-6 space-x-1">

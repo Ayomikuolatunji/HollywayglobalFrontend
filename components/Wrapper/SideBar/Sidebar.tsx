@@ -7,7 +7,7 @@ export default function Sidebar() {
   return (
     <div className="w-full flex justify-center items-center flex-col">
       <div className="w-full">
-        <h1 className="text-2xl text-start mt-3 text-[#7fad39] font-bold">
+        <h1 className="text-3xl text-start mt-4 text-[#7fad39] font-bold">
           HollywayGlobal
         </h1>
       </div>

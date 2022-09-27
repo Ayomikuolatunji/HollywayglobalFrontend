@@ -75,7 +75,7 @@ const Navbar: React.FC = () => {
             <BsTelephoneFill text-xl />
           </span>
           <div className="support flex flex-col">
-             <h1>+2349025252652</h1>
+             <h1 className="text-black font-extrabold mb-2 text-lg">+2349025252652</h1>
              <p>support 24/7 time</p>
           </div>
         </div>
