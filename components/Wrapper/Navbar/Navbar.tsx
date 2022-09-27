@@ -70,11 +70,11 @@ const Navbar: React.FC = () => {
             SEARCH
           </button>
         </div>
-        <div className="contact">
-          <span className="p-4 flex justify-center items-center bg-[#f5f5f5] w-[50px] h-[50px] rounded-full text-[#7fad39]">
+        <div className="contact flex items-center">
+          <span className="p-4 flex justify-center items-center bg-[#f5f5f5] w-[50px] h-[50px] rounded-full text-[#7fad39] mr-5">
             <BsTelephoneFill text-xl />
           </span>
-          <div className="support">
+          <div className="support flex flex-col">
              <h1>+2349025252652</h1>
              <p>support 24/7 time</p>
           </div>

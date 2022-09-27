@@ -15,8 +15,8 @@ const HomeRightLeftWrapper = () => {
     }, [router]);
   
   return (
-    <div className='flex bg-white h-[100vh] w-[65%] mx-auto'>
-        <div className='w-[20%] bg-[white]'>
+    <div className='flex bg-white h-[100vh] w-[70%] mx-auto'>
+        <div className='w-[25%] bg-[white]'>
            <Sidebar/>
         </div>
         <main className='w-[80%] bg-[white]'> 
