@@ -8,7 +8,7 @@ interface Props {
   children:JSX.Element | JSX.Element[]
 }
 
-const PageWrapper = ({
+const HomeRightLeftWrapper = ({
   children
 }:Props) => {
 
@@ -21,14 +21,14 @@ const PageWrapper = ({
   
   return (
     <div className='flex bg-white h-[100vh]'>
-        {/* <div className='w-[20%] bg-[white]'>
+        <div className='w-[20%] bg-[white]'>
            <Sidebar/>
-        </div> */}
+        </div>
         <main className='w-[80%] bg-[white]'> 
-           {children}
+          
         </main>
     </div>
   )
 }
 
-export default PageWrapper
+export default HomeRightLeftWrapper

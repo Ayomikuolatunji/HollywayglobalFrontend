@@ -16,10 +16,7 @@ const Home: NextPage = () => {
         <title>Create Next App</title>
         <link rel="icon" href="/assets/logo.png" />
       </Head>
-  
-         {/* Homepage */}
-         {/* <Carousel/>
-         <Products/> */}
+
     </div>
   )
 }

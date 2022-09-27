@@ -4,20 +4,19 @@ import "react-toastify/dist/ReactToastify.css";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { useRouter } from "next/router";
-import { ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from "@mui/material/styles";
 
 import HeaderWrapper from "../components/Wrapper/HeaderWrapper";
-import PageWrapper from "../components/Wrapper/PageWrapper";
+import PageWrapper from "../components/Wrapper/HomeRightLeftWrapper";
 import { store, persistor } from "../redux/store";
 import AdminWrapper from "../components/AdminWrapper/Main";
 import * as helper from "../helpers";
 import NetWorkWrapper from "../layouts/NetworkWrapper/NetWorkWrapper";
 
-
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
 
-  const theme = {}
+  const theme = {};
 
   if (
     router.pathname.startsWith("/admin-login") ||
@@ -59,18 +58,16 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <div className="lg:w-[100%] md:w-[1000%] sm:w-[80%] mx-auto w-[97%]">
       <ThemeProvider theme={theme}>
-      <NetWorkWrapper>
-        <Provider store={store}>
-          <PersistGate loading={null} persistor={persistor}>
-            <HeaderWrapper>
-              <PageWrapper>
+        <NetWorkWrapper>
+          <Provider store={store}>
+            <PersistGate loading={null} persistor={persistor}>
+              <HeaderWrapper>
                 <Component {...pageProps} />
                 <helper.Toastify />
-              </PageWrapper>
-            </HeaderWrapper>
-          </PersistGate>
-        </Provider>
-      </NetWorkWrapper>
+              </HeaderWrapper>
+            </PersistGate>
+          </Provider>
+        </NetWorkWrapper>
       </ThemeProvider>
     </div>
   );
