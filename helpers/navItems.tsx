@@ -3,7 +3,7 @@ type navTypes = {
   link: string;
 };
 
-const navbarItems: navTypes[] = [
+const navbarItems: Array<navTypes> = [
   {
     name: "Home",
     link: "/",
