@@ -3,10 +3,6 @@ import React from "react";
 import { AiFillHeart } from "react-icons/ai";
 import { GiShoppingBag } from "react-icons/gi";
 import { BsTelephoneFill } from "react-icons/bs";
-// import component 👇
-import Drawer from "react-modern-drawer";
-//import styles 👇
-import "react-modern-drawer/dist/index.css";
 import { navItems } from "../../../helpers";
 
 const Navbar: React.FC = () => {

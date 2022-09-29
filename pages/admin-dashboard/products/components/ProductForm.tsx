@@ -1,5 +1,5 @@
 import React from "react";
-import { currencyOptions } from "../../../../helpers/utils";
+import { currencyOptions, productsDepartments } from "../../../../helpers/utils";
 import * as helper from "../../../../helpers";
 
 import { productFormTypings } from "../../../../models/form";
@@ -113,8 +113,7 @@ export default function ProductForm({
             className="w-[98%] mx-auto border-2 border-gray-400 my-2 p-[5px]"
           >
             <option value="">Select Car Type</option>
-            {helper.navItems
-              .slice(1, helper.navItems.length)
+            {productsDepartments
               .map((option, index) => (
                 <option value={option.name} key={index}>
                   {option.name}

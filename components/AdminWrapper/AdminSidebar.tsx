@@ -16,9 +16,9 @@ export const sideBarItems = [
     path: "/admin-dashboard/products",
   },
   {
-    name: "Categories",
+    name: "Departments",
     icon: <AiFillTags className="text-xl" />,
-    path: "/admin-dashboard/categories",
+    path: "/admin-dashboard/departments",
   },{
     name: "Orders",
     icon: <FaMoneyBill className="text-xl" />,

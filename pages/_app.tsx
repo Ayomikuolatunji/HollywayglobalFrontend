@@ -37,7 +37,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   }
 
   if (
-    ["/admin-dashboard", "/admin-dashboard/products"].includes(router.pathname)
+    ["/admin-dashboard", "/admin-dashboard/products", "/admin-dashboard/departments"].includes(router.pathname)
   ) {
     return (
       <div className="lg:w-[100%] md:w-[70%] sm:w-[80%] mx-auto w-[97%] h-[100%]">
