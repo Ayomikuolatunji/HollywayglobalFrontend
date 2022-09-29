@@ -58,9 +58,11 @@ export interface productIdTypings {
 
 export interface productsDepartmentsTypes{
     id?:string,
-    name:string
+    name:string,
+    createdAt?:Date
 }
 
 export interface productsDepartmentsTypesData {
-    products:Array<productsDepartmentsTypes>
+  departments:Array<productsDepartmentsTypes>,
+  message:string
 }

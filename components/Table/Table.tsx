@@ -220,7 +220,7 @@ export default function Table({
           ))}
         </thead>
         {
-          dataTable.length > 0 ? <tbody {...getTableBodyProps()}>
+          dataTable?.length > 0 ? <tbody {...getTableBodyProps()}>
           {rows.map((row, index: number) => {
             prepareRow(row);
             return (

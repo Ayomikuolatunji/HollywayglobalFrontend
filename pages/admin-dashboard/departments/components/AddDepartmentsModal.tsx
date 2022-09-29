@@ -24,7 +24,7 @@ export default function AddDepartments({ setIsOpen, isOpen }: modalConditions) {
       })
         .unwrap()
         .then((res) => {
-          console.log(res);
+          setIsOpen(false)
         });
     } catch (error) {
       console.log(error);
