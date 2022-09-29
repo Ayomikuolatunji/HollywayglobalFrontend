@@ -10,10 +10,6 @@ import "react-modern-drawer/dist/index.css";
 import { navItems } from "../../../helpers";
 
 const Navbar: React.FC = () => {
-  const [isOpen, setIsOpen] = React.useState(false);
-  const toggleDrawer = () => {
-    setIsOpen((prevState) => !prevState);
-  };
   return (
     <div className="lg:w-[100%] mx-auto lg:p-3">
       <div className="flex justify-between items-center">
