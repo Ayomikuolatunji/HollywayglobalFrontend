@@ -5,6 +5,7 @@ import {
   fetchProductTypings,
   productIds,
   productIdTypings,
+  productsDepartmentsTypes,
   productTypings,
   singleProductTypings,
 } from "../../models/product";
@@ -82,17 +83,31 @@ export const productApis = secureApiService.injectEndpoints({
       providesTags: ["Product"],
     }),
     bulkyDelete: build.mutation<void, productIds>({
-      query: ({ids}) => ({
-          url: "products/delete_many",
-          method: "DELETE",
-          body:{
-            productIds: ids
+      query: ({ ids }) => ({
+        url: "products/delete_many",
+        method: "DELETE",
+        body: {
+          productIds: ids,
+        },
+        params: {
+          adminId: admin_id && admin_id,
+        },
+      }),
+      invalidatesTags: ["Product"],
+    }),
+    createProductDepartments: build.mutation<void, productsDepartmentsTypes>({
+      query: ({ name }) => {
+        return {
+          url: "/create_products_departments",
+          method: "POST",
+          body: {
+            name: name,
           },
           params: {
             adminId: admin_id && admin_id,
-          }
-        }),
-      invalidatesTags: ["Product"],
+          },
+        };
+      },
     }),
   }),
 });
@@ -105,4 +120,5 @@ export const {
   useEditProductMutation,
   useGetProductQuery,
   useBulkyDeleteMutation,
+  useCreateProductDepartmentsMutation,
 } = productApis;
