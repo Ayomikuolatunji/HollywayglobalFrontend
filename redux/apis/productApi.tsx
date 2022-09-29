@@ -97,6 +97,7 @@ export const productApis = secureApiService.injectEndpoints({
     }),
     createProductDepartments: build.mutation<void, productsDepartmentsTypes>({
       query: ({ name }) => {
+        console.log(name);
         return {
           url: "/create_products_departments",
           method: "POST",
@@ -109,6 +110,7 @@ export const productApis = secureApiService.injectEndpoints({
           },
         };
       },
+      invalidatesTags: ["all_department"],
     }),
   }),
 });

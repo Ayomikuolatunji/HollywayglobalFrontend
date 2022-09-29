@@ -48,9 +48,9 @@ export default function AddDepartments({ setIsOpen, isOpen }: modalConditions) {
           Add New Products Deparments
         </Dialog.Title>
         <hr className="w-full" />
-        <Dialog.Panel className="flex justify-center flex-col items-center w-[100%] p-2">
-          <form action="" onSubmit={(e) => onSubmit(e)}>
-            <div className="p-3 w-full">
+        <Dialog.Panel className="flex justify-center items-center w-[100%] p-2">
+          <form  onSubmit={(e) => onSubmit(e)} className="w-full">
+            <div className="p-3 w-[100%]">
               <input
                 type="text"
                 name="name"

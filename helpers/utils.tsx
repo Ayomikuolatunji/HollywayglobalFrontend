@@ -1080,7 +1080,7 @@ export const productsDepartments = [
     name: "seed && Seedlings",
   },
   {
-    name: "Farm Implemner",
+    name: "Farm Implement",
   },
   {
     name: "Chemicals && Fertilizer",

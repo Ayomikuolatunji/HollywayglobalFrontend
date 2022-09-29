@@ -61,6 +61,6 @@ export interface productsDepartmentsTypes{
     name:string
 }
 
-export interface productsDepartmentsTypesDatas {
+export interface productsDepartmentsTypesData {
     products:Array<productsDepartmentsTypes>
 }

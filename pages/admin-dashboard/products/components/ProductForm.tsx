@@ -1,5 +1,8 @@
 import React from "react";
-import { currencyOptions, productsDepartments } from "../../../../helpers/utils";
+import {
+  currencyOptions,
+  productsDepartments,
+} from "../../../../helpers/utils";
 import * as helper from "../../../../helpers";
 
 import { productFormTypings } from "../../../../models/form";
@@ -13,9 +16,8 @@ export default function ProductForm({
   initialValues,
   imageExist = false,
   imageUrl,
-  imagePreview=false
+  imagePreview = false,
 }: productFormTypings) {
-    console.log(imageUrl)
   return (
     <form onSubmit={onSubmit} className="w-full">
       <div className="flex flex-col w-[100%]">
@@ -82,17 +84,19 @@ export default function ProductForm({
           />
         </div>
         {/* display image if it exist on product edit */}
-          {imageExist && (
-            <div className="w-full flex justify-center">
-              <img
-                src={imagePreview ? imageUrl : `http://localhost:8080/${imageUrl}`}
-                alt="uploaded-img"
-                width={300}
-                height={100}
-                className="border-2 border-blue-500"
-              />
-            </div>
-          )}
+        {imageExist && (
+          <div className="w-full flex justify-center">
+            <img
+              src={
+                imagePreview ? imageUrl : `http://localhost:8080/${imageUrl}`
+              }
+              alt="uploaded-img"
+              width={300}
+              height={100}
+              className="border-2 border-blue-500"
+            />
+          </div>
+        )}
         {/* is product available checkbox */}
         <div className="flex items-center w-[40%] mx-auto">
           <label htmlFor="productAvailable">Is car available available?</label>
@@ -113,12 +117,14 @@ export default function ProductForm({
             className="w-[98%] mx-auto border-2 border-gray-400 my-2 p-[5px]"
           >
             <option value="">Select Car Type</option>
-            {productsDepartments
-              .map((option, index) => (
-                <option value={option.name} key={index}>
-                  {option.name}
-                </option>
-              ))}
+            <option value="N">
+              <span className="line-through">N</span>
+            </option>
+            {productsDepartments.map((option, index) => (
+              <option value={option.name} key={index}>
+                {option.name}
+              </option>
+            ))}
           </select>
         </div>
         <div className="w-[50%] mx-auto my-2 p-[5px]">
