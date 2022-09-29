@@ -102,6 +102,7 @@ export const productApis = secureApiService.injectEndpoints({
           method: "POST",
           body: {
             name: name,
+            adminId:admin_id
           },
           params: {
             adminId: admin_id && admin_id,

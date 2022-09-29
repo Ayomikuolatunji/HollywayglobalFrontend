@@ -36,7 +36,7 @@ const ProductActionModal = ({ isOpen, setIsOpen }: modalConditions) => {
   };
 
 
-  const onSubmit = (e: any) => {
+  const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // check if inputs are empty
     if (!validate(initialValues)) {

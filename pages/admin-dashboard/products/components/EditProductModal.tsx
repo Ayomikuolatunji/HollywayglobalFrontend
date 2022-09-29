@@ -53,7 +53,7 @@ export default function EditProductModal({
   };
 
 
-  const onSubmit = (e: React.SyntheticEvent) => {
+  const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // check if inputs are empty
     if (!validate(initialValues)) {

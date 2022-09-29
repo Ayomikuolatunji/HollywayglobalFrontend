@@ -1,13 +1,39 @@
 import { Dialog } from "@headlessui/react";
-import React, { ReactEventHandler } from "react";
+import React, { ReactEventHandler, useState } from "react";
+import { toast } from "react-toastify";
 import { modalConditions } from "../../../../models/modal";
+import { productsDepartmentsTypes } from "../../../../models/product";
 import { useCreateProductDepartmentsMutation } from "../../../../redux/apis/productApi";
 
 export default function AddDepartments({ setIsOpen, isOpen }: modalConditions) {
   const [createProductDepartments] = useCreateProductDepartmentsMutation();
+  const [nameObj, setName] = useState<productsDepartmentsTypes>({
+    name: "",
+  });
+  const onSubmit = async (e: React.FormEvent) => {
+    try {
+      e.preventDefault();
+      if (!nameObj.name) {
+        toast.info("Department name required", {
+          toastId: "AddDepartments-validation-error-id",
+        });
+        return false;
+      }
+      createProductDepartments({
+        name: nameObj.name,
+      })
+        .unwrap()
+        .then((res) => {
+          console.log(res);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-  const onSubmit = async (e:React.SyntheticEvent) => {
-    e.preventDefault();
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, name } = e.target;
+    setName({ ...nameObj, [name]: value });
   };
 
   return (
@@ -27,8 +53,11 @@ export default function AddDepartments({ setIsOpen, isOpen }: modalConditions) {
             <div className="p-3 w-full">
               <input
                 type="text"
+                name="name"
+                value={nameObj.name}
                 placeholder="Enter department name"
                 className="w-full p-3 border-2"
+                onChange={(e) => handleChange(e)}
               />
             </div>
             <div className="w-[50%] mx-auto my-2 p-[5px]">
