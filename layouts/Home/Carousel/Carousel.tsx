@@ -6,7 +6,7 @@ import "slick-carousel/slick/slick-theme.css";
 
 export default function Carosel() {
   const settings = {
-    dots: true,
+    dots: false,
     infinite: true,
     slidesToShow: 1,
     slidesToScroll: 1,
