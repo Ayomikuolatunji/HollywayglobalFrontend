@@ -1,6 +1,7 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import HomeRightLeftWrapper from '../components/Wrapper/HomeRightLeftWrapper'
+import ProductSlider from '../layouts/Home/ProductSlider/ProductSlider'
 
 
 
@@ -16,6 +17,7 @@ const Home: NextPage = () => {
       </Head>
 
       <HomeRightLeftWrapper/>
+      <ProductSlider/>
     </div>
   )
 }
