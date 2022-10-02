@@ -109,7 +109,7 @@ export const productApis = secureApiService.injectEndpoints({
           },
         };
       },
-      invalidatesTags: ["All_Department"],
+      invalidatesTags: ["Department"],
     }),
   }),
 });
