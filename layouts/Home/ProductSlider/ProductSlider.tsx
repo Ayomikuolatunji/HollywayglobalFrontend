@@ -65,6 +65,14 @@ const ProductSlider: React.FC = () => {
             </h3>
           </div>
         </div>
+        <div>
+          <div className="wrapper relative">
+            <img src={"/img/product/product-5.jpg"} alt="img-products" />
+            <h3 className="text-[18px] text-[#1c1c1c] px-[16px] py-[12px]  bg-[#fff] absolute bottom-4 left-[22%]">
+              Fresh Meat
+            </h3>
+          </div>
+        </div>
       </Slider>
     </div>
   );
