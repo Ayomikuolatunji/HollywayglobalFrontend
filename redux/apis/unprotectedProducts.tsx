@@ -1,4 +1,4 @@
-import { productsDepartmentsTypesData } from "../../models/product";
+import { fetchProductTypings, productsDepartmentsTypesData } from "../../models/product";
 import { apiService } from "../service";
 
 export const unprotectedProductApis = apiService.injectEndpoints({
@@ -11,7 +11,15 @@ export const unprotectedProductApis = apiService.injectEndpoints({
         };
       },
     }),
+    fetchAllProducts: build.query<fetchProductTypings, void>({
+      query: () => {
+        return {
+          url: "/user_products",
+          method: "GET",
+        };
+      },
+    }),
   }),
 });
 
-export const { useFetchDepartmentsQuery } = unprotectedProductApis;
+export const { useFetchDepartmentsQuery, useFetchAllProductsQuery } = unprotectedProductApis;
