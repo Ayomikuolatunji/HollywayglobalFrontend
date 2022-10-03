@@ -62,6 +62,9 @@ export default function ProductForm({
             className="w-[98%] mx-auto border-2 border-gray-400 my-2 p-[5px]"
           >
             <option value="">select sales currency</option>
+            <option value="N">
+              <span className="line-through">N</span>
+            </option>
             {Object.values(currencyOptions)
               .slice(0, 3)
               .map((key) => {
@@ -117,9 +120,6 @@ export default function ProductForm({
             className="w-[98%] mx-auto border-2 border-gray-400 my-2 p-[5px]"
           >
             <option value="">Select Car Type</option>
-            <option value="N">
-              <span className="line-through">N</span>
-            </option>
             {productsDepartments.map((option, index) => (
               <option value={option.name} key={index}>
                 {option.name}
