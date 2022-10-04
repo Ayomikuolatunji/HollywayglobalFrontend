@@ -26,6 +26,7 @@ export default function Sidebar() {
               <a href="/insights" className="mt-3">
                 Insights
               </a>
+              <a href="/automations">Automations</a>
               <a href="/reports">Reports</a>
               <a href="/insights">Insights</a>
               <a href="/automations">Automations</a>
