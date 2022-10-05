@@ -14,7 +14,7 @@ export interface productTypings {
 
 export type fetchProductTypings = {
   message: string;
-  product: productTypings[];
+  product: Array<productTyping>;
 };
 export interface singleProductTypings {
   message: string;
