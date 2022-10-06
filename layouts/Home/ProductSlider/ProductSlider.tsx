@@ -27,7 +27,7 @@ const ProductSlider: React.FC = () => {
               return (
                 <div
                   key={index}
-                  className={`border-4 border-[#eaebe9] mx-3 h-[200px] ${
+                  className={`border-4 border-[#eaebe9] mx-3 h-[200px] relative hidden ${
                     product.status ? "block" : "hidden"
                   }`}
                 >
@@ -37,7 +37,7 @@ const ProductSlider: React.FC = () => {
                       alt="img-products"
                       className="max-w-full max-h-full"
                     />
-                    <h3 className="text-[18px] text-[#1c1c1c] px-[16px] py-[12px]  bg-[#fff] absolute bottom-4 left-[22%]">
+                    <h3 className="text-[18px] text-[#1c1c1c] px-[16px] py-[12px]  bg-[#fff] absolute bottom-4">
                       {product.name}
                     </h3>
                   </div>
