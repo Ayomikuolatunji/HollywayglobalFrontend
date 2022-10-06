@@ -16,6 +16,7 @@ export default function LocalCategories() {
             <Tab.Panel>Content 1</Tab.Panel>
             <Tab.Panel>Content 2</Tab.Panel>
             <Tab.Panel>Content 3</Tab.Panel>
+            <Tab.Panel>Content 3</Tab.Panel>
           </Tab.Panels>
         )}
       />
