@@ -9,7 +9,7 @@ export default function LocalCategories() {
         <h1>Local Products</h1>
       </div>
       <Tabs
-        Tabheaders={["Popular Foods","Fruit & Vegetables", "Tab 2", "Tab 3"]}
+        Tabheaders={["Popular Foods","Fruit & Vegetables", "Poutry & Seafoods", "Tab 3"]}
         tab={true}
         renderTabPanel={() => (
           <Tab.Panels>
