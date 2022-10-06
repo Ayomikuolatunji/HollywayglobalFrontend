@@ -1,3 +1,5 @@
+import { navTypes } from "./navItems";
+
 export const currencyOptions = {
   USD: {
     symbol: "$",
@@ -1072,29 +1074,41 @@ export const currencyOptions = {
   },
 };
 
-export const productsDepartments = [
+export const productsDepartments:Array<navTypes> = [
   {
     name: "Export",
+    link: "/exports",
   },
   {
     name: "seed && Seedlings",
+    link: "seeds",
   },
   {
     name: "Farm Implement",
+    link: "farm-implements",
   },
   {
     name: "Chemicals && Fertilizer",
+    link: "chemicals",
   },
   {
     name: "Agro E-Books",
+    link: "e-books",
   },
   {
     name: "Irrigation Materials",
+    link: "irrigation-material",
   },
   {
     name: "Fruits && Vegetables",
+    link: "fruits&vegetables",
   },
   {
-    name: "Livestocks && Sea foods",
+    name: "Sea foods",
+    link: "livestocks",
+  },
+  {
+    name: "Sea foods",
+    link: "sea-foods",
   },
 ];
