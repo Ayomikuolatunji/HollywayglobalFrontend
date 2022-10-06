@@ -10,7 +10,6 @@ import { productApis } from "../../../redux/apis/productApi";
 const ProductSlider: React.FC = () => {
   const { isLoading, data } = useFetchAllProductsQuery();
   const settings = {
-    className:"mx-9",
     dots: false,
     infinite: true,
     speed: 1000,
@@ -21,30 +20,35 @@ const ProductSlider: React.FC = () => {
   };
 
   return (
-    <div className="w-[100%] mx-auto mt-20 mb-10">
+    <div className="w-[100%] mx-auto mt-16 mb-10">
       <Slider {...settings}>
-        {data
-          ? data?.product?.map((product: productTypings, index: number) => {
+        {isLoading
+          ? [1, 2, 3, 4].map((data) => {
+              return <Skeleton />;
+            })
+          : data?.product?.map((product: productTypings, index: number) => {
+              console.log(product);
               return (
                 <div
                   key={index}
-                  className={`mx-3 h-[200px] relative hidden shadow-sm p-4 bg-gray-200 w-full`}
+                  className="h-[200px] relative shadow-sm p-4 bg-gray-50 w-full"
                 >
-                  <div className="wrapper relative">
+                  <div
+                    className={`wrapper relative ${
+                      product.status ? "block" : "hidden"
+                    }`}
+                  >
                     <img
                       src={`http://localhost:8080/${product.image}`}
                       alt="img-products"
                       className="h-[180px] mt-[-5px] w-full"
                     />
-                    <h3 className="text-[18px] text-[#1c1c1c] px-[16px] py-[12px]  bg-[#fff] absolute bottom-4">
+                    <h3 className="text-[18px] text-[#7fad39] px-[16px] py-[12px] font-extrabold bg-[#fdfbfb] shadow-md absolute bottom-4 cursor-pointer">
                       {product.name}
                     </h3>
                   </div>
                 </div>
               );
-            })
-          : [1, 3, 4, 5].map((data) => {
-              return <Skeleton />;
             })}
       </Slider>
     </div>

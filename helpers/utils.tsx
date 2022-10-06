@@ -1074,13 +1074,13 @@ export const currencyOptions = {
   },
 };
 
-export const productsDepartments:Array<navTypes> = [
+export const productsDepartments: Array<navTypes> = [
   {
     name: "Export",
     link: "/exports",
   },
   {
-    name: "seed && Seedlings",
+    name: "seed & Seedlings",
     link: "seeds",
   },
   {
@@ -1088,7 +1088,7 @@ export const productsDepartments:Array<navTypes> = [
     link: "farm-implements",
   },
   {
-    name: "Chemicals && Fertilizer",
+    name: "Chemicals & Fertilizer",
     link: "chemicals",
   },
   {
@@ -1100,17 +1100,18 @@ export const productsDepartments:Array<navTypes> = [
     link: "irrigation-material",
   },
   {
-    name: "Fruits && Vegetables",
+    name: "Fruits & Vegetables",
     link: "fruits&vegetables",
   },
   {
-    name: "Sea foods",
+    name: "Livestocks",
     link: "livestocks",
   },
   {
     name: "Sea foods",
     link: "sea-foods",
-  },{
+  },
+  {
     name: "Mineral Resources",
     link: "mineral-resources",
   },

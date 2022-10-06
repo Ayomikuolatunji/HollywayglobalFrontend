@@ -1,6 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import HomeRightLeftWrapper from "../components/Wrapper/HomeRightLeftWrapper";
+import LocalCategories from "../layouts/Home/LocalCatergories/LocalCategories";
 import ProductSlider from "../layouts/Home/ProductSlider/ProductSlider";
 
 const Home: NextPage = () => {
@@ -14,6 +15,7 @@ const Home: NextPage = () => {
       <div className="bg-white  w-[70%] mx-auto">
         <HomeRightLeftWrapper />
         <ProductSlider />
+        <LocalCategories/>
       </div>
     </div>
   );

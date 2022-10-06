@@ -44,11 +44,11 @@ const Navbar: React.FC = () => {
         </div>
       </div>
       <div className="search relative mt-4 flex justify-between items-center">
-        <div className="search-warapper border-[1px] outline-0 border-gray-200 w-[60%]">
+        <div className="search-warapper border-[1px] outline-0 border-gray-200 w-[70%]">
           <select
             name=""
             id=""
-            className="w-[25%] border-0 outline-none p-3.5 bg-white text-black font-bold py-3"
+            className="w-[30%] border-0 outline-none  bg-white text-black font-bold py-3"
           >
             <option value="">All Category</option>
             {productsDepartments.map((item, index) => {
@@ -64,7 +64,7 @@ const Navbar: React.FC = () => {
           <input
             type="text"
             placeholder="What do you need?"
-            className="border-0 w-[50%] p-3 outline-0"
+            className="border-0 w-[45%] p-3 outline-0"
           />
           <button className="bg-[#7fad39] p-3.5 w-[25%] font-[800] text-white">
             SEARCH
