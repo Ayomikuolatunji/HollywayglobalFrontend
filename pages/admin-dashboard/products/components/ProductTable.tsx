@@ -4,6 +4,7 @@ import { Table, ActionDropDown } from "../../../../components";
 
 import {
   fetchProductTypings,
+  ProductTableColumns,
   productTypings,
   selectedTypings,
   tableProduct,
@@ -92,7 +93,7 @@ export default function ProductTable() {
   };
   // This is a custom filter UI for selecting
 
-  const columns: any = useMemo(() => {
+  const columns: Array<ProductTableColumns> = useMemo(() => {
     return [
       {
         Header: "name",
@@ -123,7 +124,7 @@ export default function ProductTable() {
       {
         Header: "status",
         accessor: "status",
-        Cell: ({ row }: any) => {
+        Cell: ({ row }: selectedTypings) => {
           return (
             <div
               className={`mb-3 ${
@@ -144,9 +145,9 @@ export default function ProductTable() {
       //add delete and edit button
       {
         Header: "Action",
-        Cell: (props: any) => {
+        Cell: ({row}: selectedTypings) => {
           // get single data id
-          const { id } = props.row.original;
+          const { id } = row.original;
           return (
             <ActionDropDown
               items={[

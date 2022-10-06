@@ -56,13 +56,21 @@ export interface productIdTypings {
   productId: string;
 }
 
-export interface productsDepartmentsTypes{
-    id?:string,
-    name:string,
-    createdAt?:Date
+export interface productsDepartmentsTypes {
+  id?: string;
+  name: string;
+  createdAt?: Date;
 }
 
 export interface productsDepartmentsTypesData {
-  departments:Array<productsDepartmentsTypes>,
-  message:string
+  departments: Array<productsDepartmentsTypes>;
+  message: string;
+}
+
+export interface ProductTableColumns {
+  Header?: string;
+  accessor?: string;
+  Filter?: unknown | boolean;
+  filter?: string;
+  Cell?: (props:selectedTypings)=>void;
 }
