@@ -4,6 +4,7 @@ import { AiFillHeart } from "react-icons/ai";
 import { GiShoppingBag } from "react-icons/gi";
 import { BsTelephoneFill } from "react-icons/bs";
 import { navItems } from "../../../helpers";
+import { productsDepartments } from "../../../helpers/utils";
 
 const Navbar: React.FC = () => {
   return (
@@ -47,11 +48,18 @@ const Navbar: React.FC = () => {
           <select
             name=""
             id=""
-            className="w-[25%] border-0 outline-none p-3.5 bg-white text-black font-bold"
+            className="w-[25%] border-0 outline-none p-3.5 bg-white text-black font-bold py-3"
           >
             <option value="">All Category</option>
-            <option value="export">Export</option>
-            <option value="local production">Local product</option>
+            {productsDepartments.map((item, index) => {
+              return (
+                <option key={index}>
+                  <span className="cursor-pointer block text-[#1c1c1c] leading-[24px]">
+                    {item.name}
+                  </span>
+                </option>
+              );
+            })}
           </select>
           <input
             type="text"
@@ -67,8 +75,10 @@ const Navbar: React.FC = () => {
             <BsTelephoneFill text-xl />
           </span>
           <div className="support flex flex-col">
-             <h1 className="text-black font-extrabold mb-2 text-lg">+2349025252652</h1>
-             <p>support 24/7 time</p>
+            <h1 className="text-black font-extrabold mb-2 text-lg">
+              +2349025252652
+            </h1>
+            <p>support 24/7 time</p>
           </div>
         </div>
       </div>

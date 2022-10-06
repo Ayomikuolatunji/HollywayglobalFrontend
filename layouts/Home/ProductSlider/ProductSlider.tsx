@@ -10,6 +10,7 @@ import { productApis } from "../../../redux/apis/productApi";
 const ProductSlider: React.FC = () => {
   const { isLoading, data } = useFetchAllProductsQuery();
   const settings = {
+    className:"mx-9",
     dots: false,
     infinite: true,
     speed: 1000,
@@ -20,22 +21,20 @@ const ProductSlider: React.FC = () => {
   };
 
   return (
-    <div className="bg-white w-[97%] mx-auto mt-20 mb-10">
+    <div className="w-[100%] mx-auto mt-20 mb-10">
       <Slider {...settings}>
         {data
           ? data?.product?.map((product: productTypings, index: number) => {
               return (
                 <div
                   key={index}
-                  className={`border-4 border-[#eaebe9] mx-3 h-[200px] relative hidden ${
-                    product.status ? "block" : "hidden"
-                  }`}
+                  className={`mx-3 h-[200px] relative hidden shadow-sm p-4 bg-gray-200 w-full`}
                 >
                   <div className="wrapper relative">
                     <img
                       src={`http://localhost:8080/${product.image}`}
                       alt="img-products"
-                      className="max-w-full max-h-full"
+                      className="h-[180px] mt-[-5px] w-full"
                     />
                     <h3 className="text-[18px] text-[#1c1c1c] px-[16px] py-[12px]  bg-[#fff] absolute bottom-4">
                       {product.name}
