@@ -1084,7 +1084,7 @@ export const productsDepartments:Array<navTypes> = [
     link: "seeds",
   },
   {
-    name: "Farm Implement",
+    name: "Farm Implements",
     link: "farm-implements",
   },
   {
@@ -1110,5 +1110,8 @@ export const productsDepartments:Array<navTypes> = [
   {
     name: "Sea foods",
     link: "sea-foods",
+  },{
+    name: "Mineral Resources",
+    link: "mineral-resources",
   },
 ];
