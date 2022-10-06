@@ -2,6 +2,8 @@ import React from "react";
 import { Popover } from "@headlessui/react";
 import { BsChevronDown } from "react-icons/bs";
 import { GiHamburgerMenu } from "react-icons/gi";
+import { productsDepartments } from "../../../helpers/utils";
+import Link from "next/link";
 
 export default function Sidebar() {
   return (
@@ -21,20 +23,17 @@ export default function Sidebar() {
             </Popover.Button>
             <Popover.Panel
               static
-              className="flex flex-col space-y-5 border-2 px-3 py-3"
+              className="flex flex-col space-y-5 border-2 px-5 py-3"
             >
-              <a href="/insights" className="mt-3">
-                Insights
-              </a>
-              <a href="/automations">Automations</a>
-              <a href="/reports">Reports</a>
-              <a href="/insights">Insights</a>
-              <a href="/automations">Automations</a>
-              <a href="/reports">Reports</a>
-              <a href="/insights">Insights</a>
-              <a href="/automations">Automations</a>
-              <a href="/reports">Reports</a>
-              <a href="/insights">Insights</a>
+              {productsDepartments.map((item, index) => {
+                return (
+                  <Link href={item.link} passHref key={index}>
+                    <span className="cursor-pointer block text-[#1c1c1c] leading-[24px]">
+                      {item.name}
+                    </span>
+                  </Link>
+                );
+              })}
             </Popover.Panel>
           </>
         )}
