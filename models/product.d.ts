@@ -12,6 +12,10 @@ export interface productTypings {
   currency?: string;
 }
 
+export interface ProductCardTypes {
+  item: productTypings;
+}
+
 export type fetchProductTypings = {
   counts: number;
   message: string;

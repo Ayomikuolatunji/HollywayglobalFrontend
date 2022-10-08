@@ -20,7 +20,16 @@ const Tabs = ({
       <Tab.List className="flex justify-center mx-auto space-x-5">
         {Tabheaders.map((tab, index) => {
           if (selectedIndex === index) setCurrentTab(tab);
-          return <Tab key={index}>{tab}</Tab>;
+          return (
+            <Tab
+              key={index}
+              className={`text-xl ${
+                selectedIndex === index ? "text-[#7fad39] font-extrabold" : ""
+              }`}
+            >
+              {tab}
+            </Tab>
+          );
         })}
       </Tab.List>
       {tab ? renderTabPanel() : <Tab.Panels> {""} </Tab.Panels>}

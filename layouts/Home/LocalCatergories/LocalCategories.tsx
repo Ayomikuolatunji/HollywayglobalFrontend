@@ -2,13 +2,11 @@ import React, { useState } from "react";
 import { Tab } from "@headlessui/react";
 import { ProductCard, Skeleton, Tabs } from "../../../components";
 import { useFetchAllProductsQuery } from "../../../redux/apis/unprotectedProducts";
-import { productFormTypings } from "../../../models/form";
+
 
 export default function LocalCategories() {
   const [currentTab, setCurrentTab] = useState("Local products");
   const { isLoading, data, isFetching } = useFetchAllProductsQuery(currentTab);
-  console.log(data);
-
   return (
     <div className="mt-12">
       <div className="title text-center my-10">
@@ -28,10 +26,10 @@ export default function LocalCategories() {
         renderTabPanel={() => (
           <Tab.Panels className="my-4">
             {[1, 2, 3, 4].map((item) => (
-              <Tab.Panel>
+              <Tab.Panel className="grid grid-cols-4 gap-3">
                 {isLoading || isFetching
                   ? [1, 2, 4, 5, 5, 6, 7].map((item) => <Skeleton />)
-                  : data?.product?.map((item:productFormTypings) => {
+                  : data?.product?.slice(0,8).map((item) => {
                       return <ProductCard item={item}/>;
                     })}
               </Tab.Panel>
