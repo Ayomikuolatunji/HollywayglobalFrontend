@@ -9,4 +9,5 @@ export { default as ActionDropDown } from "./DropDown/ActionDropDown";
 export { default as Table } from "./Table/Table";
 export { default as Modal } from "./Modal/Modal";
 export { default as Skeleton } from "./Skeleton/Skeleton";
-export {default as Tabs} from "./Tabs/Tabs"
+export { default as Tabs } from "./Tabs/Tabs";
+export { default as ProductCard } from "./ProductCard/ProductCard";

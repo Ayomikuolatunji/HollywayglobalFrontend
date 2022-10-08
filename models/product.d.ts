@@ -13,6 +13,7 @@ export interface productTypings {
 }
 
 export type fetchProductTypings = {
+  counts: number;
   message: string;
   product: Array<productTyping>;
 };
@@ -72,5 +73,5 @@ export interface ProductTableColumns {
   accessor?: string;
   Filter?: unknown | boolean;
   filter?: string;
-  Cell?: (props:selectedTypings)=>void;
+  Cell?: (props: selectedTypings) => void;
 }

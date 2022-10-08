@@ -8,7 +8,7 @@ import { Skeleton } from "../../../components";
 import { productApis } from "../../../redux/apis/productApi";
 
 const ProductSlider: React.FC = () => {
-  const { isLoading, data } = useFetchAllProductsQuery();
+  const { isLoading, data } = useFetchAllProductsQuery("all");
   const settings = {
     dots: false,
     infinite: true,
@@ -26,7 +26,7 @@ const ProductSlider: React.FC = () => {
           ? [1, 2, 3, 4].map((data) => {
               return <Skeleton />;
             })
-          : data?.product?.map((product: productTypings, index: number) => {
+          : data?.product?.slice(0, 8).map((product: productTypings, index: number) => {
               return (
                 <div
                   key={index}

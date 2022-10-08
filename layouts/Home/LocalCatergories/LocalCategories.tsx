@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { Tab } from "@headlessui/react";
-import { Tabs } from "../../../components";
+import { ProductCard, Skeleton, Tabs } from "../../../components";
+import { useFetchAllProductsQuery } from "../../../redux/apis/unprotectedProducts";
+import { productFormTypings } from "../../../models/form";
 
 export default function LocalCategories() {
-  const [currentTab, setCurrentTab]=useState("")
-  console.log(currentTab);
- 
-
+  const [currentTab, setCurrentTab] = useState("Local products");
+  const { isLoading, data, isFetching } = useFetchAllProductsQuery(currentTab);
+  console.log(data);
 
   return (
     <div className="mt-12">
@@ -17,20 +18,24 @@ export default function LocalCategories() {
       </div>
       <Tabs
         Tabheaders={[
-          "Popular Foods",
-          "Fruit & Vegetables",
+          "Local products",
+          "Fruits/Vegetables",
           "Poutry & Seafoods",
           "Tubers & Cereals",
         ]}
         setCurrentTab={setCurrentTab}
         tab={true}
         renderTabPanel={() => (
-          <Tab.Panels>
-            <Tab.Panel>Content 1</Tab.Panel>
-            <Tab.Panel>Content 2</Tab.Panel>
-            <Tab.Panel>Content 3</Tab.Panel>
-            <Tab.Panel>Content 4</Tab.Panel>
-            <Tab.Panel>Content 5</Tab.Panel>
+          <Tab.Panels className="my-4">
+            {[1, 2, 3, 4].map((item) => (
+              <Tab.Panel>
+                {isLoading || isFetching
+                  ? [1, 2, 4, 5, 5, 6, 7].map((item) => <Skeleton />)
+                  : data?.product?.map((item:productFormTypings) => {
+                      return <ProductCard item={item}/>;
+                    })}
+              </Tab.Panel>
+            ))}
           </Tab.Panels>
         )}
       />

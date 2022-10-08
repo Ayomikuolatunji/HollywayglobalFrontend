@@ -11,11 +11,14 @@ export const unprotectedProductApis = apiService.injectEndpoints({
         };
       },
     }),
-    fetchAllProducts: build.query<fetchProductTypings, void>({
-      query: () => {
+    fetchAllProducts: build.query<fetchProductTypings, string>({
+      query: (query_name) => {
         return {
           url: "/user_products",
           method: "GET",
+          params:{
+            product_type:query_name
+          }
         };
       },
     }),
