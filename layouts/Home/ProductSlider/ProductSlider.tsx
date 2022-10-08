@@ -27,7 +27,6 @@ const ProductSlider: React.FC = () => {
               return <Skeleton />;
             })
           : data?.product?.map((product: productTypings, index: number) => {
-              console.log(product);
               return (
                 <div
                   key={index}

@@ -1,26 +1,29 @@
 import { Tab } from "@headlessui/react";
+import { useState } from "react";
 
 interface TabTypings {
   Tabheaders: string[];
   renderTabPanel: () => void | any;
   tab: boolean;
+  setCurrentTab: (value: string) => void;
 }
 
-const Tabs = ({ Tabheaders, renderTabPanel, tab = false }: TabTypings) => {
+const Tabs = ({
+  Tabheaders,
+  renderTabPanel,
+  tab = false,
+  setCurrentTab,
+}: TabTypings) => {
+  const [selectedIndex, setSelectedIndex] = useState(0);
   return (
-    <Tab.Group>
+    <Tab.Group selectedIndex={selectedIndex} onChange={setSelectedIndex}>
       <Tab.List className="flex justify-center mx-auto space-x-5">
-        {Tabheaders.map((tab) => {
-          return <Tab>{tab}</Tab>;
+        {Tabheaders.map((tab, index) => {
+          if (selectedIndex === index) setCurrentTab(tab);
+          return <Tab key={index}>{tab}</Tab>;
         })}
       </Tab.List>
-      {tab ? (
-        renderTabPanel()
-      ) : (
-        <Tab.Panels>
-          {" "}
-        </Tab.Panels>
-      )}
+      {tab ? renderTabPanel() : <Tab.Panels> {""} </Tab.Panels>}
     </Tab.Group>
   );
 };

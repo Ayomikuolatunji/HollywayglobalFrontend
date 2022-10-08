@@ -1,12 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { Tab } from "@headlessui/react";
 import { Tabs } from "../../../components";
 
 export default function LocalCategories() {
+  const [currentTab, setCurrentTab]=useState("")
+  console.log(currentTab);
+ 
+
+
   return (
-    <div className="my-10">
+    <div className="mt-12">
       <div className="title text-center my-10">
-        <h1 className="text-[#1c1c1c] relative font-[700] text-[26px] after:">
+        <h1 className="text-[#1c1c1c] relative font-[700] text-[36px] after:absolute after:left-0 after:right-0 after:h-[4px] after:w-[80px] after:mx-auto after:my-0 after:bg-[#7fad39] after:bottom-[-25px]">
           Local Products
         </h1>
       </div>
@@ -15,8 +20,9 @@ export default function LocalCategories() {
           "Popular Foods",
           "Fruit & Vegetables",
           "Poutry & Seafoods",
-          "Tab 3",
+          "Tubers & Cereals",
         ]}
+        setCurrentTab={setCurrentTab}
         tab={true}
         renderTabPanel={() => (
           <Tab.Panels>

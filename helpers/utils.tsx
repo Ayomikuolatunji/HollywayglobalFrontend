@@ -1080,6 +1080,10 @@ export const productsDepartments: Array<navTypes> = [
     link: "/exports",
   },
   {
+    name: "Local products",
+    link: "sea-foods",
+  },
+  {
     name: "seed & Seedlings",
     link: "seeds",
   },
@@ -1088,7 +1092,7 @@ export const productsDepartments: Array<navTypes> = [
     link: "farm-implements",
   },
   {
-    name: "Chemicals & Fertilizer",
+    name: "Chemicals/Fertilizer",
     link: "chemicals",
   },
   {
@@ -1100,19 +1104,19 @@ export const productsDepartments: Array<navTypes> = [
     link: "irrigation-material",
   },
   {
-    name: "Fruits & Vegetables",
-    link: "fruits&vegetables",
+    name: "Fruits/Vegetables",
+    link: "fruits-vegetables",
   },
   {
-    name: "Livestocks",
-    link: "livestocks",
-  },
-  {
-    name: "Sea foods",
-    link: "sea-foods",
+    name: "Livestocks/Sea foods",
+    link: "livestocks-seafoods",
   },
   {
     name: "Mineral Resources",
     link: "mineral-resources",
+  },
+  {
+    name: "Tubers/Cereals",
+    link: "tubers-cereals",
   },
 ];
