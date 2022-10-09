@@ -17,3 +17,7 @@ export interface productFormTypings {
   imageUrl?:string
   imagePreview?:boolean
 }
+
+export interface HTMLInputEvent extends Event {
+  target: HTMLInputElement & EventTarget;
+}
