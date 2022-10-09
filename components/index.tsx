@@ -11,3 +11,5 @@ export { default as Modal } from "./Modal/Modal";
 export { default as Skeleton } from "./Skeleton/Skeleton";
 export { default as Tabs } from "./Tabs/Tabs";
 export { default as ProductCard } from "./ProductCard/ProductCard";
+export { default as CartModal} from "./CartModal/CartModal"
+

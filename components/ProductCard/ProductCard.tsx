@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { AiFillHeart } from "react-icons/ai";
 import { FaShoppingCart } from "react-icons/fa";
 import { ProductCardTypes } from "../../models/product";
 
 export default function ProductCard({ item }: ProductCardTypes) {
+  let [isOpen, setIsOpen] = useState(true)
+
   return (
-    <div className="max-w-xs bg-white shadow-xl rounded-lg overflow-hidden my-10 cursor-pointer">
+    <div className="max-w-xs bg-white shadow-xl rounded-lg overflow-hidden cursor-pointer">
       <div className="px-4 py-2">
         <h1 className="text-gray-900 font-bold text-xl uppercase">
           {item.name}
@@ -15,7 +17,7 @@ export default function ProductCard({ item }: ProductCardTypes) {
         </p>
       </div>
       <img
-        className="h-[180px] w-full object-cover mt-2"
+        className="h-[140px] w-full object-cover mt-2"
         src={`http://localhost:8080/${item.image}`}
         alt="NIKE AIR"
       />

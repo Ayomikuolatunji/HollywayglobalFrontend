@@ -10,7 +10,7 @@ export default function LocalCategories() {
   return (
     <div className="mt-12">
       <div className="title text-center my-10">
-        <h1 className="text-[#1c1c1c] relative font-[700] text-[36px] after:absolute after:left-0 after:right-0 after:h-[4px] after:w-[80px] after:mx-auto after:my-0 after:bg-[#7fad39] after:bottom-[-25px]">
+        <h1 className="text-[#1c1c1c] relative font-[700] text-[36px] after:absolute after:left-0 after:right-0 after:h-[4px] after:w-[100px] after:mx-auto after:my-0 after:bg-[#7fad39] after:bottom-[-25px]">
           Local Products
         </h1>
       </div>
@@ -26,10 +26,10 @@ export default function LocalCategories() {
         renderTabPanel={() => (
           <Tab.Panels className="my-4">
             {[1, 2, 3, 4].map((item) => (
-              <Tab.Panel className="grid grid-cols-4 gap-3">
+              <Tab.Panel className="grid grid-cols-5 gap-x-3 gap-y-4">
                 {isLoading || isFetching
                   ? [1, 2, 4, 5, 5, 6, 7].map((item) => <Skeleton />)
-                  : data?.product?.slice(0,8).map((item) => {
+                  : data?.product?.slice(0,10).map((item) => {
                       return <ProductCard item={item}/>;
                     })}
               </Tab.Panel>
