@@ -14,9 +14,9 @@ const CartModal = ({
       className="w-full h-[100vh] fixed top-0 right-0 left-0 bottom-0 flex justify-center items-center 
     bg-[rgba(0,0,0,0.5)] z-[999]"
     >
-      <Dialog.Panel className="bg-white border flex justify-center flex-col items-center w-[30%] rounded-md">
-        <Dialog.Title className="p-4 text-blue-500 font-extrabold flex items-center text-2xl">
-          Product details
+      <Dialog.Panel className="bg-white border flex justify-center flex-col items-center w-[25%] rounded-md">
+        <Dialog.Title className="p-4 text-gray-800 font-extrabold flex items-center text-2xl">
+          Add product to cart
         </Dialog.Title>
         <Dialog.Description className="w-full p-4">
           <img
@@ -24,21 +24,29 @@ const CartModal = ({
             src={`http://localhost:8080/${item.image}`}
             alt="NIKE AIR"
           />
-          <p>{item.description}</p>
+          <div className="flex flex-col text-center mt-5">
+            <h1 className="text-3xl">Product name: {item.name}</h1>
+            <h3>Price: {item.price}</h3>
+          </div>
         </Dialog.Description>
 
-        <div className="w-[50%] mx-auto my-2 p-[5px]">
+        <div className="w-[100%] flex justify-center mx-auto my-2 p-[5px]">
           <button
             onClick={() => setIsOpen(false)}
-            className="text-blue-500 mx-3 font-extrabold"
+            className="text-[#7fad39] border-2 border-[#7fad39] mx-3 font-extrabold px-2 py-3"
           >
-            Cancel
+            Continue Shopping
           </button>
           <button
             type="submit"
-            className="py-[6px] px-[15px] mx-3 bg-blue-500 text-white"
+            className="py-[6px] px-[15px] mx-3 bg-[#7fad39] text-white"
           >
-            Add to cart
+            View product Details
+          </button>
+        </div>
+        <div className="view-carts flex justify-center items-center my-6">
+          <button className="py-3 px-6 text-gray-800 border-2 border-gray-600 hover:bg-gray-600 hover:text-white">
+            View cart
           </button>
         </div>
       </Dialog.Panel>
