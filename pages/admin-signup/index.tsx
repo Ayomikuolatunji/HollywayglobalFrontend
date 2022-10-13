@@ -30,7 +30,6 @@ const AdminSignup = () => {
     resolver: yupResolver(schema),
   });
 
-
   const [adminSignup] = useAdminSignupMutation();
   const router = useRouter();
 
@@ -72,131 +71,121 @@ const AdminSignup = () => {
   };
 
   return (
-    <form className="bg-white mt-4 border-[1px] border-[#d7d7d7] h-auto relative">
-      <div className="flex items-center w-[100%]">
-        <div className="personal-information w-[50%] p-3">
-          <div className="title">
-            <h1 className="text-black text-2xl font-extrabold">
-              Personal Information
-            </h1>
-          </div>
-          <div className="form w-[100%]">
-            <div className="first-name flex mt-5 items-center">
-              <div>
-                <label className="text-[#69686c] font-bold">First Name</label>
-                <span className="text-red-500 text-xl ml-4 mb-5">*</span>
-              </div>
-              <div className="ml-12">
-                <UI.InputField
-                  type="text"
-                  className="name  bg-white border-[1px] border-[#dd] outline-none p-1 w-[100%]"
-                  isHookForm={true}
-                  label="name"
-                  register={register}
-                  required={true}
-                />
-                <span className="mt-1">This is a required field.</span>
-              </div>
-            </div>
-            <div className="email flex mt-5 w-full items-center">
-              <div>
-                <label className="text-[#69686c] font-bold">Email</label>
-                <span className="text-red-500 text-xl ml-4 mb-5">*</span>
-              </div>
-              <div className="ml-12">
-                <UI.InputField
-                  type="email"
-                  className="email  bg-white border-[1px] border-[#dd] outline-none p-1 w-[100%]"
-                  isHookForm={true}
-                  label="email"
-                  register={register}
-                  required={true}
-                />
-              </div>
-            </div>
-            <div className="newletter flex mt-6 w-[100%] ml-36 items-center">
-              <div>
-                <input
-                  type="checkbox"
-                  className="last-name bg-white border-[1px] border-[#dd] outline-none p-1 w-[100%]"
-                />
-              </div>
-              <div>
-                <label className="text-[#69686c] font-normal ml-3">
-                  Sign Up for Newsletter
-                </label>
-              </div>
-            </div>
-          </div>
+    <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="w-full max-w-md space-y-8">
+        <div>
+          <img
+            className="mx-auto h-12 w-auto"
+            src="/assets/logo.png"
+            alt="Your Company"
+          />
+          <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
+            Signup your admin dashboard
+          </h2>
         </div>
-        <div className="left-login-information w-[50%] h-auto block p-3">
-          <div className="form w-[100%]">
-            <div className="title">
-              <h1 className="text-black text-2xl font-extrabold">
-                Sign-in Information
-              </h1>
+        <form className="mt-8 space-y-6" action="#" method="POST">
+          <input type="hidden" name="remember" value="true" />
+          <div className="rounded-md shadow-sm">
+            <div className="my-8">
+              <label htmlFor="username" className="sr-only">
+                Admin username
+              </label>
+              <input
+                id="username"
+                name="username"
+                type="username"
+                autoComplete="username"
+                required
+                className="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                placeholder="Enter username"
+              />
             </div>
-            <div className="password flex mt-5 w-[100%]">
-              <div>
-                <label className="text-[#69686c] font-bold">Password</label>
-                <span className="text-red-500 text-xl ml-4 mb-1">*</span>
-              </div>
-              <div className="w-[70%]">
-                <UI.InputField
-                  type="text"
-                  className="password ml-12 bg-white border-[1px] border-[#dd] outline-none p-1 w-[70%]"
-                  isHookForm={true}
-                  label="password"
-                  register={register}
-                  required={true}
-                />
-              </div>
+            <div>
+              <label htmlFor="email-address" className="sr-only">
+                Email address
+              </label>
+              <input
+                id="email-address"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                className="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                placeholder="Email address"
+              />
             </div>
-            <div className="comfirm-password flex mt-8 w-[100%]">
-              <div>
-                <label className="text-[#69686c] font-bold">
-                  Confirm Password
-                </label>
-                <span className="text-red-500 text-xl ml-4 mb-1">*</span>
-              </div>
-              <div className="w-[50%]">
-                <UI.InputField
-                  type="text"
-                  className="confirm-password ml-12 bg-white border-[1px] border-[#dd] outline-none p-1 w-[100%]"
-                  isHookForm={true}
-                  label="confirmPassword"
-                  register={register}
-                  required={true}
-                />
-              </div>
+            <div className="mt-8">
+              <label htmlFor="password" className="sr-only">
+                Password
+              </label>
+              <input
+                id="password"
+                name="password"
+                type="password"
+                autoComplete="current-password"
+                required
+                className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                placeholder="Password"
+              />
             </div>
           </div>
-        </div>
+          <div className="flex items-center justify-between mt-5">
+            <div className="flex items-center">
+              <input
+                id="remember-me"
+                name="remember-me"
+                type="checkbox"
+                className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+              />
+              <label
+                htmlFor="remember-me"
+                className="ml-2 block text-sm text-gray-900"
+              >
+                Remember me
+              </label>
+            </div>
+            <div className="text-sm">
+              <a
+                href="#"
+                className="font-medium text-indigo-600 hover:text-indigo-500"
+              >
+                Forgot your password?
+              </a>
+            </div>
+          </div>
+          <div className="flex items-center justify-between mt-5">
+            <div className="text-sm">
+              <Link href={"/admin-login"} passHref>
+                <a>Login admin</a>
+              </Link>
+            </div>
+          </div>
+          <div>
+            <button
+              type="submit"
+              className="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            >
+              <span className="absolute inset-y-0 left-0 flex items-center pl-3">
+                <svg
+                  className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 1a4.5 4.5 0 00-4.5 4.5V9H5a2 2 0 00-2 2v6a2 2 0 002 2h10a2 2 0 002-2v-6a2 2 0 00-2-2h-.5V5.5A4.5 4.5 0 0010 1zm3 8V5.5a3 3 0 10-6 0V9h6z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </span>
+              Sign up
+            </button>
+          </div>
+        </form>
       </div>
-      <div className="create-account-btn mt-12 mb-9 text-center">
-        <UI.Button
-          className="text-white py-2 px-4 -ml-44 bg-red-color hover:bg-gray-500 transition-[background-color] duration-500 ease-in-out font-[600]"
-          text="CREATE ACCOUNT"
-          type="submit"
-          onClick={handleSubmit(onSubmit)}
-        />
-        <span className="ml-2 text-gray-900">
-          <Link href={"/login"}>Or login</Link>
-        </span>
-      </div>
-      <div className="error text-center">
-        <span className="text-red-500 text-xl">
-          {(errors.email?.type ||
-            errors.confirmPassword?.type ||
-            errors.firstName?.type ||
-            errors.lastName?.message) &&
-            "All fields are required"}
-        </span>
-      </div>
-      <span className="absolute bottom-10 right-10 sm:block hidden cursor-pointer">
-        <Link href={"/"}>Home</Link>
-      </span>
-    </form>
+    </div>
   );
 };
 
