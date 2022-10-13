@@ -32,7 +32,7 @@ export default function EditProductModal({
     const getData: productTypings | any = data!;
     if (getData) {
       setInitialValues({
-        id:productId,
+        productId:productId,
         adminId: getData.adminId,
         name: getData.name,
         price: getData.price,
