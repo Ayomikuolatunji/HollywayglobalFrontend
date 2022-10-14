@@ -106,7 +106,7 @@ const AdminLogin = () => {
               <label htmlFor="email-address" className="sr-only">
                 Email address
               </label>
-              <UI.InputField
+              <input
                 id="email-address"
                 name="email"
                 type="email"
