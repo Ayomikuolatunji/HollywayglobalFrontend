@@ -1,13 +1,14 @@
 import React, { useRef, useState } from "react";
 import { Dialog } from "@headlessui/react";
 import { FaCarAlt } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 import { modalConditions } from "../../../../models/modal";
 import { productTypings } from "../../../../models/product";
 import { usePostProductMutation } from "../../../../redux/apis/productApi";
 import validate from "./ValidateProduct";
 import ProductForm from "./ProductForm";
-import { toast } from "react-toastify";
+
 
 const ProductActionModal = ({ isOpen, setIsOpen }: modalConditions) => {
   const [postProdcts] = usePostProductMutation();
@@ -81,7 +82,6 @@ const ProductActionModal = ({ isOpen, setIsOpen }: modalConditions) => {
       | React.ChangeEvent<HTMLSelectElement>
       | React.ChangeEvent<HTMLTextAreaElement>
   ) => {
-    // for checkbox onchange event
     const { name, value } = e.target;
     setInitialValues({ ...initialValues, [name]: value });
   };

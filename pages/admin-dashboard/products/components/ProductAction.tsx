@@ -5,8 +5,6 @@ import { modalConditions } from "../../../../models/modal";
 
 
 const ProductAction = ({ setIsOpen }:modalConditions) => {
-  
-
     return (
       <div className="flex justify-end">
         {/* select dropwdown */}

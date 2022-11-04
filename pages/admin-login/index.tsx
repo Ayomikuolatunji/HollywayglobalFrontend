@@ -5,8 +5,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/router";
 import * as yup from "yup";
 
-import * as UI from "../../components";
-import { IFormValues } from "../../components/InputField/InputField";
 import LoginStorage from "../../helpers/LoginStorage";
 import { toast } from "react-toastify";
 import Cookies from "../../helpers/Cookies";
@@ -20,6 +18,11 @@ const schema = yup
   })
   .required();
 
+interface loginTypes {
+  email: string;
+  password: string;
+}
+
 const AdminLogin = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -30,7 +33,7 @@ const AdminLogin = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<IFormValues>({
+  } = useForm<loginTypes>({
     resolver: yupResolver(schema),
   });
 
@@ -65,7 +68,7 @@ const AdminLogin = () => {
     }
   }, [data]);
 
-  const onSubmit: SubmitHandler<IFormValues> = async (data) => {
+  const onSubmit: SubmitHandler<loginTypes> = async (data) => {
     try {
       await adminLogin({
         email: data.email,
@@ -99,7 +102,12 @@ const AdminLogin = () => {
             Sign in to your admin dashboard
           </h2>
         </div>
-        <form className="mt-8 space-y-6" action="#" method="POST">
+        <form
+          className="mt-8 space-y-6"
+          action="#"
+          method="POST"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <input type="hidden" name="remember" value="true" />
           <div className="rounded-md shadow-sm">
             <div className="my-8">
@@ -108,7 +116,7 @@ const AdminLogin = () => {
               </label>
               <input
                 id="email-address"
-                name="email"
+                {...register("email", { required: true })}
                 type="email"
                 autoComplete="email"
                 required
@@ -122,7 +130,7 @@ const AdminLogin = () => {
               </label>
               <input
                 id="password"
-                name="password"
+                {...register("password", { required: true })}
                 type="password"
                 autoComplete="current-password"
                 required
@@ -136,6 +144,8 @@ const AdminLogin = () => {
               <input
                 id="remember-me"
                 name="remember-me"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
                 type="checkbox"
                 className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
               />

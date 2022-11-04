@@ -1,35 +1,40 @@
 import Link from "next/link";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { toast } from "react-toastify";
-import { useRouter } from "next/router";
 
+import { useRouter } from "next/router";
 import Cookies from "../../helpers/Cookies";
-import * as UI from "../../components";
-import { IFormValues } from "../../components/InputField/InputField";
 import { useAdminSignupMutation } from "../../redux/apis/authApi";
 import { Error } from "../../models/AxioError";
 
 const schema = yup
   .object({
-    name: yup.string().required(),
+    username: yup.string().required(),
     email: yup.string().email().required("Email is required"),
     password: yup.string().required(),
-    confirmPassword: yup.string().required(),
+    comfirmPassword: yup.string().required(),
   })
   .required();
+
+interface adminSignTypes {
+  username: string;
+  email: string;
+  password: string;
+  comfirmPassword: string;
+}
 
 const AdminSignup = () => {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<IFormValues>({
+  } = useForm<adminSignTypes>({
     resolver: yupResolver(schema),
   });
-
+  const [loading, setLoading] = useState(false);
   const [adminSignup] = useAdminSignupMutation();
   const router = useRouter();
 
@@ -39,21 +44,24 @@ const AdminSignup = () => {
     }
   }, [router]);
 
-  const onSubmit: SubmitHandler<IFormValues> = async (data) => {
+  const onSubmit: SubmitHandler<adminSignTypes> = async (data) => {
     try {
-      const { email, name, password, confirmPassword } = data;
-
-      if (password !== confirmPassword) {
+      setLoading(true);
+      const { email, username, password, comfirmPassword } = data;
+      if (password !== comfirmPassword) {
         toast.error("password and confirm password not equal", {
           toastId: "signup-password-not-equal-id",
         });
         return;
       }
-      await adminSignup({
-        username: name,
+      const res = await adminSignup({
+        username: username,
         email: email,
         password: password,
       }).unwrap();
+      toast.success("Admin created successfully", {
+        toastId: "res-success",
+      });
       window.location.href = "/admin-login";
     } catch (error: any) {
       const err = error as Error;
@@ -66,9 +74,17 @@ const AdminSignup = () => {
           toastId: "main-response-error-id__2",
         });
       }
-      console.log(err);
+      console.log(error);
     }
   };
+
+  useEffect(() => {
+    if (Object.keys(errors).length > 0) {
+      toast.info("All inputs fields are required", {
+        toastId: "admin-signup-id",
+      });
+    }
+  }, [errors]);
 
   return (
     <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -83,7 +99,12 @@ const AdminSignup = () => {
             Signup your admin dashboard
           </h2>
         </div>
-        <form className="mt-8 space-y-6" action="#" method="POST">
+        <form
+          className="mt-8 space-y-6"
+          action="#"
+          method="POST"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <input type="hidden" name="remember" value="true" />
           <div className="rounded-md shadow-sm">
             <div className="my-8">
@@ -92,10 +113,9 @@ const AdminSignup = () => {
               </label>
               <input
                 id="username"
-                name="username"
                 type="username"
                 autoComplete="username"
-                required
+                {...register("username", { required: true })}
                 className="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                 placeholder="Enter username"
               />
@@ -106,10 +126,9 @@ const AdminSignup = () => {
               </label>
               <input
                 id="email-address"
-                name="email"
                 type="email"
                 autoComplete="email"
-                required
+                {...register("email", { required: true })}
                 className="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                 placeholder="Email address"
               />
@@ -120,37 +139,25 @@ const AdminSignup = () => {
               </label>
               <input
                 id="password"
-                name="password"
                 type="password"
                 autoComplete="current-password"
-                required
+                {...register("password", { required: true })}
                 className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                 placeholder="Password"
               />
             </div>
-          </div>
-          <div className="flex items-center justify-between mt-5">
-            <div className="flex items-center">
-              <input
-                id="remember-me"
-                name="remember-me"
-                type="checkbox"
-                className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
-              />
-              <label
-                htmlFor="remember-me"
-                className="ml-2 block text-sm text-gray-900"
-              >
-                Remember me
+            <div className="mt-8">
+              <label htmlFor="comfirmPassword" className="sr-only">
+                Comfirm Password
               </label>
-            </div>
-            <div className="text-sm">
-              <a
-                href="#"
-                className="font-medium text-indigo-600 hover:text-indigo-500"
-              >
-                Forgot your password?
-              </a>
+              <input
+                id="password"
+                type="password"
+                autoComplete="current-password"
+                {...register("comfirmPassword", { required: true })}
+                className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                placeholder="Confirm Password"
+              />
             </div>
           </div>
           <div className="flex items-center justify-between mt-5">
