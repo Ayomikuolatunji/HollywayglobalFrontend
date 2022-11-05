@@ -26,6 +26,7 @@ interface loginTypes {
 const AdminLogin = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const [adminLogin, { data }] = useAdminLoginMutation();
@@ -70,10 +71,15 @@ const AdminLogin = () => {
 
   const onSubmit: SubmitHandler<loginTypes> = async (data) => {
     try {
-      await adminLogin({
+      setLoading(true);
+      const res = await adminLogin({
         email: data.email,
         password: data.password,
       }).unwrap();
+      toast.success("Login successfully", {
+        toastId: "admin-login-success-id",
+      });
+      setLoading(false);
     } catch (error: any) {
       const err = error as Error;
       if (err) {
@@ -85,6 +91,7 @@ const AdminLogin = () => {
           toastId: "login-response-error-id__2",
         });
       }
+      setLoading(false);
       console.log(error);
     }
   };
@@ -99,7 +106,7 @@ const AdminLogin = () => {
             alt="Your Company"
           />
           <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
-            Sign in to your admin dashboard
+            Sign into your admin dashboard
           </h2>
         </div>
         <form

@@ -13,9 +13,10 @@ export interface productFormTypings {
   handleProductAvailable: (e: React.ChangeEvent<HTMLInputElement>) => void;
   setIsOpen: (isOpen: boolean) => void;
   initialValues: productTypings;
-  imageExist?:boolean,
-  imageUrl?:string
-  imagePreview?:boolean
+  imageExist?: boolean;
+  imageUrl?: string;
+  submiting: boolean;
+  imagePreview?: boolean;
 }
 
 export interface HTMLInputEvent extends Event {

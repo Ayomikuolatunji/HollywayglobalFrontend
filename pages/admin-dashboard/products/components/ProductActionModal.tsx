@@ -9,12 +9,12 @@ import { usePostProductMutation } from "../../../../redux/apis/productApi";
 import validate from "./ValidateProduct";
 import ProductForm from "./ProductForm";
 
-
 const ProductActionModal = ({ isOpen, setIsOpen }: modalConditions) => {
   const [postProdcts] = usePostProductMutation();
   const [file, setFile] = useState("");
+  const [submiting, setSubmiting] = useState(false);
   const [carStatus, setCarStatus] = useState(false);
-  const [imageExist, setImageExist]= useState(false);
+  const [imageExist, setImageExist] = useState(false);
   const [imagePreview, setImagePreview] = useState("");
   const [initialValues, setInitialValues] = useState<productTypings>({
     adminId: "",
@@ -36,14 +36,15 @@ const ProductActionModal = ({ isOpen, setIsOpen }: modalConditions) => {
     setCarStatus(e.target.checked);
   };
 
-
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // check if inputs are empty
     if (!validate(initialValues)) {
       return;
     }
+    setSubmiting(true);
     if (file) {
+      setSubmiting(true);
       const fileData = new FormData();
       fileData.append("file", file);
       fetch("http://localhost:8080/images", {
@@ -60,6 +61,7 @@ const ProductActionModal = ({ isOpen, setIsOpen }: modalConditions) => {
             .unwrap()
             .then((data: any) => {
               if (data.message === "Product created successfully") {
+                setSubmiting(false);
                 setIsOpen(false);
               }
               setImageExist(false);
@@ -68,11 +70,13 @@ const ProductActionModal = ({ isOpen, setIsOpen }: modalConditions) => {
         })
         .catch((err) => {
           console.log(err);
+          setSubmiting(false);
         });
     } else {
       toast.error("Please upload an image", {
         toastId: "imageUploadError",
       });
+      setSubmiting(false);
     }
   };
 
@@ -110,6 +114,7 @@ const ProductActionModal = ({ isOpen, setIsOpen }: modalConditions) => {
             imageExist={imageExist}
             imagePreview={true}
             imageUrl={imagePreview}
+            submiting={submiting}
           />
         </Dialog.Panel>
       </Dialog.Panel>

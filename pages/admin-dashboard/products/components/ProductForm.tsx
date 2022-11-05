@@ -17,6 +17,7 @@ export default function ProductForm({
   imageExist = false,
   imageUrl,
   imagePreview = false,
+  submiting,
 }: productFormTypings) {
   return (
     <form onSubmit={onSubmit} className="w-full">
@@ -25,7 +26,7 @@ export default function ProductForm({
           <input
             id="name"
             name="name"
-            placeholder="Enter car name"
+            placeholder="Product name"
             onChange={(e) => handleChange(e)}
             value={initialValues.name}
             type="text"
@@ -36,7 +37,7 @@ export default function ProductForm({
           <input
             id="price"
             name="price"
-            placeholder="Enter car price"
+            placeholder="Enter product price"
             type="number"
             onChange={(e) => handleChange(e)}
             value={initialValues.price}
@@ -47,7 +48,7 @@ export default function ProductForm({
           <textarea
             id="description"
             name="description"
-            placeholder="Enter car description"
+            placeholder="Enter product description"
             value={initialValues.description}
             onChange={(e) => handleChange(e)}
             className="w-[98%] mx-auto border-2 border-gray-400 my-2 p-[5px]"
@@ -101,8 +102,10 @@ export default function ProductForm({
           </div>
         )}
         {/* is product available checkbox */}
-        <div className="flex items-center w-[40%] mx-auto">
-          <label htmlFor="productAvailable">Is car available available?</label>
+        <div className="flex items-center w-[50%] mx-auto">
+          <label htmlFor="productAvailable">
+            Is product available available?
+          </label>
           <input
             id="productAvailable"
             name="productAvailable"
@@ -119,7 +122,7 @@ export default function ProductForm({
             value={initialValues.type}
             className="w-[98%] mx-auto border-2 border-gray-400 my-2 p-[5px]"
           >
-            <option value="">Select Car Type</option>
+            <option value="">Select product type</option>
             {productsDepartments.map((option, index) => (
               <option value={option.name} key={index}>
                 {option.name}
@@ -138,7 +141,7 @@ export default function ProductForm({
             type="submit"
             className="py-[6px] px-[15px] mx-3 bg-blue-500 text-white"
           >
-            Submit
+            {submiting ? "Submiting..." : "Submit"}
           </button>
         </div>
       </div>
