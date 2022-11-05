@@ -11,9 +11,9 @@ export default function ProductCard({ item }: ProductCardTypes) {
     <div>
       <div className="max-w-xs bg-white shadow-xl rounded-lg overflow-hidden cursor-pointer">
         <div className="px-4 py-2">
-          <h1 className="text-gray-900 font-bold text-xl uppercase">
+          <h6 className="text-gray-900 font-bold text-[16px] uppercase">
             {item.name}
-          </h1>
+          </h6>
           <p className="text-gray-600 text-sm mt-1">
             This product is available in bulk
           </p>

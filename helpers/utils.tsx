@@ -1080,7 +1080,7 @@ export const productsDepartments: Array<navTypes> = [
     link: "/exports",
   },
   {
-    name: "Local products",
+    name: "Popular products",
     link: "sea-foods",
   },
   {

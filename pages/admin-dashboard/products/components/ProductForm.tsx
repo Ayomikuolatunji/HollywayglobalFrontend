@@ -138,6 +138,7 @@ export default function ProductForm({
             Cancel
           </button>
           <button
+            disabled={submiting}
             type="submit"
             className="py-[6px] px-[15px] mx-3 bg-blue-500 text-white"
           >

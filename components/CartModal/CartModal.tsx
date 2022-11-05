@@ -25,7 +25,7 @@ const CartModal = ({
             alt="NIKE AIR"
           />
           <div className="flex flex-col text-center mt-5">
-            <h1 className="text-3xl">Product name: {item.name}</h1>
+            <h1 className="text-xl">Product name: {item.name}</h1>
             <h3>Price: {item.price}</h3>
           </div>
         </Dialog.Description>
