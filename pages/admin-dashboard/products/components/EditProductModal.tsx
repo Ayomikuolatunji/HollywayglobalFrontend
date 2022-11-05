@@ -7,7 +7,7 @@ import { useGetProductQuery,useEditProductMutation} from "../../../../redux/apis
 import { modalConditions } from "../../../../models/modal";
 import ProductForm from "./ProductForm";
 import validate from "./ValidateProduct";
-import { toast } from "react-toastify";
+
 
 export default function EditProductModal({
   productId,
@@ -17,6 +17,7 @@ export default function EditProductModal({
   const { data } = useGetProductQuery(productId);
   const [editProduct] = useEditProductMutation();
   const [file, setFile] = useState("");
+  const [submiting, setSubmiting] = useState(false);
   const [previousImage,setPreviousImage] = useState<string>("");
   const [carStatus, setCarStatus] = useState(false);
   const [initialValues, setInitialValues] = useState<productTypings>({
@@ -32,7 +33,7 @@ export default function EditProductModal({
     const getData: productTypings | any = data!;
     if (getData) {
       setInitialValues({
-        productId:productId,
+        _id:productId,
         adminId: getData.adminId,
         name: getData.name,
         price: getData.price,
@@ -59,6 +60,7 @@ export default function EditProductModal({
     if (!validate(initialValues)) {
       return;
     }
+    setSubmiting(true)
       const fileData = new FormData();
       fileData.append("file", file);
       fetch("http://localhost:8080/images", {
@@ -75,6 +77,7 @@ export default function EditProductModal({
             .unwrap()
             .then((data: any) => {
               if (data.message === "Product updated successfully") {
+                setSubmiting(false)
                 setIsOpen(false);
               }
             })
@@ -120,6 +123,7 @@ export default function EditProductModal({
             imageExist={true}
             imageUrl={previousImage}
             initialValues={initialValues}
+            submiting={submiting}
           />
         </Dialog.Panel>
       </Dialog.Panel>
