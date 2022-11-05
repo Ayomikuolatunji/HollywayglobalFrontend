@@ -4,10 +4,11 @@ import { ProductCard, Skeleton, Tabs } from "../../../components";
 import { useFetchAllProductsQuery } from "../../../redux/apis/unprotectedProducts";
 
 export default function LocalCategories() {
-  const [currentTab, setCurrentTab] = useState("Local products");
+  const [currentTab, setCurrentTab] = useState("Popular Foods");
   const { isLoading, data, isFetching, error } =
     useFetchAllProductsQuery(currentTab);
-  console.log(data);
+
+    
   return (
     <div className="mt-12">
       <div className="title text-center my-10">
@@ -17,21 +18,24 @@ export default function LocalCategories() {
       </div>
       <Tabs
         Tabheaders={[
-          "Popular products",
+          "Popular Foods",
           "Fruits/Vegetables",
-          "Poutry & Seafoods",
+          "Livestocks/Sea foods",
           "Tubers & Cereals",
         ]}
         setCurrentTab={setCurrentTab}
         tab={true}
         renderTabPanel={() => (
-          <Tab.Panels className="my-4">
+          <Tab.Panels className="mt-8 mb-4">
             {[1, 2, 3, 4].map((item) => (
-              <Tab.Panel className="grid grid-cols-5 gap-x-3 gap-y-4">
+              <Tab.Panel
+                className="grid grid-cols-5 gap-x-3 gap-y-4"
+                key={item}
+              >
                 {isLoading || (isFetching && data === undefined)
                   ? [1, 2, 4, 5, 6, 7, 8, 9].map((item) => <Skeleton />)
                   : data?.product?.slice(0, 10).map((item) => {
-                      return <ProductCard item={item} />;
+                      return <ProductCard item={item} key={item._id}/>;
                     })}
               </Tab.Panel>
             ))}

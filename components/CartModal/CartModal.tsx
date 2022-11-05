@@ -29,7 +29,6 @@ const CartModal = ({
             <h3>Price: {item.price}</h3>
           </div>
         </Dialog.Description>
-
         <div className="w-[100%] flex justify-center mx-auto my-2 p-[5px]">
           <button
             onClick={() => setIsOpen(false)}

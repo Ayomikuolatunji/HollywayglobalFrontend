@@ -9,7 +9,7 @@ import {
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import update from "immutability-helper";
-import {matchSorter} from 'match-sorter'
+import { matchSorter } from "match-sorter";
 import Row from "./Row";
 import GlobalFilter from "../search/GlobalSearch";
 import { DeleteActiveIcon, MoveInactiveIcon } from "../../helpers/Icons";
@@ -21,7 +21,7 @@ interface Props {
   selectedRows: any;
   setSelectedRows: any;
   changeProductStatusFunc: (status: selectedTypings) => void;
-  bulkyDelectFunc:(status:selectedTypings)=>void
+  bulkyDelectFunc: (status: selectedTypings) => void;
 }
 
 const IndeterminateCheckbox = React.forwardRef(
@@ -42,25 +42,27 @@ const IndeterminateCheckbox = React.forwardRef(
 // Define a default UI for filtering
 function DefaultColumnFilter({
   column: { filterValue, preFilteredRows, setFilter },
-}:any) {
-  const count = preFilteredRows.length
+}: any) {
+  const count = preFilteredRows.length;
 
   return (
     <input
-      value={filterValue || ''}
-      onChange={e => {
-        setFilter(e.target.value || undefined) // Set undefined to remove the filter entirely
+      value={filterValue || ""}
+      onChange={(e) => {
+        setFilter(e.target.value || undefined); 
       }}
       placeholder={`Search ${count} records...`}
     />
-  )
+  );
 }
 function fuzzyTextFilterFn(rows: any, id: string | number, filterValue: any) {
-  return matchSorter(rows, filterValue, { keys: [(row: any) => row.values[id]] })
+  return matchSorter(rows, filterValue, {
+    keys: [(row: any) => row.values[id]],
+  });
 }
 
-// Let the table remove the filter if the string is empty
-fuzzyTextFilterFn.autoRemove = (val: any) => !val
+
+fuzzyTextFilterFn.autoRemove = (val: any) => !val;
 
 export default function Table({
   columns,
@@ -68,36 +70,36 @@ export default function Table({
   setSelectedRows,
   selectedRows,
   changeProductStatusFunc,
-  bulkyDelectFunc
+  bulkyDelectFunc,
 }: Props) {
   const [records, setRecords] = React.useState(dataTable);
-  const filterTypes:any = React.useMemo(
+  const filterTypes: any = React.useMemo(
     () => ({
       // Add a new fuzzyTextFilterFn filter type.
       fuzzyText: fuzzyTextFilterFn,
       // Or, override the default text filter to use
       // "startWith"
       text: (rows: any[], id: string | number, filterValue: any) => {
-        return rows.filter((row:any) => {
-          const rowValue = row.values[id]
+        return rows.filter((row: any) => {
+          const rowValue = row.values[id];
           return rowValue !== undefined
             ? String(rowValue)
                 .toLowerCase()
                 .startsWith(String(filterValue).toLowerCase())
-            : true
-        })
+            : true;
+        });
       },
     }),
     []
-  )
+  );
 
-  const DefaultFilterForColumn:any= React.useMemo(
+  const DefaultFilterForColumn: any = React.useMemo(
     () => ({
       // Let's set up our default Filter UI
       Filter: DefaultColumnFilter,
     }),
     []
-  )
+  );
   const {
     getTableProps,
     getTableBodyProps,
@@ -107,16 +109,16 @@ export default function Table({
     state,
     preGlobalFilteredRows,
     setGlobalFilter,
-    selectedFlatRows
+    selectedFlatRows,
     //
   } = useTable(
     {
       columns,
-      data: dataTable || [],     
-      filterTypes, 
-      defaultColumn: DefaultFilterForColumn 
+      data: dataTable || [],
+      filterTypes,
+      defaultColumn: DefaultFilterForColumn,
     },
-    useFilters,// useFilters!
+    useFilters, // useFilters!
     useGlobalFilter, // useGlobalFilter!
     useRowSelect,
     (hooks) => {
@@ -134,7 +136,7 @@ export default function Table({
             );
           },
           Filter: () => {
-            return null
+            return null;
           },
           accessor: "id",
           Cell: ({ row }: any) => {
@@ -186,15 +188,12 @@ export default function Table({
               <MoveInactiveIcon className="mr-2 h-5 w-5" />
               <span className="text-sm font-semibold">Change Status</span>
             </button>
-            <button 
+            <button
               className="deactive-btn flex items-center ml-3"
-              onClick={()=>bulkyDelectFunc(selectedRows)}
+              onClick={() => bulkyDelectFunc(selectedRows)}
             >
-                  <DeleteActiveIcon
-                      className="mr-2 h-5 w-5"
-                      aria-hidden="true"
-                    />
-                 <span className="text-sm font-semibold">Bulky delete</span>
+              <DeleteActiveIcon className="mr-2 h-5 w-5" aria-hidden="true" />
+              <span className="text-sm font-semibold">Bulky delete</span>
             </button>
           </div>
         </div>
@@ -206,40 +205,38 @@ export default function Table({
         <thead className="text-xs text-gray-700 uppercase bg-white dark:bg-gray-700 dark:text-gray-400 border-b-2 border-t-2 border-t-gray-50">
           {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) =>{
-                 return  (
+              {headerGroup.headers.map((column) => {
+                return (
                   <th {...column.getHeaderProps()} className="p-[12px]">
                     {column.render("Header")}
                     {/* Render the columns filter UI filtered */}
-                    {column.render('Filter') }
-                    
+                    {column.render("Filter")}
                   </th>
-                )
+                );
               })}
             </tr>
           ))}
         </thead>
-        {
-          dataTable?.length > 0 ? <tbody {...getTableBodyProps()}>
-          {rows.map((row, index: number) => {
-            prepareRow(row);
-            return (
-              <Row
-                index={index}
-                row={row}
-                prepareRow={prepareRow}
-                moveRow={moveRow}
-                {...row.getRowProps()}
-              />
-            );
-          })}
-        </tbody>
-        :(
+        {dataTable?.length > 0 ? (
+          <tbody {...getTableBodyProps()}>
+            {rows.map((row, index: number) => {
+              prepareRow(row);
+              return (
+                <Row
+                  index={index}
+                  row={row}
+                  prepareRow={prepareRow}
+                  moveRow={moveRow}
+                  {...row.getRowProps()}
+                />
+              );
+            })}
+          </tbody>
+        ) : (
           <div className="absolute text-center  w-full p-5">
-              <h1>Your car product lists is currently</h1>
+            <h1>Your car product lists is currently</h1>
           </div>
-        )
-        }
+        )}
       </table>
     </DndProvider>
   );

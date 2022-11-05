@@ -25,7 +25,7 @@ const Tabs = ({
               key={index}
               className={`text-xl ${
                 selectedIndex === index ? "text-[#7fad39] font-extrabold" : ""
-              }`}
+              }hover:border-0 active:border-0`}
             >
               {tab}
             </Tab>

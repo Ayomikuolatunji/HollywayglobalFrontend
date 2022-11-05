@@ -42,7 +42,7 @@ const ProductSlider: React.FC = () => {
                       alt="img-products"
                       className="h-[180px] mt-[-5px] w-full"
                     />
-                    <h3 className="text-[18px] text-[#7fad39] px-[16px] py-[12px] font-extrabold bg-[#fdfbfb] shadow-md absolute bottom-4 cursor-pointer">
+                    <h3 className="text-[15px] text-[#7fad39] px-[16px] py-[12px] font-extrabold bg-[#fdfbfb] shadow-md absolute bottom-4 cursor-pointer">
                       {product.name}
                     </h3>
                   </div>

@@ -22,7 +22,7 @@ import EditProductModal from "./EditProductModal";
 
 export default function ProductTable() {
   const { data, isFetching } = useGetProductsQuery();
-  const [bulkyDelete]=useBulkyDeleteMutation()
+  const [bulkyDelete] = useBulkyDeleteMutation();
   const [IdType, setIdType] = useState<string>("");
   const getData = data as fetchProductTypings;
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -59,20 +59,19 @@ export default function ProductTable() {
     }
   }, [IdType]);
 
-  const bulkyDelectFunc= async(selectedRows: selectedTypings)=>{
-       try {
-          if(selectedRows){
-             const ids=selectedRows.map((row:tableProduct)=>row.original.id)
-             const res=await bulkyDelete({
-                ids
-             })
-             .unwrap()
-             console.log(res)
-          }
-       } catch (error) {
-           console.log(error);
-       }
-  }
+  const bulkyDelectFunc = async (selectedRows: selectedTypings) => {
+    try {
+      if (selectedRows) {
+        const ids = selectedRows.map((row: tableProduct) => row.original.id);
+        const res = await bulkyDelete({
+          ids,
+        }).unwrap();
+        console.log(res);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const changeProductStatusFunc = async (selectedRows: selectedTypings) => {
     try {
@@ -145,7 +144,7 @@ export default function ProductTable() {
       //add delete and edit button
       {
         Header: "Action",
-        Cell: ({row}: selectedTypings) => {
+        Cell: ({ row }: selectedTypings) => {
           // get single data id
           const { id } = row.original;
           return (
