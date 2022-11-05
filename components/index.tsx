@@ -12,4 +12,5 @@ export { default as Skeleton } from "./Skeleton/Skeleton";
 export { default as Tabs } from "./Tabs/Tabs";
 export { default as ProductCard } from "./ProductCard/ProductCard";
 export { default as CartModal} from "./CartModal/CartModal"
+export { default as ErrorBoundary } from "./ErrorBoundary/ErrorBoundary"
 

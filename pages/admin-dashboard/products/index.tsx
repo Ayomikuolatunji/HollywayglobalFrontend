@@ -13,7 +13,7 @@ export default function AdminDashboard() {
       {/* header */}
       <ProductAction setIsOpen={setIsOpen}/>
       {/* table */}
-      {/* <ProductTable /> */}
+      <ProductTable />
 
       {isOpen && <AddProductModal isOpen={isOpen} setIsOpen={setIsOpen} />}
     </div>
