@@ -5,6 +5,7 @@ import {
   useFilters,
   useGlobalFilter,
   useSortBy,
+  usePagination
 } from "react-table";
 
 import { DndProvider } from "react-dnd";
@@ -132,6 +133,7 @@ export default function Table({
               </div>
             );
           },
+          disableSortBy: true,
           Filter: () => {
             return null;
           },
@@ -221,7 +223,7 @@ export default function Table({
                         ? column.isSortedDesc
                           ? " 🔽"
                           : " 🔼"
-                        : ""}
+                        : " "}
                     </span>
                   </th>
                 );
