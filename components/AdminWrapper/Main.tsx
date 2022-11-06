@@ -40,7 +40,7 @@ const AdminWrapper = ({ children }: Props) => {
       {isLoading ? (
         "Loading..."
       ) : (
-        <main className="w-[85%] bg-[white] h-[100vh] overflow-y-scroll">
+        <main className="w-[85%] bg-[white] h-[100vh] overflow-y-scroll pb-10">
           <Header />
           {children}
         </main>

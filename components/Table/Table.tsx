@@ -4,6 +4,7 @@ import {
   useTable,
   useFilters,
   useGlobalFilter,
+  useSortBy,
 } from "react-table";
 
 import { DndProvider } from "react-dnd";
@@ -19,7 +20,6 @@ interface Props {
   dataTable: any;
   columns: any;
   selectedRows: any;
-  rowsLength: number;
   setSelectedRows: any;
   changeProductStatusFunc: (status: selectedTypings) => void;
   bulkyDelectFunc: (status: selectedTypings) => void;
@@ -62,7 +62,7 @@ function fuzzyTextFilterFn(rows: any, id: string | number, filterValue: any) {
   });
 }
 
-fuzzyTextFilterFn.autoRemove = (val: any) => !val;
+fuzzyTextFilterFn.autoRemove = (val: boolean) => !val;
 
 export default function Table({
   columns,
@@ -71,15 +71,12 @@ export default function Table({
   selectedRows,
   changeProductStatusFunc,
   bulkyDelectFunc,
-  rowsLength,
 }: Props) {
   const [records, setRecords] = React.useState(dataTable);
   const filterTypes: any = React.useMemo(
     () => ({
       // Add a new fuzzyTextFilterFn filter type.
       fuzzyText: fuzzyTextFilterFn,
-      // Or, override the default text filter to use
-      // "startWith"
       text: (rows: any[], id: string | number, filterValue: any) => {
         return rows.filter((row: any) => {
           const rowValue = row.values[id];
@@ -96,7 +93,6 @@ export default function Table({
 
   const DefaultFilterForColumn: any = React.useMemo(
     () => ({
-      // Let's set up our default Filter UI
       Filter: DefaultColumnFilter,
     }),
     []
@@ -119,12 +115,12 @@ export default function Table({
       filterTypes,
       defaultColumn: DefaultFilterForColumn,
     },
-    useFilters, // useFilters!
-    useGlobalFilter, // useGlobalFilter!
+    useFilters,
+    useGlobalFilter,
+    useSortBy,
     useRowSelect,
     (hooks) => {
       hooks.visibleColumns.push((columns) => [
-        // Let's make a column for selection
         {
           id: "selection",
           Header: (prop) => {
@@ -145,7 +141,6 @@ export default function Table({
               <input type="checkbox" {...row.getToggleRowSelectedProps()} />
             );
           },
-          // hide filters on this column
         },
         ...columns,
       ]);
@@ -176,7 +171,10 @@ export default function Table({
         setGlobalFilter={setGlobalFilter}
       />
       <div className="my-4 text-xl">
-        No of products:<h3 className="text-xl inline font-extrabold text-black">{rowsLength}</h3>
+        No of products:
+        <h3 className="text-xl inline font-extrabold text-black">
+          {rows.length}
+        </h3>
       </div>
       {selectedRows.length > 0 && (
         <div className="flex justify-between items-center mb-3 ml-1">
@@ -211,10 +209,20 @@ export default function Table({
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map((column) => {
                 return (
-                  <th {...column.getHeaderProps()} className="p-[12px]">
+                  <th
+                    {...column.getHeaderProps(column.getSortByToggleProps())}
+                    className="p-[12px]"
+                  >
                     {column.render("Header")}
                     {/* Render the columns filter UI filtered */}
                     {column.render("Filter")}
+                    <span className="inline">
+                      {column.isSorted
+                        ? column.isSortedDesc
+                          ? " 🔽"
+                          : " 🔼"
+                        : ""}
+                    </span>
                   </th>
                 );
               })}

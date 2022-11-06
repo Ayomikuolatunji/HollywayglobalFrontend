@@ -123,6 +123,7 @@ export default function ProductTable() {
       {
         Header: "status",
         accessor: "status",
+        disableSortBy: true,
         Cell: ({ row }: selectedTypings) => {
           return (
             <div
@@ -205,7 +206,6 @@ export default function ProductTable() {
       ) : (
         <div>
           <Table
-            rowsLength={getData?.product?.length}
             columns={columns}
             dataTable={dataTable}
             selectedRows={selectedRows}

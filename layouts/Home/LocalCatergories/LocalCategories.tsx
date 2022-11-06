@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { Tab } from "@headlessui/react";
 import { ProductCard, Skeleton, Tabs } from "../../../components";
 import { useFetchAllProductsQuery } from "../../../redux/apis/unprotectedProducts";
+import { productTypings } from "../../../models";
 
 export default function LocalCategories() {
   const [currentTab, setCurrentTab] = useState("Popular Foods");
   const { isLoading, data, isFetching, error } =
     useFetchAllProductsQuery(currentTab);
 
-    
   return (
     <div className="mt-12">
       <div className="title text-center my-10">
@@ -33,9 +33,9 @@ export default function LocalCategories() {
                 key={item}
               >
                 {isLoading || (isFetching && data === undefined)
-                  ? [1, 2, 4, 5, 6, 7, 8, 9].map((item) => <Skeleton />)
-                  : data?.product?.slice(0, 10).map((item) => {
-                      return <ProductCard item={item} key={item._id}/>;
+                  ? [1, 2, 4, 5, 6, 7, 8, 9, 10].map((_) => <Skeleton />)
+                  : data?.product?.slice(0, 10).map((item: productTypings) => {
+                      return <ProductCard item={item} key={item._id} />;
                     })}
               </Tab.Panel>
             ))}
