@@ -19,6 +19,7 @@ interface Props {
   dataTable: any;
   columns: any;
   selectedRows: any;
+  rowsLength: number;
   setSelectedRows: any;
   changeProductStatusFunc: (status: selectedTypings) => void;
   bulkyDelectFunc: (status: selectedTypings) => void;
@@ -49,7 +50,7 @@ function DefaultColumnFilter({
     <input
       value={filterValue || ""}
       onChange={(e) => {
-        setFilter(e.target.value || undefined); 
+        setFilter(e.target.value || undefined);
       }}
       placeholder={`Search ${count} records...`}
     />
@@ -61,7 +62,6 @@ function fuzzyTextFilterFn(rows: any, id: string | number, filterValue: any) {
   });
 }
 
-
 fuzzyTextFilterFn.autoRemove = (val: any) => !val;
 
 export default function Table({
@@ -71,6 +71,7 @@ export default function Table({
   selectedRows,
   changeProductStatusFunc,
   bulkyDelectFunc,
+  rowsLength,
 }: Props) {
   const [records, setRecords] = React.useState(dataTable);
   const filterTypes: any = React.useMemo(
@@ -174,6 +175,9 @@ export default function Table({
         globalFilter={state.globalFilter}
         setGlobalFilter={setGlobalFilter}
       />
+      <div className="my-4 text-xl">
+        No of products:<h3 className="text-xl inline font-extrabold text-black">{rowsLength}</h3>
+      </div>
       {selectedRows.length > 0 && (
         <div className="flex justify-between items-center mb-3 ml-1">
           <div className="flex items-center">

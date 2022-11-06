@@ -205,6 +205,7 @@ export default function ProductTable() {
       ) : (
         <div>
           <Table
+            rowsLength={getData?.product?.length}
             columns={columns}
             dataTable={dataTable}
             selectedRows={selectedRows}
