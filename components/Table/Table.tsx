@@ -5,7 +5,7 @@ import {
   useFilters,
   useGlobalFilter,
   useSortBy,
-  usePagination
+  usePagination,
 } from "react-table";
 
 import { DndProvider } from "react-dnd";
@@ -16,6 +16,7 @@ import Row from "./Row";
 import GlobalFilter from "../search/GlobalSearch";
 import { DeleteActiveIcon, MoveInactiveIcon } from "../../helpers/Icons";
 import { selectedTypings } from "../../models/product";
+import TablePagination from "./TablePagination";
 
 interface Props {
   dataTable: any;
@@ -102,23 +103,33 @@ export default function Table({
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    rows,
     prepareRow,
     state,
     preGlobalFilteredRows,
     setGlobalFilter,
     selectedFlatRows,
-    //
+    page: rows,
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    pageCount,
+    gotoPage,
+    nextPage,
+    previousPage,
+    setPageSize,
+    state: { pageIndex, pageSize },
   } = useTable(
     {
       columns,
       data: dataTable || [],
+      initialState: { pageSize: 20 },
       filterTypes,
       defaultColumn: DefaultFilterForColumn,
     },
     useFilters,
     useGlobalFilter,
     useSortBy,
+    usePagination,
     useRowSelect,
     (hooks) => {
       hooks.visibleColumns.push((columns) => [
@@ -175,7 +186,7 @@ export default function Table({
       <div className="my-4 text-xl">
         No of products:
         <h3 className="text-xl inline font-extrabold text-black">
-          {rows.length}
+          {rows.length} of {dataTable.length}
         </h3>
       </div>
       {selectedRows.length > 0 && (
@@ -252,6 +263,18 @@ export default function Table({
           </div>
         )}
       </table>
+      <TablePagination
+        canPreviousPage={canPreviousPage}
+        canNextPage={canNextPage}
+        pageOptions={pageOptions}
+        pageCount={pageCount}
+        gotoPage={gotoPage}
+        nextPage={nextPage}
+        previousPage={previousPage}
+        setPageSize={setPageSize}
+        pageSize={pageSize}
+        pageIndex={pageIndex}
+      />
     </DndProvider>
   );
 }
