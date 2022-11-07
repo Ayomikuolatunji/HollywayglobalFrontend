@@ -32,7 +32,7 @@ const Tabs = ({
           );
         })}
       </Tab.List>
-      {tab ? renderTabPanel() : <Tab.Panels> {""} </Tab.Panels>}
+      {tab && renderTabPanel()}
     </Tab.Group>
   );
 };

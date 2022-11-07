@@ -1,26 +1,20 @@
-import React from 'react'
-
-
+import React from "react";
 
 interface ButtonsProps {
-  text: string
-  className?: string
-  disabled?: boolean
-  type?: string
-  onClick?: () => void
+  text: string;
+  className?: string;
+  disabled?: boolean;
+  type?: string;
+  onClick?: () => void;
 }
-
 
 const Buttons = ({
   text,
   className,
   disabled,
   type,
-  onClick
+  onClick,
 }: ButtonsProps) => {
-
-
-
   return (
     <button
       type={"button" || type}
@@ -30,7 +24,7 @@ const Buttons = ({
     >
       {text}
     </button>
-  )
-}
+  );
+};
 
-export default Buttons
+export default Buttons;

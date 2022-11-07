@@ -183,12 +183,12 @@ export default function Table({
         globalFilter={state.globalFilter}
         setGlobalFilter={setGlobalFilter}
       />
-      <div className="my-4 text-xl">
+      <span className="my-4 text-xl">
         No of products:
-        <h3 className="text-xl inline font-extrabold text-black">
+        <h3 className="text-sm inline font-extrabold text-black ml-1">
           {rows.length} of {dataTable.length}
         </h3>
-      </div>
+      </span>
       {selectedRows.length > 0 && (
         <div className="flex justify-between items-center mb-3 ml-1">
           <div className="flex items-center">

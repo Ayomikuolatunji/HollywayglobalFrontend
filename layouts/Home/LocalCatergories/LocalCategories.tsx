@@ -29,11 +29,13 @@ export default function LocalCategories() {
           <Tab.Panels className="mt-8 mb-4">
             {[1, 2, 3, 4].map((item) => (
               <Tab.Panel
-                className="grid grid-cols-5 gap-x-3 gap-y-4"
                 key={item}
+                className="grid grid-cols-5 gap-x-3 gap-y-4"
               >
                 {isLoading || (isFetching && data === undefined)
-                  ? [1, 2, 4, 5, 6, 7, 8, 9, 10].map((_) => <Skeleton />)
+                  ? [1, 2, 4, 5, 6, 7, 8, 9, 10].map((_, index) => (
+                      <Skeleton key={index} />
+                    ))
                   : data?.product?.slice(0, 10).map((item: productTypings) => {
                       return <ProductCard item={item} key={item._id} />;
                     })}
