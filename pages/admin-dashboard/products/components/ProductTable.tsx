@@ -80,7 +80,6 @@ export default function ProductTable() {
         const statuses = selectedRows.map((row: tableProduct) =>
           row.original.status === "Active" ? false : true
         );
-        // update status of selected products status
         await changeProductStatus({
           ids: ids,
           status: statuses,
@@ -90,14 +89,12 @@ export default function ProductTable() {
       console.log(error);
     }
   };
-  // This is a custom filter UI for selecting
 
   const columns: Array<ProductTableColumns> = useMemo(() => {
     return [
       {
         Header: "name",
         accessor: "name",
-        // disable filter for this column
         Filter: false,
       },
       {
@@ -142,11 +139,9 @@ export default function ProductTable() {
         Filter: SelectColumnFilter,
         filter: "includes",
       },
-      //add delete and edit button
       {
         Header: "Action",
         Cell: ({ row }: selectedTypings) => {
-          // get single data id
           const { id } = row.original;
           return (
             <ActionDropDown
@@ -204,16 +199,14 @@ export default function ProductTable() {
           Loading...
         </div>
       ) : (
-        <div>
-          <Table
-            columns={columns}
-            dataTable={dataTable}
-            selectedRows={selectedRows}
-            bulkyDelectFunc={bulkyDelectFunc}
-            setSelectedRows={setSelectedRows}
-            changeProductStatusFunc={changeProductStatusFunc}
-          />
-        </div>
+        <Table
+          columns={columns}
+          dataTable={dataTable}
+          selectedRows={selectedRows}
+          bulkyDelectFunc={bulkyDelectFunc}
+          setSelectedRows={setSelectedRows}
+          changeProductStatusFunc={changeProductStatusFunc}
+        />
       )}
       <DeleteProductModal
         isOpen={isOpen}

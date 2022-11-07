@@ -23,32 +23,34 @@ const ProductSlider: React.FC = () => {
     <div className="w-[100%] mx-auto mt-16 mb-10">
       <Slider {...settings}>
         {isLoading
-          ? [1, 2, 3, 4].map((data) => {
-              return <Skeleton />;
+          ? [1, 2, 3, 4].map((_, index) => {
+              return <Skeleton key={index} />;
             })
-          : data?.product?.slice(0, 8).map((product: productTypings, index: number) => {
-              return (
-                <div
-                  key={index}
-                  className="h-[200px] relative shadow-sm p-4 bg-gray-50 w-full"
-                >
+          : data?.product
+              ?.slice(0, 8)
+              .map((product: productTypings, index: number) => {
+                return (
                   <div
-                    className={`wrapper relative ${
-                      product.status ? "block" : "hidden"
-                    }`}
+                    key={index}
+                    className="h-[200px] relative shadow-sm p-4 bg-gray-50 w-full"
                   >
-                    <img
-                      src={`http://localhost:8080/${product.image}`}
-                      alt="img-products"
-                      className="h-[180px] mt-[-5px] w-full"
-                    />
-                    <h3 className="text-[15px] text-[#7fad39] px-[16px] py-[12px] font-extrabold bg-[#fdfbfb] shadow-md absolute bottom-4 cursor-pointer">
-                      {product.name}
-                    </h3>
+                    <div
+                      className={`wrapper relative ${
+                        product.status ? "block" : "hidden"
+                      }`}
+                    >
+                      <img
+                        src={`http://localhost:8080/${product.image}`}
+                        alt="img-products"
+                        className="h-[180px] mt-[-5px] w-full"
+                      />
+                      <h3 className="text-[15px] text-[#7fad39] px-[16px] py-[12px] font-extrabold bg-[#fdfbfb] shadow-md absolute bottom-4 cursor-pointer">
+                        {product.name}
+                      </h3>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
       </Slider>
     </div>
   );

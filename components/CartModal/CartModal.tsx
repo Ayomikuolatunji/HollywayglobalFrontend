@@ -15,8 +15,8 @@ const CartModal = ({
     bg-[rgba(0,0,0,0.5)] z-[999]"
     >
       <Dialog.Panel className="bg-white border flex justify-center flex-col items-center w-[25%] rounded-md">
-        <Dialog.Title className="p-4 text-gray-800 font-extrabold flex items-center text-2xl">
-          Add product to cart
+        <Dialog.Title className="p-4 text-gray-800 font-extrabold flex items-center text-[18px]">
+          {item.name} added to cart
         </Dialog.Title>
         <Dialog.Description className="w-full p-4">
           <img
@@ -25,8 +25,12 @@ const CartModal = ({
             alt="NIKE AIR"
           />
           <div className="flex flex-col text-center mt-5">
-            <h1 className="text-xl">Product name: {item.name}</h1>
-            <h3>Price: {item.price}</h3>
+            <h1 className="text-xl">
+              Price:{" "}
+              <span className="text-xl text-gray-800 font-extrabold">
+                {item.price}
+              </span>
+            </h1>
           </div>
         </Dialog.Description>
         <div className="w-[100%] flex justify-center mx-auto my-2 p-[5px]">
