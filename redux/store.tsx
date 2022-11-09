@@ -11,7 +11,11 @@ import {
   REGISTER,
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
-import { apiService, secureApiService } from "./service";
+import {
+  apiService,
+  tutorSecureApiService,
+  userSecureApiService,
+} from "./service";
 
 const persistConfig = {
   key: "ecommerce",
@@ -21,7 +25,9 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   [apiService.reducerPath]: apiService.reducer,
-  [secureApiService.reducerPath]: secureApiService.reducer,
+  [tutorSecureApiService.reducerPath]: tutorSecureApiService.reducer,
+  [tutorSecureApiService.reducerPath]: tutorSecureApiService.reducer,
+  [userSecureApiService.reducerPath]: userSecureApiService.reducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -33,7 +39,11 @@ const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }).concat([apiService.middleware, secureApiService.middleware]),
+    }).concat([
+      apiService.middleware,
+      tutorSecureApiService.middleware,
+      userSecureApiService.middleware,
+    ]),
 });
 setupListeners(store.dispatch);
 

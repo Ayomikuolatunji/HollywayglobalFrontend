@@ -67,13 +67,15 @@ const Login = () => {
     } catch (error: any) {
       const err = error as Error;
       if (error) {
-        toast.error(err?.data?.data.message, {
+        toast.error(err?.data?.message, {
           toastId: "main-response-error",
         });
+        setLoading(false);
       } else {
         toast.error("something went wrong", {
           toastId: "main-response-error-id__2",
         });
+        setLoading(false);
       }
       setLoading(false);
     }

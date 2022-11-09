@@ -1,9 +1,9 @@
 import { adminIdTypings } from "../../models/authTypings";
 import { getAppCredentials } from "../../helpers/Auth";
-import { secureApiService } from "../service";
+import { tutorSecureApiService } from "../service";
 const admin_id = getAppCredentials("admin_token", "admin")?.admin_id;
 
-export const secureApi = secureApiService.injectEndpoints({
+export const secureApi = tutorSecureApiService.injectEndpoints({
   endpoints: (build) => ({
     authAdmin: build.query<adminIdTypings, string>({
       query: (adminId) => {

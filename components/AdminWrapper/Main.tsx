@@ -5,7 +5,7 @@ import AdminSidebar from "./AdminSidebar";
 import Cookies from "../../helpers/Cookies";
 import Header from "./Header";
 import { getAppCredentials } from "../../helpers/Auth";
-import { useAuthAdminQuery } from "../../redux/apis/secureAuth";
+import { useAuthAdminQuery } from "../../redux/apis/adminApis";
 import { localStorageGetItem } from "../../helpers/Storage";
 
 interface Props {
