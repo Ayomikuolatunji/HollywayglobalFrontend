@@ -10,7 +10,7 @@ import {
   singleProductTypings,
 } from "../../models/product";
 
-const admin_id = getAppCredentials("admin_token")?.admin_id;
+const admin_id = getAppCredentials("admin_token", "admin")?.admin_id;
 
 export const productApis = secureApiService.injectEndpoints({
   endpoints: (build) => ({

@@ -5,6 +5,7 @@ export interface loginCredentails {
 
 export interface Error {
   data: {
+    data: any;
     message: string;
   };
 }
@@ -13,11 +14,15 @@ export interface loginData {
   token: string;
   message: string;
   adminId: string;
+}
+
+export interface userLoginData {
+  message: string;
+  token: string;
   userId: string;
 }
 
 export interface signupTypings {
-  username: string;
   first_name: string;
   last_name: string;
   email: string;
@@ -31,5 +36,5 @@ export interface adminSignupTypings {
 }
 
 export interface adminIdTypings {
-  adminId:string
+  adminId: string;
 }

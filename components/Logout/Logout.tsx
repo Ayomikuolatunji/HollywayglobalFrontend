@@ -1,12 +1,15 @@
+import { useRouter } from "next/router";
 import React from "react";
 import Cookies from "../../helpers/Cookies";
+import { localStorageRemoveItem } from "../../helpers/Storage";
 
 const Logout = () => {
+  const router = useRouter();
   const logout = () => {
     if (Cookies.get("admin_token")) {
-      localStorage.removeItem("admin_id");
       Cookies.remove("admin_token");
-      window.location.href = "/admin-login";
+      localStorageRemoveItem("admin_id");
+      router.push("admin-login");
     }
   };
 

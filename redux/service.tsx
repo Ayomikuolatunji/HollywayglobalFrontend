@@ -1,7 +1,9 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { getAppCredentials } from "../helpers/Auth";
 
-const admin = getAppCredentials("admin_token");
+const admin = getAppCredentials("admin_token", "admin");
+
+console.log(admin);
 
 export const apiService = createApi({
   reducerPath: "api",

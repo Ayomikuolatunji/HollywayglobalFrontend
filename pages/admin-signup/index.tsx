@@ -54,14 +54,17 @@ const AdminSignup = () => {
         });
         return;
       }
-      const res = await adminSignup({
+      await adminSignup({
         username: username,
         email: email,
         password: password,
-      }).unwrap();
-      toast.success("Admin created successfully", {
-        toastId: "res-success",
-      });
+      })
+        .unwrap()
+        .then((_) => {
+          toast.success("Admin created successfully", {
+            toastId: "res-success",
+          });
+        });
       window.location.href = "/admin-login";
     } catch (error: any) {
       const err = error as Error;

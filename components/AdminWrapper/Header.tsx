@@ -1,6 +1,6 @@
 import React from "react";
 import { BsFillBellFill } from "react-icons/bs";
-import Logout from "../../components/logout/Logout";
+import Logout from "../Logout/Logout";
 
 const Header = () => {
   return (

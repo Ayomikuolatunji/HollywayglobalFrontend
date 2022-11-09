@@ -6,31 +6,30 @@ import Cookies from "../../helpers/Cookies";
 import Header from "./Header";
 import { getAppCredentials } from "../../helpers/Auth";
 import { useAuthAdminQuery } from "../../redux/apis/secureAuth";
+import { localStorageGetItem } from "../../helpers/Storage";
 
 interface Props {
   children: JSX.Element | JSX.Element[];
 }
 
 const AdminWrapper = ({ children }: Props) => {
-  const admin_id = getAppCredentials("admin_token")?.admin_id;
-  const { error, isLoading, data } = useAuthAdminQuery(admin_id || "");
+  const admin_id = getAppCredentials("admin_token", "admin")?.admin_id;
+  const { error, isLoading } = useAuthAdminQuery(admin_id || "");
 
   const router = useRouter();
 
   useEffect(() => {
-    if (!Cookies.get("admin_token" || !localStorage.getItem("admin_token"))) {
+    if (!Cookies.get("admin_token") || !localStorageGetItem("admin_id")) {
       router.push("/admin-login");
     }
-  }, [router, admin_id, error]);
+  }, [router, admin_id]);
 
   useEffect(() => {
     if (error) {
       Cookies.remove("admin_token");
-      localStorage.removeItem("admin_id");
       window.location.href = "/admin-login";
     }
   }, [error, router]);
-
 
   return (
     <div className="flex bg-white h-[100vh]">

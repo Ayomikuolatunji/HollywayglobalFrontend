@@ -4,14 +4,16 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/router";
 import * as yup from "yup";
-
-import * as UI from "../../components";
-import { IFormValues } from "../../components/InputField/InputField";
-import LoginStorage from "../../helpers/LoginStorage";
 import { toast } from "react-toastify";
+
 import Cookies from "../../helpers/Cookies";
 import { useLoginMutation } from "../../redux/apis/authApi";
-import { Error, loginData } from "../../models/authTypings";
+import { Error, userLoginData } from "../../models/authTypings";
+import {
+  LocalSession,
+  localStorageGetItem,
+  localStorageSetItem,
+} from "../../helpers/Storage";
 
 const schema = yup
   .object({
@@ -20,22 +22,26 @@ const schema = yup
   })
   .required();
 
+interface loginTypes {
+  email: string;
+  password: string;
+}
+
 const Login = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const router = useRouter();
-
   const [login, { data }] = useLoginMutation();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<IFormValues>({
+  } = useForm<loginTypes>({
     resolver: yupResolver(schema),
   });
 
   useEffect(() => {
-    if (Cookies.get("user_token")) {
+    if (Cookies.get("user_token") || localStorageGetItem("user_id")) {
       router.push("/");
     }
   }, [router]);
@@ -50,14 +56,9 @@ const Login = () => {
 
   useEffect(() => {
     if (data) {
-      const getData = data as unknown as loginData;
-      LoginStorage(
-        "user_id",
-        "user_token",
-        getData?.userId,
-        getData?.token,
-        rememberMe
-      );
+      const getData = data as unknown as userLoginData;
+      LocalSession("user_token", getData?.token, rememberMe);
+      localStorageSetItem("userId", getData.userId);
       toast.success("login successful", {
         toastId: "login-success-id",
       });
@@ -65,7 +66,7 @@ const Login = () => {
     }
   }, [data]);
 
-  const onSubmit: SubmitHandler<IFormValues> = async (data) => {
+  const onSubmit: SubmitHandler<loginTypes> = async (data) => {
     try {
       await login({
         email: data.email,
@@ -84,102 +85,112 @@ const Login = () => {
       }
     }
   };
+  useEffect(() => {
+    if (Object.keys(errors).length > 0) {
+      toast.info("All inputs fields are required", {
+        toastId: "admin-signup-id",
+      });
+    }
+  }, [errors]);
 
   return (
-    <form className="bg-white mt-4 border-[1px] border-[#d7d7d7] h-auto relative">
-      <div className="flex w-[100%]">
-        <div className="personal-information w-[50%] p-3">
-          <div className="title">
-            <h1 className="text-black text-lg font-extrabold">
-              Personal Information
-            </h1>
-
-            <h3 className="mt-10">
-              If you have an account, sign in with your email address
-            </h3>
-          </div>
-          <div className="form w-[100%]">
-            <div className="first-name flex mt-5 items-center">
-              <div>
-                <label className="text-[#69686c] font-bold">Email</label>
-                <span className="text-red-500 text-xl ml-4 mb-5">*</span>
-              </div>
-              <div className="ml-12">
-                <UI.InputField
-                  type="email"
-                  className="email bg-white border-[1px] border-[#dd] outline-none p-1 w-[100%]"
-                  isHookForm={true}
-                  label="email"
-                  required={true}
-                  register={register}
-                />
-                <span className="mt-1">This is a required field.</span>
-              </div>
-            </div>
-            <div className="password flex mt-5 w-[100%] items-center">
-              <div>
-                <label className="text-[#69686c] font-bold">Password</label>
-                <span className="text-red-500 text-xl ml-4 mb-1">*</span>
-              </div>
-              <div className="ml-12">
-                <UI.InputField
-                  type="text"
-                  className="last-name  bg-white border-[1px] border-[#dd] outline-none p-1 w-[100%]"
-                  isHookForm={true}
-                  label="password"
-                  register={register}
-                  required={true}
-                />
-                <span className="mt-1">This is a required field.</span>
-              </div>
-            </div>
-            <div className="newletter flex mt-6 w-[100%] ml-36 items-center">
-              <div>
-                <input
-                  type="checkbox"
-                  className="last-name bg-white border-[1px] border-[#dd] outline-none p-1 w-[100%]"
-                  onChange={() => setRememberMe(!rememberMe)}
-                  checked={rememberMe}
-                />
-              </div>
-              <div>
-                <label className="text-[#69686c] font-normal ml-3">
-                  Remember me on this device
-                </label>
+    <form onSubmit={handleSubmit(onSubmit)} action="#" method="POST" className="w-full">
+      <section className="bg-gray-50 dark:bg-gray-900 w-[100%]">
+        <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+          <a
+            href="#"
+            className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white"
+          >
+            <img
+              className="w-8 h-8 mr-2"
+              src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
+              alt="logo"
+            />
+            Login
+          </a>
+          <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+            <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+              <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+                Sign in to your account
+              </h1>
+              <div className="space-y-4 md:space-y-6">
+                <div>
+                  <label
+                    htmlFor="email"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    Your email
+                  </label>
+                  <input
+                    type="email"
+                    {...register("email", { required: true })}
+                    id="email"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="name@company.com"
+                  />
+                </div>
+                <div>
+                  <label
+                    htmlFor="password"
+                    className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    {...register("password", { required: true })}
+                    id="password"
+                    placeholder="••••••••"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  />
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-start">
+                    <div className="flex items-center h-5">
+                      <input
+                        id="remember"
+                        aria-describedby="remember"
+                        type="checkbox"
+                        checked={rememberMe}
+                        onChange={(e) => setRememberMe(e.target.checked)}
+                        className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
+                      />
+                    </div>
+                    <div className="ml-3 text-sm">
+                      <label
+                        htmlFor="remember"
+                        className="text-gray-500 dark:text-gray-300"
+                      >
+                        Remember me
+                      </label>
+                    </div>
+                  </div>
+                  <a
+                    href="#"
+                    className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500"
+                  >
+                    Forgot password?
+                  </a>
+                </div>
+                <button
+                  type="submit"
+                  className="w-full text-white bg-red-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                >
+                  Sign in
+                </button>
+                <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+                  Don’t have an account yet?{" "}
+                  <Link href="/signup">
+                    <span className="font-bold text-primary-600 hover:underline dark:text-primary-500 cursor-pointer">
+                      Sign up
+                    </span>
+                  </Link>
+                </p>
               </div>
             </div>
           </div>
         </div>
-        <div className="left-login-information w-[50%] block p-3">
-          <div className="title">
-            <h1 className="text-black text-lg font-extrabold">New Customers</h1>
-            <h3 className="mt-5">
-              Creating an account has many benefits: check out faster, keep more
-              than one address, track orders and more.
-            </h3>
-          </div>
-          <div className="create-account-btn mt-12 mb-9 text-center">
-            <Link href={"/signup"} passHref>
-              <a className="text-white py-2 px-4 -ml-44 bg-red-color hover:bg-gray-500 transition-[background-color] duration-500 ease-in-out font-[600]">
-                CREATE AN ACCOUNT
-              </a>
-            </Link>
-          </div>
-        </div>
-      </div>
-      <div className="create-account-btn mt-12 mb-9 text-center">
-        <UI.Button
-          className="text-white py-2 px-4 -ml-44 bg-red-color hover:bg-gray-500 transition-[background-color] duration-500 ease-in-out font-[600]"
-          text="SIGN IN"
-          type="submit"
-          onClick={handleSubmit(onSubmit)}
-        />
-      </div>
-      <div className="error text-center">
-        <span className="text-red-500 text-xl">
-          {errors.email?.type && "All fields are required"}
-        </span>
-      </div>
+      </section>
     </form>
   );
 };

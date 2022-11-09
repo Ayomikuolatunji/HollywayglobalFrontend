@@ -5,11 +5,15 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/router";
 import * as yup from "yup";
 
-import LoginStorage from "../../helpers/LoginStorage";
 import { toast } from "react-toastify";
 import Cookies from "../../helpers/Cookies";
 import { useAdminLoginMutation } from "../../redux/apis/authApi";
 import { Error, loginData } from "../../models/authTypings";
+import {
+  LocalSession,
+  localStorageGetItem,
+  localStorageSetItem,
+} from "../../helpers/Storage";
 
 const schema = yup
   .object({
@@ -39,7 +43,7 @@ const AdminLogin = () => {
   });
 
   useEffect(() => {
-    if (Cookies.get("admin_token")) {
+    if (Cookies.get("admin_token" || localStorageGetItem("admin_id"))) {
       router.push("/admin-dashboard");
     }
   }, [router, Cookies]);
@@ -55,13 +59,8 @@ const AdminLogin = () => {
   useEffect(() => {
     if (data) {
       const getData = data as unknown as loginData;
-      LoginStorage(
-        "admin_id",
-        getData?.adminId,
-        "admin_token",
-        getData?.token,
-        rememberMe
-      );
+      LocalSession("admin_token", getData?.token, rememberMe);
+      localStorageSetItem("admin_id", getData.adminId);
       toast.success("Login successful", {
         toastId: "login-success-id",
       });

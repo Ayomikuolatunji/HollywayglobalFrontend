@@ -1,4 +1,4 @@
-import { navTypes } from "./navItems";
+import { navTypes } from "./NavItems";
 
 export const currencyOptions = {
   USD: {
