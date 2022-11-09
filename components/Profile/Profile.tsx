@@ -18,8 +18,8 @@ const ProfileDropDown = () => {
   };
   return (
     <div className="group inline-block relative z-50">
-      <span className="bg-[#f5f5f5] font-semibold py-2 px-4 rounded inline-flex items-center">
-        <span className="mr-1"> {data?.data.first_name}</span>
+      <span className="bg-[#f5f5f5] font-semibold  rounded inline-flex items-center">
+        <span className="mr-1 px-2"> {data?.data.first_name}</span>
       </span>
       <ul className="absolute hidden text-gray-700 pt-1 group-hover:block w-full">
         <li className="w-full">
