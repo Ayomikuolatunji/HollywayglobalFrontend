@@ -77,7 +77,6 @@ export default function Table({
   const [records, setRecords] = React.useState(dataTable);
   const filterTypes: any = React.useMemo(
     () => ({
-      // Add a new fuzzyTextFilterFn filter type.
       fuzzyText: fuzzyTextFilterFn,
       text: (rows: any[], id: string | number, filterValue: any) => {
         return rows.filter((row: any) => {

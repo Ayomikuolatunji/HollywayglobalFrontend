@@ -24,7 +24,6 @@ export default function LocalCategories() {
           "Tubers & Cereals",
         ]}
         setCurrentTab={setCurrentTab}
-        tab={true}
         renderTabPanel={() => (
           <Tab.Panels className="mt-8 mb-4">
             {[1, 2, 3, 4].map((item) => (
