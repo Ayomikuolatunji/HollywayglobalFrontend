@@ -186,7 +186,7 @@ export default function Table({
       <span className="my-4 text-xl">
         No of products:
         <h3 className="text-sm inline font-extrabold text-black ml-1">
-          {rows.length} of {dataTable.length}
+          {rows?.length} of {dataTable?.length} results
         </h3>
       </span>
       {selectedRows.length > 0 && (

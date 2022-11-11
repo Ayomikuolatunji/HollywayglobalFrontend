@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 
 import { modalConditions } from "../../../../models/modal";
 import { productTypings } from "../../../../models/product";
-import { usePostProductMutation } from "../../../../redux/apis/productApi";
+import { usePostProductMutation } from "../../../../redux/apis/AdminProductApi";
 import validate from "./ValidateProduct";
 import ProductForm from "./ProductForm";
 

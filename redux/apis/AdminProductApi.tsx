@@ -1,4 +1,4 @@
-import { secureApiService } from "../service";
+import { adminSecureApiService } from "../service";
 import { getAppCredentials } from "../../helpers/Auth";
 import {
   changeProductStatusTypings,
@@ -12,7 +12,7 @@ import {
 
 const admin_id = getAppCredentials("admin_token", "admin")?.admin_id;
 
-export const productApis = secureApiService.injectEndpoints({
+export const productApis = adminSecureApiService.injectEndpoints({
   endpoints: (build) => ({
     getProducts: build.query<fetchProductTypings, void>({
       query: () => ({
@@ -102,7 +102,7 @@ export const productApis = secureApiService.injectEndpoints({
           method: "POST",
           body: {
             name: name,
-            adminId:admin_id
+            adminId: admin_id,
           },
           params: {
             adminId: admin_id && admin_id,

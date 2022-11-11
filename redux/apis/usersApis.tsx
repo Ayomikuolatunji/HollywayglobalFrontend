@@ -1,6 +1,6 @@
 import { getAppCredentials } from "../../helpers/Auth";
-import { userSecureApiService } from "../service";
 import { fetchedUserDetails } from "../../models/user";
+import { userSecureApiService } from "../service";
 const user_id = getAppCredentials("user_token", "user")?.user_id;
 
 export const secureApi = userSecureApiService.injectEndpoints({

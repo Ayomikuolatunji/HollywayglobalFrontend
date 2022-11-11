@@ -9,7 +9,7 @@ const Logout = () => {
     if (Cookies.get("admin_token")) {
       Cookies.remove("admin_token");
       localStorageRemoveItem("admin_id");
-      router.push("admin-login");
+      router.push("/admin-login");
     }
   };
 

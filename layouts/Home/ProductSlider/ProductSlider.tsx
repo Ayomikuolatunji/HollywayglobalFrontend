@@ -5,7 +5,7 @@ import "slick-carousel/slick/slick-theme.css";
 import { useFetchAllProductsQuery } from "../../../redux/apis/unprotectedProducts";
 import { productTypings } from "../../../models/product";
 import { Skeleton } from "../../../components";
-import { productApis } from "../../../redux/apis/productApi";
+import { productApis } from "../../../redux/apis/AdminProductApi";
 
 const ProductSlider: React.FC = () => {
   const { isLoading, data } = useFetchAllProductsQuery("all");

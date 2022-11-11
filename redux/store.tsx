@@ -13,7 +13,7 @@ import {
 import storage from "redux-persist/lib/storage";
 import {
   apiService,
-  tutorSecureApiService,
+  adminSecureApiService,
   userSecureApiService,
 } from "./service";
 
@@ -25,8 +25,7 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   [apiService.reducerPath]: apiService.reducer,
-  [tutorSecureApiService.reducerPath]: tutorSecureApiService.reducer,
-  [tutorSecureApiService.reducerPath]: tutorSecureApiService.reducer,
+  [adminSecureApiService.reducerPath]: adminSecureApiService.reducer,
   [userSecureApiService.reducerPath]: userSecureApiService.reducer,
 });
 
@@ -41,7 +40,7 @@ const store = configureStore({
       },
     }).concat([
       apiService.middleware,
-      tutorSecureApiService.middleware,
+      adminSecureApiService.middleware,
       userSecureApiService.middleware,
     ]),
 });

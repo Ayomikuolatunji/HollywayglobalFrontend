@@ -3,7 +3,7 @@ import { Dialog } from "@headlessui/react";
 import { FaCarAlt } from "react-icons/fa";
 import { productIdTypings, productTypings } from "../../../../models/product";
 
-import { useGetProductQuery,useEditProductMutation} from "../../../../redux/apis/productApi";
+import { useGetProductQuery,useEditProductMutation} from "../../../../redux/apis/AdminProductApi";
 import { modalConditions } from "../../../../models/modal";
 import ProductForm from "./ProductForm";
 import validate from "./ValidateProduct";

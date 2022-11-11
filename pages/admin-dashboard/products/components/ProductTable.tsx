@@ -14,7 +14,7 @@ import {
   useDeleteProductMutation,
   useChangeProductStatusMutation,
   useBulkyDeleteMutation,
-} from "../../../../redux/apis/productApi";
+} from "../../../../redux/apis/AdminProductApi";
 import { DeleteActiveIcon, EditActiveIcon } from "../../../../helpers/Icons";
 import DeleteProductModal from "./DeleteProductModal";
 import SelectColumnFilter from "../../../../components/search/SelectColumnFilter";

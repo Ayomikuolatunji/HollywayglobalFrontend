@@ -21,8 +21,8 @@ export const apiService = createApi({
   endpoints: () => ({}),
 });
 
-export const tutorSecureApiService = createApi({
-  reducerPath: "secureApi",
+export const adminSecureApiService = createApi({
+  reducerPath: "adminsecureApi",
   baseQuery: fetchBaseQuery({
     baseUrl:
       process.env.NODE_ENV == "production"
@@ -43,7 +43,7 @@ export const tutorSecureApiService = createApi({
 });
 
 export const userSecureApiService = createApi({
-  reducerPath: "secureApi",
+  reducerPath: "usersecureApi",
   baseQuery: fetchBaseQuery({
     baseUrl:
       process.env.NODE_ENV == "production"

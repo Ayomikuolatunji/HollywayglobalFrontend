@@ -3,7 +3,7 @@ import React, { ReactEventHandler, useState } from "react";
 import { toast } from "react-toastify";
 import { modalConditions } from "../../../../models/modal";
 import { productsDepartmentsTypes } from "../../../../models/product";
-import { useCreateProductDepartmentsMutation } from "../../../../redux/apis/productApi";
+import { useCreateProductDepartmentsMutation } from "../../../../redux/apis/AdminProductApi";
 
 export default function AddDepartments({ setIsOpen, isOpen }: modalConditions) {
   const [createProductDepartments] = useCreateProductDepartmentsMutation();
