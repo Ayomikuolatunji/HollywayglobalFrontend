@@ -19,7 +19,7 @@ export default function ProductCard({ item }: ProductCardTypes) {
           </p>
         </div>
         <img
-          className="h-[140px] w-full object-cover mt-2"
+          className="h-[160px] w-full object-cover mt-2"
           src={`http://localhost:8080/${item.image}`}
           alt="NIKE AIR"
         />

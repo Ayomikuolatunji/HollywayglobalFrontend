@@ -12,7 +12,7 @@ const CartModal = ({
       open={isOpen}
       onClose={() => setIsOpen(false)}
       className="w-full h-[100vh] fixed top-0 right-0 left-0 bottom-0 flex justify-center items-center 
-    bg-[rgba(0,0,0,0.5)] z-[999]"
+    bg-[rgba(0,0,0,0.3)] z-[999]"
     >
       <Dialog.Panel className="bg-white border flex justify-center flex-col items-center w-[20%] rounded-md relative group">
         <Dialog.Description className="w-full p-2">
