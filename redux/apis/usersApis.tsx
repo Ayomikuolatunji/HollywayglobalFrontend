@@ -4,6 +4,7 @@ import { fetchedUserDetails } from "../../models/user";
 import { userSecureApiService } from "../service";
 const user_id = getAppCredentials("user_token", "user")?.user_id;
 
+
 export const secureApi = userSecureApiService.injectEndpoints({
   endpoints: (build) => ({
     authAdmin: build.query<fetchedUserDetails, void>({
@@ -20,8 +21,8 @@ export const secureApi = userSecureApiService.injectEndpoints({
     getCartItems: build.query<productsCarts, void>({
       query: () => {
         return {
-          url: "/get_user_cartItems" + user_id,
-          method: "PATCH",
+          url: `get_user_cartItems/${user_id}`,
+          method: "GET",
         };
       },
     }),

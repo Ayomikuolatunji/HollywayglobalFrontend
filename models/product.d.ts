@@ -83,9 +83,15 @@ export interface ProductTableColumns {
 interface cartItems {
   _id: string;
   productId: productTypings;
+  userId: string;
+  productCount: number;
+  totalAmount: number;
+  createdAt: date;
+  updatedAt: date;
 }
 
 export interface productsCarts {
   message: string;
   cartItems: Array<cartItems>;
+  totalAmounts: number;
 }
