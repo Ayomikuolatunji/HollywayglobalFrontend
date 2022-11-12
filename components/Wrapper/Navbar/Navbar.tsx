@@ -5,8 +5,11 @@ import { GiShoppingBag } from "react-icons/gi";
 import { BsTelephoneFill } from "react-icons/bs";
 import { navItems } from "../../../helpers";
 import { productsDepartments } from "../../../helpers/utils";
+import { useGetCartItemsQuery } from "../../../redux/apis/usersApis";
 
 const Navbar: React.FC = () => {
+  const { data } = useGetCartItemsQuery();
+
   return (
     <div className="lg:w-[100%] mx-auto lg:p-3">
       <div className="flex justify-between items-center">

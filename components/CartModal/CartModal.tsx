@@ -7,6 +7,7 @@ const CartModal = ({
   isOpen,
   item,
 }: modalConditions & ProductCardTypes) => {
+  
   return (
     <Dialog
       open={isOpen}

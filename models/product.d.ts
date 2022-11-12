@@ -79,3 +79,13 @@ export interface ProductTableColumns {
   filter?: string;
   Cell?: (props: selectedTypings) => void;
 }
+
+interface cartItems {
+  _id: string;
+  productId: productTypings;
+}
+
+export interface productsCarts {
+  message: string;
+  cartItems: Array<cartItems>;
+}
