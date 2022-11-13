@@ -15,11 +15,10 @@ export default function index() {
         <div className="w-full overflow-x-auto">
           <div className="my-2">
             <h3 className="text-xl font-bold tracking-wider">
-              Shopping Cart 3 item
+              Shopping Cart {data?.cartItems.length} items
             </h3>
           </div>
-          {data && Object.keys(data!).length > 0 && 
-          <CartTable data={data} />}
+          {data && Object.keys(data!).length > 0 && <CartTable data={data} />}
           {/* <Coupon /> */}
           <Summary />
           <div className="mt-4">

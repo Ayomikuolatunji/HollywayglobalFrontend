@@ -6,7 +6,7 @@ interface tableItemsTypes {
   handleQuality: (e: React.ChangeEvent<HTMLInputElement>) => void;
   qty: number;
   incrementQty: () => void;
-  cartItem:cartItemTypes
+  cartItem: cartItemTypes;
 }
 
 export default function TableItem({
@@ -14,7 +14,7 @@ export default function TableItem({
   qty,
   handleQuality,
   incrementQty,
-  cartItem
+  cartItem,
 }: tableItemsTypes) {
   return (
     <tr>
@@ -27,7 +27,9 @@ export default function TableItem({
           />
         </div>
       </td>
-      <td className="p-4 px-6 text-center whitespace-nowrap">Iphone 13</td>
+      <td className="p-4 px-6 text-center whitespace-nowrap">
+        {cartItem.productId.name}
+      </td>
       <td className="p-4 px-6 text-center whitespace-nowrap">
         <div>
           <button onClick={decrementQty}>
@@ -71,7 +73,9 @@ export default function TableItem({
           </button>
         </div>
       </td>
-      <td className="p-4 px-6 text-center whitespace-nowrap">$1,300</td>
+      <td className="p-4 px-6 text-center whitespace-nowrap">
+       {cartItem.productId.currency}  {cartItem.totalAmount}
+      </td>
       <td className="p-4 px-6 text-center whitespace-nowrap">
         <button>
           <svg

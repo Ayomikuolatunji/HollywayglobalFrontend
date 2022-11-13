@@ -30,8 +30,9 @@ export default function CartTable({ data }: any) {
       </thead>
       <tbody>
         {data &&
-          data.cartItems!.map((cartItem: cartItemTypes, index: number) => (
+          data.cartItems!.map((cartItem: cartItemTypes) => (
             <TableItem
+              key={cartItem._id}
               cartItem={cartItem}
               decrementQty={decrementQty}
               qty={qty}
