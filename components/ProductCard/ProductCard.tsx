@@ -1,11 +1,39 @@
+import { networkInterfaces } from "os";
 import React, { useState } from "react";
 import { AiFillHeart } from "react-icons/ai";
 import { FaShoppingCart } from "react-icons/fa";
 import { ProductCardTypes } from "../../models/product";
+import {
+  unprotectedProductApis,
+  useFetchPostDataMutation,
+} from "../../redux/apis/unprotectedProducts";
+import { useAddToCartItemMutation } from "../../redux/apis/usersApis";
+
 import CartModal from "../CartModal/CartModal";
 
-export default function ProductCard({ item }: ProductCardTypes) {
+interface extraTypes extends ProductCardTypes {
+  currentTab: string;
+}
+
+export default function ProductCard({ item, currentTab }: extraTypes) {
   let [isOpen, setIsOpen] = useState(false);
+  const [addToCartItem] = useAddToCartItemMutation();
+  const [fetchPostData] = useFetchPostDataMutation();
+
+  const addToCartItemFunc = async (id: string) => {
+    try {
+      await addToCartItem(id)
+        .unwrap()
+        .then(async () => {
+          setIsOpen(false);
+          unprotectedProductApis.util.resetApiState();
+          unprotectedProductApis.util.invalidateTags(["ProductItems"]);
+          await fetchPostData(currentTab).unwrap();
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div>
@@ -37,7 +65,12 @@ export default function ProductCard({ item }: ProductCardTypes) {
           </div>
         </div>
       </div>
-      <CartModal setIsOpen={setIsOpen} isOpen={isOpen} item={item} />
+      <CartModal
+        setIsOpen={setIsOpen}
+        isOpen={isOpen}
+        item={item}
+        addToCartItemFunc={addToCartItemFunc}
+      />
     </div>
   );
 }

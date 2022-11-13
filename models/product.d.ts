@@ -7,6 +7,7 @@ export interface productTypings {
   status?: boolean;
   type: string;
   image?: string;
+  item_in_cart?: boolean;
   createdAt?: Date;
   updatedAt?: Date;
   currency?: string;
@@ -14,6 +15,7 @@ export interface productTypings {
 
 export interface ProductCardTypes {
   item: productTypings;
+  addToCartItemFunc?: (id: string) => void;
 }
 
 export type fetchProductTypings = {

@@ -16,6 +16,7 @@ export const secureApi = userSecureApiService.injectEndpoints({
           },
         };
       },
+      providesTags: ["Cart", "Product"],
     }),
     getCartItems: build.query<productsCarts, void>({
       query: () => {
@@ -26,18 +27,33 @@ export const secureApi = userSecureApiService.injectEndpoints({
       },
       providesTags: ["Cart"],
     }),
-    deleteCartItem: build.mutation<void, string>({
-      query: (cartId) => {
+    addToCartItem: build.mutation<void, string>({
+      query: (productId) => {
         return {
-          url: `delete_cart_item/${user_id}`,
-          method: "DELETE",
+          url: `add_product_to_cart/${user_id}`,
+          method: "POST",
           params: {
-            cartId: cartId,
+            productId: productId,
           },
         };
       },
-      invalidatesTags: ["Cart"],
+      invalidatesTags: ["Cart", "Products"],
     }),
+    deleteCartItem: build.mutation<void, { cartId: string; productId: string }>(
+      {
+        query: ({ cartId, productId }) => {
+          return {
+            url: `delete_cart_item/${user_id}`,
+            method: "DELETE",
+            params: {
+              cartId: cartId,
+              productId: productId,
+            },
+          };
+        },
+        invalidatesTags: ["Cart", "Products"],
+      }
+    ),
     incrementCartItems: build.mutation<void, string>({
       query: (productId) => {
         return {
@@ -70,5 +86,6 @@ export const {
   useGetCartItemsQuery,
   useDeleteCartItemMutation,
   useIncrementCartItemsMutation,
-  useDecrementCartItemsMutation
+  useDecrementCartItemsMutation,
+  useAddToCartItemMutation,
 } = secureApi;

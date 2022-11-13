@@ -26,7 +26,10 @@ export default function TableItem({ cartItem }: tableItemsTypes) {
   };
   const deleteCartItemFunc = async () => {
     try {
-      await deleteCartItem(cartItem._id).unwrap();
+      await deleteCartItem({
+        cartId: cartItem._id,
+        productId: cartItem.productId._id!,
+      }).unwrap();
     } catch (error) {
       console.log(error);
     }

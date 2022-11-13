@@ -14,3 +14,4 @@ export { default as ProductCard } from "./ProductCard/ProductCard";
 export { default as CartModal } from "./CartModal/CartModal";
 export { default as ErrorBoundary } from "./ErrorBoundary/ErrorBoundary";
 export { default as ProfileDropDown } from "./Profile/Profile";
+export { default as Tooltip } from "./Tooltip/Tooltip";

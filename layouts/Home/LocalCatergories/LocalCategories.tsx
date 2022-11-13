@@ -36,7 +36,13 @@ export default function LocalCategories() {
                       <Skeleton key={index} />
                     ))
                   : data?.product?.slice(0, 10).map((item: productTypings) => {
-                      return <ProductCard item={item} key={item._id} />;
+                      return (
+                        <ProductCard
+                          item={item}
+                          key={item._id}
+                          currentTab={currentTab}
+                        />
+                      );
                     })}
               </Tab.Panel>
             ))}

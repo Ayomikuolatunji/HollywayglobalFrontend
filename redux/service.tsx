@@ -17,7 +17,8 @@ export const apiService = createApi({
       return headers;
     },
   }),
-  tagTypes: ["Product", "admin", "Department"],
+  refetchOnReconnect: true,
+  tagTypes: ["ProductItems"],
   endpoints: () => ({}),
 });
 
@@ -59,6 +60,6 @@ export const userSecureApiService = createApi({
     },
   }),
   refetchOnReconnect: true,
-  tagTypes: ["Product", "admin", "Department", "Cart"],
+  tagTypes: ["Product", "admin", "Department", "Cart", "Products"],
   endpoints: () => ({}),
 });

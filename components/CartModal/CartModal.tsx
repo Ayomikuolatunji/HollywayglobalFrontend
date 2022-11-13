@@ -6,14 +6,13 @@ const CartModal = ({
   setIsOpen,
   isOpen,
   item,
+  addToCartItemFunc,
 }: modalConditions & ProductCardTypes) => {
-  
   return (
     <Dialog
       open={isOpen}
       onClose={() => setIsOpen(false)}
-      className="w-full h-[100vh] fixed top-0 right-0 left-0 bottom-0 flex justify-center items-center 
-    bg-[rgba(0,0,0,0.3)] z-[999]"
+      className="w-full h-[100vh] fixed top-0 right-0 left-0 bottom-0 flex justify-center items-center z-[999]"
     >
       <Dialog.Panel className="bg-white border flex justify-center flex-col items-center w-[20%] rounded-md relative group">
         <Dialog.Description className="w-full p-2">
@@ -37,14 +36,21 @@ const CartModal = ({
               {item.price}
             </span>
           </h1>
-          <button
-            type="submit"
-            className="py-3 px-4 text-black bg-gray-100 rounded-lg font-bold"
-          >
-            Add to cart
-          </button>
+          {item.item_in_cart ? (
+            <button>already in cart</button>
+          ) : (
+            <button
+              type="submit"
+              onClick={() => {
+                addToCartItemFunc && addToCartItemFunc(item._id!);
+              }}
+              className="py-3 px-4 text-black bg-gray-100 rounded-lg font-bold"
+            >
+              Add to cart
+            </button>
+          )}
         </div>
-        <div className="wishlist absolute invisible group-hover:visible bg-[rgba(0,0,0,0.2)] w-full h-full">
+        <div className="wishlist absolute invisible group-hover:visible bg-[rgba(0,0,0,0.01)] w-full h-full">
           <AiFillHeart className="text-[60px]  cursor-pointer text-red-500 z-[1000]" />
         </div>
       </Dialog.Panel>
