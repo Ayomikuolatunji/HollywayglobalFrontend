@@ -3,19 +3,6 @@ import { cartItemTypes, productsCarts } from "../../../models";
 import TableItem from "./TableItem";
 
 export default function CartTable({ data }: any) {
-  const [qty, setQty] = useState<number>(1);
-
-  const handleQuality = (e: React.ChangeEvent<HTMLInputElement>) => {};
-
-  const incrementQty = () => {
-    setQty((prev) => prev + 1);
-  };
-  const decrementQty = () => {
-    if (qty === 1 || qty < -1) return;
-    else setQty((prev) => prev - 1);
-  };
-
-  console.log(data);
 
   return (
     <table className="w-full shadow-inner">
@@ -31,14 +18,7 @@ export default function CartTable({ data }: any) {
       <tbody>
         {data &&
           data.cartItems!.map((cartItem: cartItemTypes) => (
-            <TableItem
-              key={cartItem._id}
-              cartItem={cartItem}
-              decrementQty={decrementQty}
-              qty={qty}
-              handleQuality={handleQuality}
-              incrementQty={incrementQty}
-            />
+            <TableItem key={cartItem._id} cartItem={cartItem} />
           ))}
       </tbody>
     </table>

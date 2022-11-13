@@ -7,8 +7,6 @@ import Summary from "./components/Summary";
 export default function index() {
   const { data } = useGetCartItemsQuery() || {};
 
-  console.log(data);
-
   return (
     <div>
       <div className="container p-8 mx-auto mt-12">
@@ -22,17 +20,7 @@ export default function index() {
           {/* <Coupon /> */}
           <Summary />
           <div className="mt-4">
-            <button
-              className="
-            w-full
-            py-2
-            text-center text-white
-            bg-blue-500
-            rounded-md
-            shadow
-            hover:bg-blue-600
-          "
-            >
+            <button className=" w-full py-2 text-center text-white bg-blue-500 rounded-md shadow hover:bg-blue-600">
               Proceed to Checkout
             </button>
           </div>

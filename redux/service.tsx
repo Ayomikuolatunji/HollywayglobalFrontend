@@ -59,6 +59,6 @@ export const userSecureApiService = createApi({
     },
   }),
   refetchOnReconnect: true,
-  tagTypes: ["Product", "admin", "Department"],
+  tagTypes: ["Product", "admin", "Department", "Cart"],
   endpoints: () => ({}),
 });

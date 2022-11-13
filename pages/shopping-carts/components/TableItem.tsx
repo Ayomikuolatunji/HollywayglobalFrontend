@@ -1,21 +1,53 @@
-import React from "react";
+import React, { useState } from "react";
 import { cartItemTypes } from "../../../models";
+import {
+  useDecrementCartItemsMutation,
+  useDeleteCartItemMutation,
+  useIncrementCartItemsMutation,
+} from "../../../redux/apis/usersApis";
 
 interface tableItemsTypes {
-  decrementQty: () => void;
-  handleQuality: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  qty: number;
-  incrementQty: () => void;
   cartItem: cartItemTypes;
 }
 
-export default function TableItem({
-  decrementQty,
-  qty,
-  handleQuality,
-  incrementQty,
-  cartItem,
-}: tableItemsTypes) {
+export default function TableItem({ cartItem }: tableItemsTypes) {
+  const [qty, setQty] = useState<number>(cartItem.productCount || 1);
+  const [deleteCartItem] = useDeleteCartItemMutation();
+  const [incrementCartItems] = useIncrementCartItemsMutation();
+  const [decrementCartItems] = useDecrementCartItemsMutation();
+  const handleQuality = (e: React.ChangeEvent<HTMLInputElement>) => {};
+
+  const decrementQty = () => {
+    if (qty === 1 || qty < -1) return;
+    else {
+      setQty((prev) => prev - 1);
+      decrementCartItemsFunc();
+    }
+  };
+  const deleteCartItemFunc = async () => {
+    try {
+      const res = await deleteCartItem(cartItem._id).unwrap();
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const incrementCartItemsFunc = async () => {
+    try {
+      const res = await incrementCartItems(cartItem.productId._id!).unwrap();
+    } catch (error) {}
+  };
+  const decrementCartItemsFunc = async () => {
+    try {
+      const res = await decrementCartItems(cartItem.productId._id!).unwrap();
+    } catch (error) {}
+  };
+
+  const incrementQty = () => {
+    setQty((prev) => prev + 1);
+    incrementCartItemsFunc();
+  };
+
   return (
     <tr>
       <td>
@@ -74,10 +106,10 @@ export default function TableItem({
         </div>
       </td>
       <td className="p-4 px-6 text-center whitespace-nowrap">
-       {cartItem.productId.currency}  {cartItem.totalAmount}
+        {cartItem.productId.currency} {cartItem.totalAmount}
       </td>
       <td className="p-4 px-6 text-center whitespace-nowrap">
-        <button>
+        <button onClick={deleteCartItemFunc}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="w-6 h-6 text-red-400"
