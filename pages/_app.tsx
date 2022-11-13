@@ -25,7 +25,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     router.pathname.startsWith("/signup")
   ) {
     return (
-      <div className="lg:w-[55%] flex justify-center items-center h-screen md:w-[70%] sm:w-[80%] mx-auto w-[97%]">
+      <div className="w-full">
         <ErrorBoundary>
           <NetWorkWrapper>
             <Provider store={store}>

@@ -80,7 +80,7 @@ export interface ProductTableColumns {
   Cell?: (props: selectedTypings) => void;
 }
 
-interface cartItems {
+export interface cartItemTypes {
   _id: string;
   productId: productTypings;
   userId: string;
@@ -92,6 +92,6 @@ interface cartItems {
 
 export interface productsCarts {
   message: string;
-  cartItems: Array<cartItems>;
+  cartItems: Array<cartItemTypes>;
   totalAmounts: number;
 }

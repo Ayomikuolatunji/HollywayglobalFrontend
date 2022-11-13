@@ -35,12 +35,14 @@ const Navbar: React.FC = () => {
             </span>
             <AiFillHeart className="text-3xl text-[#1c1c1c]" />
           </div>
-          <div className="relative">
-            <span className="absolute top-0 right-0 bg-[#7fad39] text-white rounded-full text-sm w-[15px] h-[15px] flex justify-center items-center text-[11px]">
-              {data ? data.cartItems.length : 0}
-            </span>
-            <GiShoppingBag className="text-3xl text-[#1c1c1c]" />
-          </div>
+          <Link href={"/shopping-carts"}>
+            <div className="relative cursor-pointer">
+              <span className="absolute top-0 right-0 bg-[#7fad39] text-white rounded-full text-sm w-[15px] h-[15px] flex justify-center items-center text-[11px]">
+                {data ? data.cartItems!.length : 0}
+              </span>
+              <GiShoppingBag className="text-3xl text-[#1c1c1c]" />
+            </div>
+          </Link>
           <div>
             items:{" "}
             <span className="text-[#1c1c1c] font-extrabold">
