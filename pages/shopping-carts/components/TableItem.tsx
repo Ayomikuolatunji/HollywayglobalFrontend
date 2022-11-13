@@ -18,7 +18,7 @@ export default function TableItem({ cartItem }: tableItemsTypes) {
   const handleQuality = (e: React.ChangeEvent<HTMLInputElement>) => {};
 
   const decrementQty = () => {
-    if (qty === 1 || qty < -1) return;
+    if (qty <= 1 || qty < -1) return;
     else {
       setQty((prev) => prev - 1);
       decrementCartItemsFunc();
@@ -26,20 +26,19 @@ export default function TableItem({ cartItem }: tableItemsTypes) {
   };
   const deleteCartItemFunc = async () => {
     try {
-      const res = await deleteCartItem(cartItem._id).unwrap();
-      console.log(res);
+      await deleteCartItem(cartItem._id).unwrap();
     } catch (error) {
       console.log(error);
     }
   };
   const incrementCartItemsFunc = async () => {
     try {
-      const res = await incrementCartItems(cartItem.productId._id!).unwrap();
+      await incrementCartItems(cartItem.productId._id!).unwrap();
     } catch (error) {}
   };
   const decrementCartItemsFunc = async () => {
     try {
-      const res = await decrementCartItems(cartItem.productId._id!).unwrap();
+      await decrementCartItems(cartItem.productId._id!).unwrap();
     } catch (error) {}
   };
 

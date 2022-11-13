@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 import { useGetCartItemsQuery } from "../../redux/apis/usersApis";
 import CartTable from "./components/CartTable";
@@ -16,14 +17,27 @@ export default function index() {
               Shopping Cart {data?.cartItems.length} items
             </h3>
           </div>
-          {data && Object.keys(data!).length > 0 && <CartTable data={data} />}
+          {data?.cartItems.length! ? (
+            <CartTable data={data} />
+          ) : (
+            <div>
+              <h1>Cart lists currently empty</h1>
+              <Link href="/">
+                <div className="mt-6 cursor-pointer">Go Back</div>
+              </Link>
+            </div>
+          )}
           {/* <Coupon /> */}
-          <Summary />
-          <div className="mt-4">
-            <button className=" w-full py-2 text-center text-white bg-blue-500 rounded-md shadow hover:bg-blue-600">
-              Proceed to Checkout
-            </button>
-          </div>
+          {data?.cartItems.length! > 0 && (
+            <div className="checkout-summary">
+              <Summary />
+              <div className="mt-4">
+                <button className=" w-full py-2 text-center text-white bg-blue-500 rounded-md shadow hover:bg-blue-600">
+                  Proceed to Checkout
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

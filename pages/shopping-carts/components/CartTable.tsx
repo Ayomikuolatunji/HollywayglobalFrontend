@@ -3,7 +3,6 @@ import { cartItemTypes, productsCarts } from "../../../models";
 import TableItem from "./TableItem";
 
 export default function CartTable({ data }: any) {
-
   return (
     <table className="w-full shadow-inner">
       <thead>
