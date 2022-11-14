@@ -1,6 +1,7 @@
 import { AiFillHeart } from "react-icons/ai";
 import { Dialog } from "@headlessui/react";
 import { modalConditions, ProductCardTypes } from "../../models";
+import Link from "next/link";
 
 const CartModal = ({
   setIsOpen,
@@ -36,19 +37,14 @@ const CartModal = ({
               {item.price}
             </span>
           </h1>
-          {item.item_in_cart ? (
-            <button>already in cart</button>
-          ) : (
+          <Link href={`/detail-page/${item._id}`}>
             <button
               type="submit"
-              onClick={() => {
-                addToCartItemFunc && addToCartItemFunc(item._id!);
-              }}
               className="py-3 px-4 text-black bg-gray-100 rounded-lg font-bold"
             >
-              Add to cart
+              View details
             </button>
-          )}
+          </Link>
         </div>
         <div className="wishlist absolute invisible group-hover:visible bg-[rgba(0,0,0,0.01)] w-full h-full">
           <AiFillHeart className="text-[60px]  cursor-pointer text-red-500 z-[1000]" />
