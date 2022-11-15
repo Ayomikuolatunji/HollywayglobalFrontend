@@ -36,12 +36,18 @@ export default function TableItem({ cartItem }: tableItemsTypes) {
   };
   const incrementCartItemsFunc = async () => {
     try {
-      await incrementCartItems(cartItem.productId._id!).unwrap();
+      await incrementCartItems({
+        productId: cartItem.productId._id!,
+        cartId: cartItem._id,
+      }).unwrap();
     } catch (error) {}
   };
   const decrementCartItemsFunc = async () => {
     try {
-      await decrementCartItems(cartItem.productId._id!).unwrap();
+      await decrementCartItems({
+        productId: cartItem.productId._id!,
+        cartId: cartItem._id,
+      }).unwrap();
     } catch (error) {}
   };
 
