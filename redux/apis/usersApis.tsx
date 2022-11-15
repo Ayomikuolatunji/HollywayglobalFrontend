@@ -54,33 +54,25 @@ export const secureApi = userSecureApiService.injectEndpoints({
         invalidatesTags: ["Cart", "Products"],
       }
     ),
-    incrementCartItems: build.mutation<
-      void,
-      { productId: string; cartId: string }
-    >({
-      query: ({ productId, cartId }) => {
+    incrementCartItems: build.mutation<void, string>({
+      query: (productId) => {
         return {
           url: `increment_product_cartItem/${user_id}`,
           method: "PATCH",
           params: {
             productId: productId,
-            cartId: cartId,
           },
         };
       },
       invalidatesTags: ["Cart"],
     }),
-    decrementCartItems: build.mutation<
-      void,
-      { productId: string; cartId: string }
-    >({
-      query: ({ productId, cartId }) => {
+    decrementCartItems: build.mutation<void, string>({
+      query: (productId) => {
         return {
           url: `decrement_product_cartItem/${user_id}`,
           method: "PATCH",
           params: {
             productId: productId,
-            cartId: cartId,
           },
         };
       },
