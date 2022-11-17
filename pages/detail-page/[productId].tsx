@@ -55,8 +55,8 @@ export default function DetailPage({ data }: dataTypes) {
             <h1 className="text-gray-500 font-extrabold text-2xl">
               {data.product.name}
             </h1>
-            <button className="bg-gray-200 rounded-md text-gray-800 font-extrabold py-3 px-2">
-              add to cart
+            <button className="font-[Poppins] font-bold text-[19.31px] leading-[29px] align-top bg-[#18D06B] rounded-[15.45px] w-[163.35px] h-[47.45px] text-[#fff]">
+              Add To Cart
             </button>
           </div>
           <div className="details mt-3">
