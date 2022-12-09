@@ -32,7 +32,7 @@ const DetailsContainer = ({ product }: DetailItemProps) => {
       </p>
       <div className="flex items-center">
         <span className="detail-quantity-control flex items-center bg-[#eeebeb]">
-          <span className="px-[25px] py-[20px] cursor-pointer">-</span>
+          <span className="px-[23px] py-[18px] cursor-pointer">-</span>
           <span className="px-[20px] py-[16px]">
             <input
               type="text"
@@ -40,7 +40,7 @@ const DetailsContainer = ({ product }: DetailItemProps) => {
               className="w-3 text-center bg-none outline-none"
             />
           </span>
-          <span className="px-[25px] py-[20px] cursor-pointer">+</span>
+          <span className="px-[23px] py-[18px] cursor-pointer">+</span>
         </span>
         <span className="px-[28px] py-[16px] ml-3 bg-[#7fad39] text-white cursor-pointer">
           Add to cart

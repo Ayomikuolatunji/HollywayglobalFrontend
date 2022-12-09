@@ -5,6 +5,7 @@ import {
   RelatedProducts,
   DetailsContainer,
   DetailsImg,
+  DetailsPageReviews,
 } from "../../components";
 import {
   useFetchAllProductsQuery,
@@ -13,15 +14,16 @@ import {
 
 export default function ProductDetail() {
   const { query } = useRouter();
-  const productId = query?.productId as string;
-  const { data, isLoading } = useSingleUserProductQuery(productId);
-  const relatedTypeString = data?.product?.type as string;
+  const { data, isLoading } = useSingleUserProductQuery(
+    query?.productId as string
+  );
+
   const {
     data: relatedProducts,
     isLoading: isRelatedProductsLoading,
     isFetching: isRelatedProductFetching,
   } = useFetchAllProductsQuery({
-    query_name: relatedTypeString,
+    query_name: data?.product?.type as string,
   });
 
   return (
@@ -36,8 +38,10 @@ export default function ProductDetail() {
           <DetailsPageSkeleton />
         )}
       </div>
+      <DetailsPageReviews />
       <div className="relatedProducts">
         <RelatedProducts
+          currentProductId={data?.product?._id!}
           relatedProducts={relatedProducts!}
           isRelatedProductsLoading={isRelatedProductsLoading}
           isRelatedProductFetching={isRelatedProductFetching}

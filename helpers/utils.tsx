@@ -1120,3 +1120,13 @@ export const productsDepartments: Array<navTypes> = [
     link: "tubers-cereals",
   },
 ];
+
+export const settings = {
+  dots: false,
+  infinite: true,
+  speed: 1000,
+  slidesToShow: 4,
+  slidesToScroll: 4,
+  autoplay: true,
+  cssEase: "linear",
+};

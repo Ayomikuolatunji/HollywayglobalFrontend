@@ -5,12 +5,12 @@ import CartTable from "./components/CartTable";
 // import Coupon from "./components/Coupon";
 import Summary from "./components/Summary";
 
-export default function index() {
+export default function Index() {
   const { data } = useGetCartItemsQuery() || {};
 
   return (
-    <div>
-      <div className="container p-8 mx-auto mt-12">
+    <div className="xl:max-w-[1270px] mx-auto">
+      <div className="container p-4 mx-auto mt-8">
         <div className="w-full overflow-x-auto">
           <div className="my-2">
             <h3 className="text-xl font-bold tracking-wider">

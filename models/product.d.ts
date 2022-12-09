@@ -100,6 +100,7 @@ export interface productsCarts {
   totalAmounts: number;
 }
 export interface RelatedProductsProps {
+  currentProductId: string;
   relatedProducts: {
     product: productTypings[];
   };

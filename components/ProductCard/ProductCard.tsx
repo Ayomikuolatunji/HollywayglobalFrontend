@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { AiFillHeart } from "react-icons/ai";
 import { FaShoppingCart } from "react-icons/fa";
@@ -8,14 +10,12 @@ import {
 } from "../../redux/apis/unprotectedProducts";
 import { useAddToCartItemMutation } from "../../redux/apis/usersApis";
 
-import CartModal from "../CartModal/CartModal";
-
 interface extraTypes extends ProductCardTypes {
   currentTab?: string;
 }
 
 export default function ProductCard({ item, currentTab }: extraTypes) {
-  let [isOpen, setIsOpen] = useState(false);
+  const router = useRouter();
   const [addToCartItem] = useAddToCartItemMutation();
   const [fetchPostData] = useFetchPostDataMutation();
 
@@ -24,7 +24,6 @@ export default function ProductCard({ item, currentTab }: extraTypes) {
       await addToCartItem(id)
         .unwrap()
         .then(async () => {
-          setIsOpen(false);
           unprotectedProductApis.util.resetApiState();
           unprotectedProductApis.util.invalidateTags(["ProductItems"]);
           if (currentTab) await fetchPostData(currentTab).unwrap();
@@ -32,6 +31,11 @@ export default function ProductCard({ item, currentTab }: extraTypes) {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const onViewProductDetails = () => {
+    const routerPath = (router.query.productId = `/details-page/${item._id}`);
+    router.push(routerPath);
   };
 
   return (
@@ -45,11 +49,13 @@ export default function ProductCard({ item, currentTab }: extraTypes) {
             This product is available in bulk
           </p>
         </div>
-        <img
-          className="h-[160px] w-full object-cover mt-2"
-          src={`http://localhost:8080/${item.image}`}
-          alt="NIKE AIR"
-        />
+        <span onClick={onViewProductDetails}>
+          <img
+            className="h-[160px] w-full object-cover mt-2"
+            src={`http://localhost:8080/${item.image}`}
+            alt="NIKE AIR"
+          />
+        </span>
         <div className="flex items-center justify-between px-4 py-2 bg-[#7fad39]">
           <h1 className="text-gray-200 font-bold text-xl">
             {item.currency}
@@ -59,17 +65,11 @@ export default function ProductCard({ item, currentTab }: extraTypes) {
             <AiFillHeart className="w-6 h-6 rounded-full bg-white p-1.5" />
             <FaShoppingCart
               className="w-6 h-6 rounded-full bg-white p-1.5"
-              onClick={() => setIsOpen(true)}
+              onClick={() => addToCartItemFunc(item._id!)}
             />
           </div>
         </div>
       </div>
-      <CartModal
-        setIsOpen={setIsOpen}
-        isOpen={isOpen}
-        item={item}
-        addToCartItemFunc={addToCartItemFunc}
-      />
     </div>
   );
 }

@@ -11,6 +11,7 @@ export default function RelatedProducts({
   relatedProducts,
   isRelatedProductsLoading,
   isRelatedProductFetching,
+  currentProductId,
 }: RelatedProductsProps) {
   return (
     <div className="my-24">
@@ -26,6 +27,7 @@ export default function RelatedProducts({
               <ProductCardSkeleton key={index} />
             ))
           : relatedProducts?.product
+              .filter(({ _id }) => _id !== currentProductId)
               ?.slice(0, 5)
               .map((item: productTypings) => {
                 return <ProductCard item={item} />;

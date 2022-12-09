@@ -11,12 +11,15 @@ export default function CartTable({ data }: any) {
           <th className="px-6 py-3 font-bold whitespace-nowrap">Product</th>
           <th className="px-6 py-3 font-bold whitespace-nowrap">Qty</th>
           <th className="px-6 py-3 font-bold whitespace-nowrap">Price</th>
+          <th className="px-6 py-3 font-bold whitespace-nowrap">
+            View Product
+          </th>
           <th className="px-6 py-3 font-bold whitespace-nowrap">Remove</th>
         </tr>
       </thead>
       <tbody>
         {data &&
-          data.cartItems!.map((cartItem: cartItemTypes) => (
+          data.cartItems.map((cartItem: cartItemTypes) => (
             <TableItem key={cartItem._id} cartItem={cartItem} />
           ))}
       </tbody>

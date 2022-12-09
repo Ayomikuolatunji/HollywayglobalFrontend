@@ -5,19 +5,10 @@ import "slick-carousel/slick/slick-theme.css";
 import { useFetchAllProductsQuery } from "../../../redux/apis/unprotectedProducts";
 import { productTypings } from "../../../models/product";
 import { ProductCardSkeleton } from "../../../components";
-import { productApis } from "../../../redux/apis/AdminProductApi";
+import { settings } from "../../../helpers/utils";
 
 const ProductSlider: React.FC = () => {
-  const { isLoading, data } = useFetchAllProductsQuery("all");
-  const settings = {
-    dots: false,
-    infinite: true,
-    speed: 1000,
-    slidesToShow: 4,
-    slidesToScroll: 4,
-    autoplay: true,
-    cssEase: "linear",
-  };
+  const { isLoading, data } = useFetchAllProductsQuery({ query_name: "all" });
 
   return (
     <div className="w-[100%] mx-auto mt-16 mb-10">
