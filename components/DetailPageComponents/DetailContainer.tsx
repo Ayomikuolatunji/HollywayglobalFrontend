@@ -16,8 +16,11 @@ const DetailsContainer = ({ product }: DetailItemProps) => {
         {product.name}
       </h3>
       <div className="product__details__rating flex items-center">
-        {[1, 2, 3, 4, 5].map((start, index) => (
-          <BsStarFill className="mr-[-2px] text-[#EDBB0E] text-[1rem]" />
+        {[1, 2, 3, 4, 5].map((_, index) => (
+          <BsStarFill
+            key={index}
+            className="mr-[-2px] text-[#EDBB0E] text-[1rem]"
+          />
         ))}
         <span className="text-[#dd2222] font-normal text-[14px] ml-[4px]">
           (18 reviews)

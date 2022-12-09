@@ -3,6 +3,8 @@ import { useRouter } from "next/router";
 import React, { useState } from "react";
 import { AiFillHeart } from "react-icons/ai";
 import { FaShoppingCart } from "react-icons/fa";
+import { toast } from "react-toastify";
+import { Error } from "../../models";
 import { ProductCardTypes } from "../../models/product";
 import {
   unprotectedProductApis,
@@ -27,8 +29,15 @@ export default function ProductCard({ item, currentTab }: extraTypes) {
           unprotectedProductApis.util.resetApiState();
           unprotectedProductApis.util.invalidateTags(["ProductItems"]);
           if (currentTab) await fetchPostData(currentTab).unwrap();
+          toast.success("Product added to cart", {
+            toastId: "addToCartItemFunc-success-toast-id",
+          });
         });
     } catch (error) {
+      const err = error as Error
+      toast.error(err.data.message, {
+        toastId: "addToCartItemFunc-error-toast-id",
+      });
       console.log(error);
     }
   };

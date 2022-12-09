@@ -1,5 +1,7 @@
 import { Tab } from "@headlessui/react";
 import { Fragment } from "react";
+import CustomerReviews from "./CustomerReviews";
+import ProductInformation from "./ProductInformation";
 
 const tabListsTitles = ["Description", "Information", "Reviews"];
 
@@ -7,13 +9,15 @@ export default function DetailsPageReviews() {
   return (
     <div className="mt-24 mb-6 w-full relative">
       <Tab.Group manual>
-        <Tab.List className="flex justify-center space-x-16 mb-8 before:w-[35%] before:absolute before:left-0 before:h-[1px] before:top-2.5 before:bg-[#ebebeb]  before:contents('')  after:w-[35%] after:absolute after:right-0 after:h-[1px] after:top-2.5 after:bg-[#ebebeb]  after:contents('')">
+        <Tab.List className="flex justify-center space-x-16 mb-12 before:w-[35%] before:absolute before:left-0 before:h-[1px] before:top-2.5 before:bg-[#ebebeb]  before:contents('')  after:w-[35%] after:absolute after:right-0 after:h-[1px] after:top-2.5 after:bg-[#ebebeb]  after:contents('')">
           {tabListsTitles.map((tab, index) => (
             <Tab as={Fragment} key={index}>
               {({ selected }) => (
                 <h1
                   className={`${
-                    selected ? " text-black text-[18px] outline-none font-extrabold" : "text-gray-500"
+                    selected
+                      ? " text-black text-[18px] outline-none font-extrabold"
+                      : "text-gray-500"
                   } cursor-pointer hover:border-0`}
                 >
                   {tab}
@@ -26,7 +30,7 @@ export default function DetailsPageReviews() {
           <Tab.Panel>
             <div>
               <h1 className="mb-[26px] font-[700] text-[#333333]">
-                Product Description
+                Product Information
               </h1>
               <p>
                 Vestibulum ac diam sit amet quam vehicula elementum sed sit amet
@@ -40,39 +44,16 @@ export default function DetailsPageReviews() {
                 Vestibulum ac diam sit amet quam vehicula elementum sed sit amet
                 dui. Vestibulum ante ipsum primis in faucibus orci luctus et
                 ultrices posuere cubilia Curae; Donec velit neque, auctor sit
-                amet aliquam vel, ullamcorper sit amet ligula. Proin eget tortor
-                r
+                amet aliquam vel, ullamcorper sit amet ligula. Proin eget
+                tortoralign-content-xs-start
               </p>
             </div>
           </Tab.Panel>
           <Tab.Panel>
-            <div>
-              <h1 className="mb-[26px] font-[700] text-[#333333]">
-                Products Infomation
-              </h1>
-              <p>
-                Lorem ipsum dolor, sit amet consectetur adipisicing elit. Unde
-                officia commodi eveniet rerum! Odit nulla veritatis dolores a
-                corporis sint et reprehenderit? Eius, itaque omnis.
-              </p>
-            </div>
+            <ProductInformation />
           </Tab.Panel>
           <Tab.Panel>
-            <div>
-              <h1 className="mb-[26px] font-[700] text-[#333333]">
-                Submit your review
-              </h1>
-              <p>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel
-                sint ullam recusandae perspiciatis dignissimos eaque impedit
-                explicabo harum, possimus, placeat deserunt quo sequi quis
-                doloremque. Maiores sequi voluptates vitae deserunt nam quasi
-                ipsam omnis assumenda commodi in sint, similique excepturi
-                incidunt provident sapiente nihil, dicta saepe. Sapiente magnam
-                voluptate similique mollitia placeat, rem voluptates explicabo
-                cupiditate commodi debitis, ducimus harum.
-              </p>
-            </div>
+            <CustomerReviews />
           </Tab.Panel>
         </Tab.Panels>
       </Tab.Group>
