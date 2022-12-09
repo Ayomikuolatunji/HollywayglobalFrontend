@@ -1,4 +1,3 @@
-import { networkInterfaces } from "os";
 import React, { useState } from "react";
 import { AiFillHeart } from "react-icons/ai";
 import { FaShoppingCart } from "react-icons/fa";

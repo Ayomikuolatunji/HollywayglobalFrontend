@@ -4,7 +4,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { useFetchAllProductsQuery } from "../../../redux/apis/unprotectedProducts";
 import { productTypings } from "../../../models/product";
-import { Skeleton } from "../../../components";
+import { ProductCardSkeleton } from "../../../components";
 import { productApis } from "../../../redux/apis/AdminProductApi";
 
 const ProductSlider: React.FC = () => {
@@ -24,7 +24,7 @@ const ProductSlider: React.FC = () => {
       <Slider {...settings}>
         {isLoading
           ? [1, 2, 3, 4].map((_, index) => {
-              return <Skeleton key={index} />;
+              return <ProductCardSkeleton key={index} />;
             })
           : data?.product
               ?.slice(0, 8)

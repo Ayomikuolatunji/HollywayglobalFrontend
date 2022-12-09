@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Skeleton() {
+export default function ProductCardSkeleton() {
   return (
     <div className="max-w-sm p-4 m-10 mx-auto border border-gray-300 rounded-md shadow max-h-md">
       <div className="flex space-x-4 animate-pulse">

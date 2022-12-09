@@ -64,7 +64,7 @@ const DetailsContainer = ({ product }: DetailItemProps) => {
             <b className="font-[700] text-black text-[16px]">Shipping</b>
           </div>
           <div className="">
-            <span className="text-left font-[700] text-black text-[16px]">
+            <span className="text-left  text-[16px]">
               01 day shipping. Free pickup today
             </span>
           </div>

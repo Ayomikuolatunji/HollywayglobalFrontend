@@ -16,8 +16,8 @@ export const unprotectedProductApis = apiService.injectEndpoints({
         };
       },
     }),
-    fetchAllProducts: build.query<fetchProductTypings, string>({
-      query: (query_name: string) => {
+    fetchAllProducts: build.query<fetchProductTypings, QueryString>({
+      query: ({ query_name }) => {
         return {
           url: "/user_products",
           method: "GET",
@@ -29,12 +29,12 @@ export const unprotectedProductApis = apiService.injectEndpoints({
       providesTags: ["ProductItems"],
     }),
     fetchPostData: build.mutation<void, string>({
-      query: (query_name) => {
+      query: () => {
         return {
           url: `/user_products`,
           method: "GET",
           params: {
-            product_type: query_name,
+            product_type: "all",
           },
         };
       },

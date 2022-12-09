@@ -2,7 +2,6 @@ import React from "react";
 import { DetailItemProps } from "../../models";
 
 export default function DetailsImg({ product }: DetailItemProps) {
-  console.log(product.image);
   return (
     <div>
       <img
