@@ -33,3 +33,9 @@ body {
   box-shadow: 0 0 7px 1px #d84f2a inset;
   cursor: pointer;
 } */
+
+@layer base {
+  html {
+    font-family: "Cairo", sans-serif;
+  }
+}

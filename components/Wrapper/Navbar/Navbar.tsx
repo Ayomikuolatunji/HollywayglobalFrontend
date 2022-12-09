@@ -12,9 +12,14 @@ const Navbar: React.FC = () => {
   const { data } = useGetCartItemsQuery() || {};
 
   return (
-    <div className="lg:w-[100%] mx-auto lg:p-3">
-      <div className="flex justify-between items-center">
-        <ul className="py-4 flex">
+    <div className="lg:w-[100%] mx-auto lg:pl-3">
+      <div className="flex justify-between items-center w-full space-x-16">
+        <div className="mb-6 md:w-[25%]">
+          <h1 className="text-3xl text-start mt-4 text-[#7fad39] font-bold">
+            <Link href="/">HollywayGlobal</Link>
+          </h1>
+        </div>
+        <ul className="py-4 md:w-[55%]">
           {navItems.map((item) => {
             return (
               <Link href={item.link} key={item.link}>
@@ -28,7 +33,7 @@ const Navbar: React.FC = () => {
             );
           })}
         </ul>
-        <div className="cart-wishlist flex items-center space-x-4">
+        <div className="cart-wishlist flex items-center space-x-4 w-[20%]">
           <div className="relative">
             <span className="absolute top-0 right-0 bg-[#7fad39] text-white rounded-full text-sm w-[15px] h-[15px] flex justify-center items-center text-[10px]">
               0
@@ -51,45 +56,6 @@ const Navbar: React.FC = () => {
                 ? data!.totalAmounts
                 : "0.00"}
             </span>
-          </div>
-        </div>
-      </div>
-      <div className="search relative mt-4 flex justify-between items-center">
-        <div className="search-warapper border-[1px] outline-0 border-gray-200 w-[70%]">
-          <select
-            name=""
-            id=""
-            className="w-[30%] border-0 outline-none  bg-white text-black font-bold py-3"
-          >
-            <option value="">All Category</option>
-            {productsDepartments.map((item, index) => {
-              return (
-                <option key={index}>
-                  <span className="cursor-pointer block text-[#1c1c1c] leading-[24px]">
-                    {item.name}
-                  </span>
-                </option>
-              );
-            })}
-          </select>
-          <input
-            type="text"
-            placeholder="What do you need?"
-            className="border-0 w-[45%] p-3 outline-0"
-          />
-          <button className="bg-[#7fad39] p-3.5 w-[25%] font-[800] text-white">
-            SEARCH
-          </button>
-        </div>
-        <div className="contact flex items-center">
-          <span className="p-4 flex justify-center items-center bg-[#f5f5f5] w-[50px] h-[50px] rounded-full text-[#7fad39] mr-5">
-            <BsTelephoneFill text-xl />
-          </span>
-          <div className="support flex flex-col">
-            <h1 className="text-black font-extrabold mb-2 text-lg">
-              +2349025252652
-            </h1>
-            <p>support 24/7 time</p>
           </div>
         </div>
       </div>

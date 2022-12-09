@@ -18,6 +18,10 @@ export interface ProductCardTypes {
   addToCartItemFunc?: (id: string) => void;
 }
 
+interface DetailItemProps {
+  product: productTypings;
+}
+
 export type fetchProductTypings = {
   counts: number;
   message: string;

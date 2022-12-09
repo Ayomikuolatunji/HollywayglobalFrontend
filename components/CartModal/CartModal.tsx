@@ -37,7 +37,7 @@ const CartModal = ({
               {item.price}
             </span>
           </h1>
-          <Link href={`/detail-page/${item._id}`}>
+          <Link href={`/details-page/${item._id}`}>
             <button
               type="submit"
               className="py-3 px-4 text-black bg-gray-100 rounded-lg font-bold"

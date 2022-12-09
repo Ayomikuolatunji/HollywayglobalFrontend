@@ -1,6 +1,6 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import HomeRightLeftWrapper from "../components/Wrapper/HomeRightLeftWrapper";
+import Carousel from "../layouts/Home/Carousel/Carousel";
 import LocalCategories from "../layouts/Home/LocalCatergories/LocalCategories";
 import ProductSlider from "../layouts/Home/ProductSlider/ProductSlider";
 
@@ -11,11 +11,12 @@ const Home: NextPage = () => {
         <title>Create Next App</title>
         <link rel="icon" href="/assets/logo.png" />
       </Head>
-
-      <div className="bg-white  w-[70%] mx-auto">
-        <HomeRightLeftWrapper />
+      <div className="bg-white md:w-[70%] mx-auto">
+        <div className="flex justify-end w-[75%] ml-auto">
+          <Carousel />
+        </div>
         <ProductSlider />
-        <LocalCategories/>
+        <LocalCategories />
       </div>
     </div>
   );

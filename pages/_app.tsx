@@ -66,7 +66,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   }
 
   return (
-    <div className="lg:w-[100%] md:w-[1000%] sm:w-[80%] mx-auto w-[97%]">
+    <div className="lg:w-[100%]  sm:w-[80%] mx-auto w-[97%]">
       <ErrorBoundary>
         <ThemeProvider theme={theme}>
           <NetWorkWrapper>
