@@ -85,7 +85,6 @@ export interface ProductTableColumns {
   filter?: string;
   Cell?: (props: selectedTypings) => void;
 }
-
 export interface cartItemTypes {
   _id: string;
   productId: productTypings;
@@ -95,9 +94,15 @@ export interface cartItemTypes {
   createdAt: date;
   updatedAt: date;
 }
-
 export interface productsCarts {
   message: string;
   cartItems: Array<cartItemTypes>;
   totalAmounts: number;
+}
+export interface RelatedProductsProps {
+  relatedProducts: {
+    product: productTypings[];
+  };
+  isRelatedProductsLoading: boolean;
+  isRelatedProductFetching: boolean;
 }

@@ -17,3 +17,5 @@ export { default as CartModal } from "./CartModal/CartModal";
 export { default as ErrorBoundary } from "./ErrorBoundary/ErrorBoundary";
 export { default as ProfileDropDown } from "./Profile/Profile";
 export { default as Tooltip } from "./Tooltip/Tooltip";
+export { default as DetailsContainer } from "./DetailPageComponents/DetailContainer";
+export { default as DetailsImg } from "./DetailPageComponents/DetailsImg";

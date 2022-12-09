@@ -11,7 +11,7 @@ import { useAddToCartItemMutation } from "../../redux/apis/usersApis";
 import CartModal from "../CartModal/CartModal";
 
 interface extraTypes extends ProductCardTypes {
-  currentTab: string;
+  currentTab?: string;
 }
 
 export default function ProductCard({ item, currentTab }: extraTypes) {
@@ -27,7 +27,7 @@ export default function ProductCard({ item, currentTab }: extraTypes) {
           setIsOpen(false);
           unprotectedProductApis.util.resetApiState();
           unprotectedProductApis.util.invalidateTags(["ProductItems"]);
-          await fetchPostData(currentTab).unwrap();
+          if (currentTab) await fetchPostData(currentTab).unwrap();
         });
     } catch (error) {
       console.log(error);
