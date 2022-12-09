@@ -37,7 +37,7 @@ export default function NavbarCategory() {
           SEARCH
         </button>
       </div>
-      <div className="contact flex items-center w-[20%]">
+      <div className="contact flex items-center w-[20%] px-3">
         <span className="p-4 flex justify-center items-center bg-[#f5f5f5] w-[50px] h-[50px] rounded-full text-[#7fad39] mr-5">
           <BsTelephoneFill text-xl />
         </span>

@@ -12,14 +12,14 @@ const Navbar: React.FC = () => {
   const { data } = useGetCartItemsQuery() || {};
 
   return (
-    <div className="lg:w-[100%] mx-auto lg:pl-3">
+    <div className="md:w-[100%] mx-auto lg:pl-3">
       <div className="flex justify-between items-center w-full space-x-16">
         <div className="mb-6 md:w-[25%]">
           <h1 className="text-3xl text-start mt-4 text-[#7fad39] font-bold">
             <Link href="/">HollywayGlobal</Link>
           </h1>
         </div>
-        <ul className="py-4 md:w-[55%]">
+        <ul className="py-4 md:w-[65%]">
           {navItems.map((item) => {
             return (
               <Link href={item.link} key={item.link}>
@@ -33,7 +33,7 @@ const Navbar: React.FC = () => {
             );
           })}
         </ul>
-        <div className="cart-wishlist flex items-center space-x-4 w-[20%]">
+        <div className="flex items-center space-x-6 w-[20%]">
           <div className="relative">
             <span className="absolute top-0 right-0 bg-[#7fad39] text-white rounded-full text-sm w-[15px] h-[15px] flex justify-center items-center text-[10px]">
               0
