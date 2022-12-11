@@ -9,7 +9,7 @@ export default function CartTable({ data }: any) {
         <tr className="bg-gray-100">
           <th className="px-6 py-3 font-bold whitespace-nowrap">Image</th>
           <th className="px-6 py-3 font-bold whitespace-nowrap">Product</th>
-          <th className="px-6 py-3 font-bold whitespace-nowrap">Qty</th>
+          <th className="px-6 py-3 font-bold whitespace-nowrap">Quantity</th>
           <th className="px-6 py-3 font-bold whitespace-nowrap">Price</th>
           <th className="px-6 py-3 font-bold whitespace-nowrap">
             View Product

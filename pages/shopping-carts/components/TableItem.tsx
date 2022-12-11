@@ -57,7 +57,7 @@ export default function TableItem({ cartItem }: tableItemsTypes) {
         <div className="flex justify-center">
           <img
             src={`http://localhost:8080/${cartItem.productId.image}`}
-            className="object-cover h-28 w-28 rounded-2xl"
+            className="object-cover h-16 w-16 rounded-lg"
             alt="image"
           />
         </div>

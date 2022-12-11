@@ -30,7 +30,7 @@ export default function Index() {
           {/* <Coupon /> */}
           {data?.cartItems.length! > 0 && (
             <div className="checkout-summary">
-              <Summary />
+              <Summary data={data} />
               <div className="mt-4">
                 <button className=" w-full py-2 text-center text-white bg-blue-500 rounded-md shadow hover:bg-blue-600">
                   Proceed to Checkout

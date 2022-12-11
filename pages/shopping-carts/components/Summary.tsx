@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function Summary() {
+export default function Summary({ data }: any) {
   return (
     <div className="mt-4">
       <div className="py-4 rounded-md shadow">
@@ -29,7 +29,7 @@ export default function Summary() {
     "
         >
           <span className="text-xl font-bold">Total</span>
-          <span className="text-2xl font-bold">$37.50</span>
+          <span className="text-2xl font-bold">{data.totalAmounts}</span>
         </div>
       </div>
     </div>

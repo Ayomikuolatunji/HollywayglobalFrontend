@@ -48,7 +48,7 @@ const DetailsContainer = ({ product }: DetailItemProps) => {
         <span className="px-[28px] py-[16px] ml-3 bg-[#7fad39] text-white cursor-pointer">
           Add to cart
         </span>
-        <span className="ml-3 px-[23px] py-[16px] bg-[#eeebeb] cursor-pointer">
+        <span className="ml-3 px-[23px] py-[20px] bg-[#eeebeb] cursor-pointer">
           <AiOutlineHeart />
         </span>
       </div>
