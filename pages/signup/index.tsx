@@ -4,7 +4,6 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "next/router";
 import * as yup from "yup";
-
 import { toast } from "react-toastify";
 import Cookies from "../../helpers/Cookies";
 import { useSignupMutation } from "../../redux/apis/authApi";
@@ -40,11 +39,11 @@ const Login = () => {
 
   const [signup] = useSignupMutation();
 
-  useEffect(() => {
-    if (Cookies.get("user_token")) {
-      router.push("/");
-    }
-  }, [router]);
+  // useEffect(() => {
+  //   if (Cookies.get("user_token")) {
+  //     router.push("/");
+  //   }
+  // }, [router]);
 
   const onSubmit: SubmitHandler<loginTypes> = async (data) => {
     try {

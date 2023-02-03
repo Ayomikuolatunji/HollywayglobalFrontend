@@ -6,7 +6,7 @@ const user_id = getAppCredentials("user_token", "user")?.user_id;
 
 export const secureApi = userSecureApiService.injectEndpoints({
   endpoints: (build) => ({
-    authAdmin: build.query<fetchedUserDetails, void>({
+    authUser: build.query<fetchedUserDetails, void>({
       query: () => {
         return {
           url: "single_user/",
@@ -82,7 +82,7 @@ export const secureApi = userSecureApiService.injectEndpoints({
 });
 
 export const {
-  useAuthAdminQuery,
+  useAuthUserQuery,
   useGetCartItemsQuery,
   useDeleteCartItemMutation,
   useIncrementCartItemsMutation,

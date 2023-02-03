@@ -175,6 +175,8 @@ export default function Table({
     );
   };
 
+  console.log(dataTable);
+
   return (
     <DndProvider backend={HTML5Backend}>
       <GlobalFilter
@@ -182,6 +184,7 @@ export default function Table({
         globalFilter={state.globalFilter}
         setGlobalFilter={setGlobalFilter}
       />
+
       <span className="my-4 text-xl">
         No of products:
         <h3 className="text-sm inline font-extrabold text-black ml-1">
@@ -262,18 +265,20 @@ export default function Table({
           </div>
         )}
       </table>
-      <TablePagination
-        canPreviousPage={canPreviousPage}
-        canNextPage={canNextPage}
-        pageOptions={pageOptions}
-        pageCount={pageCount}
-        gotoPage={gotoPage}
-        nextPage={nextPage}
-        previousPage={previousPage}
-        setPageSize={setPageSize}
-        pageSize={pageSize}
-        pageIndex={pageIndex}
-      />
+      {dataTable.length && (
+        <TablePagination
+          canPreviousPage={canPreviousPage}
+          canNextPage={canNextPage}
+          pageOptions={pageOptions}
+          pageCount={pageCount}
+          gotoPage={gotoPage}
+          nextPage={nextPage}
+          previousPage={previousPage}
+          setPageSize={setPageSize}
+          pageSize={pageSize}
+          pageIndex={pageIndex}
+        />
+      )}
     </DndProvider>
   );
 }

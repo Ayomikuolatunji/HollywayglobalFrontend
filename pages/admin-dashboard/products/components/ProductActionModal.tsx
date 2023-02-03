@@ -98,7 +98,7 @@ const ProductActionModal = ({ isOpen, setIsOpen }: modalConditions) => {
       bg-[rgba(0,0,0,0.5)] z-[999]"
     >
       <Dialog.Panel className="bg-white border flex justify-center flex-col items-center w-[30%] rounded-md">
-        <Dialog.Title className="p-4 text-blue-500 font-extrabold flex items-center text-2xl">
+        <Dialog.Title className="p-4 text-main-color font-extrabold flex items-center text-2xl">
           Add a new product
         </Dialog.Title>
         <hr className="w-full" />

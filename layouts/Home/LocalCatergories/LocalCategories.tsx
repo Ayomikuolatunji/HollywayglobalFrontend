@@ -19,7 +19,6 @@ export default function LocalCategories() {
       </div>
       <Tabs
         Tabheaders={[
-          "Popular Foods",
           "Fruits/Vegetables",
           "Livestocks/Sea foods",
           "Tubers & Cereals",

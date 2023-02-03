@@ -65,7 +65,7 @@ function AdminSidebar() {
             );
           })}
         </ul>
-        <div>
+        <div className="mt-5">
           <Logout />
         </div>
       </div>

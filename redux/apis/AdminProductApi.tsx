@@ -64,7 +64,16 @@ export const productApis = adminSecureApiService.injectEndpoints({
       query: ({ _id, ...body }) => ({
         url: `products/${_id}`,
         method: "PATCH",
-        body: { ...body },
+        body: {
+          name: body.name,
+          price: body.price,
+          description: body.description,
+          type: body.type || "general",
+          image: body.image,
+          adminId: body.adminId,
+          status: body.status,
+          currency:body.currency,
+        },
         params: {
           adminId: admin_id && admin_id,
         },

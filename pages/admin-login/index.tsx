@@ -42,11 +42,11 @@ const AdminLogin = () => {
     resolver: yupResolver(schema),
   });
 
-  useEffect(() => {
-    if (Cookies.get("admin_token" || localStorageGetItem("admin_id"))) {
-      router.push("/admin-dashboard");
-    }
-  }, [router]);
+  // useEffect(() => {
+  //   if (Cookies.get("admin_token" || localStorageGetItem("admin_id"))) {
+  //     router.push("/admin-dashboard");
+  //   }
+  // }, [router]);
 
   useEffect(() => {
     if (isLoggedIn) {

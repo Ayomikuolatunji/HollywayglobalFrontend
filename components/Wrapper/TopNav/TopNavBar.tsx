@@ -6,8 +6,6 @@ import {
 } from "react-icons/ai";
 import { MdEmail } from "react-icons/md";
 import { FaFacebookF } from "react-icons/fa";
-import { FaUserAlt } from "react-icons/fa";
-import Link from "next/link";
 import { isAuthenticated } from "../../../helpers";
 import ProfileDropDown from "../../Profile/Profile";
 
@@ -19,6 +17,8 @@ export default function TopNavBar() {
       setIsLogged(true);
     }
   }, []);
+
+  console.log(isLogged);
 
   return (
     <div className="p-4 bg-[#f5f5f5] w-full lg:block hidden">
@@ -43,17 +43,8 @@ export default function TopNavBar() {
             <AiFillLinkedin className="text-black" />
             <AiOutlineWhatsApp className="text-black" />
           </div>
-          <div className="login ml-3">
-            {isLogged ? (
-              <ProfileDropDown />
-            ) : (
-              <Link href="/login">
-                <li className="flex items-center pl-3 text-[#1c1c1c] cursor-pointer">
-                  <FaUserAlt className="mr-2" />
-                  Login
-                </li>
-              </Link>
-            )}
+          <div className="login">
+            <ProfileDropDown isLogged={isLogged} />
           </div>
         </div>
       </div>

@@ -132,14 +132,14 @@ export default function ProductForm({
         <div className="w-[100%] flex justify-center  my-2 p-[5px]">
           <button
             onClick={() => setIsOpen(false)}
-            className="text-blue-500 mx-3 font-extrabold"
+            className="text-main-color mx-3 font-extrabold"
           >
             Cancel
           </button>
           <button
             disabled={submiting}
             type="submit"
-            className="py-[6px] px-[15px] mx-3 bg-blue-500 text-white"
+            className="py-[6px] px-[15px] mx-3 bg-main-color text-white"
           >
             {submiting ? "Submiting..." : "Submit"}
           </button>
