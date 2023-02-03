@@ -27,7 +27,7 @@ export default function ProductDetail() {
   });
 
   return (
-    <div className="pt-[80px] xl:max-w-[1270px] mx-auto">
+    <div className="pt-[80px] lg:max-w-[1270px] mx-auto">
       <div className="w-full mx-auto grid sm:grid-cols-2 px-[15px] gap-5">
         {data !== undefined && !isLoading ? (
           <>

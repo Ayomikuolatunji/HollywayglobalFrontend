@@ -3,7 +3,6 @@ import {
   currencyOptions,
   productsDepartments,
 } from "../../../../helpers/utils";
-import * as helper from "../../../../helpers";
 
 import { productFormTypings } from "../../../../models/form";
 
@@ -102,16 +101,16 @@ export default function ProductForm({
           </div>
         )}
         {/* is product available checkbox */}
-        <div className="flex items-center w-[50%] mx-auto">
+        <div className="flex items-center w-[50%] pl-2">
           <label htmlFor="productAvailable">
-            Is product available available?
+            Is this product available?
           </label>
           <input
             id="productAvailable"
             name="productAvailable"
             type="checkbox"
             onChange={(e) => handleProductAvailable(e)}
-            className="mx-auto border-2 border-gray-400 my-2 p-[5px]"
+            className="border-2 border-gray-400 my-2 ml-1 p-[5px]"
           />
         </div>
         <div className="w-full flex justify-center">
@@ -122,7 +121,7 @@ export default function ProductForm({
             value={initialValues.type}
             className="w-[98%] mx-auto border-2 border-gray-400 my-2 p-[5px]"
           >
-            <option value="">Select product type</option>
+            <option value="">Select product department</option>
             {productsDepartments.map((option, index) => (
               <option value={option.name} key={index}>
                 {option.name}
@@ -130,7 +129,7 @@ export default function ProductForm({
             ))}
           </select>
         </div>
-        <div className="w-[50%] mx-auto my-2 p-[5px]">
+        <div className="w-[100%] flex justify-center  my-2 p-[5px]">
           <button
             onClick={() => setIsOpen(false)}
             className="text-blue-500 mx-3 font-extrabold"

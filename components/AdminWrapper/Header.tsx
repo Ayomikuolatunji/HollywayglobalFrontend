@@ -10,11 +10,6 @@ const Header = () => {
           Admin Dashboard
         </h1>
       </div>
-      <div className="flex items-center">
-        <BsFillBellFill className="mr-4 text-2xl" />
-        {/*logout  */}
-        <Logout />
-      </div>
     </div>
   );
 };

@@ -1,37 +1,41 @@
 import React from "react";
 import { RiGroupFill } from "react-icons/ri";
 import { AiFillTags } from "react-icons/ai";
-import { FaMoneyBill } from "react-icons/fa";
+import { FaMoneyBill, FaUsers } from "react-icons/fa";
+import { AiOutlineShoppingCart } from "react-icons/ai";
+import { MdDashboard } from "react-icons/md";
 import Link from "next/link";
+import Logout from "../Logout/Logout";
 
 export const sideBarItems = [
   {
     name: "Dashboard",
-    icon: <RiGroupFill className="text-xl" />,
+    icon: <MdDashboard className="text-xl text-main-color" />,
     path: "/admin-dashboard",
   },
   {
     name: "Products",
-    icon: <RiGroupFill className="text-xl" />,
+    icon: <RiGroupFill className="text-xl text-main-color" />,
     path: "/admin-dashboard/products",
   },
   {
     name: "Departments",
-    icon: <AiFillTags className="text-xl" />,
+    icon: <AiFillTags className="text-xl text-main-color" />,
     path: "/admin-dashboard/departments",
-  },{
+  },
+  {
     name: "Orders",
-    icon: <FaMoneyBill className="text-xl" />,
+    icon: <AiOutlineShoppingCart className="text-xl text-main-color" />,
     path: "/admin-dashboard/orders",
   },
   {
     name: "Users",
-    icon: <FaMoneyBill className="text-xl" />,
+    icon: <FaUsers className="text-xl text-main-color" />,
     path: "/admin-dashboard/users",
   },
   {
     name: "Transactions",
-    icon: <FaMoneyBill className="text-xl" />,
+    icon: <FaMoneyBill className="text-xl text-main-color" />,
     path: "/admin-dashboard/transactions",
   },
 ];
@@ -43,21 +47,27 @@ function AdminSidebar() {
         <img src="/assets/logo.png" alt="logo" />
       </div>
       {/* sidebar items */}
-      <div className="sidebar-items p-4 flex justify-center flex-col mt-10">
-        <ul className="w-[80%] mx-auto flex justify-center flex-col">
+      <div className="sidebar-items flex justify-center flex-col mt-2">
+        <ul className="flex justify-start flex-col">
           {sideBarItems.map((item, index) => {
             return (
               <Link href={item.path} key={index}>
-                <div className="flex items-center pl-7 p-2 nav-items mt-3 py- ml-3 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-[#F2FAFF] dark:hover:bg-gray-700 cursor-pointer">
+                <li
+                  className="flex items-center  mt-3 text-base font-normal  dark:text-white hover:bg-[#F2FAFF]  cursor-pointer 
+                border-b-2 p-3"
+                >
                   <span>{item.icon}</span>
                   <span className="sidebar-item-name p-2 text-xl">
                     {item.name}
                   </span>
-                </div>
+                </li>
               </Link>
             );
           })}
         </ul>
+        <div>
+          <Logout />
+        </div>
       </div>
     </div>
   );

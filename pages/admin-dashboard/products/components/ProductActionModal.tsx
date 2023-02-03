@@ -99,8 +99,7 @@ const ProductActionModal = ({ isOpen, setIsOpen }: modalConditions) => {
     >
       <Dialog.Panel className="bg-white border flex justify-center flex-col items-center w-[30%] rounded-md">
         <Dialog.Title className="p-4 text-blue-500 font-extrabold flex items-center text-2xl">
-          <FaCarAlt />
-          Add a New Car
+          Add a new product
         </Dialog.Title>
         <hr className="w-full" />
         <Dialog.Panel className="flex justify-center items-center w-[100%]">

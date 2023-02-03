@@ -45,6 +45,9 @@ function MyApp({ Component, pageProps }: AppProps) {
       "/admin-dashboard",
       "/admin-dashboard/products",
       "/admin-dashboard/departments",
+      "/admin-dashboard/transactions",
+      "/admin-dashboard/users",
+      "/admin-dashboard/orders"
     ].includes(router.pathname)
   ) {
     return (
@@ -66,7 +69,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   }
 
   return (
-    <div className="lg:w-[100%]  sm:w-[80%] mx-auto w-[97%]">
+    <div className="lg:w-[100%] mx-auto w-[97%]">
       <ErrorBoundary>
         <ThemeProvider theme={theme}>
           <NetWorkWrapper>

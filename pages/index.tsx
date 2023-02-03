@@ -11,7 +11,7 @@ const Home: NextPage = () => {
         <title>Create Next App</title>
         <link rel="icon" href="/assets/logo.png" />
       </Head>
-      <div className="bg-white md:w-[70%] mx-auto">
+      <div className="bg-white md:max-w-[1270px] mx-auto">
         <div className="flex justify-end w-[75%] ml-auto">
           <Carousel />
         </div>

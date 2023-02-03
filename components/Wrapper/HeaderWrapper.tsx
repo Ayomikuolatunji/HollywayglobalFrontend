@@ -10,7 +10,7 @@ const HeaderWrapper = ({ children }: Props) => {
   return (
     <div>
       <TopNavBar />
-      <div className="header w-[70%] bg-[white] mx-auto">
+      <div className="header bg-[white] md:max-w-[1270px] mx-auto">
         <Navbar />
         <NavbarCategory />
       </div>

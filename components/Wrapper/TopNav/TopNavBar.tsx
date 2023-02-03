@@ -12,7 +12,7 @@ import { isAuthenticated } from "../../../helpers";
 import ProfileDropDown from "../../Profile/Profile";
 
 export default function TopNavBar() {
-  const [islogged, setIsLogged] = useState(false);
+  const [isLogged, setIsLogged] = useState(false);
 
   useEffect(() => {
     if (isAuthenticated("user_token")) {
@@ -44,7 +44,7 @@ export default function TopNavBar() {
             <AiOutlineWhatsApp className="text-black" />
           </div>
           <div className="login ml-3">
-            {islogged ? (
+            {isLogged ? (
               <ProfileDropDown />
             ) : (
               <Link href="/login">

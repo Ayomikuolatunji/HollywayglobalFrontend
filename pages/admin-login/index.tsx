@@ -46,7 +46,7 @@ const AdminLogin = () => {
     if (Cookies.get("admin_token" || localStorageGetItem("admin_id"))) {
       router.push("/admin-dashboard");
     }
-  }, [router, Cookies]);
+  }, [router]);
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -71,13 +71,16 @@ const AdminLogin = () => {
   const onSubmit: SubmitHandler<loginTypes> = async (data) => {
     try {
       setLoading(true);
-      const res = await adminLogin({
+      await adminLogin({
         email: data.email,
         password: data.password,
-      }).unwrap();
-      toast.success("Login successfully", {
-        toastId: "admin-login-success-id",
-      });
+      })
+        .unwrap()
+        .then((data) => {
+          toast.success("Login successfully", {
+            toastId: "admin-login-success-id",
+          });
+        });
       setLoading(false);
     } catch (error: any) {
       const err = error as Error;
