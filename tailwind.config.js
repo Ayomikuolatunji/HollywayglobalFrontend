@@ -11,7 +11,7 @@ module.exports = {
         "paragraph-color": "#c41c1c",
         "bg-color-main": "#c41c1c",
         "main-color": "#7fad39",
-        "red-color": "#c41c1c",
+        "main-deep-color": "rgb(15,78,8)",
       },
     },
     screens: {

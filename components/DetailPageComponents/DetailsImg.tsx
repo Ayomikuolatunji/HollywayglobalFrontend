@@ -7,7 +7,7 @@ export default function DetailsImg({ product }: DetailItemProps) {
       <img
         src={`http://localhost:8080/${product.image}`}
         alt={product.name}
-        className="max-w-full w-full max-h-full h-full"
+        className="max-w-full w-full max-h-full h-[50vh]"
       />
     </div>
   );

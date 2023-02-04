@@ -1122,11 +1122,11 @@ export const productsDepartments: Array<navTypes> = [
 ];
 
 export const settings = {
-  dots: false,
+  dots: true,
   infinite: true,
   speed: 1000,
-  slidesToShow: 4,
-  slidesToScroll: 4,
+  slidesToShow: 5,
+  slidesToScroll: 5,
   autoplay: true,
   cssEase: "linear",
 };

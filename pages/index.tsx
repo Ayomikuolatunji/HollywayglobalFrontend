@@ -1,6 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Carousel from "../layouts/Home/Carousel/Carousel";
+import FarmImplement from "../layouts/Home/FarmImplement/FarmImplement";
 import LocalCategories from "../layouts/Home/LocalCatergories/LocalCategories";
 import ProductSlider from "../layouts/Home/ProductSlider/ProductSlider";
 import SpecialProductsSlider from "../layouts/Home/SpecialProductsSliders/SpecialProductsSlider";
@@ -19,6 +20,7 @@ const Home: NextPage = () => {
         <ProductSlider />
         <LocalCategories />
         <SpecialProductsSlider />
+        {/* <FarmImplement /> */}
       </div>
     </div>
   );

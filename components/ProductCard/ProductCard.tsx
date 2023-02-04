@@ -1,8 +1,6 @@
-import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
-import { AiFillHeart } from "react-icons/ai";
-import { FaShoppingCart } from "react-icons/fa";
+import React from "react";
+import { AiOutlineShoppingCart, AiOutlineHeart } from "react-icons/ai";
 import { toast } from "react-toastify";
 import { Error } from "../../models";
 import { ProductCardTypes } from "../../models/product";
@@ -34,7 +32,7 @@ export default function ProductCard({ item, currentTab }: extraTypes) {
           });
         });
     } catch (error) {
-      const err = error as Error
+      const err = error as Error;
       toast.error(err.data.message, {
         toastId: "addToCartItemFunc-error-toast-id",
       });
@@ -48,36 +46,21 @@ export default function ProductCard({ item, currentTab }: extraTypes) {
   };
 
   return (
-    <div>
-      <div className="max-w-xs bg-white shadow-xl rounded-lg overflow-hidden cursor-pointer">
-        <div className="px-4 py-2">
-          <h6 className="text-gray-900 font-bold text-[16px] uppercase">
-            {item.name}
-          </h6>
-          <p className="text-gray-600 text-sm mt-1">
-            This product is available in bulk
-          </p>
-        </div>
-        <span onClick={onViewProductDetails}>
-          <img
-            className="h-[160px] w-full object-cover mt-2"
-            src={`http://localhost:8080/${item.image}`}
-            alt="NIKE AIR"
-          />
-        </span>
-        <div className="flex items-center justify-between px-4 py-2 bg-[#7fad39]">
-          <h1 className="text-gray-200 font-bold text-xl">
-            {item.currency}
-            {item.price}
-          </h1>
-          <div className="text-sm text-gray-900 font-semibold rounded flex space-x-3 items-center">
-            <AiFillHeart className="w-6 h-6 rounded-full bg-white p-1.5" />
-            <FaShoppingCart
-              className="w-6 h-6 rounded-full bg-white p-1.5"
-              onClick={() => addToCartItemFunc(item._id!)}
-            />
-          </div>
-        </div>
+    <div className="flex flex-col items-center m-4 p-4 shadow-lg bg-white rounded-lg">
+      <img
+        className="w-48 h-48 object-cover"
+        src={`http://localhost:8080/${item.image}`}
+        onClick={onViewProductDetails}
+        alt={item.name}
+      />
+      <h4 className="mt-4 text-xl font-medium">{item.name}</h4>
+      <p className="text-gray-600 mt-2">${item.price}</p>
+      <span className="bg-main-color text-white px-2 py-1 rounded-full text-xs">
+        sales
+      </span>
+      <div className="flex mt-4">
+        <AiOutlineShoppingCart className="text-indigo-500 mr-4 cursor-pointer text-xl" />
+        <AiOutlineHeart className="text-indigo-500 cursor-pointer text-xl" />
       </div>
     </div>
   );
