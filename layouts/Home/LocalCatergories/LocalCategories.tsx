@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 import { Tab } from "@headlessui/react";
-import { ProductCard, ProductCardSkeleton, Tabs } from "../../../components";
+import {
+  ProductCard,
+  ProductCardSkeleton,
+  ProductHeader,
+  Tabs,
+} from "../../../components";
 import { useFetchAllProductsQuery } from "../../../redux/apis/unprotectedProducts";
 import { productTypings } from "../../../models";
 
@@ -12,10 +17,13 @@ export default function LocalCategories() {
 
   return (
     <div className="mt-12">
-      <div className="title text-center my-10">
-        <h1 className="text-[#1c1c1c] relative font-[700] text-[26px] after:absolute after:left-0 after:right-0 after:h-[4px] after:w-[100px] after:mx-auto after:my-0 after:bg-[#7fad39] after:bottom-[-25px]">
-          Local Products
+      <div className="relative">
+        <h1
+          className={`text-[#1c1c1c] relative font-[700] text-[26px] after:absolute after:left-0 after:right-0 after:h-[4px] after:w-[210px] after:mx-auto after:my-0 after:bg-main-deep-color after:bottom-[-3px] text-center p-4`}
+        >
+          Local Categories
         </h1>
+        <hr className="h-5" />
       </div>
       <Tabs
         Tabheaders={[

@@ -1,6 +1,8 @@
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useState } from "react";
 import { AiOutlineShoppingCart, AiOutlineHeart } from "react-icons/ai";
+import { BsHeart } from "react-icons/bs";
+import { GiShoppingCart } from "react-icons/gi";
 import { toast } from "react-toastify";
 import { Error } from "../../models";
 import { ProductCardTypes } from "../../models/product";
@@ -16,6 +18,7 @@ interface extraTypes extends ProductCardTypes {
 
 export default function ProductCard({ item, currentTab }: extraTypes) {
   const router = useRouter();
+  const [wishlistHovered, setWishlistHovered] = useState(false);
   const [addToCartItem] = useAddToCartItemMutation();
   const [fetchPostData] = useFetchPostDataMutation();
 
@@ -55,12 +58,21 @@ export default function ProductCard({ item, currentTab }: extraTypes) {
       />
       <h4 className="mt-4 text-xl font-medium">{item.name}</h4>
       <p className="text-gray-600 mt-2">${item.price}</p>
-      <span className="bg-main-color text-white px-2 py-1 rounded-full text-xs">
+      <span className="bg-blue-500 text-white px-2 py-1 rounded-full text-xs">
         sales
       </span>
-      <div className="flex mt-4">
-        <AiOutlineShoppingCart className="text-indigo-500 mr-4 cursor-pointer text-xl" />
-        <AiOutlineHeart className="text-indigo-500 cursor-pointer text-xl" />
+      <div className="mt-4 w-full flex items-center justify-center">
+        <span>
+          {wishlistHovered ? (
+            <span>Added to Wishlist</span>
+          ) : (
+            <BsHeart className="text-2xl mr-5 text-main-color cursor-pointer font-extrabold" />
+          )}
+        </span>
+        <button className="flex items-center justify-center bg-main-color hover:bg-main-deep-color p-2 rounded-md cursor-pointer transition duration-150">
+          <GiShoppingCart className="text-white mr-2" />
+          <span className="text-white font-medium">Add to cart</span>
+        </button>
       </div>
     </div>
   );

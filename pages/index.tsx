@@ -3,7 +3,7 @@ import Head from "next/head";
 import Carousel from "../layouts/Home/Carousel/Carousel";
 import FarmImplement from "../layouts/Home/FarmImplement/FarmImplement";
 import LocalCategories from "../layouts/Home/LocalCatergories/LocalCategories";
-import ProductSlider from "../layouts/Home/ProductSlider/ProductSlider";
+import ExportProducts from "../layouts/Home/ExportProducts/ExportProducts";
 import SpecialProductsSlider from "../layouts/Home/SpecialProductsSliders/SpecialProductsSlider";
 
 const Home: NextPage = () => {
@@ -17,7 +17,7 @@ const Home: NextPage = () => {
         <div className="flex justify-end w-[75%] ml-auto">
           <Carousel />
         </div>
-        <ProductSlider />
+        <ExportProducts />
         <LocalCategories />
         <SpecialProductsSlider />
         {/* <FarmImplement /> */}
