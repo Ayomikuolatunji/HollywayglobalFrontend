@@ -11,13 +11,13 @@ const ProductSlider: React.FC = () => {
   const { isLoading, data } = useFetchAllProductsQuery({ query_name: "all" });
 
   return (
-    <div className="w-[100%] mx-auto mt-16 mb-10">
+    <div className="w-[100%] mx-auto mt-24 mb-10">
       <Slider {...settings}>
         {isLoading
           ? [1, 2, 3, 4].map((_, index) => {
               return <ProductCardSkeleton key={index} />;
             })
-          : data?.product
+          : data?.products
               ?.slice(0, 8)
               .map((product: productTypings, index: number) => {
                 return (

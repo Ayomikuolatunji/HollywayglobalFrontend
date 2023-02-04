@@ -12,6 +12,7 @@ import AdminWrapper from "../components/AdminWrapper/Main";
 import * as helper from "../helpers";
 import NetWorkWrapper from "../layouts/NetworkWrapper/NetWorkWrapper";
 import { ErrorBoundary } from "../components";
+import Footer from "../components/Footer/Footer";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -47,7 +48,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       "/admin-dashboard/departments",
       "/admin-dashboard/transactions",
       "/admin-dashboard/users",
-      "/admin-dashboard/orders"
+      "/admin-dashboard/orders",
     ].includes(router.pathname)
   ) {
     return (
@@ -77,6 +78,7 @@ function MyApp({ Component, pageProps }: AppProps) {
               <PersistGate loading={null} persistor={persistor}>
                 <HeaderWrapper>
                   <Component {...pageProps} />
+                  <Footer />
                   <helper.Toastify />
                 </HeaderWrapper>
               </PersistGate>

@@ -26,7 +26,7 @@ export default function RelatedProducts({
           ? [1, 2, 4, 5, 6, 7, 8, 9, 10].map((_, index) => (
               <ProductCardSkeleton key={index} />
             ))
-          : relatedProducts?.product
+          : relatedProducts?.products
               .filter(({ _id }) => _id !== currentProductId)
               ?.slice(0, 5)
               .map((item: productTypings) => {

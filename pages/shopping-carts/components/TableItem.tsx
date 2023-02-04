@@ -56,14 +56,14 @@ export default function TableItem({ cartItem }: tableItemsTypes) {
       <td>
         <div className="flex justify-center">
           <img
-            src={`http://localhost:8080/${cartItem.productId.image}`}
+            src={`http://localhost:8080/${cartItem.productId?.image}`}
             className="object-cover h-16 w-16 rounded-lg"
             alt="image"
           />
         </div>
       </td>
       <td className="p-4 px-6 text-center whitespace-nowrap">
-        {cartItem.productId.name}
+        {cartItem.productId?.name}
       </td>
       <td className="p-4 px-6 text-center whitespace-nowrap">
         <div>
@@ -109,10 +109,10 @@ export default function TableItem({ cartItem }: tableItemsTypes) {
         </div>
       </td>
       <td className="p-4 px-6 text-center whitespace-nowrap">
-        {cartItem.productId.currency} {cartItem.totalAmount}
+        {cartItem.productId?.currency} {cartItem?.totalAmount}
       </td>
       <td className="p-4 px-6 text-center whitespace-nowrap">
-        <Link href={`details-page/${cartItem.productId._id}`}>
+        <Link href={`details-page/${cartItem.productId?._id}`}>
           <button className="py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
             View Product
           </button>

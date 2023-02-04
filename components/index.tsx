@@ -20,3 +20,4 @@ export { default as Tooltip } from "./Tooltip/Tooltip";
 export { default as DetailsContainer } from "./DetailPageComponents/DetailContainer";
 export { default as DetailsImg } from "./DetailPageComponents/DetailsImg";
 export { default as DetailsPageReviews } from "./DetailPageComponents/DetailsPageReviews";
+export { default as Footer } from "./Footer/Footer";

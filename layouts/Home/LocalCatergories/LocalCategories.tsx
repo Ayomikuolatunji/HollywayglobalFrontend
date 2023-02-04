@@ -21,7 +21,7 @@ export default function LocalCategories() {
         Tabheaders={[
           "Fruits/Vegetables",
           "Livestocks/Sea foods",
-          "Tubers & Cereals",
+          "Tubers/Cereals",
         ]}
         setCurrentTab={setCurrentTab}
         renderTabPanel={() => (
@@ -35,7 +35,7 @@ export default function LocalCategories() {
                   ? [1, 2, 4, 5, 6, 7, 8, 9, 10].map((_, index) => (
                       <ProductCardSkeleton key={index} />
                     ))
-                  : data?.product?.slice(0, 10).map((item: productTypings) => {
+                  : data?.products?.slice(0, 10).map((item: productTypings) => {
                       return (
                         <ProductCard
                           item={item}

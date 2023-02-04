@@ -179,7 +179,7 @@ export default function ProductTable() {
   }, []);
 
   const dataTable = useMemo(() => {
-    return getData?.product?.map((product: productTypings) => {
+    return getData?.products?.map((product: productTypings) => {
       return {
         id: product._id,
         name: product.name.toLocaleUpperCase(),

@@ -25,7 +25,7 @@ interface DetailItemProps {
 export type fetchProductTypings = {
   counts: number;
   message: string;
-  product: Array<productTyping>;
+  products: Array<productTyping>;
 };
 export interface singleProductTypings {
   message: string;
@@ -102,7 +102,7 @@ export interface productsCarts {
 export interface RelatedProductsProps {
   currentProductId: string;
   relatedProducts: {
-    product: productTypings[];
+    products: productTypings[];
   };
   isRelatedProductsLoading: boolean;
   isRelatedProductFetching: boolean;

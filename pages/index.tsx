@@ -3,6 +3,7 @@ import Head from "next/head";
 import Carousel from "../layouts/Home/Carousel/Carousel";
 import LocalCategories from "../layouts/Home/LocalCatergories/LocalCategories";
 import ProductSlider from "../layouts/Home/ProductSlider/ProductSlider";
+import SpecialProductsSlider from "../layouts/Home/SpecialProductsSliders/SpecialProductsSlider";
 
 const Home: NextPage = () => {
   return (
@@ -17,6 +18,7 @@ const Home: NextPage = () => {
         </div>
         <ProductSlider />
         <LocalCategories />
+        <SpecialProductsSlider />
       </div>
     </div>
   );

@@ -18,8 +18,6 @@ export default function TopNavBar() {
     }
   }, []);
 
-  console.log(isLogged);
-
   return (
     <div className="p-4 bg-[#f5f5f5] w-full lg:block hidden">
       <div className="md:w-[70%] mx-auto flex justify-between">
