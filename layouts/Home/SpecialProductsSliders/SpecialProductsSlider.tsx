@@ -1,5 +1,4 @@
-import React, { Component, useState } from "react";
-import Slider from "react-slick";
+import React from "react";
 import { productTypings } from "../../../models";
 import { useFetchAllProductsQuery } from "../../../redux/apis/unprotectedProducts";
 import { SpecialProduct } from "./SpecialProduct";
