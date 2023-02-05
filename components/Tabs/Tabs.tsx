@@ -3,14 +3,14 @@ import { useState } from "react";
 import uuid from "react-uuid";
 
 interface TabTypings {
-  Tabheaders: string[];
+  TabHeaders: string[];
   renderTabPanel: () => void | any;
   tab?: boolean;
   setCurrentTab: (value: any) => void;
 }
 
 const Tabs = ({
-  Tabheaders,
+  TabHeaders,
   renderTabPanel,
   tab = true,
   setCurrentTab,
@@ -19,8 +19,8 @@ const Tabs = ({
   return (
     <Tab.Group selectedIndex={selectedIndex} onChange={setSelectedIndex}>
       <Tab.List className="flex justify-center mx-auto space-x-5">
-        {Tabheaders.map((tabheader, index) => {
-          if (selectedIndex === index) setCurrentTab(tabheader);
+        {TabHeaders.map((tabHeader, index) => {
+          if (selectedIndex === index) setCurrentTab(tabHeader);
           return (
             <Tab
               key={uuid()}
@@ -28,7 +28,7 @@ const Tabs = ({
                 selectedIndex === index ? "text-[#7fad39] font-extrabold" : ""
               }hover:border-0 active:border-0`}
             >
-              {tabheader}
+              {tabHeader}
             </Tab>
           );
         })}

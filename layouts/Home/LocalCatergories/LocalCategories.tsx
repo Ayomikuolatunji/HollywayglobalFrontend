@@ -3,7 +3,6 @@ import { Tab } from "@headlessui/react";
 import {
   ProductCard,
   ProductCardSkeleton,
-  ProductHeader,
   Tabs,
 } from "../../../components";
 import { useFetchAllProductsQuery } from "../../../redux/apis/unprotectedProducts";
@@ -26,7 +25,7 @@ export default function LocalCategories() {
         <hr className="h-5" />
       </div>
       <Tabs
-        Tabheaders={[
+        TabHeaders={[
           "Fruits/Vegetables",
           "Livestocks/Sea foods",
           "Tubers/Cereals",

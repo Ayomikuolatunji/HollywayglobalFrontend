@@ -48,7 +48,7 @@ const SpecialProductsSlider: React.FC = ({}) => {
     data: group.data,
   }));
   return (
-    <div className="grid grid-cols-3 gap-7 items-start justify-center mt-16">
+    <div className="grid grid-cols-3 gap-7 items-start justify-center mt-16 p-4">
       {mappedData?.map((item: internalDataItem, index) => {
         return <SpecialProduct product={item} key={index} />;
       })}

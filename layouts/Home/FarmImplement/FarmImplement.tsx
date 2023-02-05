@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import Slider from "react-slick";
 import { useFetchAllProductsQuery } from "../../../redux/apis/unprotectedProducts";
-import { ProductCard } from "../../../components";
+import { ProductCard, ProductCardSkeleton, Tabs } from "../../../components";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { Tab } from "@headlessui/react";
+import { productTypings } from "../../../models";
 
 const FarmImplement = () => {
-  const { isLoading, data } = useFetchAllProductsQuery({
+  const [currentTab, setCurrentTab] = useState("Farm Implements");
+  const { isLoading, data, isFetching } = useFetchAllProductsQuery({
     query_name: "Farm Implements",
   });
 
@@ -14,8 +17,8 @@ const FarmImplement = () => {
     dots: true,
     infinite: true,
     speed: 500,
-    slidesToShow: 5,
-    slidesToScroll: 3,
+    slidesToShow: 4,
+    slidesToScroll: 4,
   };
   console.log(data);
 
@@ -29,16 +32,33 @@ const FarmImplement = () => {
         </h1>
         <hr className="h-5" />
       </div>
-      {/* <ProductCard key={index} {...product} /> */}
-      <Slider {...settings}>
-        {data?.products?.map((product, index) => {
-          return (
-            <div key={index}>
-              <ProductCard item={product} />
-            </div>
-          );
-        })}
-      </Slider>
+      <Tabs
+        TabHeaders={["Farm Implements", "Fruits/Vegetables"]}
+        setCurrentTab={setCurrentTab}
+        renderTabPanel={() => (
+          <Tab.Panels className="mt-8 mb-4">
+            {[1, 2, 3, 4].map((item) => (
+              <Tab.Panel key={item} className="">
+                <Slider {...settings}>
+                  {isLoading || (isFetching && data === undefined)
+                    ? [1, 2, 4, 5, 6].map((_, index) => (
+                        <ProductCardSkeleton key={index} />
+                      ))
+                    : data?.products.map((item: productTypings) => {
+                        return (
+                          <ProductCard
+                            item={item}
+                            key={item._id}
+                            currentTab={currentTab}
+                          />
+                        );
+                      })}
+                </Slider>
+              </Tab.Panel>
+            ))}
+          </Tab.Panels>
+        )}
+      />
     </div>
   );
 };
