@@ -18,25 +18,16 @@ export default function Index() {
             </h3>
           </div>
           {data?.cartItems.length! ? (
-            <CartTable data={data} />
-          ) : (
-            <div>
-              <h1>Cart lists currently empty</h1>
-              <Link href="/">
-                <div className="mt-6 cursor-pointer">Go Back</div>
-              </Link>
-            </div>
-          )}
-          {/* <Coupon /> */}
-          {data?.cartItems.length! > 0 && (
-            <div className="checkout-summary">
-              <Summary data={data} />
-              <div className="mt-4">
-                <button className=" w-full py-2 text-center text-white bg-blue-500 rounded-md shadow hover:bg-blue-600">
-                  Proceed to Checkout
-                </button>
+            <div className="w-full flex">
+              <div className="w-[80%]">
+                <CartTable data={data} />
+              </div>
+              <div className="w-[20%]">
+                <Summary />
               </div>
             </div>
+          ) : (
+            <span>Empty cart</span>
           )}
         </div>
       </div>

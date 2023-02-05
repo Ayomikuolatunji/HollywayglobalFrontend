@@ -80,12 +80,13 @@ export const secureApi = userSecureApiService.injectEndpoints({
       invalidatesTags: ["Cart"],
     }),
     createPayment: build.mutation<void, any>({
-      query: (productId) => {
+      query: () => {
         return {
           url: `create_user_payment/${user_id}`,
-          method: "PATCH",
-          params: {
-            userId: localStorageGetItem("userId"),
+          method: "POST",
+          body: {
+            email: "olatunjiayomiku@gmail.com",
+            amount: 1000,
           },
         };
       },
@@ -100,4 +101,5 @@ export const {
   useIncrementCartItemsMutation,
   useDecrementCartItemsMutation,
   useAddToCartItemMutation,
+  useCreatePaymentMutation,
 } = secureApi;
