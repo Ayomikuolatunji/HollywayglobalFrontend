@@ -16,7 +16,7 @@ const ProfileDropDown = ({ isLogged }: ProfileDropDownProps) => {
   const logout = () => {
     if (Cookies.get("user_token")) {
       Cookies.remove("user_token");
-      localStorageRemoveItem("user_id");
+      localStorageRemoveItem("userId");
       window.location.reload();
       router.push("/");
     }

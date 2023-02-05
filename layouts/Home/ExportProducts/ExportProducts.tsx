@@ -2,18 +2,50 @@ import React, { useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { useFetchAllProductsQuery } from "../../../redux/apis/unprotectedProducts";
+import {
+  useFetchAllProductsQuery,
+  useFetchPostDataMutation,
+} from "../../../redux/apis/unprotectedProducts";
 import { productTypings } from "../../../models/product";
 import { ProductCardSkeleton, ProductHeader } from "../../../components";
 import { settings } from "../../../helpers/utils";
 import { useRouter } from "next/router";
 import { BsHeart } from "react-icons/bs";
 import { GiShoppingCart } from "react-icons/gi";
+import { useAddToCartItemMutation } from "../../../redux/apis/usersApis";
+import { localStorageGetItem } from "../../../helpers/Storage";
+import { toast } from "react-toastify";
+import { Error } from "../../../models";
 
 const ExportProducts: React.FC = () => {
   const { isLoading, data } = useFetchAllProductsQuery({ query_name: "all" });
   const router = useRouter();
   const [wishlistHovered, setWishlistHovered] = useState(false);
+  const [addToCartItem] = useAddToCartItemMutation();
+  const [fetchPostData] = useFetchPostDataMutation();
+
+  const addToCartItemFunc = async (item: productTypings) => {
+    try {
+      if (!localStorageGetItem("userId")) {
+        toast.info("You have to login first", {
+          toastId: "id-login-auth",
+        });
+        return;
+      } else if (item?.item_in_cart) {
+        return;
+      }
+      await addToCartItem(item?._id!)
+        .unwrap()
+        .then(async () => {});
+    } catch (error) {
+      const err = error as Error;
+      toast.error(err.data.message, {
+        toastId: "addToCartItemFunc-error-toast-id",
+      });
+      console.log(error);
+    }
+  };
+
   const onViewProductDetails = (item: productTypings) => {
     const routerPath = (router.query.productId = `/details-page/${item._id}`);
     router.push(routerPath);
@@ -62,7 +94,10 @@ const ExportProducts: React.FC = () => {
                           </span>
                           <button className="flex items-center justify-center bg-main-color hover:bg-main-deep-color p-2 rounded-md cursor-pointer transition duration-150">
                             <GiShoppingCart className="text-white mr-2" />
-                            <span className="text-white font-medium">
+                            <span
+                              className="text-white font-medium"
+                              onClick={() => addToCartItemFunc(product)}
+                            >
                               Add to cart
                             </span>
                           </button>

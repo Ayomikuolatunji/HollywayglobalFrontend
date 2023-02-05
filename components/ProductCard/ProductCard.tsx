@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { BsHeart } from "react-icons/bs";
 import { GiShoppingCart } from "react-icons/gi";
 import { toast } from "react-toastify";
+import { localStorageGetItem } from "../../helpers/Storage";
 import { Error } from "../../models";
 import { ProductCardTypes } from "../../models/product";
 import {
@@ -23,6 +24,14 @@ export default function ProductCard({ item, currentTab }: extraTypes) {
 
   const addToCartItemFunc = async (id: string) => {
     try {
+      if (!localStorageGetItem("userId")) {
+        toast.info("You have to login first", {
+          toastId: "id-login-auth",
+        });
+        return;
+      } else if (item.item_in_cart) {
+        return;
+      }
       await addToCartItem(id)
         .unwrap()
         .then(async () => {
@@ -71,7 +80,16 @@ export default function ProductCard({ item, currentTab }: extraTypes) {
           </span>
           <button className="flex items-center justify-center bg-main-color hover:bg-main-deep-color p-2 rounded-md cursor-pointer transition duration-150">
             <GiShoppingCart className="text-white mr-2" />
-            <span className="text-white font-medium">Add to cart</span>
+            {item?.item_in_cart && localStorageGetItem("userId") ? (
+              <span className="text-white font-medium">In cart</span>
+            ) : (
+              <span
+                className="text-white font-bold"
+                onClick={() => addToCartItemFunc(item?._id!)}
+              >
+                Add to cart
+              </span>
+            )}
           </button>
         </div>
       </div>

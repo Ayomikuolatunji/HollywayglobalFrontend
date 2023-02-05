@@ -10,6 +10,7 @@ export interface productTypings {
   item_in_cart?: boolean;
   createdAt?: Date;
   updatedAt?: Date;
+  item_in_cart?: string;
   currency?: string;
 }
 

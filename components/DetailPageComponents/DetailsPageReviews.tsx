@@ -3,7 +3,7 @@ import { Fragment } from "react";
 import CustomerReviews from "./CustomerReviews";
 import ProductInformation from "./ProductInformation";
 
-const tabListsTitles = ["Information", "Reviews"];
+const tabListsTitles = ["Reviews", "Information"];
 
 export default function DetailsPageReviews() {
   return (
@@ -28,10 +28,10 @@ export default function DetailsPageReviews() {
         </Tab.List>
         <Tab.Panels>
           <Tab.Panel>
-            <ProductInformation />
+            <CustomerReviews />
           </Tab.Panel>
           <Tab.Panel>
-            <CustomerReviews />
+            <ProductInformation />
           </Tab.Panel>
         </Tab.Panels>
       </Tab.Group>

@@ -1,4 +1,5 @@
 import { getAppCredentials } from "../../helpers/Auth";
+import { localStorageGetItem } from "../../helpers/Storage";
 import { productsCarts } from "../../models";
 import { fetchedUserDetails } from "../../models/user";
 import { userSecureApiService } from "../service";
@@ -77,6 +78,17 @@ export const secureApi = userSecureApiService.injectEndpoints({
         };
       },
       invalidatesTags: ["Cart"],
+    }),
+    createPayment: build.mutation<void, any>({
+      query: (productId) => {
+        return {
+          url: `create_user_payment/${user_id}`,
+          method: "PATCH",
+          params: {
+            userId: localStorageGetItem("userId"),
+          },
+        };
+      },
     }),
   }),
 });

@@ -40,11 +40,11 @@ const Login = () => {
     resolver: yupResolver(schema),
   });
 
-  // useEffect(() => {
-  //   if (Cookies.get("user_token") || localStorageGetItem("user_id")) {
-  //     router.push("/");
-  //   }
-  // }, [router]);
+  useEffect(() => {
+    if (Cookies.get("user_token") || localStorageGetItem("userId")) {
+      router.push("/");
+    }
+  }, [router]);
 
   useEffect(() => {
     if (isLoggedIn) {

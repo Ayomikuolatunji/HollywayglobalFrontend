@@ -20,7 +20,6 @@ const FarmImplement = () => {
     slidesToShow: 4,
     slidesToScroll: 4,
   };
-  console.log(data);
 
   return (
     <div className=" my-24 relative">
