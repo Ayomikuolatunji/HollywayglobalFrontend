@@ -49,7 +49,7 @@ export default function ProductCard({ item, currentTab }: extraTypes) {
   };
 
   return (
-    <div className="flex flex-col items-center m-4 p-4 shadow-sm bg-white rounded-lg">
+    <div className="flex flex-col items-center m-4 p-4  bg-white">
       <img
         className="w-48 h-48 object-cover"
         src={`http://localhost:8080/${item.image}`}

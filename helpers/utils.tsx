@@ -1108,6 +1108,10 @@ export const productsDepartments: Array<navTypes> = [
     link: "livestocks-seafoods",
   },
   {
+    name: "Irrigation Materials",
+    link: "irrigation-material",
+  },
+  {
     name: "Mineral Resources",
     link: "mineral-resources",
   },

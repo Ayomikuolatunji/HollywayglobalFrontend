@@ -10,7 +10,7 @@ import { productTypings } from "../../../models";
 const FarmImplement = () => {
   const [currentTab, setCurrentTab] = useState("Farm Implements");
   const { isLoading, data, isFetching } = useFetchAllProductsQuery({
-    query_name: "Farm Implements",
+    query_name: currentTab,
   });
 
   const settings = {
@@ -33,7 +33,7 @@ const FarmImplement = () => {
         <hr className="h-5" />
       </div>
       <Tabs
-        TabHeaders={["Farm Implements", "Fruits/Vegetables"]}
+        TabHeaders={["Farm Implements", "Irrigation Materials"]}
         setCurrentTab={setCurrentTab}
         renderTabPanel={() => (
           <Tab.Panels className="mt-8 mb-4">
@@ -41,7 +41,7 @@ const FarmImplement = () => {
               <Tab.Panel key={item} className="">
                 <Slider {...settings}>
                   {isLoading || (isFetching && data === undefined)
-                    ? [1, 2, 4, 5, 6].map((_, index) => (
+                    ? [1, 2, 4, 5, 6, 7, 8, 9, 10].map((_, index) => (
                         <ProductCardSkeleton key={index} />
                       ))
                     : data?.products.map((item: productTypings) => {
