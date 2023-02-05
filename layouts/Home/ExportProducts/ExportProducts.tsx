@@ -7,9 +7,7 @@ import { productTypings } from "../../../models/product";
 import { ProductCardSkeleton, ProductHeader } from "../../../components";
 import { settings } from "../../../helpers/utils";
 import { useRouter } from "next/router";
-
-import { FiHeart, FiShoppingCart } from "react-icons/fi";
-import { BsFillBagFill, BsHeart } from "react-icons/bs";
+import { BsHeart } from "react-icons/bs";
 import { GiShoppingCart } from "react-icons/gi";
 
 const ExportProducts: React.FC = () => {

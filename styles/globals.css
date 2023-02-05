@@ -12,10 +12,10 @@ body {
 }
 
 .slick-slide > div {
-  margin: 0 10px;
+  margin: 0 3px;
 }
 .slick-list {
-  margin: 0 -10px;
+  margin: 0 -3px;
 }
 
 @layer base {

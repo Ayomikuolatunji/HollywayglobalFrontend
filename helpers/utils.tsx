@@ -1100,10 +1100,6 @@ export const productsDepartments: Array<navTypes> = [
     link: "e-books",
   },
   {
-    name: "Irrigation Materials",
-    link: "irrigation-material",
-  },
-  {
     name: "Fruits/Vegetables",
     link: "fruits-vegetables",
   },

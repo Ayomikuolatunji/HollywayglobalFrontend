@@ -42,10 +42,18 @@ export const SpecialProduct: React.FC<internalDataProps> = ({ product }) => {
       <div className="flex justify-between items-center mb-7">
         <h1 className="text-black font-extrabold text-xl">{product.title}</h1>
         <div className="button">
-          <button onClick={handlePrev} className="border-2 rounded-md p-2">
+          <button
+            onClick={handlePrev}
+            type="button"
+            className="border-2 rounded-md p-2"
+          >
             <GrFormPrevious />
           </button>
-          <button onClick={handleNext} className="border-2 rounded-md p-2 ml-4">
+          <button
+            onClick={handleNext}
+            type="button"
+            className="border-2 rounded-md p-2 ml-4"
+          >
             <GrFormNext />
           </button>
         </div>
@@ -58,7 +66,6 @@ export const SpecialProduct: React.FC<internalDataProps> = ({ product }) => {
         {product.data
           .slice(currentIndex, currentIndex + 3)
           .map((item, index) => {
-            console.log(item);
             return (
               <div
                 key={index}

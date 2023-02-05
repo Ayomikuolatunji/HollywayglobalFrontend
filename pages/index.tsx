@@ -20,7 +20,7 @@ const Home: NextPage = () => {
         <ExportProducts />
         <LocalCategories />
         <SpecialProductsSlider />
-        {/* <FarmImplement /> */}
+        <FarmImplement />
       </div>
     </div>
   );
