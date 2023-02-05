@@ -45,14 +45,14 @@ export const SpecialProduct: React.FC<internalDataProps> = ({ product }) => {
           <button
             onClick={handlePrev}
             type="button"
-            className="border-2 rounded-md p-2"
+            className="border-2 rounded-md p-2 bg-[#F3F6FA]"
           >
             <GrFormPrevious />
           </button>
           <button
             onClick={handleNext}
             type="button"
-            className="border-2 rounded-md p-2 ml-4"
+            className="border-2 rounded-md p-2 ml-4 bg-[#F3F6FA]"
           >
             <GrFormNext />
           </button>

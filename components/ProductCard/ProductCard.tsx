@@ -1,6 +1,5 @@
 import { useRouter } from "next/router";
 import React, { useState } from "react";
-import { AiOutlineShoppingCart, AiOutlineHeart } from "react-icons/ai";
 import { BsHeart } from "react-icons/bs";
 import { GiShoppingCart } from "react-icons/gi";
 import { toast } from "react-toastify";

@@ -24,8 +24,10 @@ const Tabs = ({
           return (
             <Tab
               key={uuid()}
-              className={`text-xl ${
-                selectedIndex === index ? "text-[#7fad39] font-extrabold" : ""
+              className={`text-lg ${
+                selectedIndex === index
+                  ? "text-main-deep-color font-extrabold"
+                  : ""
               }hover:border-0 active:border-0`}
             >
               {tabHeader}
