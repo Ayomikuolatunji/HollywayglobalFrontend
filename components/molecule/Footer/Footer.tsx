@@ -1,6 +1,6 @@
 import React from "react";
 
-const Footer = () => {
+const Footer = (): JSX.Element => {
   return (
     <div className="bg-gray-100">
       <footer className=" dark:bg-gray-900 md:max-w-[1270px] mx-auto">

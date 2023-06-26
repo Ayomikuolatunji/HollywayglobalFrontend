@@ -1,18 +1,18 @@
-import "../styles/globals.css";
-import type { AppProps } from "next/app";
-import "react-toastify/dist/ReactToastify.css";
-import { Provider } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
-import { useRouter } from "next/router";
-import { ThemeProvider } from "@mui/material/styles";
+import '../styles/globals.css';
+import type { AppProps } from 'next/app';
+import 'react-toastify/dist/ReactToastify.css';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import { useRouter } from 'next/router';
+import { ThemeProvider } from '@mui/material/styles';
 
-import HeaderWrapper from "../components/Wrapper/HeaderWrapper";
-import { store, persistor } from "../redux/store";
-import AdminWrapper from "../components/AdminWrapper/Main";
-import * as helper from "../helpers";
-import NetWorkWrapper from "../layouts/NetworkWrapper/NetWorkWrapper";
-import { ErrorBoundary } from "../components";
-import Footer from "../components/Footer/Footer";
+import HeaderWrapper from '../components/Wrapper/HeaderWrapper';
+import { store, persistor } from '../redux/store';
+import AdminWrapper from '../components/AdminWrapper/Main';
+import * as helper from '../helpers';
+import NetWorkWrapper from '../layouts/NetworkWrapper/NetWorkWrapper';
+import { ErrorBoundary } from '../components';
+import Footer from '../components/molecule/Footer/Footer';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -20,17 +20,20 @@ function MyApp({ Component, pageProps }: AppProps) {
   const theme = {};
 
   if (
-    router.pathname.startsWith("/admin-login") ||
-    router.pathname.startsWith("/admin-signup") ||
-    router.pathname.startsWith("/login") ||
-    router.pathname.startsWith("/signup")
+    router.pathname.startsWith('/admin-login') ||
+    router.pathname.startsWith('/admin-signup') ||
+    router.pathname.startsWith('/login') ||
+    router.pathname.startsWith('/signup')
   ) {
     return (
-      <div className="w-full">
+      <div className='w-full'>
         <ErrorBoundary>
           <NetWorkWrapper>
             <Provider store={store}>
-              <PersistGate loading={null} persistor={persistor}>
+              <PersistGate
+                loading={null}
+                persistor={persistor}
+              >
                 <Component {...pageProps} />
                 <helper.Toastify />
               </PersistGate>
@@ -43,20 +46,23 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   if (
     [
-      "/admin-dashboard",
-      "/admin-dashboard/products",
-      "/admin-dashboard/departments",
-      "/admin-dashboard/transactions",
-      "/admin-dashboard/users",
-      "/admin-dashboard/orders",
+      '/admin-dashboard',
+      '/admin-dashboard/products',
+      '/admin-dashboard/departments',
+      '/admin-dashboard/transactions',
+      '/admin-dashboard/users',
+      '/admin-dashboard/orders',
     ].includes(router.pathname)
   ) {
     return (
       <ErrorBoundary>
-        <div className="lg:w-[100%] md:w-[70%] sm:w-[80%] mx-auto w-[97%] h-[100%]">
+        <div className='lg:w-[100%] md:w-[70%] sm:w-[80%] mx-auto w-[97%] h-[100%]'>
           <NetWorkWrapper>
             <Provider store={store}>
-              <PersistGate loading={null} persistor={persistor}>
+              <PersistGate
+                loading={null}
+                persistor={persistor}
+              >
                 <AdminWrapper>
                   <Component {...pageProps} />
                   <helper.Toastify />
@@ -70,12 +76,15 @@ function MyApp({ Component, pageProps }: AppProps) {
   }
 
   return (
-    <div className="lg:w-[100%] mx-auto w-[97%]">
+    <div className='lg:w-[100%] mx-auto w-[97%]'>
       <ErrorBoundary>
         <ThemeProvider theme={theme}>
           <NetWorkWrapper>
             <Provider store={store}>
-              <PersistGate loading={null} persistor={persistor}>
+              <PersistGate
+                loading={null}
+                persistor={persistor}
+              >
                 <HeaderWrapper>
                   <Component {...pageProps} />
                   <Footer />
