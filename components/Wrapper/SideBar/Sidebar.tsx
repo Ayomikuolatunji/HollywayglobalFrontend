@@ -30,9 +30,12 @@ export default function Sidebar() {
           >
             {productsDepartments.map((item, index) => {
               return (
-                <Menu.Item>
-                  <Link href={item.link} passHref key={index}>
-                    <span className="cursor-pointer block text-[#1c1c1c] leading-[24px]">
+                <Menu.Item key={index}>
+                  <Link
+                    href={item.link}
+                    passHref
+                  >
+                    <span className='cursor-pointer block text-[#1c1c1c] leading-[24px]'>
                       {item.name}
                     </span>
                   </Link>

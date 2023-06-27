@@ -24,7 +24,7 @@ export default function LocalCategories() {
         </h1>
         <hr className="h-5" />
       </div>
-      <Tabs
+      {/* <Tabs
         TabHeaders={[
           "Fruits/Vegetables",
           "Livestocks/Sea foods",
@@ -55,7 +55,7 @@ export default function LocalCategories() {
             ))}
           </Tab.Panels>
         )}
-      />
+      /> */}
     </div>
   );
 }

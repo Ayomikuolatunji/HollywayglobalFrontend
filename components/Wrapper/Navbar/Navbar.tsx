@@ -22,13 +22,11 @@ const Navbar: React.FC = () => {
         <ul className="py-4 md:w-[65%]">
           {navItems.map((item) => {
             return (
-              <Link href={item.link} key={item.link}>
-                <a
-                  className="text-[#252525] first:text-[#7fad39] 
+              <Link href={item.link} key={item.link}
+               className="text-[#252525] first:text-[#7fad39] 
               font-[700] text-[14px] ml-[60px] first:ml-0 hover:text-[#7fad39] transition-[color] duration-100 delay-100 hover:delay-100"
-                >
+              >
                   {item.name.toUpperCase()}
-                </a>
               </Link>
             );
           })}

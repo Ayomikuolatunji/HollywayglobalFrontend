@@ -20,10 +20,10 @@ export default function NavbarCategory() {
           <option value="">All Category</option>
           {productsDepartments.map((item, index) => {
             return (
-              <option key={index}>
-                <span className="cursor-pointer block text-[#1c1c1c] leading-[24px]">
+              <option key={index} className="cursor-pointer block text-[#1c1c1c] leading-[24px]">
+                {/* <span> */}
                   {item.name}
-                </span>
+                {/* </span> */}
               </option>
             );
           })}
@@ -39,7 +39,7 @@ export default function NavbarCategory() {
       </div>
       <div className="contact flex items-center w-[20%] px-3">
         <span className="p-4 flex justify-center items-center bg-[#f5f5f5] w-[50px] h-[50px] rounded-full text-[#7fad39] mr-5">
-          <BsTelephoneFill text-xl />
+          <BsTelephoneFill className="text-xl" />
         </span>
         <div className="support flex flex-col">
           <h1 className="text-black font-extrabold mb-2 text-lg">
