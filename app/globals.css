@@ -302,6 +302,12 @@ h2 { margin-bottom: 0; font-size: clamp(29px, 3vw, 41px); line-height: 1.08; let
 .subscribeFormRow .button { cursor: pointer; }
 .subscribeFormCard small { color: #8995a8; font-size: 9px; line-height: 1.5; }
 .subscribeFormCard small a { color: var(--blue); font-weight: 800; }
+.consentCheck { display: flex !important; grid-template-columns: none !important; align-items: flex-start; gap: 8px !important; font-weight: 500 !important; line-height: 1.45; }
+.consentCheck input { width: auto; margin-top: 2px; }
+.formStatus { margin: 2px 0 0 !important; padding: 9px 11px; border-radius: 7px; font-size: 10px !important; font-weight: 700; }
+.formStatus.success { color: #126b3b !important; background: #e9f8ef; }
+.formStatus.error { color: #a12b24 !important; background: #fff0ee; }
+.button:disabled { cursor: wait; opacity: .65; }
 [data-theme="dark"] .subscribeSection { background: #151f32; }
 [data-theme="dark"] .subscribeFormCard { border-color: #2a3952; background: #0f1829; }
 [data-theme="dark"] .subscribeFormCard label { color: #d4deed; }

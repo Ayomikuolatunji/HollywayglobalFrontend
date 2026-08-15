@@ -11,6 +11,11 @@ const adminWhatsApp = `https://wa.me/2347015585967?text=${encodeURIComponent("He
 const sellWhatsApp = `https://wa.me/2347015585967?text=${encodeURIComponent("Hello Hollyway Admin, I want to sell an item.")}`;
 const wantedWhatsApp = `https://wa.me/2347015585967?text=${encodeURIComponent("Hello Hollyway Admin, I want to post a wanted item request.")}`;
 const contactEmail = "contact@hollywayglobal.com";
+const audienceRelayBaseUrl = (process.env.NEXT_PUBLIC_AUDIENCE_RELAY_BASE_URL || "https://audiencerelay.com").replace(/\/$/, "");
+const audienceRelayTokens = {
+  contact: process.env.NEXT_PUBLIC_AUDIENCE_RELAY_CONTACT_FORM_TOKEN || "",
+  newsletter: process.env.NEXT_PUBLIC_AUDIENCE_RELAY_NEWSLETTER_FORM_TOKEN || "",
+};
 
 const navLinks = [["Home", "/"], ["How it works", "#how"], ["Categories", "#categories"], ["Fees & requests", "#pricing"], ["Logistics", "#logistics"], ["About us", "/about"], ["Testimonials", "/testimonials"], ["Contact", "#contact"]];
 const categories = [
@@ -83,6 +88,8 @@ export default function Home() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
+  const [contactStatus, setContactStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [subscribeStatus, setSubscribeStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
 
   useEffect(() => {
     const savedTheme = window.localStorage.getItem("hollyway-theme");
@@ -99,25 +106,49 @@ export default function Home() {
     window.localStorage.setItem("hollyway-theme", nextTheme ? "dark" : "light");
   }
 
-  function handleContactSubmit(event: FormEvent<HTMLFormElement>) {
+  async function submitToAudienceRelay(type: "contact" | "newsletter", data: Record<string, string | boolean>) {
+    const token = audienceRelayTokens[type];
+    if (!token) throw new Error("AudienceRelay form token is not configured");
+    const response = await fetch(`${audienceRelayBaseUrl}/api/v1/forms/${encodeURIComponent(token)}/submissions`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) throw new Error("AudienceRelay submission failed");
+  }
+
+  async function handleContactSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
+    const form = event.currentTarget;
+    const formData = new FormData(form);
     const name = String(formData.get("name") || "");
     const email = String(formData.get("email") || "");
     const topic = String(formData.get("topic") || "General enquiry");
     const message = String(formData.get("message") || "");
-    const subject = encodeURIComponent(`Hollyway enquiry: ${topic}`);
-    const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nTopic: ${topic}\n\n${message}`);
-    window.location.href = `mailto:${contactEmail}?subject=${subject}&body=${body}`;
+    setContactStatus("sending");
+    try {
+      await submitToAudienceRelay("contact", { name, email, topic, message });
+      form.reset();
+      setContactStatus("sent");
+    } catch {
+      setContactStatus("error");
+    }
   }
 
-  function handleSubscribeSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubscribeSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
+    const form = event.currentTarget;
+    const formData = new FormData(form);
     const email = String(formData.get("subscriberEmail") || "");
-    const subject = encodeURIComponent("Hollyway news subscription");
-    const body = encodeURIComponent(`Please add this email to the Hollyway Global news and information list:\n\n${email}`);
-    window.location.href = `mailto:${contactEmail}?subject=${subject}&body=${body}`;
+    const marketingConsent = formData.get("marketingConsent") === "yes";
+    setSubscribeStatus("sending");
+    try {
+      await submitToAudienceRelay("newsletter", { email, marketing_consent: marketingConsent });
+      form.reset();
+      setSubscribeStatus("sent");
+    } catch {
+      setSubscribeStatus("error");
+    }
   }
 
   return <main>
@@ -143,11 +174,11 @@ export default function Home() {
 
     <section id="channels" className="section pageShell channelsSection"><div className="sectionHeader"><div><span className="sectionKicker">STAY IN THE LOOP</span><h2>Start with <span>WhatsApp.</span></h2></div><p>Our WhatsApp marketplace is where buyers and sellers connect. Follow the channel for updates, then find us across our official social platforms.</p></div><div className="channelGrid">{channels.map(([icon, title, text, href, tone], index) => <a className={`channelCard ${index < 2 ? "whatsappChannelCard" : ""}`} href={href} target="_blank" rel="noreferrer" key={title}><span className={`channelIcon ${tone}`}><SocialIcon name={icon === "WA" ? "whatsapp" : icon === "IG" ? "instagram" : icon === "X" ? "x" : icon === "f" ? "facebook" : icon === "tiktok" ? "tiktok" : icon === "group" ? "group" : "linkedin"} /></span><span><b>{title}</b><small>{text}</small></span><Arrow /></a>)}</div></section>
 
-    <section className="subscribeSection"><div className="pageShell subscribeInner"><div><span className="sectionKicker">NEWS &amp; INFORMATION</span><h2>Stay close to the <em>next opportunity.</em></h2><p>Subscribe for Hollyway marketplace updates, new listings, buyer requests and practical buying or selling information.</p></div><div className="subscribeFormCard"><form onSubmit={handleSubscribeSubmit}><label htmlFor="subscriberEmail">Email address</label><div className="subscribeFormRow"><input id="subscriberEmail" name="subscriberEmail" type="email" placeholder="you@example.com" autoComplete="email" required /><button className="button buttonPrimary" type="submit">Subscribe <Arrow /></button></div><small>Submitting opens an email to Hollyway for confirmation. For instant updates, <a href={whatsappChannel} target="_blank" rel="noreferrer">follow our WhatsApp channel</a>.</small></form></div></div></section>
+    <section className="subscribeSection"><div className="pageShell subscribeInner"><div><span className="sectionKicker">NEWS &amp; INFORMATION</span><h2>Stay close to the <em>next opportunity.</em></h2><p>Subscribe for Hollyway marketplace updates, new listings, buyer requests and practical buying or selling information.</p></div><div className="subscribeFormCard"><form onSubmit={handleSubscribeSubmit}><label htmlFor="subscriberEmail">Email address</label><div className="subscribeFormRow"><input id="subscriberEmail" name="subscriberEmail" type="email" placeholder="you@example.com" autoComplete="email" required /><button className="button buttonPrimary" type="submit" disabled={subscribeStatus === "sending"}>{subscribeStatus === "sending" ? "Subscribing…" : <>Subscribe <Arrow /></>}</button></div><label className="consentCheck"><input name="marketingConsent" type="checkbox" value="yes" required /> <span>I agree to receive Hollyway email updates and can unsubscribe later.</span></label><small>For instant updates, <a href={whatsappChannel} target="_blank" rel="noreferrer">follow our WhatsApp channel</a>.</small>{subscribeStatus === "sent" && <p className="formStatus success" role="status">You are subscribed. Welcome to Hollyway updates.</p>}{subscribeStatus === "error" && <p className="formStatus error" role="alert">We could not subscribe you right now. Please try again.</p>}</form></div></div></section>
 
     <section className="trustStrip"><div className="pageShell trustInner"><div><span>🇳🇬</span><b>Nationwide coverage</b><small>All 36 states + FCT</small></div><div><span>🛡️</span><b>Safer transactions</b><small>Escrow, inspection and delivery support</small></div><div><span>⚡</span><b>Fast support</b><small>Monday–Saturday, 8AM–9PM WAT</small></div></div></section>
 
-    <section id="contact" className="contactSection pageShell"><div className="contactIntro"><span className="sectionKicker">WE ARE HERE TO HELP</span><h2>Let&apos;s talk about your <span>buying or selling goal.</span></h2><p>Business actions go directly to the Hollyway Admin WhatsApp DM. Use email for general contact, support and formal enquiries.</p><div className="contactDetails"><a className="contactDetail" href={`mailto:${contactEmail}`}><span>✉</span><div><b>Email support</b><small>{contactEmail}</small></div></a><a className="contactDetail" href={adminWhatsApp} target="_blank" rel="noreferrer"><span><SocialIcon name="whatsapp" /></span><div><b>Admin WhatsApp DM</b><small>+234 701 558 5967</small></div></a><a className="contactDetail" href="tel:+2347015585967"><span>☎</span><div><b>Phone support</b><small>+234 701 558 5967</small></div></a><div className="contactDetail"><span>⌚</span><div><b>Support hours</b><small>Mon–Sat, 8AM–9PM WAT</small></div></div></div><div className="contactSocials"><span>Follow Hollyway</span><a href="https://www.instagram.com/hollywayglobal/" target="_blank" rel="noreferrer">Instagram</a><a href="https://www.tiktok.com/@hollywayglobal" target="_blank" rel="noreferrer">TikTok</a><a href="https://x.com/hollywayglobal" target="_blank" rel="noreferrer">X</a><a href="https://www.facebook.com/Hollywayglobal/" target="_blank" rel="noreferrer">Facebook</a></div></div><div className="contactFormCard"><div className="formHeading"><h3>Send us a message</h3><p>Tell us what you need and we&apos;ll help you find the right next step.</p></div><form onSubmit={handleContactSubmit}><div className="formRow"><label>Name<input name="name" type="text" placeholder="Your name" required /></label><label>Email<input name="email" type="email" placeholder="you@example.com" required /></label></div><label>What can we help with?<select name="topic" defaultValue="General enquiry"><option>General enquiry</option><option>Company information</option><option>Support or dispute</option><option>Partnership</option><option>Business enquiry</option></select></label><label>Message<textarea name="message" rows={4} placeholder="How can Hollyway help?" required /></label><button className="button buttonPrimary" type="submit">Open email to contact us <Arrow /></button><small className="formNote">Submitting opens your device&apos;s email app with your message ready to send.</small></form></div></section>
+    <section id="contact" className="contactSection pageShell"><div className="contactIntro"><span className="sectionKicker">WE ARE HERE TO HELP</span><h2>Let&apos;s talk about your <span>buying or selling goal.</span></h2><p>Business actions go directly to the Hollyway Admin WhatsApp DM. Use email for general contact, support and formal enquiries.</p><div className="contactDetails"><a className="contactDetail" href={`mailto:${contactEmail}`}><span>✉</span><div><b>Email support</b><small>{contactEmail}</small></div></a><a className="contactDetail" href={adminWhatsApp} target="_blank" rel="noreferrer"><span><SocialIcon name="whatsapp" /></span><div><b>Admin WhatsApp DM</b><small>+234 701 558 5967</small></div></a><a className="contactDetail" href="tel:+2347015585967"><span>☎</span><div><b>Phone support</b><small>+234 701 558 5967</small></div></a><div className="contactDetail"><span>⌚</span><div><b>Support hours</b><small>Mon–Sat, 8AM–9PM WAT</small></div></div></div><div className="contactSocials"><span>Follow Hollyway</span><a href="https://www.instagram.com/hollywayglobal/" target="_blank" rel="noreferrer">Instagram</a><a href="https://www.tiktok.com/@hollywayglobal" target="_blank" rel="noreferrer">TikTok</a><a href="https://x.com/hollywayglobal" target="_blank" rel="noreferrer">X</a><a href="https://www.facebook.com/Hollywayglobal/" target="_blank" rel="noreferrer">Facebook</a></div></div><div className="contactFormCard"><div className="formHeading"><h3>Send us a message</h3><p>Tell us what you need and we&apos;ll help you find the right next step.</p></div><form onSubmit={handleContactSubmit}><div className="formRow"><label>Name<input name="name" type="text" placeholder="Your name" required /></label><label>Email<input name="email" type="email" placeholder="you@example.com" required /></label></div><label>What can we help with?<select name="topic" defaultValue="General enquiry"><option>General enquiry</option><option>Company information</option><option>Support or dispute</option><option>Partnership</option><option>Business enquiry</option></select></label><label>Message<textarea name="message" rows={4} placeholder="How can Hollyway help?" required /></label><button className="button buttonPrimary" type="submit" disabled={contactStatus === "sending"}>{contactStatus === "sending" ? "Sending…" : <>Send message <Arrow /></>}</button><small className="formNote">Your message is sent securely to Hollyway.</small>{contactStatus === "sent" && <p className="formStatus success" role="status">Your message was sent. Our team will respond soon.</p>}{contactStatus === "error" && <p className="formStatus error" role="alert">We could not send your message. Please try again or email us directly.</p>}</form></div></section>
 
     <footer className="footer"><div className="pageShell footerTop"><div className="footerBrand"><Brand footer /><p>Nigeria&apos;s marketplace for decluttering, distress sales, relocation clearance and quick liquidation.</p><strong>Buy with confidence. Sell with confidence.</strong></div><div><h4>EXPLORE</h4><a href="#home">Home</a><a href="#categories">Categories</a><a href="#how">How it works</a><a href="#why">Why Hollyway</a><a href="/about">About us</a><a href="/testimonials">Testimonials</a></div><div><h4>TAKE ACTION</h4><a href={sellWhatsApp} target="_blank" rel="noreferrer">Chat with admin to sell</a><a href={wantedWhatsApp} target="_blank" rel="noreferrer">Message admin to request</a><a href={whatsappChannel} target="_blank" rel="noreferrer">Follow WhatsApp channel</a><a href="#contact">Contact support</a></div><div><h4>CONTACT</h4><a href={`mailto:${contactEmail}`}>{contactEmail}</a><a href="mailto:support@hollywayglobal.com">support@hollywayglobal.com</a><a href="mailto:hollywayglobal@gmail.com">hollywayglobal@gmail.com</a><span className="footerMeta">Admin WhatsApp: +234 701 558 5967<br />Mon–Sat, 8AM–9PM WAT</span></div></div><div className="pageShell footerBottom"><span>© 2026 Hollyway Global · CAC RC 1611033</span><span>Buy · Sell · Connect · Nationwide</span></div></footer>
   </main>;
