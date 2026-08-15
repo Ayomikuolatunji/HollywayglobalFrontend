@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import SiteHeader from "../components/SiteHeader";
 
 export const metadata: Metadata = {
   title: "Customer Stories",
@@ -26,10 +27,7 @@ const stories = [
 export default function TestimonialsPage() {
   return (
     <main className="storiesPage">
-      <header className="storiesHeader">
-        <a className="aboutBack" href="/">← Back to Hollyway Global</a>
-        <span className="aboutHeaderLabel">CUSTOMER STORIES</span>
-      </header>
+      <SiteHeader />
 
       <section className="storiesHero pageShell">
         <div><span className="sectionKicker">WHAT HOLLYWAY IS BUILT FOR</span><h1>Real needs. <em>Real marketplace moments.</em></h1><p>From clearing a home to liquidating imported stock, Hollyway Global helps people and businesses move items forward.</p><a className="button buttonPrimary" href={adminWhatsApp} target="_blank" rel="noreferrer">Share your Hollyway story <span>↗</span></a></div>
