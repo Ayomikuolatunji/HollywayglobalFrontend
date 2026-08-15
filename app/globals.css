@@ -256,3 +256,23 @@ h2 { margin-bottom: 0; font-size: clamp(29px, 3vw, 41px); line-height: 1.08; let
   .storyProofInner > div:last-child { margin-top: 25px; }
   .storiesFooter .pageShell { display: block; line-height: 2; }
 }
+
+/* Theme contrast fixes */
+.themeToggle { color: #35206f; background: #fff; box-shadow: 0 2px 8px rgba(10,29,55,.08); }
+.themeToggle .themeSvg { color: currentColor; opacity: 1; }
+[data-theme="dark"] .themeToggle { color: #ffb01b; background: #192844; box-shadow: 0 2px 8px rgba(0,0,0,.22); }
+[data-theme="dark"] .navLinks { background: #0d1424; }
+[data-theme="dark"] .menuButton span { background: #d4deed; }
+[data-theme="dark"] .audienceCard > span { color: #c4d2e8; }
+[data-theme="dark"] .audienceCard p, [data-theme="dark"] .requestFlow span, [data-theme="dark"] .logisticsGrid p, [data-theme="dark"] .policyNotes span, [data-theme="dark"] .serviceFees div, [data-theme="dark"] .channelCard small, [data-theme="dark"] .trustInner small, [data-theme="dark"] .contactDetail small, [data-theme="dark"] .contactSocials span { color: #b3bfd1; }
+[data-theme="dark"] .requestFormat li { color: #c1ccdc; border-color: #2a3952; }
+[data-theme="dark"] .notice { color: #ead7b4; background: #302714; }
+[data-theme="dark"] .logisticsGrid article > span, [data-theme="dark"] .storyTop b { color: #aebbd0; }
+[data-theme="dark"] .aboutPillars article { background: #172b4b; }
+[data-theme="dark"] .aboutPillars article:nth-child(2) { background: #2b2150; }
+[data-theme="dark"] .aboutPillars article:nth-child(3) { background: #3a2b1b; }
+[data-theme="dark"] .aboutPillars p, [data-theme="dark"] .companyDisclaimer { color: #b3bfd1; }
+[data-theme="dark"] .companyDisclaimer { background: #151f32; }
+[data-theme="dark"] .buttonAboutGhost { color: #d8caff; border-color: #8170ad; }
+[data-theme="dark"] .contactFormCard label { color: #d4deed; }
+[data-theme="dark"] .formNote { color: #aebbd0; }
