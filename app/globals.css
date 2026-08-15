@@ -1,9 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&display=swap');
 
-:root { --navy: #061936; --navy-2: #0b2d61; --blue: #1453bb; --orange: #ff8a00; --green: #20bd61; --ink: #0b1830; --muted: #667085; --line: #e5eaf1; --soft: #f6f8fb; --white: #fff; }
+:root { --navy: #061936; --navy-2: #0b2d61; --blue: #1453bb; --blue-bright: #2877dd; --purple: #6b45c7; --purple-dark: #35206f; --orange: #ff8a00; --green: #20bd61; --ink: #0b1830; --muted: #667085; --line: #dfe4ed; --ash: #eef1f5; --soft: #f6f8fb; --white: #fff; }
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-body { margin: 0; background: var(--white); color: var(--ink); font-family: "DM Sans", Arial, sans-serif; overflow-x: hidden; }
+body { margin: 0; background: var(--ash); color: var(--ink); font-family: "DM Sans", Arial, sans-serif; overflow-x: hidden; }
 a { color: inherit; text-decoration: none; }
 button, input, select, textarea { font: inherit; }
 section[id] { scroll-margin-top: 88px; }
@@ -11,7 +11,7 @@ section[id] { scroll-margin-top: 88px; }
 .pageShell { width: min(1180px, calc(100% - 64px)); margin: 0 auto; }
 
 /* Header */
-.nav { height: 78px; position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,.96); border-bottom: 1px solid #edf0f5; backdrop-filter: blur(14px); }
+.nav { height: 78px; position: sticky; top: 0; z-index: 50; background: rgba(238,241,245,.96); border-bottom: 1px solid #dfe4ed; backdrop-filter: blur(14px); }
 .navInner { width: min(1280px, calc(100% - 64px)); height: 100%; margin: auto; display: flex; align-items: center; gap: 38px; }
 .brand { display: flex; align-items: center; gap: 8px; flex: none; }
 .brandMark { width: 42px; height: 42px; overflow: hidden; position: relative; flex: none; }
@@ -117,3 +117,32 @@ h2 { margin-bottom: 0; font-size: clamp(29px, 3vw, 41px); line-height: 1.08; let
 @media (max-width: 1050px) { .navInner { gap: 20px; }.navLinks { gap: 16px; }.pageShell, .navInner { width: min(100% - 48px, 1180px); }.heroGrid { gap: 35px; }.heroPanel { padding: 22px; }.categoryGrid { grid-template-columns: repeat(3, 1fr); }.audienceGrid { grid-template-columns: repeat(2, 1fr); }.pricingLayout, .feesLayout { grid-template-columns: 1fr; }.logisticsGrid { grid-template-columns: repeat(2, 1fr); }.contactSection { grid-template-columns: 1fr; gap: 40px; }.footerTop { grid-template-columns: 1.5fr 1fr 1fr; }.footerBrand { grid-row: span 2; } }
 @media (max-width: 760px) { .pageShell, .navInner { width: calc(100% - 40px); }.nav { height: 68px; }.navInner { gap: 9px; }.brandMark { width: 36px; height: 36px; }.brandMark img { width: 62px; height: 62px; left: -13px; }.brandName strong { font-size: 13px; }.brandName small { font-size: 7px; }.menuButton { width: 32px; height: 32px; margin-left: auto; padding: 7px; display: flex; flex-direction: column; justify-content: center; gap: 4px; }.menuButton span { width: 18px; height: 2px; background: var(--navy); }.navLinks { display: none; position: absolute; top: 68px; left: 0; right: 0; padding: 19px 20px; flex-direction: column; align-items: flex-start; gap: 18px; background: #fff; box-shadow: 0 15px 25px rgba(0,0,0,.1); }.navLinks.open { display: flex; }.navCta { padding: 10px; font-size: 0; }.navCta .socialSvg { width: 15px; height: 15px; }.navCta .arrowIcon { display: none !important; }.heroGrid { min-height: auto; padding: 63px 0 145px; grid-template-columns: 1fr; }.heroCopy { padding: 0; }.heroLead { font-size: 14px; }.heroPanel { display: none; }.heroQuickLinks { bottom: -96px; width: calc(100% - 40px); grid-template-columns: 1fr; }.heroQuickLinks a { min-height: 67px; padding: 12px 17px; border-right: 0; border-bottom: 1px solid var(--line); }.section { padding: 83px 0; }.sectionHeader { display: block; margin-bottom: 27px; }.sectionHeader > p { margin-top: 15px; }.categoryGrid, .benefitGrid, .audienceGrid { grid-template-columns: repeat(2, 1fr); gap: 9px; }.categoryCard { min-height: 205px; padding: 15px 13px; }.categoryIcon { margin-bottom: 16px; }.categoryCard small { font-size: 9px; }.audienceCard { min-height: 210px; padding: 17px; }.audienceCard h3 { font-size: 14px; }.audienceCard p { font-size: 9px; }.processSection { padding-top: 82px; }.processGrid { grid-template-columns: 1fr; gap: 0; }.processCard { min-height: auto; padding: 18px 0 25px 78px; border-top: 1px solid rgba(255,255,255,.15); }.processIcon { position: absolute; top: 18px; left: 0; margin: 0; }.processCard h3 { margin-top: 14px; }.processArrow { display: none; }.audienceRow { grid-template-columns: 1fr; gap: 10px; }.requestFee { align-items: flex-start; flex-wrap: wrap; }.requestFee b { width: 100%; margin-left: 0; text-align: left; }.requestFlow { grid-template-columns: repeat(3, 1fr); }.requestFlow div:nth-child(3):after { display: none; }.requestFormat, .requestSteps { padding: 19px; }.logisticsGrid { grid-template-columns: 1fr 1fr; gap: 9px; }.logisticsGrid article { padding: 15px; }.escrowBanner { display: block; }.escrowBanner a { display: block; margin-top: 17px; }.policyNotes { grid-template-columns: 1fr; }.feesSection { padding-top: 0; }.feeTableHead, .feeTableRow { padding: 0 13px; }.sellCtaInner { min-height: auto; padding: 50px 0; display: block; }.ctaActions { margin-top: 28px; flex-wrap: wrap; }.channelsSection { padding-bottom: 82px; }.channelGrid { grid-template-columns: 1fr 1fr; gap: 9px; }.channelCard { grid-template-columns: 32px 1fr; gap: 8px; padding: 11px; }.channelCard > span:last-child { display: none; }.channelIcon { width: 31px; height: 31px; font-size: 10px; }.channelCard b { font-size: 10px; }.channelCard small { font-size: 8px; }.trustInner { width: 100%; grid-template-columns: 1fr; }.trustInner > div { min-height: 78px; padding: 16px 20px; border-right: 0; border-bottom: 1px solid var(--line); }.trustInner > div:last-child { border-bottom: 0; }.contactSection { padding-top: 82px; padding-bottom: 82px; gap: 32px; }.contactFormCard { padding: 21px 17px; }.formRow { grid-template-columns: 1fr; gap: 14px; }.footerTop { padding-top: 48px; padding-bottom: 38px; grid-template-columns: 1fr 1fr; gap: 31px 22px; }.footerBrand { grid-column: 1 / -1; grid-row: auto; }.footerBottom { display: block; line-height: 2; }.footerBottom span { display: block; } }
 @media (max-width: 390px) { h1 { font-size: 39px; }.heroActions .button, .ctaActions .button { width: 100%; }.categoryGrid { grid-template-columns: 1fr; }.categoryCard { min-height: 170px; }.channelGrid { grid-template-columns: 1fr; }.contactSocials { gap: 10px; } }
+
+/* Hollyway brand balance: ash surfaces with stronger blue, purple and orange accents. */
+.hero { background: linear-gradient(116deg, #061936 0%, #123f91 53%, #4d2b96 100%); }
+.heroBackdrop { background: radial-gradient(circle at 82% 17%, rgba(108,69,199,.55), transparent 28%), radial-gradient(circle at 10% 90%, rgba(40,119,221,.25), transparent 30%), linear-gradient(90deg, rgba(1,10,25,.28), transparent 65%); }
+.heroPanel { background: linear-gradient(150deg, rgba(40,119,221,.28), rgba(107,69,199,.22)); }
+.categoryCard, .benefitCard { background: #f9fafc; box-shadow: 0 7px 20px rgba(10,29,55,.06); }
+.categoryIcon { background: #e1ebff; }
+.categoryCard:nth-child(2n) .categoryIcon { background: #eee5ff; }
+.categoryCard:nth-child(3n) .categoryIcon { background: #dce7ff; }
+.benefitTag { color: var(--purple); }
+.audienceRow > div { background: #e4ecff; }
+.audienceRow > div:last-child { background: #eee5ff; }
+.audienceCard { background: #e1ebff; }
+.audienceCard:nth-child(2), .audienceCard:nth-child(5) { background: #eee5ff; }
+.audienceCard:nth-child(3), .audienceCard:nth-child(6) { background: #dce7ff; }
+.pricingSection { background: #e9e5f5; }
+.requestSteps, .requestFormat, .feeTable, .serviceFees, .logisticsGrid article { background: #f9fafc; }
+.requestFee { background: linear-gradient(105deg, #1453bb, #6b45c7); }
+.requestFlow div { border-top-color: var(--purple); }
+.requestFlow b, .feeTableRow b { color: var(--orange); }
+.logisticsGrid article:nth-child(3) { border-top-color: var(--blue-bright); }
+.logisticsGrid article:nth-child(4) { border-top-color: var(--purple); }
+.escrowBanner { background: linear-gradient(100deg, #061936, #35206f); }
+.policyNotes div { background: #e5eafa; }
+.feesSection { background: var(--ash); }
+.feeTableHead { background: linear-gradient(100deg, var(--navy), var(--purple-dark)); }
+.serviceFees div b { color: var(--purple); }
+.trustStrip { background: #e4e8f1; }
+.trustInner span { color: var(--purple); }
