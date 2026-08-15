@@ -4,7 +4,7 @@ import SiteHeader from "../components/SiteHeader";
 export const metadata: Metadata = {
   title: "Customer Stories",
   description:
-    "Customer story templates covering decluttering, distress sales, relocation clearance, importer stock, wanted requests and safer transactions with Hollyway Global.",
+    "Explore Hollyway Global customer-story themes for decluttering, distress sales, relocation clearance, importer stock, wanted requests and safer transactions in Nigeria.",
   alternates: { canonical: "/testimonials" },
   openGraph: {
     title: "Hollyway Global Customer Stories",

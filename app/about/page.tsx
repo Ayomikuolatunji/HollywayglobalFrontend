@@ -5,7 +5,7 @@ import SiteHeader from "../components/SiteHeader";
 export const metadata: Metadata = {
   title: "About Us",
   description:
-    "Learn about Hollyway Global Investment Int'l Ltd., its quick-sales marketplace, leadership, and mission to connect Nigerian buyers and sellers safely.",
+    "Learn about Hollyway Global Investment Int'l Ltd., a Nigerian quick-sales marketplace for decluttering, distress sales, relocation clearance, importer stock and safer buyer-seller transactions.",
   alternates: { canonical: "/about" },
   openGraph: {
     title: "About Hollyway Global Quick Sales",
