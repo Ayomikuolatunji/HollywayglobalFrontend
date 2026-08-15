@@ -40,7 +40,7 @@ export default function TestimonialsPage() {
 
       <section className="storyProof"><div className="pageShell storyProofInner"><div><span className="sectionKicker">HAVE YOU USED HOLLYWAY?</span><h2>Your experience can help the next person <em>buy or sell with confidence.</em></h2></div><div><p>Send your approved feedback, first name or business name, service used and city to the Hollyway Admin. We can publish it with your permission.</p><a className="button buttonPrimary" href={adminWhatsApp} target="_blank" rel="noreferrer">Send feedback to admin <span>↗</span></a></div></div></section>
 
-      <footer className="storiesFooter"><div className="pageShell"><a href="/">← Return to Hollyway Global Quick Sales</a><span>© 2026 Hollyway Global Investment Int&apos;l Ltd. · CAC RC 1611033</span></div></footer>
+      <footer className="storiesFooter"><div className="pageShell"><a href="/">← Return to Hollyway Global Quick Sales</a><span>© 2026 Hollyway Global · CAC RC 1611033</span></div></footer>
     </main>
   );
 }

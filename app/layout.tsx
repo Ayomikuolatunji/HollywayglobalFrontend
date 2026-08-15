@@ -28,8 +28,8 @@ export const metadata: Metadata = {
     "Hollyway Global",
   ],
   applicationName: "Hollyway Global Quick Sales",
-  creator: "Hollyway Global Investment Int'l Ltd.",
-  publisher: "Hollyway Global Investment Int'l Ltd.",
+  creator: "Hollyway Global",
+  publisher: "Hollyway Global",
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
@@ -58,7 +58,7 @@ const structuredData = {
   "@graph": [
     {
       "@type": "Organization",
-      name: "Hollyway Global Investment Int'l Ltd.",
+      name: "Hollyway Global",
       alternateName: "Hollyway Global Quick Sales",
       url: siteUrl,
       logo: `${siteUrl}/site-logo.png`,
