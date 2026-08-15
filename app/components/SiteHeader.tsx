@@ -1,11 +1,13 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 
 const adminWhatsApp = `https://wa.me/2347015585967?text=${encodeURIComponent("Hello Hollyway Admin, I would like to make an enquiry.")}`;
 const navLinks = [
+  ["Home", "/"],
   ["How it works", "#how"],
   ["Categories", "#categories"],
   ["Fees & requests", "#pricing"],
@@ -16,7 +18,7 @@ const navLinks = [
 ] as const;
 
 export function Brand({ footer = false }: { footer?: boolean }) {
-  return <a href="/" className={footer ? "brand brandFooter" : "brand"} aria-label="Hollyway Global home"><span className="brandMark" aria-hidden="true"><Image src="/brand-logo.png" alt="" width={80} height={80} priority={!footer} /></span><span className="brandName"><strong>HOLLYWAY</strong><small>GLOBAL</small></span></a>;
+  return <Link href="/" className={footer ? "brand brandFooter" : "brand"} aria-label="Hollyway Global home"><span className="brandMark" aria-hidden="true"><Image src="/brand-logo.png" alt="" width={80} height={80} priority={!footer} /></span><span className="brandName"><strong>HOLLYWAY</strong><small>GLOBAL</small></span></Link>;
 }
 
 export function SocialIcon({ name }: { name: string }) {
@@ -50,6 +52,10 @@ export default function SiteHeader() {
     document.documentElement.dataset.theme = shouldUseDark ? "dark" : "light";
   }, []);
 
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [pathname]);
+
   function toggleTheme() {
     const nextTheme = !darkMode;
     setDarkMode(nextTheme);
@@ -57,5 +63,5 @@ export default function SiteHeader() {
     window.localStorage.setItem("hollyway-theme", nextTheme ? "dark" : "light");
   }
 
-  return <header className="nav"><div className="navInner"><Brand /><button className="menuButton" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu" aria-expanded={menuOpen}><span></span><span></span><span></span></button><nav className={menuOpen ? "navLinks open" : "navLinks"}>{navLinks.map(([label, href]) => { const target = href.startsWith("#") && pathname !== "/" ? `/${href}` : href; return <a href={target} key={href} onClick={() => setMenuOpen(false)}>{label}</a>; })}</nav><div className="navActions"><button className="themeToggle" onClick={toggleTheme} aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"} title={darkMode ? "Switch to light mode" : "Switch to dark mode"}><ThemeIcon dark={darkMode} /></button><a className="navCta" href={adminWhatsApp} target="_blank" rel="noreferrer"><SocialIcon name="whatsapp" /> Chat with admin <Arrow /></a></div></div></header>;
+  return <header className="nav"><div className="navInner"><Brand /><button className="menuButton" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu" aria-expanded={menuOpen}><span></span><span></span><span></span></button><nav className={menuOpen ? "navLinks open" : "navLinks"}>{navLinks.map(([label, href]) => { const target = href.startsWith("#") && pathname !== "/" ? `/${href}` : href; const active = href === "/" ? pathname === "/" : href.startsWith("/") && pathname === href; return <Link href={target} className={active ? "active" : undefined} key={href} onClick={() => setMenuOpen(false)}>{label}</Link>; })}</nav><div className="navActions"><button className="themeToggle" onClick={toggleTheme} aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"} title={darkMode ? "Switch to light mode" : "Switch to dark mode"}><ThemeIcon dark={darkMode} /></button><a className="navCta" href={adminWhatsApp} target="_blank" rel="noreferrer"><SocialIcon name="whatsapp" /> Chat with admin <Arrow /></a></div></div></header>;
 }

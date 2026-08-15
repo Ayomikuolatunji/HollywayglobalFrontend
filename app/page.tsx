@@ -1,7 +1,9 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState, type FormEvent } from "react";
+import { usePathname } from "next/navigation";
 
 const whatsappGroup = "https://chat.whatsapp.com/Ij8dR9bkwppHQq77srTSqx";
 const whatsappChannel = "https://whatsapp.com/channel/0029VbDn9GO30LKWJNk81P2M";
@@ -10,7 +12,7 @@ const sellWhatsApp = `https://wa.me/2347015585967?text=${encodeURIComponent("Hel
 const wantedWhatsApp = `https://wa.me/2347015585967?text=${encodeURIComponent("Hello Hollyway Admin, I want to post a wanted item request.")}`;
 const contactEmail = "contact@hollywayglobal.com";
 
-const navLinks = [["How it works", "#how"], ["Categories", "#categories"], ["Fees & requests", "#pricing"], ["Logistics", "#logistics"], ["About us", "/about"], ["Testimonials", "/testimonials"], ["Contact", "#contact"]];
+const navLinks = [["Home", "/"], ["How it works", "#how"], ["Categories", "#categories"], ["Fees & requests", "#pricing"], ["Logistics", "#logistics"], ["About us", "/about"], ["Testimonials", "/testimonials"], ["Contact", "#contact"]];
 const categories = [
   ["🚗", "Vehicles", "Cars, motorcycles, generators and machinery"],
   ["📺", "Electronics", "TVs, phones, laptops, cameras and gadgets"],
@@ -61,7 +63,7 @@ const logistics = [
 const feeRows = [["₦1,000–₦10,000", "₦150–₦550"], ["₦10,001–₦50,000", "₦1,100"], ["₦50,001–₦100,000", "₦2,200"], ["₦100,001–₦500,000", "₦3,300"], ["₦500,001–₦1,000,000", "₦10,500"], ["Above ₦1,000,000", "1% of item value"]];
 
 function Brand({ footer = false }: { footer?: boolean }) {
-  return <a href="/" className={footer ? "brand brandFooter" : "brand"} aria-label="Hollyway Global home"><span className="brandMark" aria-hidden="true"><Image src="/brand-logo.png" alt="" width={80} height={80} priority={!footer} /></span><span className="brandName"><strong>HOLLYWAY</strong><small>GLOBAL</small></span></a>;
+  return <Link href="/" className={footer ? "brand brandFooter" : "brand"} aria-label="Hollyway Global home"><span className="brandMark" aria-hidden="true"><Image src="/brand-logo.png" alt="" width={80} height={80} priority={!footer} /></span><span className="brandName"><strong>HOLLYWAY</strong><small>GLOBAL</small></span></Link>;
 }
 function SocialIcon({ name }: { name: string }) {
   if (name === "whatsapp") return <svg className="socialSvg" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2.2a9.7 9.7 0 0 0-8.4 14.55L2.2 21.8l5.2-1.36A9.8 9.8 0 1 0 12 2.2Zm0 17.65a8 8 0 0 1-4.08-1.12l-.3-.18-3.08.8.82-3-.2-.31A8.03 8.03 0 1 1 12 19.85Zm4.4-5.98c-.24-.12-1.43-.7-1.65-.78-.22-.08-.38-.12-.54.12-.16.24-.62.78-.76.94-.14.16-.28.18-.52.06-.24-.12-1.02-.38-1.94-1.2-.72-.64-1.2-1.43-1.34-1.67-.14-.24-.01-.37.1-.49.1-.1.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.3-.74-1.78-.2-.47-.4-.4-.54-.41h-.46c-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2s.86 2.32.98 2.48c.12.16 1.7 2.6 4.12 3.64.58.25 1.04.4 1.4.51.59.19 1.12.16 1.54.1.47-.07 1.43-.58 1.63-1.14.2-.56.2-1.04.14-1.14-.06-.1-.22-.16-.46-.28Z" /></svg>;
@@ -78,6 +80,7 @@ function ThemeIcon({ dark }: { dark: boolean }) {
 }
 
 export default function Home() {
+  const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
 
@@ -109,7 +112,7 @@ export default function Home() {
   }
 
   return <main>
-    <header className="nav"><div className="navInner"><Brand /><button className="menuButton" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu" aria-expanded={menuOpen}><span></span><span></span><span></span></button><nav className={menuOpen ? "navLinks open" : "navLinks"}>{navLinks.map(([label, href]) => <a href={href} key={href} onClick={() => setMenuOpen(false)}>{label}</a>)}</nav><div className="navActions"><button className="themeToggle" onClick={toggleTheme} aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"} title={darkMode ? "Switch to light mode" : "Switch to dark mode"}><ThemeIcon dark={darkMode} /></button><a className="navCta" href={adminWhatsApp} target="_blank" rel="noreferrer"><SocialIcon name="whatsapp" /> Chat with admin <Arrow /></a></div></div></header>
+    <header className="nav"><div className="navInner"><Brand /><button className="menuButton" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu" aria-expanded={menuOpen}><span></span><span></span><span></span></button><nav className={menuOpen ? "navLinks open" : "navLinks"}>{navLinks.map(([label, href]) => { const target = href.startsWith("#") && pathname !== "/" ? `/${href}` : href; const active = href === "/" ? pathname === "/" : href.startsWith("/") && pathname === href; return <Link href={target} className={active ? "active" : undefined} key={href} onClick={() => setMenuOpen(false)}>{label}</Link>; })}</nav><div className="navActions"><button className="themeToggle" onClick={toggleTheme} aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"} title={darkMode ? "Switch to light mode" : "Switch to dark mode"}><ThemeIcon dark={darkMode} /></button><a className="navCta" href={adminWhatsApp} target="_blank" rel="noreferrer"><SocialIcon name="whatsapp" /> Chat with admin <Arrow /></a></div></div></header>
 
     <section id="home" className="hero"><div className="heroBackdrop"></div><div className="pageShell heroGrid"><div className="heroCopy"><div className="eyebrow"><span className="pulse"></span> NIGERIA&apos;S QUICK-SALES MARKETPLACE</div><h1>Turn what you no longer want into <em>quick cash.</em></h1><p className="heroLead">Hollyway Global connects people selling unwanted items, relocation goods, distress-sale assets and excess stock with ready buyers across Nigeria.</p><div className="heroActions"><a className="button buttonPrimary" href={sellWhatsApp} target="_blank" rel="noreferrer">Sell an item free <Arrow /></a><a className="button buttonGhost" href="#contact">Talk to Hollyway <Arrow /></a></div><div className="heroNote"><span>✓</span> Free listings <i></i><span>✓</span> Nationwide reach <i></i><span>✓</span> Safer transactions</div></div><div className="heroPanel" aria-label="Ways to use Hollyway Global"><div className="heroPanelTop"><span>BUY · SELL · CONNECT</span><b>01</b></div><div className="heroPanelTitle">One marketplace.<br /><strong>Many ways to move forward.</strong></div><div className="heroObjects"><span className="object objectCar">🚙</span><span className="object objectPhone">📱</span><span className="object objectSofa">🛋️</span><span className="object objectBox">📦</span></div><div className="heroPanelBottom"><span>Sell what you have</span><span>Find what you need <Arrow /></span></div></div></div><div className="heroQuickLinks pageShell"><a className="whatsappQuickLink" href={adminWhatsApp} target="_blank" rel="noreferrer"><span className="quickIcon green"><SocialIcon name="whatsapp" /></span><span><b>Chat with admin</b><small>Sell or ask for help</small></span><Arrow /></a><a className="whatsappQuickLink" href={whatsappChannel} target="_blank" rel="noreferrer"><span className="quickIcon green"><SocialIcon name="whatsapp" /></span><span><b>WhatsApp channel</b><small>Follow new updates</small></span><Arrow /></a><a href={wantedWhatsApp} target="_blank" rel="noreferrer"><span className="quickIcon orange">⌕</span><span><b>Post a wanted request</b><small>Message admin · ₦200</small></span><Arrow /></a></div></section>
 
