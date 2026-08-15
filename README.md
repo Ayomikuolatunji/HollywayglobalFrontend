@@ -1,4 +1,4 @@
-# Hollyway Global — Next.js 16.3 Landing Page
+# Hollyway Global Quick Sales Landing Page
 
 Desktop-first landing page matching the approved visual direction.
 
@@ -18,8 +18,6 @@ Then open http://localhost:3000
 - WhatsApp, Facebook, Instagram, TikTok, X and LinkedIn links
 - Responsive mobile fallback
 - No UI framework dependency; styling is in `app/globals.css`
-
-# hollywayglobal
 
 ## Development
 
