@@ -20,3 +20,7 @@ Then open http://localhost:3000
 - No UI framework dependency; styling is in `app/globals.css`
 
 # hollywayglobal
+
+## Development
+
+The `dev` branch is used for ongoing landing-page improvements before they are merged into `main`.
