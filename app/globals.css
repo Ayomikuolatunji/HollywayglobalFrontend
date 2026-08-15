@@ -21,7 +21,7 @@ section[id] { scroll-margin-top: 88px; }
 .brandName small { color: var(--orange); font-size: 8px; font-weight: 800; letter-spacing: .29em; margin: 4px 0 0 1px; }
 .navLinks { display: flex; align-items: center; justify-content: center; gap: 29px; flex: 1; }
 .navLinks a { color: #344054; font-size: 12px; font-weight: 700; white-space: nowrap; }
-.navLinks a:hover, .navLinks a:last-child { color: var(--orange); }
+.navLinks a:hover, .navLinks a.active { color: var(--orange); }
 .navCta { display: flex; align-items: center; gap: 6px; padding: 12px 15px; border-radius: 8px; color: #fff; background: var(--navy); box-shadow: 0 8px 18px rgba(6,29,69,.14); font-size: 11px; font-weight: 800; white-space: nowrap; }
 .navCta .socialSvg { width: 15px; height: 15px; color: #35d874; }
 .navCta .arrowIcon { color: #ffb11b; margin-left: 2px; }

@@ -1,22 +1,25 @@
 import type { MetadataRoute } from "next";
 
+const siteUrl = "https://hollywayglobal.com";
+const lastModified = "2026-08-15";
+
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
-      url: "https://hollywayglobal.com/",
-      lastModified: new Date(),
+      url: `${siteUrl}/`,
+      lastModified,
       changeFrequency: "weekly",
       priority: 1,
     },
     {
-      url: "https://hollywayglobal.com/about",
-      lastModified: new Date(),
+      url: `${siteUrl}/about`,
+      lastModified,
       changeFrequency: "monthly",
       priority: 0.7,
     },
     {
-      url: "https://hollywayglobal.com/testimonials",
-      lastModified: new Date(),
+      url: `${siteUrl}/testimonials`,
+      lastModified,
       changeFrequency: "monthly",
       priority: 0.6,
     },
