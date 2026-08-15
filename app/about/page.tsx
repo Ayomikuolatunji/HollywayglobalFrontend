@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   },
 };
 
-const whatsappGroup = "https://chat.whatsapp.com/Ij8dR9bkwppHQq77srTSqx";
+const adminWhatsApp = `https://wa.me/2347015585967?text=${encodeURIComponent("Hello Hollyway Admin, I would like to make an enquiry.")}`;
 
 export default function AboutPage() {
   return (
@@ -33,7 +33,7 @@ export default function AboutPage() {
             Hollyway Global Investment Int&apos;l Ltd. is a Nigerian marketplace and transaction-support business helping individuals, families, importers and organisations connect with buyers for unwanted items, surplus stock, relocation goods and distress-sale assets.
           </p>
           <div className="aboutActions">
-            <a className="button buttonPrimary" href={whatsappGroup} target="_blank" rel="noreferrer">Join our marketplace <span>↗</span></a>
+            <a className="button buttonPrimary" href={adminWhatsApp} target="_blank" rel="noreferrer">Chat with admin <span>↗</span></a>
             <a className="button buttonAboutGhost" href="mailto:contact@hollywayglobal.com">Contact the team <span>↗</span></a>
           </div>
         </div>
@@ -70,7 +70,7 @@ export default function AboutPage() {
 
       <section className="aboutSection pageShell companyDetails"><div className="aboutSectionHeader"><span className="sectionKicker">COMPANY PROFILE</span><h2>Hollyway Global Investment <span>Int&apos;l Ltd.</span></h2></div><div className="companyDetailsGrid"><div><span>Registered company</span><b>HOLLYWAY GLOBAL INVESTMENT INT&apos;L LTD</b></div><div><span>CAC registration</span><b>RC 1611033</b></div><div><span>Entity type</span><b>Private company limited by shares</b></div><div><span>Registered in</span><b>Lagos State, Nigeria</b></div></div><p className="companyDisclaimer">Hollyway acts as a marketplace manager and escrow facilitator. It does not manufacture, own or store third-party goods listed by sellers. Buyers should verify specifications, condition, delivery arrangements and official payment instructions before proceeding.</p></section>
 
-      <section className="aboutCta"><div className="pageShell aboutCtaInner"><div><span className="sectionKicker">CONNECT WITH HOLLYWAY</span><h2>Buy with confidence.<br /><em>Sell with confidence.</em></h2></div><a className="button buttonPrimary" href={whatsappGroup} target="_blank" rel="noreferrer">Join the WhatsApp marketplace <span>↗</span></a></div></section>
+      <section className="aboutCta"><div className="pageShell aboutCtaInner"><div><span className="sectionKicker">CONNECT WITH HOLLYWAY</span><h2>Buy with confidence.<br /><em>Sell with confidence.</em></h2></div><a className="button buttonPrimary" href={adminWhatsApp} target="_blank" rel="noreferrer">Chat with Hollyway Admin <span>↗</span></a></div></section>
 
       <footer className="aboutFooter"><div className="pageShell"><a href="/">← Return to Hollyway Global Quick Sales</a><span>© 2026 Hollyway Global Investment Int&apos;l Ltd. · CAC RC 1611033</span></div></footer>
     </main>
