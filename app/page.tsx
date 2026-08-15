@@ -111,6 +111,15 @@ export default function Home() {
     window.location.href = `mailto:${contactEmail}?subject=${subject}&body=${body}`;
   }
 
+  function handleSubscribeSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const email = String(formData.get("subscriberEmail") || "");
+    const subject = encodeURIComponent("Hollyway news subscription");
+    const body = encodeURIComponent(`Please add this email to the Hollyway Global news and information list:\n\n${email}`);
+    window.location.href = `mailto:${contactEmail}?subject=${subject}&body=${body}`;
+  }
+
   return <main>
     <header className="nav"><div className="navInner"><Brand /><button className="menuButton" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu" aria-expanded={menuOpen}><span></span><span></span><span></span></button><nav className={menuOpen ? "navLinks open" : "navLinks"}>{navLinks.map(([label, href]) => { const target = href.startsWith("#") && pathname !== "/" ? `/${href}` : href; const active = href === "/" ? pathname === "/" : href.startsWith("/") && pathname === href; return <Link href={target} className={active ? "active" : undefined} key={href} onClick={() => setMenuOpen(false)}>{label}</Link>; })}</nav><div className="navActions"><button className="themeToggle" onClick={toggleTheme} aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"} title={darkMode ? "Switch to light mode" : "Switch to dark mode"}><ThemeIcon dark={darkMode} /></button><a className="navCta" href={adminWhatsApp} target="_blank" rel="noreferrer"><SocialIcon name="whatsapp" /> Chat with admin <Arrow /></a></div></div></header>
 
@@ -133,6 +142,8 @@ export default function Home() {
     <section id="sell" className="sellCta"><div className="pageShell sellCtaInner"><div><span className="sectionKicker">READY WHEN YOU ARE</span><h2>Give your unused items<br />a <em>new home.</em></h2><p>Start with a free listing or speak with our team about your sale.</p></div><div className="ctaActions"><a className="button buttonPrimary" href={sellWhatsApp} target="_blank" rel="noreferrer">Chat with admin to sell <Arrow /></a><a className="button buttonLight" href="#contact">Contact our team <Arrow /></a></div></div></section>
 
     <section id="channels" className="section pageShell channelsSection"><div className="sectionHeader"><div><span className="sectionKicker">STAY IN THE LOOP</span><h2>Start with <span>WhatsApp.</span></h2></div><p>Our WhatsApp marketplace is where buyers and sellers connect. Follow the channel for updates, then find us across our official social platforms.</p></div><div className="channelGrid">{channels.map(([icon, title, text, href, tone], index) => <a className={`channelCard ${index < 2 ? "whatsappChannelCard" : ""}`} href={href} target="_blank" rel="noreferrer" key={title}><span className={`channelIcon ${tone}`}><SocialIcon name={icon === "WA" ? "whatsapp" : icon === "IG" ? "instagram" : icon === "X" ? "x" : icon === "f" ? "facebook" : icon === "tiktok" ? "tiktok" : icon === "group" ? "group" : "linkedin"} /></span><span><b>{title}</b><small>{text}</small></span><Arrow /></a>)}</div></section>
+
+    <section className="subscribeSection"><div className="pageShell subscribeInner"><div><span className="sectionKicker">NEWS &amp; INFORMATION</span><h2>Stay close to the <em>next opportunity.</em></h2><p>Subscribe for Hollyway marketplace updates, new listings, buyer requests and practical buying or selling information.</p></div><div className="subscribeFormCard"><form onSubmit={handleSubscribeSubmit}><label htmlFor="subscriberEmail">Email address</label><div className="subscribeFormRow"><input id="subscriberEmail" name="subscriberEmail" type="email" placeholder="you@example.com" autoComplete="email" required /><button className="button buttonPrimary" type="submit">Subscribe <Arrow /></button></div><small>Submitting opens an email to Hollyway for confirmation. For instant updates, <a href={whatsappChannel} target="_blank" rel="noreferrer">follow our WhatsApp channel</a>.</small></form></div></div></section>
 
     <section className="trustStrip"><div className="pageShell trustInner"><div><span>🇳🇬</span><b>Nationwide coverage</b><small>All 36 states + FCT</small></div><div><span>🛡️</span><b>Safer transactions</b><small>Escrow, inspection and delivery support</small></div><div><span>⚡</span><b>Fast support</b><small>Monday–Saturday, 8AM–9PM WAT</small></div></div></section>
 
