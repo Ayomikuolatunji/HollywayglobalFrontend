@@ -276,3 +276,12 @@ h2 { margin-bottom: 0; font-size: clamp(29px, 3vw, 41px); line-height: 1.08; let
 [data-theme="dark"] .buttonAboutGhost { color: #d8caff; border-color: #8170ad; }
 [data-theme="dark"] .contactFormCard label { color: #d4deed; }
 [data-theme="dark"] .formNote { color: #aebbd0; }
+[data-theme="dark"] .sectionKicker { color: #b5c4d9; }
+[data-theme="dark"] .heroQuickLinks { color: #edf3fc; background: #151f32; }
+[data-theme="dark"] .audienceRow b, [data-theme="dark"] .audienceCard h3, [data-theme="dark"] .requestFormat h3, [data-theme="dark"] .logisticsGrid h3, [data-theme="dark"] .serviceFees h3, [data-theme="dark"] .channelCard b, [data-theme="dark"] .trustInner b, [data-theme="dark"] .contactDetail b { color: #edf3fc; }
+[data-theme="dark"] .channelCard { border-color: #2a3952; background: #151f32; }
+[data-theme="dark"] .whatsappChannelCard { border-color: #2c7650; background: #173327; }
+[data-theme="dark"] .companyDetailsGrid span { color: #b3bfd1; }
+[data-theme="dark"] .companyDetailsGrid b { color: #d8caff; }
+[data-theme="dark"] .storiesHero .sectionKicker, [data-theme="dark"] .storiesSection .sectionKicker { color: #b9c9e4; }
+[data-theme="dark"] .storyCard h3 { color: #edf3fc; }
