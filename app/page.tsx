@@ -1,0 +1,88 @@
+"use client";
+
+import Image from "next/image";
+import { useState, type FormEvent } from "react";
+
+const whatsappGroup = "https://chat.whatsapp.com/Ij8dR9bkwppHQq77srTSqx";
+const whatsappChannel = "https://whatsapp.com/channel/0029VbDn9GO30LKWJNk81P2M";
+const contactEmail = "contact@hollywayglobal.com";
+
+const navLinks = [["How it works", "#how"], ["Categories", "#categories"], ["Why Hollyway", "#why"], ["Our channels", "#channels"], ["Contact", "#contact"]];
+const categories = [
+  ["🚗", "Vehicles", "Cars, motorcycles, generators and machinery"],
+  ["📺", "Electronics", "TVs, phones, laptops, cameras and gadgets"],
+  ["🛋️", "Furniture", "Sofas, beds, wardrobes and office furniture"],
+  ["🍳", "Home & kitchen", "Cookers, appliances, utensils and essentials"],
+  ["📦", "Business stock", "Imported goods, excess stock and wholesale lots"],
+  ["👗", "Lifestyle", "Fashion, beauty, toys, gym gear and luggage"],
+];
+const steps = [
+  ["01", "Tell us what you have", "List an item for free or send a wanted request for ₦200."],
+  ["02", "Reach the right people", "We share your listing or request across our marketplace channels."],
+  ["03", "Connect with confidence", "Interested buyers and sellers contact each other directly."],
+  ["04", "Complete the transaction", "Use Hollyway escrow protection for a safer, clearer transaction."],
+];
+const benefits = [
+  ["FREE", "Free item listings", "Put your unwanted items in front of potential buyers without a listing fee."],
+  ["36", "Nationwide reach", "Connect with buyers and sellers across all 36 states and the FCT."],
+  ["SAFE", "Safer transactions", "Escrow, inspection and tracked delivery support a more confident purchase."],
+  ["FAST", "Built for speed", "A practical marketplace for relocation, distress sales and quick liquidation."],
+];
+const channels = [
+  ["WA", "WhatsApp marketplace", "Join the trading community", whatsappGroup, "green"],
+  ["WA", "WhatsApp channel", "Follow new updates", whatsappChannel, "green"],
+  ["IG", "Instagram", "@hollywayglobal", "https://www.instagram.com/hollywayglobal/", "pink"],
+  ["X", "X", "@hollywayglobal", "https://x.com/hollywayglobal", "dark"],
+  ["f", "Facebook", "Hollyway Global", "https://www.facebook.com/Hollywayglobal/", "blue"],
+  ["in", "LinkedIn", "Hollyway Global", "https://www.linkedin.com/in/hollyway-global/", "linkedin"],
+];
+
+function Brand({ footer = false }: { footer?: boolean }) {
+  return <a href="#home" className={footer ? "brand brandFooter" : "brand"} aria-label="Hollyway Global home"><span className="brandMark" aria-hidden="true"><Image src="/brand-logo.png" alt="" width={80} height={80} priority={!footer} /></span><span className="brandName"><strong>HOLLYWAY</strong><small>GLOBAL</small></span></a>;
+}
+function SocialIcon({ name }: { name: string }) {
+  if (name === "whatsapp") return <svg className="socialSvg" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2.2a9.7 9.7 0 0 0-8.4 14.55L2.2 21.8l5.2-1.36A9.8 9.8 0 1 0 12 2.2Zm0 17.65a8 8 0 0 1-4.08-1.12l-.3-.18-3.08.8.82-3-.2-.31A8.03 8.03 0 1 1 12 19.85Zm4.4-5.98c-.24-.12-1.43-.7-1.65-.78-.22-.08-.38-.12-.54.12-.16.24-.62.78-.76.94-.14.16-.28.18-.52.06-.24-.12-1.02-.38-1.94-1.2-.72-.64-1.2-1.43-1.34-1.67-.14-.24-.01-.37.1-.49.1-.1.24-.28.36-.42.12-.14.16-.24.24-.4.08-.16.04-.3-.02-.42-.06-.12-.54-1.3-.74-1.78-.2-.47-.4-.4-.54-.41h-.46c-.16 0-.42.06-.64.3-.22.24-.84.82-.84 2s.86 2.32.98 2.48c.12.16 1.7 2.6 4.12 3.64.58.25 1.04.4 1.4.51.59.19 1.12.16 1.54.1.47-.07 1.43-.58 1.63-1.14.2-.56.2-1.04.14-1.14-.06-.1-.22-.16-.46-.28Z" /></svg>;
+  if (name === "instagram") return <svg className="socialSvg" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" strokeWidth="2" /><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" strokeWidth="2" /><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor" /></svg>;
+  if (name === "x") return <svg className="socialSvg" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4 19 20M19 4 5 20" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" /></svg>;
+  if (name === "facebook") return <svg className="socialSvg" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M13.6 21v-8h2.7l.4-3h-3.1V8.1c0-.87.24-1.46 1.5-1.46h1.7V4a22 22 0 0 0-2.48-.13c-2.46 0-4.14 1.5-4.14 4.25V10H7.4v3h2.78v8h3.42Z" /></svg>;
+  return <svg className="socialSvg" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M5 4.5A1.5 1.5 0 1 1 5 7.5 1.5 1.5 0 0 1 5 4.5ZM3.7 9h2.6v11H3.7V9Zm4.2 0h2.5v1.5h.04c.35-.67 1.2-1.74 3-1.74 3.2 0 3.8 2.1 3.8 4.83V20h-2.6v-5.7c0-1.36-.02-3.1-1.9-3.1-1.9 0-2.2 1.48-2.2 3V20H7.9V9Z" /></svg>;
+}
+function Arrow() { return <span className="arrowIcon" aria-hidden="true"><svg viewBox="0 0 16 16"><path d="M3 13 13 3M5 3h8v8" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" /></svg></span>; }
+
+export default function Home() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  function handleContactSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const name = String(formData.get("name") || "");
+    const email = String(formData.get("email") || "");
+    const topic = String(formData.get("topic") || "General enquiry");
+    const message = String(formData.get("message") || "");
+    const subject = encodeURIComponent(`Hollyway enquiry: ${topic}`);
+    const body = encodeURIComponent(`Name: ${name}\nEmail: ${email}\nTopic: ${topic}\n\n${message}`);
+    window.location.href = `mailto:${contactEmail}?subject=${subject}&body=${body}`;
+  }
+
+  return <main>
+    <header className="nav"><div className="navInner"><Brand /><button className="menuButton" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle menu" aria-expanded={menuOpen}><span></span><span></span><span></span></button><nav className={menuOpen ? "navLinks open" : "navLinks"}>{navLinks.map(([label, href]) => <a href={href} key={href} onClick={() => setMenuOpen(false)}>{label}</a>)}</nav><a className="navCta" href={whatsappGroup} target="_blank" rel="noreferrer"><SocialIcon name="whatsapp" /> Join marketplace <Arrow /></a></div></header>
+
+    <section id="home" className="hero"><div className="heroBackdrop"></div><div className="pageShell heroGrid"><div className="heroCopy"><div className="eyebrow"><span className="pulse"></span> NIGERIA&apos;S QUICK-SALES MARKETPLACE</div><h1>Turn what you no longer want into <em>quick cash.</em></h1><p className="heroLead">Hollyway Global connects people selling unwanted items, relocation goods, distress-sale assets and excess stock with ready buyers across Nigeria.</p><div className="heroActions"><a className="button buttonPrimary" href={whatsappGroup} target="_blank" rel="noreferrer">Sell an item free <Arrow /></a><a className="button buttonGhost" href="#contact">Talk to Hollyway <Arrow /></a></div><div className="heroNote"><span>✓</span> Free listings <i></i><span>✓</span> Nationwide reach <i></i><span>✓</span> Safer transactions</div></div><div className="heroPanel" aria-label="Ways to use Hollyway Global"><div className="heroPanelTop"><span>BUY · SELL · CONNECT</span><b>01</b></div><div className="heroPanelTitle">One marketplace.<br /><strong>Many ways to move forward.</strong></div><div className="heroObjects"><span className="object objectCar">🚙</span><span className="object objectPhone">📱</span><span className="object objectSofa">🛋️</span><span className="object objectBox">📦</span></div><div className="heroPanelBottom"><span>Sell what you have</span><span>Find what you need <Arrow /></span></div></div></div><div className="heroQuickLinks pageShell"><a className="whatsappQuickLink" href={whatsappGroup} target="_blank" rel="noreferrer"><span className="quickIcon green"><SocialIcon name="whatsapp" /></span><span><b>WhatsApp marketplace</b><small>Join the trading community</small></span><Arrow /></a><a className="whatsappQuickLink" href={whatsappChannel} target="_blank" rel="noreferrer"><span className="quickIcon green"><SocialIcon name="whatsapp" /></span><span><b>WhatsApp channel</b><small>Follow new updates</small></span><Arrow /></a><a href="#wanted"><span className="quickIcon orange">⌕</span><span><b>Post a wanted request</b><small>Find a specific item for ₦200</small></span><Arrow /></a></div></section>
+
+    <section id="categories" className="section pageShell"><div className="sectionHeader"><div><span className="sectionKicker">SHOP · SELL · DISCOVER</span><h2>Everything has a <span>next buyer.</span></h2></div><p>From a single household item to a container of imported stock, Hollyway helps you put it in front of the right audience.</p></div><div className="categoryGrid">{categories.map(([icon, title, text]) => <a className="categoryCard" href="#sell" key={title}><span className="categoryIcon">{icon}</span><strong>{title}</strong><small>{text}</small><span className="cardLink">Explore <Arrow /></span></a>)}</div></section>
+
+    <section id="how" className="section processSection"><div className="pageShell"><div className="sectionHeader lightHeader"><div><span className="sectionKicker">A SIMPLE WAY TO MOVE ITEMS</span><h2>From listing to <span>done.</span></h2></div><p>Whether you are selling or searching, every step is designed to stay clear and practical.</p></div><div className="processGrid">{steps.map(([number, title, text], index) => <div className="processCard" key={number}><div className="processNumber">{number}</div><div className={`processIcon processIcon${index + 1}`}>{index === 0 ? "＋" : index === 1 ? "◈" : index === 2 ? "↔" : "✓"}</div><h3>{title}</h3><p>{text}</p>{index < steps.length - 1 && <span className="processArrow">→</span>}</div>)}</div></div></section>
+
+    <section id="why" className="section pageShell whySection"><div className="sectionHeader"><div><span className="sectionKicker">WHY HOLLYWAY GLOBAL</span><h2>Built around real <span>people and real needs.</span></h2></div><p>Decluttering, relocating, raising urgent cash or looking for a deal should not feel complicated.</p></div><div className="benefitGrid">{benefits.map(([tag, title, text]) => <article className="benefitCard" key={title}><span className="benefitTag">{tag}</span><h3>{title}</h3><p>{text}</p></article>)}</div><div id="wanted" className="audienceRow"><div><span>SELLERS</span><b>Have something taking up space?</b><p>List your furniture, electronics, vehicles, appliances, fashion or stock for free.</p><a href={whatsappGroup} target="_blank" rel="noreferrer">Start selling <Arrow /></a></div><div><span>BUYERS</span><b>Looking for something specific?</b><p>Send a wanted request and let potential sellers know exactly what you need.</p><a href="#contact">Post a request <Arrow /></a></div></div></section>
+
+    <section id="sell" className="sellCta"><div className="pageShell sellCtaInner"><div><span className="sectionKicker">READY WHEN YOU ARE</span><h2>Give your unused items<br />a <em>new home.</em></h2><p>Start with a free listing or speak with our team about your sale.</p></div><div className="ctaActions"><a className="button buttonPrimary" href={whatsappGroup} target="_blank" rel="noreferrer">Sell an item free <Arrow /></a><a className="button buttonLight" href="#contact">Contact our team <Arrow /></a></div></div></section>
+
+    <section id="channels" className="section pageShell channelsSection"><div className="sectionHeader"><div><span className="sectionKicker">STAY IN THE LOOP</span><h2>Start with <span>WhatsApp.</span></h2></div><p>Our WhatsApp marketplace is where buyers and sellers connect. Follow the channel for updates, then find us across our official social platforms.</p></div><div className="channelGrid">{channels.map(([icon, title, text, href, tone], index) => <a className={`channelCard ${index < 2 ? "whatsappChannelCard" : ""}`} href={href} target="_blank" rel="noreferrer" key={title}><span className={`channelIcon ${tone}`}><SocialIcon name={icon === "WA" ? "whatsapp" : icon === "IG" ? "instagram" : icon === "X" ? "x" : icon === "f" ? "facebook" : "linkedin"} /></span><span><b>{title}</b><small>{text}</small></span><Arrow /></a>)}</div></section>
+
+    <section className="trustStrip"><div className="pageShell trustInner"><div><span>🇳🇬</span><b>Nationwide coverage</b><small>All 36 states + FCT</small></div><div><span>🛡️</span><b>Safer transactions</b><small>Escrow, inspection and delivery support</small></div><div><span>⚡</span><b>Fast support</b><small>Monday–Saturday, 8AM–9PM WAT</small></div></div></section>
+
+    <section id="contact" className="contactSection pageShell"><div className="contactIntro"><span className="sectionKicker">WE ARE HERE TO HELP</span><h2>Let&apos;s talk about your <span>buying or selling goal.</span></h2><p>Need help listing an item, posting a wanted request, or understanding the next step? Reach Hollyway through the channel that works best for you.</p><div className="contactDetails"><a className="contactDetail" href={`mailto:${contactEmail}`}><span>✉</span><div><b>Email support</b><small>{contactEmail}</small></div></a><a className="contactDetail" href={whatsappGroup} target="_blank" rel="noreferrer"><span><SocialIcon name="whatsapp" /></span><div><b>WhatsApp marketplace</b><small>Message the community</small></div></a><div className="contactDetail"><span>⌚</span><div><b>Support hours</b><small>Mon–Sat, 8AM–9PM WAT</small></div></div></div><div className="contactSocials"><span>Follow Hollyway</span><a href="https://www.instagram.com/hollywayglobal/" target="_blank" rel="noreferrer">Instagram</a><a href="https://x.com/hollywayglobal" target="_blank" rel="noreferrer">X</a><a href="https://www.facebook.com/Hollywayglobal/" target="_blank" rel="noreferrer">Facebook</a></div></div><div className="contactFormCard"><div className="formHeading"><h3>Send us a message</h3><p>Tell us what you need and we&apos;ll help you find the right next step.</p></div><form onSubmit={handleContactSubmit}><div className="formRow"><label>Name<input name="name" type="text" placeholder="Your name" required /></label><label>Email<input name="email" type="email" placeholder="you@example.com" required /></label></div><label>What can we help with?<select name="topic" defaultValue="Selling an item"><option>Selling an item</option><option>Posting a wanted request</option><option>Buying an item</option><option>Escrow and safety</option><option>General enquiry</option></select></label><label>Message<textarea name="message" rows={4} placeholder="How can Hollyway help?" required /></label><button className="button buttonPrimary" type="submit">Open email to contact us <Arrow /></button><small className="formNote">Submitting opens your device&apos;s email app with your message ready to send.</small></form></div></section>
+
+    <footer className="footer"><div className="pageShell footerTop"><div className="footerBrand"><Brand footer /><p>Nigeria&apos;s marketplace for decluttering, distress sales, relocation clearance and quick liquidation.</p><strong>Buy with confidence. Sell with confidence.</strong></div><div><h4>EXPLORE</h4><a href="#home">Home</a><a href="#categories">Categories</a><a href="#how">How it works</a><a href="#why">Why Hollyway</a></div><div><h4>TAKE ACTION</h4><a href="#sell">Sell an item</a><a href="#wanted">Post a wanted request</a><a href={whatsappGroup} target="_blank" rel="noreferrer">Join WhatsApp</a><a href="#contact">Contact support</a></div><div><h4>CONTACT</h4><a href={`mailto:${contactEmail}`}>{contactEmail}</a><a href="mailto:support@hollywayglobal.com">support@hollywayglobal.com</a><a href="mailto:hollywayglobal@gmail.com">hollywayglobal@gmail.com</a><span className="footerMeta">36 states + FCT<br />Mon–Sat, 8AM–9PM WAT</span></div></div><div className="pageShell footerBottom"><span>© 2026 Hollyway Global Investment Int&apos;l Ltd. · CAC RC 1611033</span><span>Buy · Sell · Connect · Nationwide</span></div></footer>
+  </main>;
+}
