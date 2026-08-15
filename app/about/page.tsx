@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { Metadata } from "next";
+import SiteHeader from "../components/SiteHeader";
 
 export const metadata: Metadata = {
   title: "About Us",
@@ -20,10 +21,7 @@ const adminWhatsApp = `https://wa.me/2347015585967?text=${encodeURIComponent("He
 export default function AboutPage() {
   return (
     <main className="aboutPage">
-      <header className="aboutHeader">
-        <a className="aboutBack" href="/">← Back to Hollyway Global</a>
-        <span className="aboutHeaderLabel">HOLLYWAY GLOBAL QUICK SALES</span>
-      </header>
+      <SiteHeader />
 
       <section className="aboutHero pageShell">
         <div className="aboutHeroCopy">
