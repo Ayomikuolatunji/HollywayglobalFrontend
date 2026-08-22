@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import SiteHeader from "../components/SiteHeader";
 
 export const metadata: Metadata = {
-  title: "Customer Stories",
+  title: "User Stories",
   description:
-    "Explore Hollyway Global customer-story themes for decluttering, distress sales, relocation clearance, importer stock, wanted requests and safer transactions in Nigeria.",
+    "Explore Hollyway Global user-story themes for decluttering, distress sales, relocation clearance, importer stock, wanted requests and safer transactions in Nigeria.",
   alternates: { canonical: "/testimonials" },
   openGraph: {
-    title: "Hollyway Global Customer Stories",
+    title: "Hollyway Global User Stories",
     description: "Stories from the people and businesses Hollyway Global is built to serve.",
     url: "https://hollywayglobal.com/testimonials",
   },
@@ -34,7 +34,7 @@ export default function TestimonialsPage() {
         <div className="storiesHeroArt"><span>“</span><strong>Buy with confidence.<br />Sell with confidence.</strong><small>Hollyway Global Quick Sales</small></div>
       </section>
 
-      <section className="storyNotice"><div className="pageShell"><strong>Story page setup</strong><span>These are illustrative customer-story templates prepared from Hollyway&apos;s service brief. Replace each card with an approved quote from a real user before presenting it as a testimonial.</span></div></section>
+      <section className="storyNotice"><div className="pageShell"><strong>Story page setup</strong><span>These are illustrative user-story templates prepared from Hollyway&apos;s service brief. Replace each card with an approved quote from a real user before presenting it as a testimonial.</span></div></section>
 
       <section className="storiesSection pageShell"><div className="storiesSectionHead"><span className="sectionKicker">THE PEOPLE WE SERVE</span><h2>Every sale has a <span>reason behind it.</span></h2><p>Hollyway&apos;s marketplace is designed around the different situations that bring sellers and buyers together.</p></div><div className="storyGrid">{stories.map(([category, title, text, label], index) => <article className={`storyCard storyCard${index + 1}`} key={category}><div className="storyTop"><span>{category}</span><b>0{index + 1}</b></div><div className="storyQuote">“</div><h3>{title}</h3><p>{text}</p><footer><span>{label}</span><small>Illustrative story</small></footer></article>)}</div></section>
 
