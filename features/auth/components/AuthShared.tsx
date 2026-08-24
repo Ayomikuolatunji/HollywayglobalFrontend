@@ -1,11 +1,9 @@
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import { Arrow } from "../../../components/ui/Arrow";
 import Brand from "../../../components/ui/Brand";
-
-export const customerApiBaseUrl = (
-  process.env.NEXT_PUBLIC_HOLLYWAY_API_BASE_URL || "https://staging-api.hollywayglobal.com"
-).replace(/\/$/, "");
+import { getCustomerApiBaseUrl, productionCustomerApiBaseUrl } from "../../../components/config/customerApi";
 
 export function AuthShell({ kicker, title, description, children }: { kicker: string; title: ReactNode; description: string; children: ReactNode }) {
   return (
@@ -56,5 +54,7 @@ export function AuthSuccess({ message }: { message: string }) {
 }
 
 export function GoogleButton() {
-  return <a className="mt-7 flex h-12 items-center justify-center gap-3 rounded-lg border border-[#dfe4ed] bg-white text-sm font-extrabold text-[#0b1830] transition hover:border-[#1453bb] hover:bg-[#f8fafc]" href={`${customerApiBaseUrl}/auth/google`}><span className="flex h-5 w-5 items-center justify-center rounded-full border border-[#dfe4ed] text-xs font-extrabold text-[#4285f4]">G</span>Continue with Google</a>;
+  const [apiBaseUrl, setApiBaseUrl] = useState(productionCustomerApiBaseUrl);
+  useEffect(() => setApiBaseUrl(getCustomerApiBaseUrl()), []);
+  return <a className="mt-7 flex h-12 items-center justify-center gap-3 rounded-lg border border-[#dfe4ed] bg-white text-sm font-extrabold text-[#0b1830] transition hover:border-[#1453bb] hover:bg-[#f8fafc]" href={`${apiBaseUrl}/auth/google`}><span className="flex h-5 w-5 items-center justify-center rounded-full border border-[#dfe4ed] text-xs font-extrabold text-[#4285f4]">G</span>Continue with Google</a>;
 }

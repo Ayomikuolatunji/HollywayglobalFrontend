@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useEffect, useState, type FormEvent } from "react";
 import { Arrow } from "../../../components/ui/Arrow";
-import { AuthError, AuthField, AuthShell, GoogleButton, customerApiBaseUrl } from "./AuthShared";
+import { getCustomerApiBaseUrl } from "../../../components/config/customerApi";
+import { AuthError, AuthField, AuthShell, GoogleButton } from "./AuthShared";
 
 export default function LoginPage() {
   const [error, setError] = useState("");
@@ -12,7 +13,7 @@ export default function LoginPage() {
   useEffect(() => {
     const message = new URLSearchParams(window.location.search).get("error");
     if (message) setError(message.replace(/\+/g, " "));
-    fetch(`${customerApiBaseUrl}/dashboard`, { credentials: "include" })
+    fetch(`${getCustomerApiBaseUrl()}/dashboard`, { credentials: "include" })
       .then((response) => { if (response.ok) window.location.assign("/dashboard"); })
       .catch(() => null);
   }, []);
@@ -23,7 +24,7 @@ export default function LoginPage() {
     setSubmitting(true);
     const form = new FormData(event.currentTarget);
     try {
-      const response = await fetch(`${customerApiBaseUrl}/auth/login`, { method: "POST", credentials: "include", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: form.get("email"), password: form.get("password") }) });
+      const response = await fetch(`${getCustomerApiBaseUrl()}/auth/login`, { method: "POST", credentials: "include", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: form.get("email"), password: form.get("password") }) });
       const payload = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(typeof payload.detail === "string" ? payload.detail : "Unable to sign in.");
       window.location.assign("/dashboard");
