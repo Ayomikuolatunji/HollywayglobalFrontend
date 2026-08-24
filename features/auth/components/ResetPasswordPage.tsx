@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useEffect, useState, type FormEvent } from "react";
 import { Arrow } from "../../../components/ui/Arrow";
-import { AuthError, AuthField, AuthShell, AuthSuccess, customerApiBaseUrl } from "./AuthShared";
+import { getCustomerApiBaseUrl } from "../../../components/config/customerApi";
+import { AuthError, AuthField, AuthShell, AuthSuccess } from "./AuthShared";
 
 export default function ResetPasswordPage() {
   const [token, setToken] = useState("");
@@ -30,7 +31,7 @@ export default function ResetPasswordPage() {
     }
     setSubmitting(true);
     try {
-      const response = await fetch(`${customerApiBaseUrl}/auth/reset-password`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ token, password: form.get("password") }) });
+      const response = await fetch(`${getCustomerApiBaseUrl()}/auth/reset-password`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ token, password: form.get("password") }) });
       const payload = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(typeof payload.detail === "string" ? payload.detail : "Unable to reset your password.");
       setSuccess("Your password has been reset. You can now sign in.");

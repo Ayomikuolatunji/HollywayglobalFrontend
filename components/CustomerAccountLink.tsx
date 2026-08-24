@@ -3,15 +3,14 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Arrow } from "./ui/Arrow";
-
-const customerApiBaseUrl = (process.env.NEXT_PUBLIC_HOLLYWAY_API_BASE_URL || "https://staging-api.hollywayglobal.com").replace(/\/$/, "");
+import { getCustomerApiBaseUrl } from "./config/customerApi";
 
 export default function CustomerAccountLink() {
   const [state, setState] = useState<"checking" | "authenticated" | "unauthenticated">("checking");
 
   useEffect(() => {
     let active = true;
-    fetch(`${customerApiBaseUrl}/dashboard`, { credentials: "include" })
+    fetch(`${getCustomerApiBaseUrl()}/dashboard`, { credentials: "include" })
       .then((response) => { if (active) setState(response.ok ? "authenticated" : "unauthenticated"); })
       .catch(() => { if (active) setState("unauthenticated"); });
     return () => { active = false; };

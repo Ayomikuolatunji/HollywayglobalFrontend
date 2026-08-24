@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useState, type FormEvent } from "react";
 import { Arrow } from "../../../components/ui/Arrow";
-import { AuthError, AuthField, AuthShell, GoogleButton, customerApiBaseUrl } from "./AuthShared";
+import { getCustomerApiBaseUrl } from "../../../components/config/customerApi";
+import { AuthError, AuthField, AuthShell, GoogleButton } from "./AuthShared";
 
 export default function SignupPage() {
   const [error, setError] = useState("");
@@ -20,7 +21,7 @@ export default function SignupPage() {
       return;
     }
     try {
-      const response = await fetch(`${customerApiBaseUrl}/auth/signup`, { method: "POST", credentials: "include", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: form.get("name"), email: form.get("email"), password: form.get("password") }) });
+      const response = await fetch(`${getCustomerApiBaseUrl()}/auth/signup`, { method: "POST", credentials: "include", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: form.get("name"), email: form.get("email"), password: form.get("password") }) });
       const payload = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(typeof payload.detail === "string" ? payload.detail : "Unable to create your account.");
       window.location.assign("/dashboard");

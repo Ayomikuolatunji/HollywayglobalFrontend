@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { useState, type FormEvent } from "react";
 import { Arrow } from "../../../components/ui/Arrow";
-import { AuthError, AuthField, AuthShell, AuthSuccess, customerApiBaseUrl } from "./AuthShared";
+import { getCustomerApiBaseUrl } from "../../../components/config/customerApi";
+import { AuthError, AuthField, AuthShell, AuthSuccess } from "./AuthShared";
 
 export default function ForgotPasswordPage() {
   const [error, setError] = useState("");
@@ -17,7 +18,7 @@ export default function ForgotPasswordPage() {
     setSubmitting(true);
     const form = new FormData(event.currentTarget);
     try {
-      const response = await fetch(`${customerApiBaseUrl}/auth/forgot-password`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: form.get("email") }) });
+      const response = await fetch(`${getCustomerApiBaseUrl()}/auth/forgot-password`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: form.get("email") }) });
       const payload = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(typeof payload.detail === "string" ? payload.detail : "Unable to request a reset link.");
       setSuccess("If an account exists for that email, a reset link has been sent.");

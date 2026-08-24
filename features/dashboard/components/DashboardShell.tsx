@@ -9,8 +9,8 @@ import DashboardIcon from "./DashboardIcon";
 import KycDraftBanner from "./KycDraftBanner";
 import KycPromptModal from "./KycPromptModal";
 import { kycStorageKey } from "../data/kyc";
+import { getCustomerApiBaseUrl } from "../../../components/config/customerApi";
 
-const customerApiBaseUrl = (process.env.NEXT_PUBLIC_HOLLYWAY_API_BASE_URL || "https://api.hollywayglobal.com").replace(/\/$/, "");
 type CustomerAccount = { name: string; email: string };
 type DashboardContextValue = { accountName: string; accountEmail: string };
 const DashboardContext = createContext<DashboardContextValue | null>(null);
@@ -47,12 +47,12 @@ export default function DashboardShell({ children }: { children: ReactNode }) {
   const [account, setAccount] = useState<CustomerAccount | null>(null);
   const [kycComplete, setKycComplete] = useState(false);
   const [showKycPrompt, setShowKycPrompt] = useState(false);
-  const loadCustomerSession = useCallback(() => { fetch(`${customerApiBaseUrl}/dashboard`, { credentials: "include" }).then(async (response) => { if (response.status === 401) { setSessionState("unauthenticated"); return; } if (!response.ok) throw new Error("User session request failed"); const payload = await response.json(); setAccount({ name: String(payload.user?.name || "Hollyway user"), email: String(payload.user?.email || "") }); setSessionState("authenticated"); }).catch(() => setSessionState("error")); }, []);
+  const loadCustomerSession = useCallback(() => { fetch(`${getCustomerApiBaseUrl()}/dashboard`, { credentials: "include" }).then(async (response) => { if (response.status === 401) { setSessionState("unauthenticated"); return; } if (!response.ok) throw new Error("User session request failed"); const payload = await response.json(); setAccount({ name: String(payload.user?.name || "Hollyway user"), email: String(payload.user?.email || "") }); setSessionState("authenticated"); }).catch(() => setSessionState("error")); }, []);
   useEffect(() => { loadCustomerSession(); }, [loadCustomerSession]);
   useEffect(() => { if (pathname !== "/dashboard" && activeGroup !== "COMMERCE") setOpenGroup(activeGroup); }, [activeGroup, pathname]);
   useEffect(() => { if (typeof window === "undefined") return; const saved = window.localStorage.getItem(kycStorageKey); setKycComplete(saved?.includes('"status":"submitted"') === true); }, [pathname]);
   useEffect(() => { if (typeof window === "undefined" || pathname !== "/dashboard") return; const saved = window.localStorage.getItem(kycStorageKey); setShowKycPrompt(!saved?.includes('"status":"submitted"')); }, []);
-  async function signOut() { await fetch(`${customerApiBaseUrl}/auth/logout`, { method: "POST", credentials: "include" }).catch(() => null); window.location.assign("/login"); }
+  async function signOut() { await fetch(`${getCustomerApiBaseUrl()}/auth/logout`, { method: "POST", credentials: "include" }).catch(() => null); window.location.assign("/login"); }
   const accountName = account?.name || "Hollyway user";
   const accountInitial = accountName.trim().charAt(0).toUpperCase() || "H";
   const currentTitle = pathname.startsWith("/dashboard/marketplace/") ? "Listing details" : pageTitles.get(pathname) || "Overview";
