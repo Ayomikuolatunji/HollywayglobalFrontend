@@ -90,7 +90,7 @@ const structuredData = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body>
+      <body className="min-h-screen overflow-x-hidden bg-[#eef1f5] font-[DM_Sans] text-[#0b1830]">
         {children}
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
       </body>
