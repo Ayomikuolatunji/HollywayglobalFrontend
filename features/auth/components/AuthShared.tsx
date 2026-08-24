@@ -4,7 +4,7 @@ import { Arrow } from "../../../components/ui/Arrow";
 import Brand from "../../../components/ui/Brand";
 
 export const customerApiBaseUrl = (
-  process.env.NEXT_PUBLIC_HOLLYWAY_API_BASE_URL || "https://staging-api.hollywayglobal.com"
+  process.env.NEXT_PUBLIC_HOLLYWAY_API_BASE_URL || "https://api.hollywayglobal.com"
 ).replace(/\/$/, "");
 
 export function AuthShell({ kicker, title, description, children }: { kicker: string; title: ReactNode; description: string; children: ReactNode }) {
