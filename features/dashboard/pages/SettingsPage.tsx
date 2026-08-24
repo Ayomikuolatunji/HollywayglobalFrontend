@@ -1,0 +1,11 @@
+"use client";
+
+import { useState } from "react";
+import DashboardPageHeader from "../components/DashboardPageHeader";
+
+const options = [["Email updates", "Receive important account and transaction updates."], ["Listing activity", "Know when buyers show interest in your listings."], ["Request updates", "Get updates when a wanted request changes."]];
+
+export default function SettingsPage() {
+  const [enabled, setEnabled] = useState(options.map(() => true));
+  return <div className="mx-auto max-w-[980px] space-y-6 p-5 sm:p-8"><DashboardPageHeader kicker="ACCOUNT" title="Settings" description="Choose how Hollyway keeps you informed. These preferences are saved locally for now." /><section className="rounded-xl border border-[#dfe4ed] bg-white p-6 shadow-sm"><h3 className="font-[Manrope] text-lg font-extrabold tracking-[-.04em] text-[#0b1830]">Notification preferences</h3><div className="mt-5 divide-y divide-[#eef1f4]">{options.map(([title, text], index) => <label className="flex cursor-pointer items-center gap-4 py-4 first:pt-0 last:pb-0" key={title}><span className={`relative h-6 w-11 shrink-0 rounded-full transition ${enabled[index] ? "bg-[#1453bb]" : "bg-[#cbd5e1]"}`}><input className="sr-only" type="checkbox" checked={enabled[index]} onChange={() => setEnabled((current) => current.map((value, item) => item === index ? !value : value))} /><span className={`absolute top-1 h-4 w-4 rounded-full bg-white transition ${enabled[index] ? "left-6" : "left-1"}`} /></span><span><b className="block text-xs text-[#0b1830]">{title}</b><small className="mt-1 block text-[10px] leading-5 text-[#8490a4]">{text}</small></span></label>)}</div></section><section className="rounded-xl border border-[#dfe4ed] bg-white p-6 shadow-sm"><h3 className="font-[Manrope] text-lg font-extrabold tracking-[-.04em] text-[#0b1830]">Account security</h3><p className="mt-2 text-xs leading-5 text-[#8490a4]">Manage your password and sign-in methods from the secure account flows.</p><a className="mt-5 inline-flex text-xs font-extrabold text-[#1453bb] hover:underline" href="/forgot-password">Change password</a></section></div>;
+}
