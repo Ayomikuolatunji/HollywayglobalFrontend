@@ -1,0 +1,5 @@
+import Link from "next/link";
+
+export default function ComingSoonContent() {
+  return <section className="grid min-h-[70vh] place-items-center p-6"><div className="w-full max-w-lg rounded-2xl border border-[#dfe4ed] bg-white p-8 text-center shadow-xl shadow-[#061936]/10"><span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#1453bb] font-[Manrope] font-extrabold text-white">H</span><span className="mt-6 block text-[10px] font-extrabold tracking-[.2em] text-[#ff8a00]">HOLLYWAY USER ACCOUNT</span><h2 className="mt-3 font-[Manrope] text-3xl font-extrabold tracking-[-.05em] text-[#0b1830]">Coming soon.</h2><p className="mx-auto mt-3 max-w-sm text-sm leading-6 text-[#53627a]">This user area is being prepared. Your account and sign-in are ready while we complete this feature.</p><Link className="mt-7 inline-flex h-11 items-center rounded-lg bg-[#1453bb] px-4 text-xs font-extrabold text-white hover:bg-[#0b3f91]" href="/dashboard">Back to dashboard</Link></div></section>;
+}
