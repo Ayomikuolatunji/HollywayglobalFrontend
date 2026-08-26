@@ -1,18 +1,7 @@
 export { Arrow } from "../../../components/ui/Arrow";
+import BrandIcon from "../../../components/ui/BrandIcon";
 
 export function SocialIcon({ name }: { name: string }) {
-  const icons: Record<string, string> = {
-    whatsapp: "WA",
-    instagram: "IG",
-    x: "X",
-    facebook: "f",
-    linkedin: "in",
-    tiktok: "♪",
-    group: "◎",
-  };
-  return (
-    <span aria-hidden="true" className="text-[10px] font-extrabold">
-      {icons[name] || name}
-    </span>
-  );
+  const iconName = ["whatsapp", "instagram", "x", "facebook", "linkedin", "tiktok", "group"].includes(name) ? name as "whatsapp" | "instagram" | "x" | "facebook" | "linkedin" | "tiktok" | "group" : "group";
+  return <BrandIcon name={iconName} className="h-4 w-4" />;
 }

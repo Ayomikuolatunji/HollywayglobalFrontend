@@ -5,6 +5,7 @@ export type KycStatus = "not-started" | "draft" | "submitted";
 export type KycDraft = {
   dateOfBirth: string;
   phone: string;
+  country: string;
   documentType: string;
   documentNumber: string;
   documentName: string;
@@ -17,6 +18,7 @@ export type KycDraft = {
 export const emptyKycDraft: KycDraft = {
   dateOfBirth: "",
   phone: "",
+  country: "",
   documentType: "NIN",
   documentNumber: "",
   documentName: "",

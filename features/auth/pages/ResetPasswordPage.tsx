@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState, type FormEvent } from "react";
 import { Arrow } from "../../../components/ui/Arrow";
 import { getCustomerApiBaseUrl } from "../../../components/config/customerApi";
-import { AuthError, AuthField, AuthShell, AuthSuccess } from "./AuthShared";
+import { AuthError, AuthField, AuthShell, AuthSuccess } from "../components/AuthShared";
 
 export default function ResetPasswordPage() {
   const [token, setToken] = useState("");
