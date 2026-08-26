@@ -5,13 +5,14 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Arrow } from "./ui/Arrow";
 import Brand from "./ui/Brand";
+import BrandIcon from "./ui/BrandIcon";
 
 const adminWhatsApp = `https://wa.me/2347015585967?text=${encodeURIComponent("Hello Hollyway Admin, I would like to make an enquiry.")}`;
 const navLinks = [["Home", "/"], ["How it works", "#how"], ["Categories", "#categories"], ["Fees & requests", "#pricing"], ["Logistics", "#logistics"], ["About us", "/about"], ["Testimonials", "/testimonials"], ["Contact", "#contact"]] as const;
 
 export function SocialIcon({ name }: { name: string }) {
-  const icons: Record<string, string> = { whatsapp: "WA", instagram: "IG", x: "X", facebook: "f", tiktok: "♪", group: "◎" };
-  return <span aria-hidden="true" className="text-[10px] font-extrabold">{icons[name] || name}</span>;
+  const iconName = ["whatsapp", "instagram", "x", "facebook", "linkedin", "tiktok", "group"].includes(name) ? name as "whatsapp" | "instagram" | "x" | "facebook" | "linkedin" | "tiktok" | "group" : "group";
+  return <BrandIcon name={iconName} className="h-4 w-4" />;
 }
 
 export default function SiteHeader() {

@@ -1,3 +1,3 @@
-import ForgotPasswordPage from "../../features/auth/components/ForgotPasswordPage";
+import ForgotPasswordPage from "../../features/auth/pages/ForgotPasswordPage";
 
 export default ForgotPasswordPage;

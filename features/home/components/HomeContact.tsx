@@ -7,6 +7,7 @@ import {
   audienceRelayBaseUrl,
   audienceRelayTokens,
   contactEmail,
+  facebookPage,
   whatsappChannel,
 } from "../data";
 
@@ -179,6 +180,15 @@ export default function HomeContact() {
         <div className="mt-6 flex flex-wrap gap-4 text-[10px] text-[#667085]">
           <span>Follow Hollyway</span>
           <a
+            className="inline-flex items-center gap-1 font-bold text-[#1453bb]"
+            href={whatsappChannel}
+            target="_blank"
+            rel="noreferrer"
+          >
+            <SocialIcon name="whatsapp" />
+            WhatsApp
+          </a>
+          <a
             className="font-bold text-[#1453bb]"
             href="https://www.instagram.com/hollywayglobal/"
             target="_blank"
@@ -193,6 +203,14 @@ export default function HomeContact() {
             rel="noreferrer"
           >
             TikTok
+          </a>
+          <a
+            className="font-bold text-[#1453bb]"
+            href={facebookPage}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Facebook
           </a>
           <a
             className="font-bold text-[#1453bb]"

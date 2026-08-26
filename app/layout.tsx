@@ -2,6 +2,13 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 const siteUrl = "https://hollywayglobal.com";
+const siteName = "Hollyway Global Quick Sales";
+const socialImage = {
+  url: `${siteUrl}/site-logo.png`,
+  width: 1672,
+  height: 941,
+  alt: "Hollyway Global Quick Sales marketplace logo",
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -25,31 +32,43 @@ export const metadata: Metadata = {
     "relocation sale Nigeria",
     "importer clearance stock Nigeria",
     "WhatsApp marketplace Nigeria",
+    "sell car in Nigeria",
+    "sell furniture in Lagos",
+    "sell electronics in Nigeria",
+    "buy used items in Nigeria",
+    "imported goods clearance Nigeria",
+    "estate clearance Nigeria",
+    "agro products marketplace Nigeria",
+    "handmade crafts marketplace Nigeria",
+    "quick liquidation Nigeria",
+    "sell items in Lagos",
+    "sell items in Abuja",
     "Hollyway Global",
   ],
-  applicationName: "Hollyway Global Quick Sales",
+  applicationName: siteName,
   creator: "Hollyway Global",
   publisher: "Hollyway Global",
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     url: siteUrl,
-    siteName: "Hollyway Global Quick Sales",
+    siteName,
     title: "Sell Unwanted Items in Nigeria | Hollyway Global Quick Sales",
     description:
       "Nigeria's quick-sales marketplace for decluttering, distress sales, relocation clearance, importer stock and wanted item requests.",
     locale: "en_NG",
-    images: [{ url: "/site-logo.png", width: 1672, height: 941, alt: "Hollyway Global Quick Sales" }],
+    images: [socialImage],
   },
   twitter: {
     card: "summary_large_image",
     title: "Hollyway Global Quick Sales | Sell Fast Across Nigeria",
     description: "Turn unwanted items into quick cash and find what you need across Nigeria.",
-    images: ["/site-logo.png"],
+    images: [socialImage.url],
   },
   robots: { index: true, follow: true },
   icons: {
-    icon: "/site-logo.png",
+    icon: "/brand-logo.png",
+    apple: "/brand-logo.png",
   },
 };
 
@@ -58,10 +77,17 @@ const structuredData = {
   "@graph": [
     {
       "@type": "Organization",
+      "@id": `${siteUrl}/#organization`,
       name: "Hollyway Global",
       alternateName: "Hollyway Global Quick Sales",
       url: siteUrl,
-      logo: `${siteUrl}/site-logo.png`,
+      logo: {
+        "@type": "ImageObject",
+        url: `${siteUrl}/brand-logo.png`,
+        width: 1254,
+        height: 1254,
+      },
+      image: socialImage.url,
       email: "contact@hollywayglobal.com",
       telephone: "+2347015585967",
       areaServed: { "@type": "Country", name: "Nigeria" },
@@ -79,10 +105,23 @@ const structuredData = {
     },
     {
       "@type": "WebSite",
+      "@id": `${siteUrl}/#website`,
       name: "Hollyway Global Quick Sales",
       url: siteUrl,
       inLanguage: "en-NG",
       description: "Sell unwanted items and connect with buyers across Nigeria.",
+      publisher: { "@id": `${siteUrl}/#organization` },
+      image: socialImage.url,
+    },
+    {
+      "@type": "WebPage",
+      "@id": `${siteUrl}/#webpage`,
+      name: "Sell Unwanted Items in Nigeria | Hollyway Global Quick Sales",
+      url: siteUrl,
+      isPartOf: { "@id": `${siteUrl}/#website` },
+      about: { "@id": `${siteUrl}/#organization` },
+      primaryImageOfPage: { "@type": "ImageObject", url: socialImage.url, width: socialImage.width, height: socialImage.height },
+      inLanguage: "en-NG",
     },
   ],
 };

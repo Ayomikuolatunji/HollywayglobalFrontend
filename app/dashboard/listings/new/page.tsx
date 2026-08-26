@@ -1,3 +1,3 @@
-import ListingPage from "../../../../features/commerce/pages/ListingPage";
+import UnifiedListingPage from "../../../../features/commerce/pages/UnifiedListingPage";
 
-export default ListingPage;
+export default UnifiedListingPage;

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState, type FormEvent } from "react";
 import { Arrow } from "../../../components/ui/Arrow";
 import { getCustomerApiBaseUrl } from "../../../components/config/customerApi";
-import { AuthError, AuthField, AuthShell, GoogleButton } from "./AuthShared";
+import { AuthError, AuthField, AuthShell, GoogleButton } from "../components/AuthShared";
 
 export default function SignupPage() {
   const [error, setError] = useState("");
