@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { kycStorageKey, type KycStatus } from "../data/kyc";
 import DashboardSummaryCard from "./DashboardSummaryCard";
 
-export default function KycStatusSummary() {
+export default function KycStatusSummary({ compact = false }: { compact?: boolean }) {
   const [status, setStatus] = useState<KycStatus>("not-started");
 
   useEffect(() => {
@@ -23,5 +23,5 @@ export default function KycStatusSummary() {
   const title = submitted ? "KYC saved for review" : inProgress ? "KYC draft in progress" : "Not started";
   const action = submitted ? "Review verification" : inProgress ? "Continue verification" : "Start verification";
 
-  return <DashboardSummaryCard label="KYC STATUS" value={title} note={action} icon="shield" href="/dashboard/profile/kyc" tone={submitted ? "green" : "blue"} />;
+  return <DashboardSummaryCard label="KYC STATUS" value={title} note={action} icon="shield" href="/dashboard/profile/kyc" tone={submitted ? "green" : "blue"} compact={compact} />;
 }

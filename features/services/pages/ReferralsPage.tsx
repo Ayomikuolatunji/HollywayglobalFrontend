@@ -3,15 +3,15 @@
 import Link from "next/link";
 import { useState, type FormEvent, type ReactNode } from "react";
 import { Arrow } from "../../../components/ui/Arrow";
+import Dropdown, { dropdownOptionsFromChildren } from "../../../components/forms/Dropdown";
 import ServiceField from "../components/ServiceField";
 import ServicePageHeader from "../components/ServicePageHeader";
 import { getDraftValues, saveUserDraft } from "../../dashboard/data/drafts";
 
-const inputClass = "h-11 rounded-lg border border-[#dfe4ed] bg-white px-3 text-xs font-medium text-[#0b1830] outline-none focus:border-[#1453bb] focus:ring-4 focus:ring-[#1453bb]/10";
 const labelClass = "grid gap-2 text-[11px] font-extrabold text-[#31425e]";
 
 function SelectField({ label, name, children }: { label: string; name: string; children: ReactNode }) {
-  return <label className={labelClass}><span>{label}</span><select className={inputClass} name={name} defaultValue="" required><option value="" disabled>Select an option</option>{children}</select></label>;
+  return <Dropdown label={label} name={name} options={dropdownOptionsFromChildren(children)} />;
 }
 
 function TextAreaField({ label, name, placeholder }: { label: string; name: string; placeholder: string }) {

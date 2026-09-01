@@ -11,7 +11,10 @@ export type UserDraft = {
 
 export function getDraftValues(form: HTMLFormElement) {
   const values: Record<string, string> = {};
-  new FormData(form).forEach((value, key) => { values[key] = typeof value === "string" ? value : value.name; });
+  new FormData(form).forEach((value, key) => {
+    const current = typeof value === "string" ? value : value.name;
+    values[key] = values[key] ? `${values[key]}, ${current}` : current;
+  });
   return values;
 }
 

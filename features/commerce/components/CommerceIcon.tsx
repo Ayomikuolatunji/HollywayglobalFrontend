@@ -1,3 +1,4 @@
-export default function CommerceIcon({ name, className = "h-4 w-4 shrink-0" }: { name: "search"; className?: string }) {
+export default function CommerceIcon({ name, className = "h-4 w-4 shrink-0" }: { name: "search" | "cart"; className?: string }) {
+  if (name === "cart") return <svg className={className} viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 4h2l1.7 10.2a2 2 0 0 0 2 1.7h8.5a2 2 0 0 0 1.9-1.5L21 8H6.2" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" /><circle cx="9" cy="19" r="1.2" fill="none" stroke="currentColor" strokeWidth="1.7" /><circle cx="18" cy="19" r="1.2" fill="none" stroke="currentColor" strokeWidth="1.7" /></svg>;
   return <svg className={className} viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.3" fill="none" stroke="currentColor" strokeWidth="1.8" /><path d="m16 16 4.5 4.5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" /></svg>;
 }

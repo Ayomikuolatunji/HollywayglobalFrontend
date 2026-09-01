@@ -1,5 +1,82 @@
 export type Listing = { code: string; name: string; category: string; price: number; location: string; condition: "Brand New" | "Open Box" | "Clean Fairly Used"; date: string; views: number; mark: string; tone: string; featured?: boolean };
 
+export const sellingRoutes = ["All selling routes", "Home & office decluttering", "Urgent distress sale", "Relocation / Japa clearance", "Importer / container clearance", "Campus & NYSC clearance", "Commercial business clearance", "Estate buyout", "Repair, refurbish & resell", "Smart trade-in & upgrade", "Agro products or handmade crafts", "Other item for sale"];
+export const marketCategories = ["All markets", "Declutter Market", "Urgent Sale Market", "Relocation / Japa Market", "Importer / Container Market", "Campus & NYSC Market", "Business Clearance Market", "Estate Clearance Market", "Repair, Refurbish & Resell Market", "Trade-in & Upgrade Market", "Agro & Crafts Market", "Other Sales Market"];
+export const deliveryMethods = ["All delivery methods", "Dispatch rider", "Interstate waybill", "Logistics company", "Bulk minibus", "Pickup"];
+
+export function marketSlug(market: string) {
+  return market.toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+}
+
+export function getMarketFromSlug(slug: string) {
+  return marketCategories.find((market) => marketSlug(market) === slug) || null;
+}
+
+const categoryLabels: Record<string, string> = {
+  Electronics: "Living room & electronics",
+  Furniture: "Furniture & interior decor",
+  Appliances: "Home & kitchen appliances",
+  Vehicles: "Vehicles & machinery",
+  Gadgets: "Gadgets & computing",
+  Fashion: "Fashion, toys & personal items",
+  Machinery: "Vehicles & machinery",
+  "Imported Goods": "Imported clearance & excess stock",
+  Agro: "Agro products",
+  Crafts: "Handmade crafts",
+  "Commercial Equipment": "Commercial equipment",
+};
+
+export function getListingCategory(listing: Pick<Listing, "category">) {
+  return categoryLabels[listing.category] || listing.category;
+}
+
+export function getListingSellingRoute(listing: Pick<Listing, "category">) {
+  const category = getListingCategory(listing);
+  if (category === "Imported clearance & excess stock") return "Importer / container clearance";
+  if (category === "Commercial equipment") return "Commercial business clearance";
+  if (category === "Agro products" || category === "Handmade crafts") return "Agro products or handmade crafts";
+  return "Home & office decluttering";
+}
+
+const marketLabels: Record<string, string> = {
+  "Home & office decluttering": "Declutter Market",
+  "Urgent distress sale": "Urgent Sale Market",
+  "Relocation / Japa clearance": "Relocation / Japa Market",
+  "Importer / container clearance": "Importer / Container Market",
+  "Campus & NYSC clearance": "Campus & NYSC Market",
+  "Commercial business clearance": "Business Clearance Market",
+  "Estate buyout": "Estate Clearance Market",
+  "Repair, refurbish & resell": "Repair, Refurbish & Resell Market",
+  "Smart trade-in & upgrade": "Trade-in & Upgrade Market",
+  "Agro products or handmade crafts": "Agro & Crafts Market",
+  "Other item for sale": "Other Sales Market",
+};
+
+const localMarketByCode: Record<string, string> = {
+  "HWG-0096": "Urgent Sale Market",
+  "HWG-0084": "Relocation / Japa Market",
+  "HWG-0088": "Campus & NYSC Market",
+  "HWG-0078": "Campus & NYSC Market",
+  "HWG-0036": "Campus & NYSC Market",
+  "HWG-0101": "Estate Clearance Market",
+  "HWG-0086": "Estate Clearance Market",
+  "HWG-0054": "Trade-in & Upgrade Market",
+  "HWG-0039": "Repair, Refurbish & Resell Market",
+};
+
+export function getListingMarket(listing: Pick<Listing, "code" | "category">) {
+  if (localMarketByCode[listing.code]) return localMarketByCode[listing.code];
+  return marketLabels[getListingSellingRoute(listing)] || "Other Sales Market";
+}
+
+export function getListingDeliveryMethod(listing: Pick<Listing, "category">) {
+  const category = getListingCategory(listing);
+  if (category === "Vehicles & machinery" || category === "Furniture & interior decor") return "Pickup";
+  if (category === "Imported clearance & excess stock" || category === "Commercial equipment") return "Logistics company";
+  if (category === "Agro products") return "Interstate waybill";
+  return "Dispatch rider";
+}
+
 export const listings: Listing[] = [
   { code: "HWG-0102", name: "Samsung 55-inch Smart TV", category: "Electronics", price: 485000, location: "Lekki, Lagos", condition: "Clean Fairly Used", date: "Today", views: 184, mark: "TV", tone: "from-[#2364ae] to-[#122f62]", featured: true },
   { code: "HWG-0101", name: "L-shaped family sofa set", category: "Furniture", price: 320000, location: "Ikeja, Lagos", condition: "Clean Fairly Used", date: "Yesterday", views: 142, mark: "SOFA", tone: "from-[#ead7bb] to-[#c99e6d]" , featured: true },
@@ -30,5 +107,9 @@ export const listings: Listing[] = [
   { code: "HWG-0030", name: "Nissan X-Trail 2014", category: "Vehicles", price: 9800000, location: "Ibadan, Oyo", condition: "Clean Fairly Used", date: "1 month ago", views: 287, mark: "SUV", tone: "from-[#475569] to-[#1e293b]" },
 ];
 
-export const categories = ["All categories", "Electronics", "Furniture", "Appliances", "Vehicles", "Gadgets", "Fashion", "Machinery", "Imported Goods", "Agro", "Crafts", "Commercial Equipment"];
+export function getListingsForMarket(market: string) {
+  return listings.filter((listing) => getListingMarket(listing) === market);
+}
+
+export const categories = ["All categories", "Vehicles & machinery", "Home & kitchen appliances", "Household essentials & utensils", "Living room & electronics", "Gadgets & computing", "Furniture & interior decor", "Fashion, toys & personal items", "Imported clearance & excess stock", "Agro products", "Handmade crafts", "Commercial equipment", "Other"];
 export const conditions = ["All conditions", "Brand New", "Open Box", "Clean Fairly Used"];

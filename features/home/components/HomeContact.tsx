@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { Arrow, SocialIcon } from "./HomeIcons";
+import Dropdown from "../../../components/forms/Dropdown";
 import {
   adminWhatsApp,
   audienceRelayBaseUrl,
@@ -252,20 +253,18 @@ export default function HomeContact() {
             />
           </label>
         </div>
-        <label className="mt-3 block text-[10px] font-extrabold text-[#344054]">
-          What can we help with?
-          <select
-            name="topic"
-            defaultValue="General enquiry"
-            className="mt-1 w-full rounded-lg border border-[#dfe5ed] bg-white px-3 py-3 text-[11px] font-normal outline-none focus:border-[#4d86d8]"
-          >
-            <option>General enquiry</option>
-            <option>Company information</option>
-            <option>Support or dispute</option>
-            <option>Partnership</option>
-            <option>Business enquiry</option>
-          </select>
-        </label>
+        <Dropdown
+          label="What can we help with?"
+          name="topic"
+          defaultValue="General enquiry"
+          options={[
+            { value: "General enquiry", label: "General enquiry", tip: "Use this for a question that does not fit another topic." },
+            { value: "Company information", label: "Company information", tip: "Ask about Hollyway Global, its work or how the platform operates." },
+            { value: "Support or dispute", label: "Support or dispute", tip: "Choose this when you need help with a transaction or want to report a dispute." },
+            { value: "Partnership", label: "Partnership", tip: "Choose this for referral, reseller or business collaboration enquiries." },
+            { value: "Business enquiry", label: "Business enquiry", tip: "Use this for a company request, supply need or commercial opportunity." },
+          ]}
+        />
         <label className="mt-3 block text-[10px] font-extrabold text-[#344054]">
           Message
           <textarea

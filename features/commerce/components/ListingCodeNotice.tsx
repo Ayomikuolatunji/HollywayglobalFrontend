@@ -1,0 +1,3 @@
+export default function ListingCodeNotice({ code }: { code: string }) {
+  return <section className="flex flex-col justify-between gap-3 rounded-xl border border-[#cfe0f7] bg-[#f4f8ff] p-4 sm:flex-row sm:items-center" aria-label="Listing code"><div><span className="text-[10px] font-extrabold tracking-[.16em] text-[#1453bb]">LISTING CODE</span><h3 className="mt-1 text-sm font-extrabold text-[#0b1830]">Your reference for this item</h3><p className="mt-1 text-xs leading-5 text-[#53627a]">Use this code when contacting Hollyway about your listing, review or later sale.</p></div><strong className="rounded-lg bg-white px-4 py-3 font-mono text-sm font-extrabold tracking-[.16em] text-[#1453bb]">{code || "Assigning code…"}</strong></section>;
+}
