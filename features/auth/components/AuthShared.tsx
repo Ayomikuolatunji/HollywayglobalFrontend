@@ -32,7 +32,7 @@ export function AuthShell({
         </Link>
       </header>
       <section className="mx-auto grid min-h-[calc(100vh-78px)] w-[calc(100%-40px)] max-w-[1080px] items-center gap-10 py-12 lg:w-[calc(100%-56px)] lg:grid-cols-[1fr_.72fr] lg:gap-[90px] lg:py-[70px]">
-        <div>
+        <div className="hidden lg:block">
           <span className="text-[10px] font-extrabold tracking-[.2em] text-[#ff8a00]">
             HOLLYWAY USER ACCOUNT
           </span>
