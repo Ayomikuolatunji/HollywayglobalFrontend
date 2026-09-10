@@ -192,7 +192,13 @@ export default function DashboardShell({ children }: { children: ReactNode }) {
   }, [accountPhotoPath]);
 
   useEffect(() => {
-    const refreshAccount = () => void loadCustomerSession();
+    const refreshAccount = (event: Event) => {
+      const detail = event instanceof CustomEvent ? event.detail : null;
+      const verifiedName =
+        detail && typeof detail.kycName === "string" ? detail.kycName.trim() : "";
+      if (verifiedName) setKycIdentityName(verifiedName);
+      void loadCustomerSession();
+    };
     window.addEventListener(accountProfileUpdatedEvent, refreshAccount);
     return () => window.removeEventListener(accountProfileUpdatedEvent, refreshAccount);
   }, [loadCustomerSession]);
@@ -203,6 +209,7 @@ export default function DashboardShell({ children }: { children: ReactNode }) {
       setShowKycPrompt(false);
       return;
     }
+    setKycIdentityName("");
     const localStatus = readKycLocalState(getKycStorageKey(accountEmail)).status;
     const localComplete = isKycComplete(localStatus);
     setKycComplete(localComplete);
@@ -213,8 +220,10 @@ export default function DashboardShell({ children }: { children: ReactNode }) {
     fetchKycStatus()
       .then((remote) => {
         if (!active) return;
-        setKycIdentityName(remote.legal_full_name?.trim() || "");
         const nextStatus = resolveKycStatus(remote.status, localStatus);
+        setKycIdentityName(
+          nextStatus === "approved" ? remote.legal_full_name?.trim() || "" : "",
+        );
         const remoteComplete = isKycComplete(nextStatus);
         setKycComplete(remoteComplete);
         if (pathname === "/dashboard") {
@@ -268,7 +277,7 @@ export default function DashboardShell({ children }: { children: ReactNode }) {
     window.location.assign("/login");
   }
 
-  const accountName = kycIdentityName || "Hollyway user";
+  const accountName = kycIdentityName || account?.name || "Hollyway user";
   const accountInitial = accountName.trim().charAt(0).toUpperCase() || "H";
 
   return (

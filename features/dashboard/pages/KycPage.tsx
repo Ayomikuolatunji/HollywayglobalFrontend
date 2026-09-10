@@ -118,7 +118,11 @@ export default function KycPage() {
       setStatus(result.submission.status);
       setMessage(result.message);
       if (result.submission.status === "approved") {
-        window.dispatchEvent(new Event(accountProfileUpdatedEvent));
+        window.dispatchEvent(
+          new CustomEvent(accountProfileUpdatedEvent, {
+            detail: { kycName: result.submission.legal_full_name || "" },
+          }),
+        );
       }
       setDraft((current) => ({ ...current, identityNumber: "", selfieName: "" }));
       setSelfieFile(null);
