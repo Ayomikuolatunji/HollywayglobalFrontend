@@ -1,6 +1,8 @@
 import { getCustomerApiBaseUrl } from "../../../components/config/customerApi";
 import type { KycServerStatus } from "./kyc";
 
+const minimumSelfieConfidence = 70;
+
 export type KycServerSubmission = {
   id?: number;
   status: KycServerStatus;
@@ -88,7 +90,7 @@ export async function verifyKyc(input: {
     (submission.liveness_passed !== true ||
       submission.selfie_match !== true ||
       typeof submission.selfie_confidence !== "number" ||
-      submission.selfie_confidence < 90)
+      submission.selfie_confidence < minimumSelfieConfidence)
   ) {
     throw new KycApiError("Verification did not pass the required face checks. Please try again.", response.status);
   }
