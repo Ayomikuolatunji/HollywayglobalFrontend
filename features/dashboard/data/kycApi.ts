@@ -82,11 +82,21 @@ export async function verifyKyc(input: {
     throw new KycApiError("Verification response was incomplete. Please try again.", response.status);
   }
   const submission = data.submission;
+  const normalizedStatus = normalizeServerStatus(submission.status);
+  if (
+    normalizedStatus === "approved" &&
+    (submission.liveness_passed !== true ||
+      submission.selfie_match !== true ||
+      typeof submission.selfie_confidence !== "number" ||
+      submission.selfie_confidence < 90)
+  ) {
+    throw new KycApiError("Verification did not pass the required face checks. Please try again.", response.status);
+  }
   return {
     message: typeof data.message === "string" ? data.message : "Your identity verification result is available.",
     submission: {
       ...submission,
-      status: normalizeServerStatus(submission.status),
+      status: normalizedStatus,
     } as KycServerSubmission,
   };
 }
