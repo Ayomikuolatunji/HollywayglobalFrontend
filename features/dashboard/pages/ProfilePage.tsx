@@ -30,13 +30,18 @@ function formatDate(value?: string) {
   return match ? `${match[3]}/${match[2]}/${match[1]}` : value;
 }
 
+function requestErrorMessage(error: unknown, fallback: string) {
+  if (error instanceof Error && /failed to fetch/i.test(error.message)) return fallback;
+  return error instanceof Error ? error.message : fallback;
+}
+
 function ProfileValue({ label, value }: { label: string; value: string }) {
   return (
     <div>
       <dt className="text-[10px] font-extrabold tracking-[.12em] text-[#8b97a9] dark:text-[#8190a8]">
         {label}
       </dt>
-      <dd className="mt-1 break-words text-sm font-semibold text-[#31425e] dark:text-[#d6deeb]">
+      <dd className="mt-1 break-words text-xs font-semibold text-[#31425e] dark:text-[#d6deeb]">
         {value}
       </dd>
     </div>
@@ -44,7 +49,7 @@ function ProfileValue({ label, value }: { label: string; value: string }) {
 }
 
 export default function ProfilePage() {
-  const { accountEmail, accountPhotoUrl } = useDashboard();
+  const { accountEmail, accountName, accountPhotoUrl } = useDashboard();
   const storageKey = getKycStorageKey(accountEmail);
   const [kycStatus, setKycStatus] = useState<KycStatus>("not-started");
   const [kycSubmission, setKycSubmission] = useState<KycServerSubmission | null>(null);
@@ -67,11 +72,7 @@ export default function ProfilePage() {
       setKycSubmission(remote.status === "not_submitted" ? null : remote);
       setKycStatus(resolveKycStatus(remote.status, local.status));
     } catch (requestError) {
-      setStatusError(
-        requestError instanceof Error
-          ? requestError.message
-          : "KYC status could not be loaded.",
-      );
+      setStatusError(requestErrorMessage(requestError, "Verification status is unavailable."));
     } finally {
       setLoading(false);
     }
@@ -85,11 +86,7 @@ export default function ProfilePage() {
       const remote = await fetchBusinessUpgrade();
       setBusinessUpgrade(remote.status === "not_submitted" ? null : remote);
     } catch (requestError) {
-      setBusinessError(
-        requestError instanceof Error
-          ? requestError.message
-          : "Business account status could not be loaded.",
-      );
+      setBusinessError(requestErrorMessage(requestError, "Business account status is unavailable."));
     } finally {
       setBusinessLoading(false);
     }
@@ -110,6 +107,7 @@ export default function ProfilePage() {
   const statusAction = kycStatusAction(kycStatus);
   const identityName =
     kycSubmission?.legal_full_name || "Not provided until KYC is verified";
+  const displayName = kycSubmission?.legal_full_name?.trim() || accountName || "Hollyway user";
   const identityPhone = kycSubmission?.phone_e164 || "Not returned by KYC yet";
   const identityAddress =
     [kycDraft.address, kycDraft.city, kycDraft.state].filter(Boolean).join(", ") ||
@@ -135,14 +133,15 @@ export default function ProfilePage() {
           body: "text-[#6b5a3d] dark:text-[#e2c38e]",
         };
   return (
-    <div className="mx-auto w-full max-w-[1180px] space-y-6 p-5 sm:p-8">
+    <div className="mx-auto w-full max-w-[1080px] space-y-3 p-4 sm:p-5 lg:p-6">
       <DashboardPageHeader
         kicker="ACCOUNT"
         title="Profile & KYC"
-        description="Review your account details, verification status and business account pathway."
+        description="Manage identity details and business access."
+        compact
         action={
           <Link
-            className="inline-flex h-11 items-center gap-2 rounded-lg bg-[#1453bb] px-4 text-xs font-extrabold text-white hover:bg-[#0b3f91]"
+            className="inline-flex h-9 items-center gap-2 rounded-lg bg-[#1453bb] px-3 text-[11px] font-extrabold text-white hover:bg-[#0b3f91]"
             href="/dashboard/profile/kyc"
           >
             {statusAction} <Arrow />
@@ -152,7 +151,7 @@ export default function ProfilePage() {
 
       {statusError && (
         <div
-          className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-[#f1d8a9] bg-[#fffaf1] px-4 py-3 text-xs leading-5 text-[#6b5a3d] dark:border-[#604a29] dark:bg-[#2a2115] dark:text-[#e2c38e]"
+          className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-[#f1d8a9] bg-[#fffaf1] px-3 py-2 text-[11px] leading-4 text-[#6b5a3d] dark:border-[#604a29] dark:bg-[#2a2115] dark:text-[#e2c38e]"
           role="alert"
         >
           <span>{statusError}</span>
@@ -167,7 +166,7 @@ export default function ProfilePage() {
       )}
       {businessError && (
         <div
-          className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-[#f1d8a9] bg-[#fffaf1] px-4 py-3 text-xs leading-5 text-[#6b5a3d] dark:border-[#604a29] dark:bg-[#2a2115] dark:text-[#e2c38e]"
+          className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-[#f1d8a9] bg-[#fffaf1] px-3 py-2 text-[11px] leading-4 text-[#6b5a3d] dark:border-[#604a29] dark:bg-[#2a2115] dark:text-[#e2c38e]"
           role="alert"
         >
           <span>{businessError}</span>
@@ -181,20 +180,14 @@ export default function ProfilePage() {
         </div>
       )}
 
-      <section className="grid gap-6 lg:grid-cols-[1fr_.85fr]">
-        <article className="rounded-xl border border-[#dfe4ed] bg-white p-6 shadow-sm dark:border-[#2a374e] dark:bg-[#121d30]">
+      <section className="grid gap-3 lg:grid-cols-[1.1fr_.9fr]">
+        <article className="rounded-xl border border-[#dfe4ed] bg-white p-4 shadow-sm dark:border-[#2a374e] dark:bg-[#121d30]">
           <ProfilePhotoEditor
-            accountName={identityName}
+            accountName={displayName}
             accountPhotoUrl={accountPhotoUrl}
           />
-          <div className="pt-5">
-              <h3 className="font-[Manrope] text-lg font-extrabold text-[#0b1830] dark:text-[#f4f7fb]">
-                {identityName}
-              </h3>
-              <p className="mt-1 text-xs text-[#8490a4] dark:text-[#8190a8]">KYC identity name</p>
-          </div>
-          <dl className="mt-5 grid gap-4 sm:grid-cols-2">
-            <ProfileValue label="ACCOUNT NAME" value={identityName} />
+          <dl className="mt-4 grid gap-3 border-t border-[#eef1f4] pt-4 dark:border-[#2a374e] sm:grid-cols-2">
+            <ProfileValue label="ACCOUNT NAME" value={displayName} />
             <ProfileValue label="EMAIL ADDRESS" value={accountEmail || "Not provided"} />
             <ProfileValue
               label="ACCOUNT TYPE"
@@ -202,30 +195,25 @@ export default function ProfilePage() {
             />
             <ProfileValue label="KYC STATUS" value={statusTitle} />
           </dl>
-          <p className="mt-6 rounded-lg bg-[#f8fafc] p-4 text-xs leading-5 text-[#53627a] dark:bg-[#18253a] dark:text-[#b7c3d6]">
-            The account name shown here comes from your KYC identity result, not
-            your social sign-in profile. Your email remains the sign-in address
-            for this account.
-          </p>
         </article>
 
-        <article className={`rounded-xl border p-6 shadow-sm ${statusStyles.card}`}>
+        <article className={`rounded-xl border p-4 shadow-sm ${statusStyles.card}`}>
           <span
-            className={`grid h-11 w-11 place-items-center rounded-xl [&>svg]:h-5 [&>svg]:w-5 ${statusStyles.icon}`}
+            className={`grid h-9 w-9 place-items-center rounded-lg [&>svg]:h-4 [&>svg]:w-4 ${statusStyles.icon}`}
           >
             <DashboardIcon name="shield" />
           </span>
-          <span className={`mt-5 block text-[10px] font-extrabold tracking-[.15em] ${statusStyles.text}`}>
+          <span className={`mt-3 block text-[9px] font-extrabold tracking-[.15em] ${statusStyles.text}`}>
             VERIFICATION · {statusTitle.toUpperCase()}
           </span>
-          <h3 className="mt-2 font-[Manrope] text-xl font-extrabold tracking-[-.04em] text-[#0b1830] dark:text-[#f4f7fb]">
+          <h3 className="mt-1 font-[Manrope] text-base font-extrabold tracking-[-.04em] text-[#0b1830] dark:text-[#f4f7fb]">
             {statusTitle}
           </h3>
-          <p className={`mt-2 text-xs leading-5 ${statusStyles.body}`}>
+          <p className={`mt-1 text-[11px] leading-4 ${statusStyles.body}`}>
             {kycStatusDescription(kycStatus)}
           </p>
           <Link
-            className={`mt-6 inline-flex items-center gap-2 text-xs font-extrabold hover:underline ${statusStyles.text}`}
+            className={`mt-4 inline-flex items-center gap-2 text-[11px] font-extrabold hover:underline ${statusStyles.text}`}
             href="/dashboard/profile/kyc"
           >
             {submitted ? "View verification" : statusAction} <Arrow />
@@ -233,22 +221,21 @@ export default function ProfilePage() {
         </article>
       </section>
 
-      <section className="rounded-xl border border-[#dfe4ed] bg-white p-6 shadow-sm dark:border-[#2a374e] dark:bg-[#121d30]">
-        <div className="flex flex-col justify-between gap-4 border-b border-[#eef1f4] pb-5 dark:border-[#2a374e] sm:flex-row sm:items-start">
+      <section className="rounded-xl border border-[#dfe4ed] bg-white p-4 shadow-sm dark:border-[#2a374e] dark:bg-[#121d30]">
+        <div className="flex flex-col justify-between gap-3 border-b border-[#eef1f4] pb-3 dark:border-[#2a374e] sm:flex-row sm:items-center">
           <div>
-            <span className="text-[10px] font-extrabold tracking-[.15em] text-[#1453bb] dark:text-[#8bb8ff]">
+            <span className="text-[9px] font-extrabold tracking-[.15em] text-[#1453bb] dark:text-[#8bb8ff]">
               IDENTITY DETAILS
             </span>
-            <h3 className="mt-2 font-[Manrope] text-xl font-extrabold tracking-[-.04em] text-[#0b1830] dark:text-[#f4f7fb]">
+            <h3 className="mt-1 font-[Manrope] text-base font-extrabold tracking-[-.04em] text-[#0b1830] dark:text-[#f4f7fb]">
               Details used for verification
             </h3>
-            <p className="mt-2 max-w-2xl text-xs leading-5 text-[#53627a] dark:text-[#b7c3d6]">
-              These details come from your KYC form. Correct them through the
-              verification page before submitting.
+            <p className="mt-1 max-w-2xl text-[11px] leading-4 text-[#53627a] dark:text-[#b7c3d6]">
+              Verified identity details returned by KYC.
             </p>
           </div>
           <Link
-            className="inline-flex h-10 shrink-0 items-center gap-2 rounded-lg border border-[#1453bb] px-4 text-xs font-extrabold text-[#1453bb] hover:bg-[#f4f8ff] dark:border-[#8bb8ff] dark:text-[#8bb8ff] dark:hover:bg-[#202d44]"
+            className="inline-flex h-9 shrink-0 items-center gap-2 rounded-lg border border-[#1453bb] px-3 text-[11px] font-extrabold text-[#1453bb] hover:bg-[#f4f8ff] dark:border-[#8bb8ff] dark:text-[#8bb8ff] dark:hover:bg-[#202d44]"
             href="/dashboard/profile/kyc"
           >
             {rejected ? "Correct details" : submitted ? "Review details" : "Edit details"} <Arrow />
@@ -257,7 +244,7 @@ export default function ProfilePage() {
         {loading ? (
           <p className="py-6 text-xs text-[#687895] dark:text-[#9eabc0]">Loading your verification details…</p>
         ) : (
-          <dl className="mt-5 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <dl className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             <ProfileValue label="LEGAL FULL NAME" value={identityName} />
             <ProfileValue
               label="DATE OF BIRTH"
@@ -271,9 +258,8 @@ export default function ProfilePage() {
             <ProfileValue label="ADDRESS" value={identityAddress} />
           </dl>
         )}
-        <p className="mt-6 rounded-lg border border-[#cfe0f7] bg-[#f4f8ff] p-3 text-[10px] leading-5 text-[#53627a] dark:border-[#334b72] dark:bg-[#14243d] dark:text-[#b7c3d6]">
-          For privacy, Hollyway shows only safe verification details here. Your
-          full NIN or BVN is never displayed or saved in browser storage.
+        <p className="mt-4 rounded-lg border border-[#cfe0f7] bg-[#f4f8ff] p-2.5 text-[10px] leading-4 text-[#53627a] dark:border-[#334b72] dark:bg-[#14243d] dark:text-[#b7c3d6]">
+          Full NIN or BVN numbers are never displayed or saved in browser storage.
         </p>
       </section>
 

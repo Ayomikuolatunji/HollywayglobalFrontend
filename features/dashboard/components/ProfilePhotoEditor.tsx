@@ -86,8 +86,8 @@ export default function ProfilePhotoEditor({
   }
 
   return (
-    <div className="flex flex-col gap-4 border-b border-[#eef1f4] pb-5 dark:border-[#2a374e] sm:flex-row sm:items-center">
-      <span className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-full bg-[#1453bb] text-lg font-extrabold text-white dark:bg-[#dd6b12]">
+    <div className="flex flex-col gap-3 border-b border-[#eef1f4] pb-4 dark:border-[#2a374e] sm:flex-row sm:items-center">
+      <span className="grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-full bg-[#1453bb] text-base font-extrabold text-white dark:bg-[#dd6b12]">
         {previewUrl && !imageFailed ? (
           <img
             className="h-full w-full object-cover"
@@ -100,25 +100,28 @@ export default function ProfilePhotoEditor({
         )}
       </span>
       <div className="min-w-0 flex-1">
-        <p className="text-[10px] font-extrabold tracking-[.12em] text-[#1453bb] dark:text-[#8bb8ff]">
-          PROFILE PICTURE
+        <strong className="block truncate text-sm font-extrabold text-[#0b1830] dark:text-[#f4f7fb]">
+          {accountName}
+        </strong>
+        <p className="mt-0.5 text-[10px] font-extrabold uppercase tracking-[.12em] text-[#1453bb] dark:text-[#8bb8ff]">
+          Profile picture
         </p>
-        <p className="mt-1 text-xs leading-5 text-[#53627a] dark:text-[#b7c3d6]">
-          Your Google photo or verified selfie is used automatically. Upload a replacement whenever you want.
+        <p className="mt-1 text-[11px] leading-4 text-[#53627a] dark:text-[#b7c3d6]">
+          Use your Google photo, verified selfie or upload another.
         </p>
-        <div className="mt-3 flex flex-wrap items-center gap-3">
-          <label className="inline-flex h-9 cursor-pointer items-center rounded-lg border border-[#1453bb] px-3 text-[11px] font-extrabold text-[#1453bb] hover:bg-[#f4f8ff] dark:border-[#8bb8ff] dark:text-[#8bb8ff] dark:hover:bg-[#202d44]">
+        <div className="mt-2 flex flex-wrap items-center gap-2">
+          <label className="inline-flex h-8 cursor-pointer items-center rounded-lg border border-[#1453bb] px-3 text-[10px] font-extrabold text-[#1453bb] hover:bg-[#f4f8ff] dark:border-[#8bb8ff] dark:text-[#8bb8ff] dark:hover:bg-[#202d44]">
             Choose picture
             <input className="sr-only" type="file" accept="image/jpeg,image/png,image/webp" onChange={choosePhoto} />
           </label>
           {file && (
-            <button className="inline-flex h-9 items-center rounded-lg bg-[#1453bb] px-3 text-[11px] font-extrabold text-white hover:bg-[#0b3f91] disabled:opacity-50" type="button" onClick={() => void savePhoto()} disabled={saving}>
+            <button className="inline-flex h-8 items-center rounded-lg bg-[#1453bb] px-3 text-[10px] font-extrabold text-white hover:bg-[#0b3f91] disabled:opacity-50" type="button" onClick={() => void savePhoto()} disabled={saving}>
               {saving ? "Saving…" : "Save picture"}
             </button>
           )}
         </div>
-        {error && <p className="mt-2 text-[11px] font-semibold text-[#a32929]" role="alert">{error}</p>}
-        {message && <p className="mt-2 text-[11px] font-semibold text-[#168046]" role="status">{message}</p>}
+        {error && <p className="mt-1 text-[10px] font-semibold text-[#a32929]" role="alert">{error}</p>}
+        {message && <p className="mt-1 text-[10px] font-semibold text-[#168046]" role="status">{message}</p>}
       </div>
     </div>
   );
