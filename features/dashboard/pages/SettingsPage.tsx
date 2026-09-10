@@ -1,11 +1,157 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import DashboardPageHeader from "../components/DashboardPageHeader";
+import SettingsForm, { type NotificationKey } from "../components/SettingsForm";
+import { useDashboard } from "../components/DashboardShell";
+import {
+  AccountApiError,
+  changePassword,
+  fetchAccountSettings,
+  type AccountSettings,
+  updateAccountSettings,
+} from "../data/accountApi";
 
-const options = [["Email updates", "Receive important account and transaction updates."], ["Listing activity", "Know when buyers show interest in your listings."], ["Request updates", "Get updates when a wanted request changes."]];
+const defaultSettings: AccountSettings = {
+  theme: "light",
+  email_updates: true,
+  listing_activity: true,
+  request_updates: true,
+  order_updates: true,
+  service_updates: true,
+};
 
 export default function SettingsPage() {
-  const [enabled, setEnabled] = useState(options.map(() => true));
-  return <div className="mx-auto max-w-[980px] space-y-7 p-5 sm:p-8"><DashboardPageHeader kicker="ACCOUNT" title="Settings" description="Choose how Hollyway keeps you informed. These preferences are saved locally for now." /><section className="rounded-lg border border-[#dfe4ed] bg-white p-5"><div className="border-b border-[#eef1f4] pb-4"><span className="text-xs font-bold text-[#1453bb]">Notifications</span><h3 className="mt-2 font-[Manrope] text-xl font-extrabold tracking-[-.04em] text-[#0b1830]">Notification preferences</h3></div><div className="divide-y divide-[#eef1f4]">{options.map(([title, text], index) => <label className="flex cursor-pointer items-center gap-4 py-4 first:pt-5 last:pb-0" key={title}><span className={`relative h-6 w-11 shrink-0 rounded-full transition ${enabled[index] ? "bg-[#1453bb]" : "bg-[#cbd5e1]"}`}><input className="sr-only" type="checkbox" checked={enabled[index]} onChange={() => setEnabled((current) => current.map((value, item) => item === index ? !value : value))} /><span className={`absolute top-1 h-4 w-4 rounded-full bg-white transition ${enabled[index] ? "left-6" : "left-1"}`} /></span><span><b className="block text-xs text-[#0b1830]">{title}</b><small className="mt-1 block text-[10px] leading-5 text-[#8490a4]">{text}</small></span></label>)}</div></section><section className="rounded-lg border border-[#dfe4ed] bg-white p-5"><span className="text-xs font-bold text-[#1453bb]">Security</span><h3 className="mt-2 font-[Manrope] text-xl font-extrabold tracking-[-.04em] text-[#0b1830]">Account security</h3><p className="mt-2 text-xs leading-5 text-[#8490a4]">Manage your password and sign-in methods from the secure account flows.</p><a className="mt-5 inline-flex text-xs font-extrabold text-[#1453bb] hover:underline" href="/forgot-password">Change password</a></section></div>;
+  const { accountEmail, theme, setTheme } = useDashboard();
+  const [settings, setSettings] = useState<AccountSettings>({ ...defaultSettings, theme });
+  const [loading, setLoading] = useState(true);
+  const [savingKey, setSavingKey] = useState("");
+  const [loadError, setLoadError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [passwordMessage, setPasswordMessage] = useState("");
+  const [passwordSaving, setPasswordSaving] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+    fetchAccountSettings()
+      .then((remote) => {
+        if (!active) return;
+        setSettings(remote);
+        setTheme(remote.theme);
+      })
+      .catch((requestError) => {
+        if (!active) return;
+        setLoadError(
+          requestError instanceof AccountApiError
+            ? requestError.message
+            : "Your saved settings could not be loaded. You can still update them and retry.",
+        );
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [setTheme]);
+
+  async function saveSetting(
+    key: "theme" | NotificationKey,
+    changes: Partial<Omit<AccountSettings, "updated_at">>,
+  ) {
+    const previous = settings;
+    setSettings((current) => ({ ...current, ...changes }));
+    if (changes.theme) setTheme(changes.theme);
+    setSavingKey(key);
+    setLoadError("");
+    try {
+      const remote = await updateAccountSettings(changes);
+      setSettings(remote);
+      if (changes.theme) setTheme(remote.theme);
+    } catch (requestError) {
+      setSettings(previous);
+      if (changes.theme) setTheme(previous.theme);
+      setLoadError(
+        requestError instanceof Error
+          ? requestError.message
+          : "That setting could not be saved. Please try again.",
+      );
+    } finally {
+      setSavingKey("");
+    }
+  }
+
+  function handleThemeChange(nextTheme: AccountSettings["theme"]) {
+    void saveSetting("theme", { theme: nextTheme });
+  }
+
+  function handleNotificationChange(key: NotificationKey, value: boolean) {
+    void saveSetting(key, { [key]: value });
+  }
+
+  async function handlePasswordSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setPasswordError("");
+    setPasswordMessage("");
+    const form = new FormData(event.currentTarget);
+    const currentPassword = String(form.get("currentPassword") || "");
+    const newPassword = String(form.get("newPassword") || "");
+    const confirmPassword = String(form.get("confirmPassword") || "");
+    if (newPassword !== confirmPassword) {
+      setPasswordError("New passwords do not match.");
+      return;
+    }
+    if (newPassword.length < 8) {
+      setPasswordError("New password must be at least 8 characters.");
+      return;
+    }
+    setPasswordSaving(true);
+    try {
+      setPasswordMessage(await changePassword({ currentPassword, newPassword }));
+      event.currentTarget.reset();
+    } catch (requestError) {
+      setPasswordError(
+        requestError instanceof Error
+          ? requestError.message
+          : "Your password could not be changed.",
+      );
+    } finally {
+      setPasswordSaving(false);
+    }
+  }
+
+  return (
+    <div className="mx-auto w-full max-w-[980px] space-y-6 p-5 sm:p-8">
+      <DashboardPageHeader
+        kicker="ACCOUNT"
+        title="Settings"
+        description="Manage your dashboard appearance, account notifications and sign-in security."
+      />
+      {loadError && (
+        <p
+          className="rounded-lg border border-[#f1d8a9] bg-[#fffaf1] px-4 py-3 text-xs font-semibold leading-5 text-[#6b5a3d]"
+          role="alert"
+        >
+          {loadError}
+        </p>
+      )}
+      {loading ? (
+        <div className="rounded-xl border border-[#e4e2da] bg-white p-6 text-sm text-[#53627a] dark:border-[#2a374e] dark:bg-[#121d30] dark:text-[#b7c3d6]">
+          Loading your saved settings…
+        </div>
+      ) : (
+        <SettingsForm
+          accountEmail={accountEmail}
+          settings={settings}
+          savingKey={savingKey}
+          passwordError={passwordError}
+          passwordMessage={passwordMessage}
+          passwordSaving={passwordSaving}
+          onThemeChange={handleThemeChange}
+          onNotificationChange={handleNotificationChange}
+          onPasswordSubmit={handlePasswordSubmit}
+        />
+      )}
+    </div>
+  );
 }

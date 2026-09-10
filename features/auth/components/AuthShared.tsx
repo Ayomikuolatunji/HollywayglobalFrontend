@@ -120,13 +120,16 @@ export function AuthSuccess({ message }: { message: string }) {
   ) : null;
 }
 
-export function GoogleButton() {
+export function GoogleButton({ referralCode = "" }: { referralCode?: string }) {
   const [apiBaseUrl, setApiBaseUrl] = useState(productionCustomerApiBaseUrl);
   useEffect(() => setApiBaseUrl(getCustomerApiBaseUrl()), []);
+  const query = referralCode
+    ? `?referral_code=${encodeURIComponent(referralCode)}`
+    : "";
   return (
     <a
       className="mt-7 flex h-12 items-center justify-center gap-3 rounded-lg border border-[#dfe4ed] bg-white text-sm font-extrabold text-[#0b1830] transition hover:border-[#1453bb] hover:bg-[#f8fafc]"
-      href={`${apiBaseUrl}/auth/google`}
+      href={`${apiBaseUrl}/auth/google${query}`}
     >
       <BrandIcon name="google" className="h-5 w-5" />
       Continue with Google

@@ -16,7 +16,8 @@ const labelClass = "grid gap-2 text-[11px] font-extrabold text-[#31425e]";
 const steps = [["Buyer & Seller Agree", "Both parties confirm the item, value and terms."], ["Submit Escrow", "Create the documented HWE transaction request."], ["Funds Deposited (Fidelity)", "Use only official Hollyway payment instructions."], ["Dispatch", "The agreed courier delivers the item."], ["Inspect", "The buyer tests the item against the agreement."], ["Instant Payout", "Seller payout follows buyer confirmation."]];
 
 function SelectField({ label, name, children }: { label: string; name: string; children: ReactNode }) {
-  return <Dropdown label={label} name={name} options={dropdownOptionsFromChildren(children)} />;
+  const optional = name === "deliveryFeeCoverage" || name === "courier";
+  return <Dropdown label={`${label}${optional ? " (optional)" : ""}`} name={name} options={dropdownOptionsFromChildren(children)} required={!optional} />;
 }
 
 function TextAreaField({ label, name, placeholder }: { label: string; name: string; placeholder: string }) {

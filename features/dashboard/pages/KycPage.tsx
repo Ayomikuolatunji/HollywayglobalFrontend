@@ -1,87 +1,145 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState, type ChangeEvent } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Arrow } from "../../../components/ui/Arrow";
-import DashboardIcon from "../components/DashboardIcon";
 import DashboardPageHeader from "../components/DashboardPageHeader";
-import { emptyKycDraft, kycSteps, kycStorageKey, type KycDraft, type KycStatus } from "../data/kyc";
-import Dropdown from "../../../components/forms/Dropdown";
-
-const documentTypes = ["NIN", "International passport", "Driver's licence", "Voter's card"];
-const nigerianStates = ["Lagos", "Abuja (FCT)", "Rivers", "Oyo", "Kano", "Enugu", "Kaduna", "Other"];
-
-function Field({ label, children, hint }: { label: string; children: React.ReactNode; hint?: string }) {
-  return <label className="grid gap-2 text-[11px] font-extrabold text-[#31425e]"><span>{label}</span>{children}{hint && <small className="text-[10px] font-medium leading-4 text-[#8995a8]">{hint}</small>}</label>;
-}
-
-function inputClass() {
-  return "h-11 rounded-lg border border-[#dfe4ed] bg-white px-3 text-xs font-medium text-[#0b1830] outline-none placeholder:text-[#9aa6b7] focus:border-[#1453bb] focus:ring-4 focus:ring-[#1453bb]/10";
-}
-
-function displayDate(value: string) {
-  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
-  return match ? `${match[3]}/${match[2]}/${match[1]}` : value;
-}
-
-function formatDateInput(value: string) {
-  const digits = value.replace(/\D/g, "").slice(0, 8);
-  if (digits.length <= 2) return digits;
-  if (digits.length <= 4) return `${digits.slice(0, 2)}/${digits.slice(2)}`;
-  return `${digits.slice(0, 2)}/${digits.slice(2, 4)}/${digits.slice(4)}`;
-}
+import KycForm from "../components/KycForm";
+import KycStatusPanel from "../components/KycStatusPanel";
+import { useDashboard } from "../components/DashboardShell";
+import { KycApiError, fetchKycStatus, verifyKyc, type KycServerSubmission } from "../data/kycApi";
+import {
+  clearKycLocalState,
+  emptyKycDraft,
+  getKycStorageKey,
+  hasKycSubmission,
+  isKycComplete,
+  persistKycLocalState,
+  readKycLocalState,
+  resolveKycStatus,
+  type KycDraft,
+  type KycStatus,
+} from "../data/kyc";
 
 export default function KycPage() {
+  const { accountEmail } = useDashboard();
+  const storageKey = getKycStorageKey(accountEmail);
   const [draft, setDraft] = useState<KycDraft>(emptyKycDraft);
-  const [step, setStep] = useState(0);
   const [status, setStatus] = useState<KycStatus>("not-started");
+  const [submission, setSubmission] = useState<KycServerSubmission | null>(null);
+  const [selfieFile, setSelfieFile] = useState<File | null>(null);
+  const [step, setStep] = useState(0);
   const [ready, setReady] = useState(false);
+  const [loadingStatus, setLoadingStatus] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [statusError, setStatusError] = useState("");
+  const [message, setMessage] = useState("");
 
-  useEffect(() => {
-    const saved = window.localStorage.getItem(kycStorageKey);
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved) as { draft?: Partial<KycDraft>; status?: KycStatus };
-        setDraft({ ...emptyKycDraft, ...parsed.draft, dateOfBirth: displayDate(parsed.draft?.dateOfBirth || "") });
-        setStatus(parsed.status === "submitted" ? "submitted" : parsed.status === "draft" ? "draft" : "not-started");
-      } catch {
-        window.localStorage.removeItem(kycStorageKey);
+  const loadStatus = useCallback(async (fallback: KycStatus = "not-started") => {
+    setLoadingStatus(true);
+    setStatusError("");
+    try {
+      const remote = await fetchKycStatus();
+      setSubmission(remote.status === "not_submitted" ? null : remote);
+      setStatus(resolveKycStatus(remote.status, fallback));
+    } catch (requestError) {
+      if (!(requestError instanceof KycApiError && requestError.status === 401)) {
+        setStatusError(requestError instanceof Error ? requestError.message : "KYC status could not be loaded.");
       }
+    } finally {
+      setLoadingStatus(false);
     }
-    setReady(true);
   }, []);
 
   useEffect(() => {
-    if (ready) window.localStorage.setItem(kycStorageKey, JSON.stringify({ draft, status }));
-  }, [draft, ready, status]);
+    if (!accountEmail) return;
+    const local = readKycLocalState(storageKey);
+    setDraft(local.draft);
+    setStatus(local.status);
+    setReady(true);
+    void loadStatus(local.status);
+  }, [accountEmail, loadStatus, storageKey]);
 
-  function update<K extends keyof KycDraft>(field: K, value: KycDraft[K]) {
-    setDraft((current) => ({ ...current, [field]: value }));
-    if (status === "not-started") setStatus("draft");
+  useEffect(() => {
+    if (ready && accountEmail) persistKycLocalState(draft, status, storageKey);
+  }, [accountEmail, draft, ready, status, storageKey]);
+
+  function update(field: keyof KycDraft, value: string | boolean) {
+    setDraft((current) => ({ ...current, [field]: value } as KycDraft));
+    if (!isKycComplete(status)) setStatus("draft");
     setError("");
+    setMessage("");
   }
 
-  function validateCurrentStep() {
-    if (step === 0 && draft.dateOfBirth && !/^\d{2}\/\d{2}\/\d{4}$/.test(draft.dateOfBirth)) {
-      setError("Enter your date of birth as DD/MM/YYYY.");
+  function validateStep() {
+    if (step === 0 && !/^\d{11}$/.test(draft.identityNumber)) {
+      setError("Enter the 11-digit identity number for the selected identity record.");
       return false;
     }
-    const required = step === 0 ? [draft.dateOfBirth, draft.phone, draft.country] : step === 1 ? [draft.documentType, draft.documentNumber, draft.documentName] : step === 2 ? [draft.address, draft.city, draft.state] : [draft.consent ? "confirmed" : ""];
-    if (required.some((value) => !String(value).trim())) {
-      setError("Complete the required fields before continuing.");
+    if (step === 1 && !selfieFile) {
+      setError("Capture a clear front-facing selfie before continuing.");
+      return false;
+    }
+    if (step === 2 && (!draft.address.trim() || !draft.city.trim() || !draft.state.trim())) {
+      setError("Complete your full address, city and state before continuing.");
+      return false;
+    }
+    if (step === 3 && !draft.consent) {
+      setError("Confirm that your KYC details are accurate before submitting.");
       return false;
     }
     return true;
   }
 
-  function nextStep() { if (validateCurrentStep()) setStep((current) => Math.min(current + 1, kycSteps.length - 1)); }
-  function previousStep() { setError(""); setStep((current) => Math.max(current - 1, 0)); }
-  function chooseDocument(event: ChangeEvent<HTMLInputElement>) { update("documentName", event.target.files?.[0]?.name || ""); }
-  function submitKyc() { if (!validateCurrentStep()) return; setStatus("submitted"); setError(""); }
-  function startOver() { window.localStorage.removeItem(kycStorageKey); setDraft(emptyKycDraft); setStatus("not-started"); setStep(0); setError(""); }
+  function nextStep() {
+    if (validateStep()) setStep((current) => Math.min(current + 1, 3));
+  }
 
-  if (status === "submitted") return <div className="w-full p-5 sm:p-8"><section className="mx-auto max-w-2xl rounded-2xl border border-[#bfe5d0] bg-[#f5fcf7] p-8 text-center shadow-sm sm:p-12"><span className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-[#20bd61] text-xl font-extrabold text-white">✓</span><span className="mt-6 block text-[10px] font-extrabold tracking-[.18em] text-[#168046]">KYC SUBMISSION SAVED</span><h2 className="mt-3 font-[Manrope] text-3xl font-extrabold tracking-[-.06em] text-[#0b1830]">Your verification details are ready.</h2><p className="mx-auto mt-3 max-w-lg text-sm leading-6 text-[#53627a]">This UI has saved your verification draft locally. The secure provider lookup, document upload and Hollyway review will activate when the verification API is connected.</p><div className="mt-7 flex flex-wrap justify-center gap-3"><Link className="inline-flex h-11 items-center gap-2 rounded-lg bg-[#1453bb] px-4 text-xs font-extrabold text-white" href="/dashboard/profile">Back to profile <Arrow /></Link><button className="inline-flex h-11 items-center gap-2 rounded-lg border border-[#bfe5d0] px-4 text-xs font-extrabold text-[#168046]" type="button" onClick={startOver}>Start a new draft</button></div></section></div>;
+  function saveDraft() {
+    setStatus((current) => (isKycComplete(current) ? current : "draft"));
+    setMessage("Draft saved on this device. Your identity number and selfie are not stored in browser storage.");
+    setError("");
+  }
 
+  async function submit() {
+    if (!validateStep() || !selfieFile) return;
+    setSubmitting(true);
+    setError("");
+    setMessage("");
+    try {
+      const result = await verifyKyc({
+        identityType: draft.identityType,
+        identityNumber: draft.identityNumber,
+        selfie: selfieFile,
+      });
+      setSubmission(result.submission);
+      setStatus(result.submission.status);
+      setMessage(result.message);
+      setDraft((current) => ({ ...current, identityNumber: "", selfieName: "" }));
+      setSelfieFile(null);
+      setStep(result.submission.status === "rejected" ? 1 : 3);
+    } catch (requestError) {
+      setError(requestError instanceof Error ? requestError.message : "KYC submission could not be completed.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
+  function startNewDraft() {
+    clearKycLocalState(storageKey);
+    setDraft(emptyKycDraft);
+    setSubmission(null);
+    setSelfieFile(null);
+    setStatus("not-started");
+    setStep(0);
+    setError("");
+    setMessage("");
+  }
+
+  if (!ready) return <div className="mx-auto w-full max-w-[1180px] space-y-6 p-5 sm:p-8"><DashboardPageHeader kicker="ACCOUNT" title="Identity verification" description="Loading your Hollyway verification status…" /><div className="rounded-xl border border-[#dfe4ed] bg-white p-6 text-sm text-[#53627a]">Checking your secure KYC status…</div></div>;
+
+  const complete = isKycComplete(status);
+  const showStatus = Boolean(submission && hasKycSubmission(status) && status !== "rejected");
+  return <div className="mx-auto w-full max-w-[1180px] space-y-6 p-5 sm:p-8"><DashboardPageHeader kicker="ACCOUNT" title="Identity verification" description="Verify your identity for high-value transactions and account actions that require KYC." action={<Link className="inline-flex h-10 items-center gap-2 rounded-lg border border-[#dfe4ed] px-4 text-xs font-extrabold text-[#53627a] hover:border-[#1453bb] hover:text-[#1453bb]" href="/dashboard/profile">Back to profile <Arrow /></Link>} />{statusError && <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-[#f1d8a9] bg-[#fffaf1] px-4 py-3 text-xs leading-5 text-[#6b5a3d]" role="alert"><span>{statusError} You can continue a saved draft.</span><button className="font-extrabold text-[#b8560d] hover:underline" type="button" onClick={() => void loadStatus(status)}>Retry</button></div>}{message && <p className={`rounded-lg border px-4 py-3 text-xs font-semibold leading-5 ${complete ? "border-[#bfe5d0] bg-[#f1fbf5] text-[#14733d]" : "border-[#cfe0f7] bg-[#f4f8ff] text-[#31527f]"}`} role="status">{message}</p>}{status === "rejected" && submission?.rejection_reason && <div className="rounded-lg border border-[#f3caca] bg-[#fff5f5] px-4 py-3 text-xs leading-5 text-[#8d2c2c]"><strong>Reason for rejection:</strong> {submission.rejection_reason}</div>}{showStatus && submission ? <KycStatusPanel submission={submission} loading={loadingStatus} onRefresh={() => void loadStatus(status)} /> : <KycForm draft={draft} step={step} selfieFile={selfieFile} error={error} submitting={submitting} onUpdate={update} onSelfieChange={setSelfieFile} onNext={nextStep} onPrevious={() => { setError(""); setStep((current) => Math.max(current - 1, 0)); }} onSave={saveDraft} onSubmit={submit} />}{status === "rejected" && <button className="text-xs font-extrabold text-[#b8560d] hover:underline" type="button" onClick={startNewDraft}>Start a new verification draft</button>}</div>;
 }

@@ -1,17 +1,267 @@
 "use client";
 
 import Link from "next/link";
-import { useState, type FormEvent } from "react";
+import { useEffect, useState } from "react";
 import { Arrow } from "../../../components/ui/Arrow";
-import DashboardIcon from "../components/DashboardIcon";
+import BusinessUpgradeForm from "../components/BusinessUpgradeForm";
+import BusinessUpgradeLoadError from "../components/BusinessUpgradeLoadError";
+import BusinessUpgradeStatusPanel from "../components/BusinessUpgradeStatusPanel";
+import BusinessUpgradeStatusIntro from "../components/BusinessUpgradeStatusIntro";
 import DashboardPageHeader from "../components/DashboardPageHeader";
-import { getDraftValues, saveUserDraft } from "../data/drafts";
+import { useDashboard } from "../components/DashboardShell";
+import {
+  AccountApiError,
+  fetchBusinessUpgrade,
+  saveBusinessUpgrade,
+  type BusinessUpgrade,
+} from "../data/accountApi";
+import {
+  clearBusinessUpgradeDraft,
+  draftFromBusinessUpgrade,
+  emptyBusinessUpgradeDraft,
+  getBusinessUpgradeStorageKey,
+  hasBusinessUpgradeDocument,
+  isBusinessUpgradeLocked,
+  mergeBusinessUpgradeDraft,
+  persistBusinessUpgradeDraft,
+  readBusinessUpgradeDraft,
+  type BusinessDocumentKind,
+  type BusinessSettlementField,
+  type BusinessUpgradeDraft,
+} from "../data/businessUpgrade";
 
-const inputClass = "h-11 rounded-lg border border-[#dfe4ed] bg-white px-3 text-xs font-medium text-[#0b1830] outline-none focus:border-[#1453bb] focus:ring-4 focus:ring-[#1453bb]/10";
-const labelClass = "grid gap-2 text-[11px] font-extrabold text-[#31425e]";
+const MAX_DOCUMENT_SIZE = 10_000_000;
+const ALLOWED_DOCUMENT_TYPES = ["application/pdf", "image/jpeg", "image/png"];
 
 export default function BusinessUpgradePage() {
-  const [submitted, setSubmitted] = useState(false);
-  function submit(event: FormEvent<HTMLFormElement>) { event.preventDefault(); saveUserDraft("business upgrade", { values: getDraftValues(event.currentTarget) }); setSubmitted(true); }
-  return <div className="mx-auto max-w-[980px] space-y-6 p-5 sm:p-8"><DashboardPageHeader kicker="ACCOUNT UPGRADE" title="Business account" description="Submit your company identity and incorporation document for Admin verification and a business badge." action={<Link className="inline-flex items-center gap-2 text-xs font-extrabold text-[#1453bb] hover:underline" href="/dashboard/profile">Back to profile <Arrow /></Link>} />{submitted ? <section className="rounded-2xl border border-[#bfe5d0] bg-[#f5fcf7] p-8 text-center shadow-sm"><span className="mx-auto grid h-12 w-12 place-items-center rounded-full bg-[#20bd61] text-xl font-extrabold text-white">✓</span><h2 className="mt-5 font-[Manrope] text-2xl font-extrabold tracking-[-.05em] text-[#0b1830]">Business upgrade saved as Draft</h2><p className="mx-auto mt-3 max-w-md text-sm leading-6 text-[#53627a]">Your company details and certificate are captured in this UI flow. Admin verification and account upgrade will follow when the account service is connected.</p><Link className="mt-7 inline-flex h-11 items-center gap-2 rounded-lg bg-[#1453bb] px-4 text-xs font-extrabold text-white" href="/dashboard/profile">Back to profile <Arrow /></Link></section> : <form className="space-y-6" onSubmit={submit}><section className="rounded-xl border border-[#dfe4ed] bg-white p-6 shadow-sm"><div className="flex items-center gap-4 border-b border-[#eef1f4] pb-5"><span className="grid h-11 w-11 place-items-center rounded-xl bg-[#edf4ff] text-[#1453bb] [&>svg]:h-5 [&>svg]:w-5"><DashboardIcon name="store" /></span><div><h3 className="font-[Manrope] text-lg font-extrabold text-[#0b1830]">Company identity</h3><p className="mt-1 text-xs text-[#8490a4]">Use the registered company information Admin can verify.</p></div></div><div className="mt-5 grid gap-4 sm:grid-cols-2"><label className={labelClass}><span>Email</span><input className={inputClass} name="email" type="email" placeholder="Company email address" required /></label><label className={labelClass}><span>Company name</span><input className={inputClass} name="companyName" placeholder="Registered company name" required /></label><label className={labelClass}><span>CAC RC number</span><input className={inputClass} name="rcNumber" placeholder="RC or BN number" required /></label><label className={labelClass}><span>Your position</span><input className={inputClass} name="position" placeholder="Director, owner or representative" required /></label><label className={labelClass}><span>Business address</span><input className={inputClass} name="address" placeholder="Street, area, city and state" required /></label></div></section><section className="rounded-xl border border-[#dfe4ed] bg-white p-6 shadow-sm"><h3 className="font-[Manrope] text-lg font-extrabold tracking-[-.04em] text-[#0b1830]">Certificate of Incorporation</h3><p className="mt-2 text-xs leading-5 text-[#53627a]">Upload the company certificate for Admin review.</p><label className="mt-5 flex min-h-36 cursor-pointer flex-col items-center justify-center rounded-xl border border-dashed border-[#b9c8dd] bg-[#f8fafc] p-5 text-center hover:border-[#1453bb]"><span className="text-sm font-extrabold text-[#1453bb]">Add certificate document</span><small className="mt-2 text-[10px] text-[#8490a4]">PDF, JPG or PNG</small><input className="sr-only" name="certificate" type="file" accept="application/pdf,image/jpeg,image/png" required /></label><label className="mt-5 flex items-start gap-2 text-xs leading-5 text-[#53627a]"><input className="mt-1 accent-[#1453bb]" type="checkbox" required />I confirm these company details are accurate and agree to Admin verification, Hollyway terms and privacy notice.</label></section><div className="flex flex-wrap justify-end gap-3"><Link className="inline-flex h-11 items-center rounded-lg border border-[#dfe4ed] px-4 text-xs font-extrabold text-[#53627a]" href="/dashboard/profile">Cancel</Link><button className="inline-flex h-11 items-center gap-2 rounded-lg bg-[#1453bb] px-5 text-xs font-extrabold text-white" type="submit">Save upgrade draft <Arrow /></button></div></form>}</div>;
+  const { accountEmail } = useDashboard();
+  const storageKey = getBusinessUpgradeStorageKey(accountEmail);
+  const [draft, setDraft] = useState<BusinessUpgradeDraft>(emptyBusinessUpgradeDraft);
+  const [hydratedStorageKey, setHydratedStorageKey] = useState("");
+  const [upgrade, setUpgrade] = useState<BusinessUpgrade | null>(null);
+  const [settlementBankName, setSettlementBankName] = useState("");
+  const [settlementAccountNumber, setSettlementAccountNumber] = useState("");
+  const [settlementAccountName, setSettlementAccountName] = useState("");
+  const [certificate, setCertificate] = useState<File | null>(null);
+  const [directorIdentification, setDirectorIdentification] = useState<File | null>(null);
+  const [consent, setConsent] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState<"draft" | "submit" | "">("");
+  const [loadError, setLoadError] = useState("");
+  const [formError, setFormError] = useState("");
+  const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    setDraft(readBusinessUpgradeDraft(storageKey));
+    setHydratedStorageKey(storageKey);
+  }, [storageKey]);
+
+  useEffect(() => {
+    if (hydratedStorageKey === storageKey) {
+      persistBusinessUpgradeDraft(draft, storageKey);
+    }
+  }, [draft, hydratedStorageKey, storageKey]);
+
+  useEffect(() => {
+    if (!accountEmail) {
+      setLoading(false);
+      return;
+    }
+    let active = true;
+    setLoading(true);
+    setLoadError("");
+    fetchBusinessUpgrade()
+      .then((remote) => {
+        if (!active) return;
+        if (remote.status === "not_submitted") {
+          setUpgrade(null);
+          return;
+        }
+        setUpgrade(remote);
+        if (remote.status === "draft" || remote.status === "rejected") {
+          const local = readBusinessUpgradeDraft(storageKey);
+          const nextDraft = mergeBusinessUpgradeDraft(
+            local,
+            draftFromBusinessUpgrade(remote),
+          );
+          setDraft(nextDraft);
+          setSettlementBankName(remote.settlement_bank_name || "");
+        }
+      })
+      .catch((requestError) => {
+        if (!active) return;
+        setLoadError(
+          requestError instanceof AccountApiError
+            ? requestError.message
+            : "Your business account record could not be loaded.",
+        );
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [accountEmail, storageKey]);
+
+  function updateDraft(field: keyof BusinessUpgradeDraft, value: string) {
+    setDraft((current) => ({ ...current, [field]: value }));
+    setFormError("");
+  }
+
+  function updateSettlement(field: BusinessSettlementField, value: string) {
+    if (field === "settlementBankName") setSettlementBankName(value);
+    if (field === "settlementAccountNumber") setSettlementAccountNumber(value);
+    if (field === "settlementAccountName") setSettlementAccountName(value);
+    setFormError("");
+  }
+
+  function updateFile(kind: BusinessDocumentKind, file: File | null) {
+    if (!file) {
+      if (kind === "certificate") setCertificate(null);
+      if (kind === "directorIdentification") setDirectorIdentification(null);
+      return;
+    }
+    if (!ALLOWED_DOCUMENT_TYPES.includes(file.type)) {
+      setFormError("Documents must be PDF, JPG or PNG files.");
+      return;
+    }
+    if (file.size < 1 || file.size > MAX_DOCUMENT_SIZE) {
+      setFormError("Each document must be between 1 byte and 10 MB.");
+      return;
+    }
+    setFormError("");
+    if (kind === "certificate") setCertificate(file);
+    if (kind === "directorIdentification") setDirectorIdentification(file);
+  }
+
+  async function save(action: "draft" | "submit") {
+    setFormError("");
+    setMessage("");
+    if (action === "submit") {
+      const hasCertificate =
+        Boolean(certificate) ||
+        hasBusinessUpgradeDocument(upgrade, "certificate_of_incorporation");
+      const hasDirectorIdentification =
+        Boolean(directorIdentification) ||
+        hasBusinessUpgradeDocument(upgrade, "director_identification");
+      if (!hasCertificate || !hasDirectorIdentification) {
+        setFormError(
+          "Attach the Certificate of Incorporation and director identification before submitting, or keep the previously saved documents.",
+        );
+        return;
+      }
+      if (!consent) {
+        setFormError("Confirm the business details before submitting.");
+        return;
+      }
+    }
+    setSaving(action);
+    try {
+      const result = await saveBusinessUpgrade({
+        action,
+        companyName: draft.companyName,
+        registrationNumber: draft.registrationNumber,
+        tin: draft.tin,
+        companyEmail: draft.companyEmail,
+        companyPhone: draft.companyPhone,
+        position: draft.position,
+        addressStreet: draft.addressStreet,
+        addressCity: draft.addressCity,
+        addressState: draft.addressState,
+        settlementBankName,
+        settlementAccountNumber,
+        settlementAccountName,
+        consent,
+        certificate,
+        directorIdentification,
+      });
+      setUpgrade(result.data);
+      setMessage(result.message);
+      if (action === "submit") {
+        clearBusinessUpgradeDraft(storageKey);
+        setDraft(emptyBusinessUpgradeDraft);
+        setHydratedStorageKey("");
+        setSettlementBankName("");
+        setSettlementAccountNumber("");
+        setSettlementAccountName("");
+        setCertificate(null);
+        setDirectorIdentification(null);
+        setConsent(false);
+      }
+    } catch (requestError) {
+      setFormError(
+        requestError instanceof Error
+          ? requestError.message
+          : "Your business upgrade could not be saved.",
+      );
+    } finally {
+      setSaving("");
+    }
+  }
+
+  const accountStatus = upgrade?.account_status || "individual";
+  const locked = isBusinessUpgradeLocked(upgrade?.status);
+
+  return (
+    <div className="mx-auto w-full max-w-[1080px] space-y-6 p-5 sm:p-8">
+      <DashboardPageHeader
+        kicker="ACCOUNT"
+        title="Business upgrade"
+        description="Submit your registered company details for Hollyway Admin verification."
+        action={
+          <Link
+            className="inline-flex items-center gap-2 text-xs font-extrabold text-[#1453bb] hover:underline"
+            href="/dashboard/profile"
+          >
+            Back to profile <Arrow />
+          </Link>
+        }
+      />
+
+      <BusinessUpgradeStatusIntro
+        accountStatus={accountStatus}
+        rejected={upgrade?.status === "rejected"}
+        rejectionReason={upgrade?.rejection_reason}
+      />
+
+      {loadError && (
+        <BusinessUpgradeLoadError
+          message={loadError}
+          onRetry={() => window.location.reload()}
+        />
+      )}
+
+      {loading ? (
+        <section className="rounded-xl border border-[#dfe4ed] bg-white p-6 text-sm text-[#53627a] dark:border-[#2a374e] dark:bg-[#121d30] dark:text-[#b7c3d6]">
+          Loading your business account record…
+        </section>
+      ) : locked && upgrade ? (
+        <BusinessUpgradeStatusPanel upgrade={upgrade} />
+      ) : (
+        <>
+          <BusinessUpgradeForm
+            draft={draft}
+            settlementBankName={settlementBankName}
+            settlementAccountNumber={settlementAccountNumber}
+            settlementAccountName={settlementAccountName}
+            savedSettlementLast4={upgrade?.settlement_account_last4}
+            certificate={certificate}
+            directorIdentification={directorIdentification}
+            existingDocuments={upgrade?.documents || []}
+            consent={consent}
+            saving={saving}
+            error={formError}
+            message={message}
+            onDraftChange={updateDraft}
+            onSettlementChange={updateSettlement}
+            onFileChange={updateFile}
+            onConsentChange={setConsent}
+            onSaveDraft={() => void save("draft")}
+            onSubmit={() => void save("submit")}
+          />
+        </>
+      )}
+    </div>
+  );
 }

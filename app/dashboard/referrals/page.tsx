@@ -1,3 +1,3 @@
-import MyReferralsPage from "../../../features/services/pages/MyReferralsPage";
+import ReferralsPage from "../../../features/referrals/pages/ReferralsPage";
 
-export default MyReferralsPage;
+export default ReferralsPage;

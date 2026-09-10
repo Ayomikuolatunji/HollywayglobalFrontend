@@ -1,8 +1,37 @@
 import Link from "next/link";
-import { Arrow } from "../../../components/ui/Arrow";
-import AddToOrderButton from "./AddToOrderButton";
-import { getListingCategory, type Listing } from "../data";
+import MarketProductVisual from "./MarketProductVisual";
+import SaveListingButton from "./SaveListingButton";
+import { getListingMarket, type Listing } from "../data";
+
+const marketAccent: Record<string, string> = {
+  "Urgent Sale Market": "border-t-[#b8560d]",
+  "Relocation / Japa Market": "border-t-[#1f7a5c]",
+  "Importer / Container Market": "border-t-[#3b4b6b]",
+  "Campus & NYSC Market": "border-t-[#7a5c00]",
+  "Business Clearance Market": "border-t-[#6b2545]",
+};
+
+function shortMarketName(market: string) { return market.replace(/ Market$/, ""); }
 
 export default function MarketListingCard({ listing, detailsHref }: { listing: Listing; detailsHref: string }) {
-  return <article className="overflow-hidden rounded-lg border border-[#dfe4ed] bg-white shadow-sm"><div className={`relative grid min-h-28 place-items-center bg-gradient-to-br text-white ${listing.tone}`}><span className="font-[Manrope] text-xl font-extrabold tracking-[.06em]">{listing.mark}</span>{listing.featured && <b className="absolute left-2 top-2 rounded bg-[#ff8a00] px-1.5 py-1 text-[8px] tracking-[.1em] text-[#17223a]">FEATURED</b>}</div><div className="p-3"><div className="flex items-center justify-between gap-2 text-[9px]"><span className="truncate font-extrabold uppercase tracking-[.08em] text-[#6b45c7]">{getListingCategory(listing)}</span><small className="shrink-0 text-[#8794a8]">{listing.date}</small></div><h3 className="mt-2 min-h-9 text-sm font-extrabold leading-5 text-[#0b1830]">{listing.name}</h3><strong className="mt-1 block font-[Manrope] text-base font-extrabold text-[#0b1830]">₦{listing.price.toLocaleString("en-NG")}</strong><p className="mt-1 truncate text-[10px] text-[#687895]">{listing.location} · {listing.condition}</p><div className="mt-2 flex items-center justify-between border-y border-[#eef1f4] py-1.5 text-[9px] text-[#596983]"><b>{listing.code}</b><span>{listing.views} views</span></div><div className="mt-2 flex flex-wrap items-center gap-2"><Link className="inline-flex h-8 items-center rounded-md border border-[#dfe4ed] px-2.5 text-[9px] font-extrabold text-[#1453bb] hover:border-[#1453bb]" href={detailsHref}>View details</Link><Link className="inline-flex h-8 items-center gap-1 rounded-md bg-[#ff8a00] px-2.5 text-[9px] font-extrabold text-[#17223a]" href={`/dashboard/orders/interest?listing=${encodeURIComponent(listing.code)}`}>Order now <Arrow /></Link><AddToOrderButton item={{ code: listing.code, name: listing.name, price: listing.price }} /></div></div></article>;
+  const market = getListingMarket(listing);
+  const accent = marketAccent[market] || "border-t-[#14213d]";
+
+  return (
+    <article className={`group flex h-full flex-col overflow-hidden rounded-[14px] border border-t-[3px] border-[#e4e2da] bg-white shadow-[0_1px_2px_rgba(18,20,28,.04)] transition hover:-translate-y-0.5 hover:shadow-[0_10px_24px_rgba(18,20,28,.09)] ${accent}`}>
+      <div className="relative">
+        <Link className="block" href={detailsHref} aria-label={`View ${listing.name}`}><MarketProductVisual listing={listing} /></Link>
+        <span className="absolute left-2.5 top-2.5 rounded-full bg-[#12141c]/60 px-2.5 py-1 text-[9px] font-extrabold text-white backdrop-blur-sm">{shortMarketName(market)}</span>
+        <span className="absolute right-2.5 top-2.5"><SaveListingButton code={listing.code} name={listing.name} /></span>
+        {listing.featured && <span className="absolute bottom-2.5 left-2.5 rounded-full bg-[#b8560d] px-2.5 py-1 text-[9px] font-extrabold text-white">Featured</span>}
+      </div>
+
+      <div className="flex flex-1 flex-col p-3">
+        <strong className="font-[Manrope] text-base font-extrabold text-[#12141c]">₦{listing.price.toLocaleString("en-NG")}</strong>
+        <Link className="mt-1 block" href={detailsHref}><h3 className="line-clamp-1 text-xs font-semibold text-[#12141c] group-hover:text-[#b8560d]">{listing.name}</h3></Link>
+        <p className="mt-1.5 flex items-center gap-1.5 text-[10px] text-[#5c5f6b]"><span className="truncate">{listing.location}</span><span className="h-0.5 w-0.5 shrink-0 rounded-full bg-[#9498a3]" /><span className="shrink-0">{listing.code}</span></p>
+        <div className="mt-2 flex items-center justify-between border-t border-[#e4e2da] pt-2"><span className="rounded-full bg-[#edeff5] px-2 py-0.5 text-[9px] font-bold text-[#14213d]">{listing.condition}</span><span className="text-[9px] text-[#9498a3]">{listing.date}</span></div>
+      </div>
+    </article>
+  );
 }

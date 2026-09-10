@@ -47,6 +47,7 @@ export default function Dropdown({ label, name, options, value, defaultValue = "
   const [internalValue, setInternalValue] = useState(defaultValue);
   const selectedValue = value === undefined ? internalValue : value;
   const selectedOption = options.find((option) => option.value === selectedValue);
+  const activeTipOption = options.find((option) => option.value === activeTip);
 
   useEffect(() => {
     function closeWhenOutside(event: MouseEvent) {
@@ -64,6 +65,18 @@ export default function Dropdown({ label, name, options, value, defaultValue = "
     const selectedIndex = options.findIndex((option) => option.value === selectedValue);
     optionRefs.current[selectedIndex >= 0 ? selectedIndex : 0]?.focus();
   }, [open]);
+
+  useEffect(() => {
+    if (!activeTipOption) return;
+    function closeTipOnEscape(event: globalThis.KeyboardEvent) { if (event.key === "Escape") closeTip(); }
+    document.addEventListener("keydown", closeTipOnEscape);
+    return () => document.removeEventListener("keydown", closeTipOnEscape);
+  }, [activeTipOption]);
+
+  function closeTip() {
+    setActiveTip("");
+    triggerRef.current?.focus();
+  }
 
   function choose(nextValue: string) {
     if (value === undefined) setInternalValue(nextValue);
@@ -116,14 +129,14 @@ export default function Dropdown({ label, name, options, value, defaultValue = "
           return <div ref={(element) => { optionRefs.current[index] = element; }} className={`rounded-md ${selectedValue === option.value ? "bg-[#f4f8ff]" : "hover:bg-[#f8fafc]"}`} key={option.value} role="option" aria-selected={selectedValue === option.value} tabIndex={0} onClick={() => choose(option.value)} onKeyDown={(event) => handleOptionKeyDown(event, index)}>
             <div className="flex items-center gap-2 px-3 py-2">
               <span className={`min-w-0 flex-1 text-xs font-semibold ${selectedValue === option.value ? "text-[#1453bb]" : "text-[#31425e]"}`}>{option.label}</span>
-              <button className="grid h-6 w-6 shrink-0 place-items-center rounded-full border border-[#cfe0f7] text-[10px] font-extrabold text-[#1453bb] hover:bg-[#edf4ff]" type="button" title={tip} aria-label={`${option.label}: ${tip}`} aria-expanded={activeTip === option.value} onClick={(event) => { event.stopPropagation(); setActiveTip((current) => current === option.value ? "" : option.value); }} onKeyDown={(event) => event.stopPropagation()}>?</button>
+              <button className="grid h-6 w-6 shrink-0 place-items-center rounded-full border border-[#cfe0f7] text-[10px] font-extrabold text-[#1453bb] hover:bg-[#edf4ff]" type="button" title={`Learn about ${option.label}`} aria-label={`Learn about ${option.label}`} aria-haspopup="dialog" onClick={(event) => { event.stopPropagation(); setOpen(false); setActiveTip(option.value); }} onKeyDown={(event) => event.stopPropagation()}>?</button>
             </div>
-            {activeTip === option.value && <p className="px-3 pb-3 text-[10px] font-medium leading-4 text-[#687895]">Tip: {tip}</p>}
           </div>;
         })}
       </div>}
     </div>
     {hint && <small className="text-[10px] font-medium leading-4 text-[#8995a8]">{hint}</small>}
     {showSelectedTip && selectedOption && <small className="text-[10px] font-medium leading-4 text-[#687895]">Tip: {optionTip(selectedOption, label, tips)}</small>}
+    {activeTipOption && <div className="fixed inset-0 z-[80] grid place-items-center p-4"><button className="absolute inset-0 bg-[#12141c]/40" type="button" onClick={closeTip} aria-label="Close explanation" /><section className="relative w-full max-w-sm rounded-[14px] border border-[#e4e2da] bg-white p-5 text-left shadow-2xl" role="dialog" aria-modal="true" aria-labelledby={`${dropdownId}-tip-title`}><div className="flex items-start gap-3"><span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[#fbe9da] text-xs font-bold text-[#b8560d]">?</span><div className="min-w-0 flex-1"><span className="text-[9px] font-bold uppercase tracking-[.12em] text-[#9498a3]">WHAT THIS MEANS</span><h2 className="mt-1 font-[Manrope] text-base font-semibold text-[#12141c]" id={`${dropdownId}-tip-title`}>{activeTipOption.label}</h2></div><button className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-[#e4e2da] text-[#5c5f6b] hover:bg-[#f5f4f0]" type="button" onClick={closeTip} aria-label="Close explanation" autoFocus><svg className="h-4 w-4" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" /></svg></button></div><p className="mt-4 text-xs leading-5 text-[#5c5f6b]">{optionTip(activeTipOption, label, tips)}</p><button className="mt-5 h-9 w-full rounded-lg bg-[#14213d] text-xs font-bold text-white hover:bg-[#24325a]" type="button" onClick={closeTip}>Got it</button></section></div>}
   </div>;
 }

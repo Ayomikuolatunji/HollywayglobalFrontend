@@ -77,6 +77,26 @@ export function getListingDeliveryMethod(listing: Pick<Listing, "category">) {
   return "Dispatch rider";
 }
 
+const listingImageTerms: Record<string, string> = {
+  Electronics: "television,electronics",
+  Furniture: "furniture,interior",
+  Appliances: "home,appliance",
+  Vehicles: "car,vehicle",
+  Gadgets: "computer,smartphone",
+  Fashion: "fashion,clothing",
+  Machinery: "industrial,machinery",
+  "Imported Goods": "warehouse,goods",
+  Agro: "agriculture,produce",
+  Crafts: "handmade,craft",
+  "Commercial Equipment": "office,equipment",
+};
+
+export function getListingImageUrl(listing: Pick<Listing, "category" | "code">) {
+  const terms = listingImageTerms[listing.category] || "marketplace,product";
+  const lock = listing.code.replace(/\D/g, "") || "1";
+  return `https://loremflickr.com/640/480/${terms}/all?lock=${lock}`;
+}
+
 export const listings: Listing[] = [
   { code: "HWG-0102", name: "Samsung 55-inch Smart TV", category: "Electronics", price: 485000, location: "Lekki, Lagos", condition: "Clean Fairly Used", date: "Today", views: 184, mark: "TV", tone: "from-[#2364ae] to-[#122f62]", featured: true },
   { code: "HWG-0101", name: "L-shaped family sofa set", category: "Furniture", price: 320000, location: "Ikeja, Lagos", condition: "Clean Fairly Used", date: "Yesterday", views: 142, mark: "SOFA", tone: "from-[#ead7bb] to-[#c99e6d]" , featured: true },
