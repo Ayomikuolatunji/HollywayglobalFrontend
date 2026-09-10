@@ -10,7 +10,7 @@ type NavItem = readonly [string, string, string];
 type NavGroup = { label: string; items: readonly NavItem[] };
 
 const navigationGroups: readonly NavGroup[] = [
-  { label: "COMMERCE", items: [["Marketplace", "/dashboard/marketplace", "store"], ["Cart", "/dashboard/cart", "cart"], ["My listings", "/dashboard/listings", "box"], ["My requests", "/dashboard/requests", "search"], ["My orders", "/dashboard/orders", "shield"]] },
+  { label: "COMMERCE", items: [["Marketplace", "/dashboard/marketplace", "store"], ["My listings", "/dashboard/listings", "box"], ["My requests", "/dashboard/requests", "search"], ["My orders", "/dashboard/orders", "shield"]] },
   { label: "OPERATIONS", items: [["Deliveries", "/dashboard/logistics", "truck"], ["Relocations", "/dashboard/relocation", "truck"]] },
   { label: "SERVICES", items: [["Professional services", "/dashboard/services", "tool"], ["Events", "/dashboard/events", "tool"], ["My escrow", "/dashboard/escrow", "shield"]] },
   { label: "PARTNERSHIPS & FINANCE", items: [["Referrals & reseller", "/dashboard/referrals", "users"], ["Ads & promotions", "/dashboard/advertising", "grid"], ["Wallet & payouts", "/dashboard/wallet", "wallet"]] },
