@@ -277,7 +277,7 @@ export default function DashboardShell({ children }: { children: ReactNode }) {
     window.location.assign("/login");
   }
 
-  const accountName = kycIdentityName || account?.name || "Hollyway user";
+  const accountName = kycIdentityName || "Hollyway user";
   const accountInitial = accountName.trim().charAt(0).toUpperCase() || "H";
 
   return (

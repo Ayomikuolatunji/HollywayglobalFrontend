@@ -49,7 +49,7 @@ function ProfileValue({ label, value }: { label: string; value: string }) {
 }
 
 export default function ProfilePage() {
-  const { accountEmail, accountName, accountPhotoUrl } = useDashboard();
+  const { accountEmail, accountPhotoUrl } = useDashboard();
   const storageKey = getKycStorageKey(accountEmail);
   const [kycStatus, setKycStatus] = useState<KycStatus>("not-started");
   const [kycSubmission, setKycSubmission] = useState<KycServerSubmission | null>(null);
@@ -109,7 +109,7 @@ export default function ProfilePage() {
     ? "Unavailable — verification unsuccessful"
     : "Not provided until KYC is verified";
   const identityName = kycSubmission?.legal_full_name || unavailableIdentityDetail;
-  const displayName = kycSubmission?.legal_full_name?.trim() || accountName || "Hollyway user";
+  const displayName = kycSubmission?.legal_full_name?.trim() || "Hollyway user";
   const identityPhone = kycSubmission?.phone_e164 || unavailableIdentityDetail;
   const identityAddress =
     [kycDraft.address, kycDraft.city, kycDraft.state].filter(Boolean).join(", ") ||
