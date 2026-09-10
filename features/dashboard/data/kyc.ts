@@ -43,9 +43,9 @@ export function normalizeKycStatus(value: unknown): KycStatus {
   if (value === "not_submitted") return "not_submitted";
   if (value === "approved") return "approved";
   if (value === "rejected") return "rejected";
-  // Older browser state treated a successful provider check as pending.
-  // KYC is now final after a successful check, so normalize that state.
-  if (value === "pending_review") return "approved";
+  // Legacy browser state is not proof of a server-side verification result.
+  // The API remains the only authority for an approved account.
+  if (value === "pending_review") return "draft";
   if (value === "additional_review") return "rejected";
   // "submitted" was used by the old local-only screen. It was never sent to
   // Hollyway, so reopen it as a draft instead of showing a false review state.
@@ -121,7 +121,10 @@ export function readKycLocalState(storageKey = kycStorageKey): { draft: KycDraft
     };
     const storedStatus = normalizeKycStatus(parsed.status);
     const hasProgress = [draft.address, draft.city, draft.state].some(Boolean);
-    const status = storedStatus === "not-started" && hasProgress ? "draft" : storedStatus;
+    // Approved status must come from the API. This prevents a cleared server
+    // record or a failed status request from leaving a false local success.
+    const localStatus = storedStatus === "approved" ? "not-started" : storedStatus;
+    const status = localStatus === "not-started" && hasProgress ? "draft" : localStatus;
     if ("identityNumber" in source || "documentNumber" in source || "documentName" in source || "selfieName" in source) {
       persistKycLocalState(draft, status, storageKey);
     }
@@ -136,10 +139,11 @@ export function persistKycLocalState(draft: KycDraft, status: KycStatus, storage
   if (typeof window === "undefined") return;
   // Keep only resumable, non-document fields in browser storage. NIN/BVN and
   // the uploaded selfie remain in memory until the authenticated submission.
+  const localStatus = status === "approved" ? "not-started" : status;
   window.localStorage.setItem(
     storageKey,
     JSON.stringify({
-      status,
+      status: localStatus,
       draft: {
         identityType: draft.identityType,
         address: draft.address,

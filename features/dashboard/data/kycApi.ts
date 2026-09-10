@@ -78,7 +78,10 @@ export async function verifyKyc(input: {
   });
   const payload = await responsePayload(response);
   const data = (payload.data || {}) as { message?: unknown; submission?: Partial<KycServerSubmission> };
-  const submission = data.submission || { status: "approved" as const };
+  if (!data.submission || typeof data.submission !== "object" || Array.isArray(data.submission)) {
+    throw new KycApiError("Verification response was incomplete. Please try again.", response.status);
+  }
+  const submission = data.submission;
   return {
     message: typeof data.message === "string" ? data.message : "Your identity verification result is available.",
     submission: {
