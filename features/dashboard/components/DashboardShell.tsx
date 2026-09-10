@@ -317,7 +317,7 @@ export default function DashboardShell({ children }: { children: ReactNode }) {
         {sessionState === "authenticated" &&
           !kycComplete &&
           pathname !== "/dashboard/profile/kyc" && (
-            <div className="px-4 sm:px-6 lg:px-8">
+            <div className="px-4 pt-3 sm:px-6 lg:px-8">
               <KycDraftBanner />
             </div>
           )}

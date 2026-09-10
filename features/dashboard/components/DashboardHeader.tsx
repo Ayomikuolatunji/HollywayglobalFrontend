@@ -84,32 +84,63 @@ export default function DashboardHeader({
   return (
     <>
       <header className="sticky top-0 z-20 flex min-h-[58px] items-center justify-between bg-[#14213d] px-4 lg:hidden">
-        <Link className="flex items-center gap-2" href="/dashboard">
-          <span className="relative h-8 w-8 shrink-0 overflow-hidden rounded-lg">
-            <Image
-              src="/site-logo.png"
-              alt="Hollyway Global logo"
-              fill
-              priority
-              sizes="32px"
-              className="object-contain"
-            />
-          </span>
-          <span className="leading-none">
-            <strong className="block text-[13px] font-semibold text-white">Hollyway</strong>
-            <small className="mt-1 block text-[9px] font-semibold tracking-[.08em] text-[#dd6b12]">
-              GLOBAL
-            </small>
-          </span>
-        </Link>
-        <button
-          className="grid h-8 w-8 place-items-center rounded-lg bg-white/[.08] text-white"
-          type="button"
-          onClick={onOpenMenu}
-          aria-label="Open navigation"
-        >
-          <MenuIcon />
-        </button>
+        <div className="flex min-w-0 items-center gap-2">
+          <button
+            className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-white/[.08] text-white"
+            type="button"
+            onClick={onOpenMenu}
+            aria-label="Open navigation"
+          >
+            <MenuIcon />
+          </button>
+          <Link className="flex min-w-0 items-center gap-2" href="/dashboard">
+            <span className="relative h-8 w-8 shrink-0 overflow-hidden rounded-lg">
+              <Image
+                src="/site-logo.png"
+                alt="Hollyway Global logo"
+                fill
+                priority
+                sizes="32px"
+                className="object-contain"
+              />
+            </span>
+            <span className="leading-none">
+              <strong className="block text-[13px] font-semibold text-white">Hollyway</strong>
+              <small className="mt-1 block text-[9px] font-semibold tracking-[.08em] text-[#dd6b12]">
+                GLOBAL
+              </small>
+            </span>
+          </Link>
+        </div>
+        <div className="flex shrink-0 items-center gap-1.5">
+          <Link
+            className="relative grid h-8 w-8 place-items-center rounded-full bg-white/[.08] text-white"
+            href="/dashboard/cart"
+            aria-label={cartCount ? `Cart, ${cartCount} items` : "Cart, empty"}
+          >
+            <HeaderCartIcon />
+            {cartCount > 0 && (
+              <span className="absolute -right-1 -top-1 grid h-4 min-w-4 place-items-center rounded-full bg-[#dd6b12] px-1 text-[8px] font-bold text-white">
+                {cartCount > 99 ? "99+" : cartCount}
+              </span>
+            )}
+          </Link>
+          <Link
+            className="relative grid h-8 w-8 place-items-center rounded-full bg-white/[.08] text-white"
+            href="/dashboard/notifications"
+            aria-label="Notifications"
+          >
+            <HeaderNotificationIcon />
+            <span className="absolute -right-0.5 -top-0.5 h-[7px] w-[7px] rounded-full border-2 border-[#14213d] bg-[#dd6b12]" />
+          </Link>
+          <ProfileMenu
+            accountInitial={accountInitial}
+            accountName={accountName}
+            accountEmail={accountEmail}
+            profilePictureUrl={profilePictureUrl}
+            onSignOut={onSignOut}
+          />
+        </div>
       </header>
       <header className="hidden items-center justify-between px-8 pb-3 pt-4 lg:flex">
         <div>
