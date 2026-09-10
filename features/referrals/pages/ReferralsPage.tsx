@@ -73,14 +73,15 @@ export default function ReferralsPage() {
   }
 
   return (
-    <div className="w-full space-y-4 px-4 pb-16 pt-1 sm:px-6 lg:px-8">
+    <div className="w-full space-y-3 px-4 pb-16 pt-1 sm:px-6 lg:px-8">
       <DashboardPageHeader
         kicker="PARTNERSHIPS & FINANCE"
         title="Referrals"
-        description="Share your Hollyway link and track the new account registrations it brings in."
+        description="Share your link and track registrations."
+        compact
         action={
           <Link
-            className="inline-flex h-9 items-center gap-2 rounded-lg border border-[#e4e2da] bg-white px-3 text-xs font-bold text-[#14213d] hover:border-[#14213d]"
+            className="inline-flex h-8 items-center gap-2 rounded-lg border border-[#e4e2da] bg-white px-3 text-[11px] font-bold text-[#14213d] hover:border-[#14213d]"
             href="/dashboard/referrals/new"
           >
             How it works <Arrow />
@@ -89,7 +90,7 @@ export default function ReferralsPage() {
       />
       {error && (
         <div
-          className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-[#f1d8a9] bg-[#fffaf1] px-4 py-3 text-xs leading-5 text-[#6b5a3d]"
+          className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-[#f1d8a9] bg-[#fffaf1] px-3 py-2 text-[11px] leading-4 text-[#6b5a3d]"
           role="alert"
         >
           <span>{error}</span>
@@ -105,13 +106,15 @@ export default function ReferralsPage() {
           </button>
         </div>
       )}
-      <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3" aria-label="Referral summary">
+      <section className="grid grid-cols-3 gap-2 sm:gap-3" aria-label="Referral summary">
         <DashboardSummaryCard
           label="TOTAL REFERRALS"
           value={loading ? "—" : String(summary.total_referrals)}
           note="New accounts attributed to you"
           icon="users"
           tone="blue"
+          compact
+          micro
         />
         <DashboardSummaryCard
           label="REGISTERED"
@@ -119,6 +122,8 @@ export default function ReferralsPage() {
           note="Registration activity recorded"
           icon="check"
           tone="green"
+          compact
+          micro
         />
         <DashboardSummaryCard
           label="PARTNER CODE"
@@ -126,6 +131,8 @@ export default function ReferralsPage() {
           note="Server-generated and immutable"
           icon="shield"
           tone="purple"
+          compact
+          micro
         />
       </section>
       <ReferralCodeCard
