@@ -105,10 +105,12 @@ export default function ProfilePage() {
   const submitted = hasKycSubmission(kycStatus);
   const statusTitle = kycStatusLabel(kycStatus);
   const statusAction = kycStatusAction(kycStatus);
-  const identityName =
-    kycSubmission?.legal_full_name || "Not provided until KYC is verified";
+  const unavailableIdentityDetail = rejected
+    ? "Unavailable — verification unsuccessful"
+    : "Not provided until KYC is verified";
+  const identityName = kycSubmission?.legal_full_name || unavailableIdentityDetail;
   const displayName = kycSubmission?.legal_full_name?.trim() || accountName || "Hollyway user";
-  const identityPhone = kycSubmission?.phone_e164 || "Not returned by KYC yet";
+  const identityPhone = kycSubmission?.phone_e164 || unavailableIdentityDetail;
   const identityAddress =
     [kycDraft.address, kycDraft.city, kycDraft.state].filter(Boolean).join(", ") ||
     "Not provided";
