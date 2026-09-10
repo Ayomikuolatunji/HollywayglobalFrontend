@@ -22,6 +22,7 @@ type SettingsFormProps = {
   onThemeChange: (theme: AccountSettings["theme"]) => void;
   onNotificationChange: (key: NotificationKey, value: boolean) => void;
   onPasswordSubmit: (event: FormEvent<HTMLFormElement>) => void;
+  onSignOut: () => void;
 };
 
 const inputClass =
@@ -138,6 +139,7 @@ export default function SettingsForm({
   onThemeChange,
   onNotificationChange,
   onPasswordSubmit,
+  onSignOut,
 }: SettingsFormProps) {
   return (
     <div className="space-y-5">
@@ -276,6 +278,7 @@ export default function SettingsForm({
             </button>
           </div>
         </form>
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-[#e4e2da] pt-5 dark:border-[#2a374e]"><div><strong className="block text-xs font-bold text-[#12141c] dark:text-[#f4f7fb]">Sign out</strong><p className="mt-1 text-[11px] leading-5 text-[#5c5f6b] dark:text-[#9eabc0]">End your current Hollyway session on this device.</p></div><button className="inline-flex h-10 items-center justify-center rounded-lg border border-[#e4e2da] px-4 text-xs font-extrabold text-[#a32929] transition hover:border-[#a32929] dark:border-[#2a374e]" type="button" onClick={onSignOut}>Sign out</button></div>
       </Section>
     </div>
   );

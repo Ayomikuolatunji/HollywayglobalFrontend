@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { Arrow } from "../../../components/ui/Arrow";
+import { accountProfileUpdatedEvent } from "../data/accountApi";
 import DashboardPageHeader from "../components/DashboardPageHeader";
 import KycForm from "../components/KycForm";
 import KycStatusPanel from "../components/KycStatusPanel";
@@ -116,6 +117,9 @@ export default function KycPage() {
       setSubmission(result.submission);
       setStatus(result.submission.status);
       setMessage(result.message);
+      if (result.submission.status === "approved") {
+        window.dispatchEvent(new Event(accountProfileUpdatedEvent));
+      }
       setDraft((current) => ({ ...current, identityNumber: "", selfieName: "" }));
       setSelfieFile(null);
       setStep(result.submission.status === "rejected" ? 1 : 3);

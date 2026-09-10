@@ -6,6 +6,7 @@ import { Arrow } from "../../../components/ui/Arrow";
 import DashboardIcon from "../components/DashboardIcon";
 import DashboardPageHeader from "../components/DashboardPageHeader";
 import ProfileBusinessAccountCard from "../components/ProfileBusinessAccountCard";
+import ProfilePhotoEditor from "../components/ProfilePhotoEditor";
 import { useDashboard } from "../components/DashboardShell";
 import { fetchBusinessUpgrade, type BusinessUpgrade } from "../data/accountApi";
 import { businessStatusLabel } from "../data/businessUpgrade";
@@ -43,7 +44,7 @@ function ProfileValue({ label, value }: { label: string; value: string }) {
 }
 
 export default function ProfilePage() {
-  const { accountEmail } = useDashboard();
+  const { accountEmail, accountPhotoUrl } = useDashboard();
   const storageKey = getKycStorageKey(accountEmail);
   const [kycStatus, setKycStatus] = useState<KycStatus>("not-started");
   const [kycSubmission, setKycSubmission] = useState<KycServerSubmission | null>(null);
@@ -113,8 +114,6 @@ export default function ProfilePage() {
   const identityAddress =
     [kycDraft.address, kycDraft.city, kycDraft.state].filter(Boolean).join(", ") ||
     "Not provided";
-  const profileInitial =
-    kycSubmission?.legal_full_name?.trim().charAt(0).toUpperCase() || "H";
   const statusStyles = complete
     ? {
         card: "border-[#bfe5d0] bg-[#f5fcf7] dark:border-[#315c4a] dark:bg-[#142b25]",
@@ -184,16 +183,15 @@ export default function ProfilePage() {
 
       <section className="grid gap-6 lg:grid-cols-[1fr_.85fr]">
         <article className="rounded-xl border border-[#dfe4ed] bg-white p-6 shadow-sm dark:border-[#2a374e] dark:bg-[#121d30]">
-          <div className="flex items-center gap-4 border-b border-[#eef1f4] pb-5 dark:border-[#2a374e]">
-            <span className="grid h-14 w-14 place-items-center rounded-full bg-[#1453bb] text-lg font-extrabold text-white">
-              {profileInitial}
-            </span>
-            <div>
+          <ProfilePhotoEditor
+            accountName={identityName}
+            accountPhotoUrl={accountPhotoUrl}
+          />
+          <div className="pt-5">
               <h3 className="font-[Manrope] text-lg font-extrabold text-[#0b1830] dark:text-[#f4f7fb]">
                 {identityName}
               </h3>
               <p className="mt-1 text-xs text-[#8490a4] dark:text-[#8190a8]">KYC identity name</p>
-            </div>
           </div>
           <dl className="mt-5 grid gap-4 sm:grid-cols-2">
             <ProfileValue label="ACCOUNT NAME" value={identityName} />

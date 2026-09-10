@@ -22,7 +22,7 @@ const defaultSettings: AccountSettings = {
 };
 
 export default function SettingsPage() {
-  const { accountEmail, theme, setTheme } = useDashboard();
+  const { accountEmail, theme, setTheme, signOut } = useDashboard();
   const [settings, setSettings] = useState<AccountSettings>({ ...defaultSettings, theme });
   const [loading, setLoading] = useState(true);
   const [savingKey, setSavingKey] = useState("");
@@ -150,6 +150,7 @@ export default function SettingsPage() {
           onThemeChange={handleThemeChange}
           onNotificationChange={handleNotificationChange}
           onPasswordSubmit={handlePasswordSubmit}
+          onSignOut={signOut}
         />
       )}
     </div>

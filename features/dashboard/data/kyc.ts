@@ -7,10 +7,8 @@ export function getKycStorageKey(accountEmail?: string) {
 
 export type KycServerStatus =
   | "not_submitted"
-  | "pending_review"
   | "approved"
-  | "rejected"
-  | "additional_review";
+  | "rejected";
 
 export type KycStatus = "not-started" | "draft" | "submitted" | KycServerStatus;
 
@@ -43,10 +41,12 @@ function text(value: unknown) {
 export function normalizeKycStatus(value: unknown): KycStatus {
   if (value === "draft") return "draft";
   if (value === "not_submitted") return "not_submitted";
-  if (value === "pending_review") return "pending_review";
   if (value === "approved") return "approved";
   if (value === "rejected") return "rejected";
-  if (value === "additional_review") return "additional_review";
+  // Older browser state treated a successful provider check as pending.
+  // KYC is now final after a successful check, so normalize that state.
+  if (value === "pending_review") return "approved";
+  if (value === "additional_review") return "rejected";
   // "submitted" was used by the old local-only screen. It was never sent to
   // Hollyway, so reopen it as a draft instead of showing a false review state.
   return value === "submitted" ? "draft" : "not-started";
@@ -62,7 +62,7 @@ export function isKycComplete(status: KycStatus) {
 }
 
 export function hasKycSubmission(status: KycStatus) {
-  return status === "pending_review" || status === "approved" || status === "rejected" || status === "additional_review";
+  return status === "approved" || status === "rejected";
 }
 
 export function kycStatusLabel(status: KycStatus) {
@@ -72,14 +72,10 @@ export function kycStatusLabel(status: KycStatus) {
       return "Not Submitted";
     case "draft":
       return "Draft";
-    case "pending_review":
-      return "Pending Review";
     case "approved":
       return "Approved";
     case "rejected":
       return "Rejected";
-    case "additional_review":
-      return "Additional Review";
     default:
       return "Not Submitted";
   }
@@ -94,12 +90,8 @@ export function kycStatusAction(status: KycStatus) {
 
 export function kycStatusDescription(status: KycStatus) {
   switch (status) {
-    case "pending_review":
-      return "Your identity and liveness checks are complete. Hollyway Admin will finish the review.";
     case "approved":
-      return "Your identity verification is approved for the account.";
-    case "additional_review":
-      return "Hollyway Admin needs an additional review before verification can be completed.";
+      return "Your identity verification is complete and available for KYC-protected actions.";
     case "rejected":
       return "The last verification attempt was not successful. Check the details and resubmit.";
     case "draft":

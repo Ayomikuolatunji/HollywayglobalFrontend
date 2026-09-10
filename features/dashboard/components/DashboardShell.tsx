@@ -17,7 +17,7 @@ import {
   orderCartUpdatedEvent,
   readOrderCart,
 } from "../../commerce/data/orderCart";
-import { fetchAccountSettings } from "../data/accountApi";
+import { accountProfileUpdatedEvent, fetchAccountSettings } from "../data/accountApi";
 import { fetchKycStatus } from "../data/kycApi";
 import {
   getKycStorageKey,
@@ -38,8 +38,10 @@ export type DashboardTheme = "light" | "dark";
 type DashboardContextValue = {
   accountName: string;
   accountEmail: string;
+  accountPhotoUrl: string;
   theme: DashboardTheme;
   setTheme: (theme: DashboardTheme) => void;
+  signOut: () => Promise<void>;
 };
 
 const DashboardContext = createContext<DashboardContextValue | null>(null);
@@ -115,6 +117,8 @@ export default function DashboardShell({ children }: { children: ReactNode }) {
   const [cartCount, setCartCount] = useState(0);
   const [showKycPrompt, setShowKycPrompt] = useState(false);
   const [theme, setThemeState] = useState<DashboardTheme>("light");
+  const [accountPhotoUrl, setAccountPhotoUrl] = useState("");
+  const [accountPhotoPath, setAccountPhotoPath] = useState("");
   const accountEmail = account?.email || "";
 
   const setTheme = useCallback((nextTheme: DashboardTheme) => {
@@ -137,6 +141,19 @@ export default function DashboardShell({ children }: { children: ReactNode }) {
       }
       if (!response.ok) throw new Error("User session request failed");
       const payload = await response.json();
+      const rawProfilePictureUrl = String(payload.user?.profile_picture_url || "");
+      if (/^https?:\/\//.test(rawProfilePictureUrl)) {
+        setAccountPhotoPath("");
+        setAccountPhotoUrl(rawProfilePictureUrl);
+      } else if (rawProfilePictureUrl.startsWith("/")) {
+        setAccountPhotoUrl("");
+        setAccountPhotoPath(
+          `${getCustomerApiBaseUrl()}${rawProfilePictureUrl}?v=${Date.now()}`,
+        );
+      } else {
+        setAccountPhotoPath("");
+        setAccountPhotoUrl("");
+      }
       setAccount({
         name: String(payload.user?.name || "Hollyway user"),
         email: String(payload.user?.email || ""),
@@ -149,6 +166,35 @@ export default function DashboardShell({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     void loadCustomerSession();
+  }, [loadCustomerSession]);
+
+  useEffect(() => {
+    if (!accountPhotoPath) return;
+    let active = true;
+    let objectUrl = "";
+    fetch(accountPhotoPath, { credentials: "include" })
+      .then((response) => {
+        if (!response.ok) throw new Error("Profile picture request failed");
+        return response.blob();
+      })
+      .then((blob) => {
+        objectUrl = URL.createObjectURL(blob);
+        if (active) setAccountPhotoUrl(objectUrl);
+        else URL.revokeObjectURL(objectUrl);
+      })
+      .catch(() => {
+        if (active) setAccountPhotoUrl("");
+      });
+    return () => {
+      active = false;
+      if (objectUrl) URL.revokeObjectURL(objectUrl);
+    };
+  }, [accountPhotoPath]);
+
+  useEffect(() => {
+    const refreshAccount = () => void loadCustomerSession();
+    window.addEventListener(accountProfileUpdatedEvent, refreshAccount);
+    return () => window.removeEventListener(accountProfileUpdatedEvent, refreshAccount);
   }, [loadCustomerSession]);
 
   useEffect(() => {
@@ -246,16 +292,18 @@ export default function DashboardShell({ children }: { children: ReactNode }) {
         pathname={pathname}
         accountName={accountName}
         accountEmail={accountEmail}
-        accountInitial={accountInitial}
         onClose={() => setSidebarOpen(false)}
-        onSignOut={signOut}
       />
       <section className="min-h-screen pb-20 lg:ml-[232px] lg:pb-0">
         <DashboardHeader
           title={dashboardPageTitle(pathname)}
           cartCount={cartCount}
           accountInitial={accountInitial}
+          accountName={accountName}
+          accountEmail={accountEmail}
+          profilePictureUrl={accountPhotoUrl}
           onOpenMenu={() => setSidebarOpen(true)}
+          onSignOut={signOut}
         />
         {sessionState === "authenticated" &&
           !kycComplete &&
@@ -266,7 +314,7 @@ export default function DashboardShell({ children }: { children: ReactNode }) {
           )}
         {sessionState === "authenticated" ? (
           <DashboardContext.Provider
-            value={{ accountName, accountEmail, theme, setTheme }}
+            value={{ accountName, accountEmail, accountPhotoUrl, theme, setTheme, signOut }}
           >
             {children}
           </DashboardContext.Provider>

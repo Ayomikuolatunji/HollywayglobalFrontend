@@ -1,5 +1,7 @@
 import { getCustomerApiBaseUrl } from "../../../components/config/customerApi";
 
+export const accountProfileUpdatedEvent = "hollyway-account-profile-updated";
+
 export type AccountTheme = "light" | "dark";
 
 export type AccountSettings = {
@@ -10,6 +12,10 @@ export type AccountSettings = {
   order_updates: boolean;
   service_updates: boolean;
   updated_at?: string;
+};
+
+export type AccountProfile = {
+  profile_picture_url: string | null;
 };
 
 export type BusinessUpgradeStatus =
@@ -85,6 +91,22 @@ async function responsePayload(response: Response) {
       ? detail
       : "Account request could not be completed.";
   throw new AccountApiError(message, response.status);
+}
+
+export async function saveProfilePhoto(file: File): Promise<AccountProfile> {
+  const form = new FormData();
+  form.set("file", file, file.name);
+  const response = await fetch(`${getCustomerApiBaseUrl()}/api/v1/account/profile/photo`, {
+    method: "POST",
+    credentials: "include",
+    body: form,
+  });
+  const payload = await responsePayload(response);
+  const data = (payload.data || {}) as Partial<AccountProfile>;
+  return {
+    profile_picture_url:
+      typeof data.profile_picture_url === "string" ? data.profile_picture_url : null,
+  };
 }
 
 function isTheme(value: unknown): value is AccountTheme {

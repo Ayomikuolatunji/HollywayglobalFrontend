@@ -11,8 +11,6 @@ export type KycServerSubmission = {
   country_code?: string;
   identity_type?: string;
   identity_last4?: string;
-  provider?: string;
-  provider_status?: string;
   liveness_passed?: boolean;
   selfie_match?: boolean;
   selfie_confidence?: number;
@@ -33,8 +31,10 @@ export class KycApiError extends Error {
   }
 }
 
-function isServerStatus(value: unknown): value is KycServerStatus {
-  return ["not_submitted", "pending_review", "approved", "rejected", "additional_review"].includes(String(value));
+function normalizeServerStatus(value: unknown): KycServerStatus {
+  if (value === "approved" || value === "pending_review") return "approved";
+  if (value === "rejected" || value === "additional_review") return "rejected";
+  return "not_submitted";
 }
 
 async function responsePayload(response: Response) {
@@ -57,7 +57,7 @@ export async function fetchKycStatus(signal?: AbortSignal): Promise<KycServerSub
   const data = (payload.data || {}) as Partial<KycServerSubmission>;
   return {
     ...data,
-    status: isServerStatus(data.status) ? data.status : "not_submitted",
+    status: normalizeServerStatus(data.status),
   };
 }
 
@@ -78,12 +78,12 @@ export async function verifyKyc(input: {
   });
   const payload = await responsePayload(response);
   const data = (payload.data || {}) as { message?: unknown; submission?: Partial<KycServerSubmission> };
-  const submission = data.submission || { status: "pending_review" as const };
+  const submission = data.submission || { status: "approved" as const };
   return {
-    message: typeof data.message === "string" ? data.message : "Your KYC submission was received.",
+    message: typeof data.message === "string" ? data.message : "Your identity verification result is available.",
     submission: {
       ...submission,
-      status: isServerStatus(submission.status) ? submission.status : "pending_review",
+      status: normalizeServerStatus(submission.status),
     } as KycServerSubmission,
   };
 }
