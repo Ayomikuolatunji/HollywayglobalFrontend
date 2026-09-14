@@ -45,6 +45,7 @@ export default function VerifyEmailPage() {
     try {
       const response = await fetch(`${getCustomerApiBaseUrl()}/auth/verify-email`, {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: requestedEmail, otp }),
       });
@@ -57,7 +58,8 @@ export default function VerifyEmailPage() {
         );
       }
       setVerified(true);
-      setSuccess("Your email has been verified. You can now sign in.");
+      setSuccess("Your email has been verified. You are now signed in.");
+      window.location.assign("/dashboard");
     } catch (requestError) {
       setError(
         requestError instanceof Error
@@ -111,7 +113,7 @@ export default function VerifyEmailPage() {
       title={verified ? "Email verified." : "Enter your verification code."}
       description={
         verified
-          ? "Your Hollyway account is ready. Sign in to continue."
+          ? "Your Hollyway account is ready. Opening your workspace…"
           : "Enter the 6-digit code sent to your email before signing in."
       }
     >
