@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-type BulkItem = { id: number; name: string; category: string; quantity: string; price: string };
+type BulkItem = { id: string; name: string; category: string; quantity: string; price: string };
 
 export default function BulkListingItems() {
   const [items, setItems] = useState<BulkItem[]>([]);
@@ -17,7 +17,7 @@ export default function BulkListingItems() {
       setError("Add an item name and category before adding it to the batch.");
       return;
     }
-    setItems((current) => [...current, { id: Date.now(), name: name.trim(), category: category.trim(), quantity: quantity || "1", price }]);
+    setItems((current) => [...current, { id: crypto.randomUUID(), name: name.trim(), category: category.trim(), quantity: quantity || "1", price }]);
     setName("");
     setCategory("");
     setQuantity("1");

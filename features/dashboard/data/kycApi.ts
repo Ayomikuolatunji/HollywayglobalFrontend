@@ -4,7 +4,8 @@ import type { KycServerStatus } from "./kyc";
 const minimumSelfieConfidence = 70;
 
 export type KycServerSubmission = {
-  id?: number;
+  id?: string;
+  user_id?: string;
   status: KycServerStatus;
   status_label?: string;
   legal_full_name?: string;
@@ -25,11 +26,13 @@ export type KycServerSubmission = {
 
 export class KycApiError extends Error {
   status: number;
+  submission: KycServerSubmission | null;
 
-  constructor(message: string, status: number) {
+  constructor(message: string, status: number, submission: KycServerSubmission | null = null) {
     super(message);
     this.name = "KycApiError";
     this.status = status;
+    this.submission = submission;
   }
 }
 
@@ -42,11 +45,22 @@ function normalizeServerStatus(value: unknown): KycServerStatus {
 async function responsePayload(response: Response) {
   const payload = (await response.json().catch(() => ({}))) as { detail?: unknown } & Record<string, unknown>;
   if (response.ok) return payload;
+  const data = payload.data && typeof payload.data === "object" && !Array.isArray(payload.data)
+    ? payload.data as Record<string, unknown>
+    : {};
+  const rawSubmission = data.submission && typeof data.submission === "object" && !Array.isArray(data.submission)
+    ? data.submission as Partial<KycServerSubmission>
+    : null;
+  const submission = rawSubmission
+    ? { ...rawSubmission, status: normalizeServerStatus(rawSubmission.status) } as KycServerSubmission
+    : null;
   const detail = payload.detail;
   const message = Array.isArray(detail)
     ? detail.map((item) => (item && typeof item === "object" && "msg" in item ? String(item.msg) : "")).filter(Boolean)[0]
-    : typeof detail === "string" ? detail : "KYC request could not be completed.";
-  throw new KycApiError(message, response.status);
+    : typeof detail === "string" ? detail
+    : typeof data.message === "string" ? data.message
+    : "KYC request could not be completed.";
+  throw new KycApiError(message, response.status, submission);
 }
 
 export async function fetchKycStatus(signal?: AbortSignal): Promise<KycServerSubmission> {

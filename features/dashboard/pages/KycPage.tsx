@@ -128,6 +128,19 @@ export default function KycPage() {
       setSelfieFile(null);
       setStep(result.submission.status === "rejected" ? 1 : 3);
     } catch (requestError) {
+      if (
+        requestError instanceof KycApiError &&
+        requestError.status === 422 &&
+        requestError.submission?.status === "rejected"
+      ) {
+        setSubmission(requestError.submission);
+        setStatus("rejected");
+        setMessage(requestError.message);
+        setDraft((current) => ({ ...current, identityNumber: "", selfieName: "" }));
+        setSelfieFile(null);
+        setStep(1);
+        return;
+      }
       setError(requestError instanceof Error ? requestError.message : "KYC submission could not be completed.");
     } finally {
       setSubmitting(false);

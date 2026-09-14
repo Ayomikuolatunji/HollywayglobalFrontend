@@ -42,7 +42,7 @@ export type BusinessDocument = {
 };
 
 export type BusinessUpgrade = {
-  id?: number;
+  id?: string;
   status: BusinessUpgradeStatus;
   status_label?: string;
   account_status: BusinessAccountStatus;

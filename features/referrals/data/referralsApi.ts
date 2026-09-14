@@ -1,7 +1,7 @@
 import { getCustomerApiBaseUrl } from "../../../components/config/customerApi";
 
 export type ReferralActivity = {
-  id: number;
+  id: string;
   status: "registered" | "active";
   joined_at: string;
 };
@@ -45,7 +45,7 @@ function activityList(value: unknown): ReferralActivity[] {
   return value.flatMap((item) => {
     if (!item || typeof item !== "object") return [];
     const record = item as Partial<ReferralActivity>;
-    if (typeof record.id !== "number" || typeof record.joined_at !== "string") {
+    if (typeof record.id !== "string" || typeof record.joined_at !== "string") {
       return [];
     }
     return [

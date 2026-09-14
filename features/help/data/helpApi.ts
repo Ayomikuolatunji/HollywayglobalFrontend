@@ -21,7 +21,7 @@ export type HelpContent = {
 };
 
 export type HelpTicket = {
-  id: number;
+  id: string;
   reference: string;
   category: string;
   subject: string;
