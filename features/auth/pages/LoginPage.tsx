@@ -5,7 +5,13 @@ import { useEffect, useState, type FormEvent } from "react";
 import { Arrow } from "../../../components/ui/Arrow";
 import { getCustomerApiBaseUrl } from "../../../components/config/customerApi";
 import { captureReferralCode } from "../../referrals/data/referralAttribution";
-import { AuthError, AuthField, AuthShell, GoogleButton } from "../components/AuthShared";
+import {
+  AuthError,
+  AuthField,
+  AuthShell,
+  GoogleButton,
+  PasswordField,
+} from "../components/AuthShared";
 
 export default function LoginPage() {
   const [error, setError] = useState("");
@@ -37,5 +43,41 @@ export default function LoginPage() {
     }
   }
 
-  return <AuthShell kicker="USER SIGN IN" title="Welcome back." description="Sign in to your Hollyway user account."><GoogleButton referralCode={referralCode} /><div className="relative my-7 border-t border-[#dfe4ed] text-center"><span className="relative -top-2.5 bg-white px-3 text-[10px] font-bold text-[#8b97a9]">or use your email</span></div><form className="grid gap-4" onSubmit={submit}><AuthError message={error} /><AuthField label="Email address" name="email" type="email" autoComplete="email" /><AuthField label="Password" name="password" type="password" autoComplete="current-password" /><div className="text-right text-xs font-bold"><Link className="text-[#1453bb] hover:underline" href="/forgot-password">Forgot password?</Link></div><button className="mt-2 flex h-12 items-center justify-center gap-2 rounded-lg bg-[#1453bb] text-sm font-extrabold text-white transition hover:bg-[#0b3f91] disabled:cursor-not-allowed disabled:opacity-60" type="submit" disabled={submitting}>{submitting ? "Signing in…" : <>Sign in <Arrow /></>}</button></form><p className="mt-6 text-center text-xs font-semibold text-[#53627a]">New to Hollyway? <Link className="font-extrabold text-[#1453bb] hover:underline" href="/signup">Create an account</Link></p></AuthShell>;
+  return (
+    <AuthShell
+      kicker="USER SIGN IN"
+      title="Welcome back."
+      description="Sign in to your Hollyway user account."
+    >
+      <GoogleButton referralCode={referralCode} />
+      <div className="relative my-7 border-t border-[#dfe4ed] text-center">
+        <span className="relative -top-2.5 bg-white px-3 text-[10px] font-bold text-[#8b97a9]">
+          or use your email
+        </span>
+      </div>
+      <form className="grid gap-4" onSubmit={submit}>
+        <AuthError message={error} />
+        <AuthField label="Email address" name="email" type="email" autoComplete="email" />
+        <PasswordField label="Password" name="password" autoComplete="current-password" />
+        <div className="text-right text-xs font-bold">
+          <Link className="text-[#1453bb] hover:underline" href="/forgot-password">
+            Forgot password?
+          </Link>
+        </div>
+        <button
+          className="mt-2 flex h-12 items-center justify-center gap-2 rounded-lg bg-[#1453bb] text-sm font-extrabold text-white transition hover:bg-[#0b3f91] disabled:cursor-not-allowed disabled:opacity-60"
+          type="submit"
+          disabled={submitting}
+        >
+          {submitting ? "Signing in…" : <>Sign in <Arrow /></>}
+        </button>
+      </form>
+      <p className="mt-6 text-center text-xs font-semibold text-[#53627a]">
+        New to Hollyway?{" "}
+        <Link className="font-extrabold text-[#1453bb] hover:underline" href="/signup">
+          Create an account
+        </Link>
+      </p>
+    </AuthShell>
+  );
 }

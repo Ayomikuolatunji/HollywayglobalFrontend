@@ -11,7 +11,7 @@ const marketDescriptions: Record<string, string> = {
   "Importer / Container Market": "Imported goods, container stock and excess inventory.",
   "Campus & NYSC Market": "Student, graduate and service-year items being cleared.",
   "Business Clearance Market": "Equipment, stock and furniture from business clearances.",
-  "Estate Clearance Market": "Household items grouped from an estate or property clearance.",
+  "Estate Clearance Market": "Household items grouped for a full home clearance.",
   "Repair, Refurbish & Resell Market": "Repaired, restored and refurbished items ready for resale.",
   "Trade-in & Upgrade Market": "Items connected to a trade-in, replacement or upgrade.",
   "Agro & Crafts Market": "Farm produce, processed goods and handmade products.",

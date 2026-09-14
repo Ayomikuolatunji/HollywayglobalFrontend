@@ -75,7 +75,7 @@ export default function KycPage() {
 
   function validateStep() {
     if (step === 0 && !/^\d{11}$/.test(draft.identityNumber)) {
-      setError("Enter the 11-digit identity number for the selected identity record.");
+      setError(`Enter your 11-digit ${draft.identityType} before continuing.`);
       return false;
     }
     if (step === 1 && !selfieFile) {
@@ -91,6 +91,11 @@ export default function KycPage() {
       return false;
     }
     return true;
+  }
+
+  function clearVerificationAttempt() {
+    setDraft((current) => ({ ...current, identityNumber: "", selfieName: "" }));
+    setSelfieFile(null);
   }
 
   function nextStep() {
@@ -124,10 +129,10 @@ export default function KycPage() {
           }),
         );
       }
-      setDraft((current) => ({ ...current, identityNumber: "", selfieName: "" }));
-      setSelfieFile(null);
-      setStep(result.submission.status === "rejected" ? 1 : 3);
+      clearVerificationAttempt();
+      setStep(result.submission.status === "rejected" ? 0 : 3);
     } catch (requestError) {
+      clearVerificationAttempt();
       if (
         requestError instanceof KycApiError &&
         requestError.status === 422 &&
@@ -136,12 +141,11 @@ export default function KycPage() {
         setSubmission(requestError.submission);
         setStatus("rejected");
         setMessage(requestError.message);
-        setDraft((current) => ({ ...current, identityNumber: "", selfieName: "" }));
-        setSelfieFile(null);
-        setStep(1);
+        setStep(0);
         return;
       }
       setError(requestError instanceof Error ? requestError.message : "KYC submission could not be completed.");
+      setStep(0);
     } finally {
       setSubmitting(false);
     }

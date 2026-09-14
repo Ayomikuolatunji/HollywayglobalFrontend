@@ -70,7 +70,7 @@ export const audiences = [
     "Give imported goods, container lots, clearance pallets and overstock direct access to Nigerian buyers and resellers.",
   ],
   [
-    "PROPERTY & ESTATE CLEARANCE",
+    "FULL HOME CLEARANCE",
     "Clear spaces responsibly",
     "Apartments, offices, warehouses and family properties can be cleared through one organised marketplace.",
   ],

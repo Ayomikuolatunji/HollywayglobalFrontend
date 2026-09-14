@@ -1,7 +1,7 @@
 import Link from "next/link";
 import MarketProductVisual from "./MarketProductVisual";
 import SaveListingButton from "./SaveListingButton";
-import { getListingMarket, type Listing } from "../data";
+import { getListingMarket, getMarketDisplayName, type Listing } from "../data";
 
 const marketAccent: Record<string, string> = {
   "Urgent Sale Market": "border-t-[#b8560d]",
@@ -11,7 +11,7 @@ const marketAccent: Record<string, string> = {
   "Business Clearance Market": "border-t-[#6b2545]",
 };
 
-function shortMarketName(market: string) { return market.replace(/ Market$/, ""); }
+function shortMarketName(market: string) { return getMarketDisplayName(market).replace(/ Market$/, ""); }
 
 export default function MarketListingCard({ listing, detailsHref }: { listing: Listing; detailsHref: string }) {
   const market = getListingMarket(listing);

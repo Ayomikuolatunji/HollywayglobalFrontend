@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Arrow } from "../../../components/ui/Arrow";
-import DashboardIcon from "../../dashboard/components/DashboardIcon";
 import DashboardPageHeader from "../../dashboard/components/DashboardPageHeader";
 import DashboardSummaryCard from "../../dashboard/components/DashboardSummaryCard";
+import PartnershipPathways from "../components/PartnershipPathways";
 import ReferralActivity from "../components/ReferralActivity";
 import ReferralCodeCard from "../components/ReferralCodeCard";
 import { fetchReferralSummary, type ReferralSummary } from "../data/referralsApi";
@@ -75,9 +75,9 @@ export default function ReferralsPage() {
   return (
     <div className="w-full space-y-3 px-4 pb-16 pt-1 sm:px-6 lg:px-8">
       <DashboardPageHeader
-        kicker="PARTNERSHIPS & FINANCE"
-        title="Referrals"
-        description="Share your link and track registrations."
+        kicker="PARTNERSHIPS"
+        title="Referrals & reseller"
+        description="Invite customers or prepare reseller orders. Wallet & payouts is a separate finance area."
         compact
         action={
           <Link
@@ -106,6 +106,7 @@ export default function ReferralsPage() {
           </button>
         </div>
       )}
+      <PartnershipPathways />
       <section className="grid grid-cols-3 gap-2 sm:gap-3" aria-label="Referral summary">
         <DashboardSummaryCard
           label="TOTAL REFERRALS"
@@ -143,27 +144,6 @@ export default function ReferralsPage() {
         onShare={() => void shareLink()}
       />
       <ReferralActivity records={summary.referrals} />
-      <section className="flex flex-col gap-3 rounded-xl border border-[#e4e2da] bg-white p-4 sm:flex-row sm:items-center sm:justify-between sm:p-5">
-        <div className="flex items-start gap-3">
-          <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-[#f6efdc] text-[#b8560d] [&>svg]:h-4 [&>svg]:w-4">
-            <DashboardIcon name="wallet" />
-          </span>
-          <div>
-            <h2 className="text-xs font-bold text-[#12141c]">Reseller earnings and payouts</h2>
-            <p className="mt-1 max-w-2xl text-[10px] leading-4 text-[#5c5f6b]">
-              Order markups, commissions and payouts will be added after Hollyway&apos;s order,
-              payment and wallet workflows are connected. No earnings are estimated from
-              registrations.
-            </p>
-          </div>
-        </div>
-        <Link
-          className="inline-flex h-9 shrink-0 items-center gap-2 rounded-lg border border-[#e4e2da] px-3 text-[10px] font-bold text-[#14213d] hover:border-[#14213d]"
-          href="/dashboard/wallet"
-        >
-          Open wallet <Arrow />
-        </Link>
-      </section>
     </div>
   );
 }

@@ -18,7 +18,8 @@ const services = [
   ["Deliveries", "Dispatch, waybill and transit support.", "truck", "/dashboard/logistics"],
   ["Relocations", "Moves, crews, vehicles and storage.", "truck", "/dashboard/relocation"],
   ["Escrow", "Protected transactions and release steps.", "shield", "/dashboard/escrow"],
-  ["Referrals & reseller", "Referral growth and reseller orders.", "users", "/dashboard/referrals"],
+  ["Referrals", "Invite new customers with your HWP link.", "users", "/dashboard/referrals"],
+  ["Reseller", "Prepare customer orders and markups.", "store", "/dashboard/reseller"],
   ["Ads & promotions", "Promote listings, stock and business offers.", "grid", "/dashboard/advertising"],
   ["Wallet & payouts", "Settlement balances and payout activity.", "wallet", "/dashboard/wallet"],
 ] as const;

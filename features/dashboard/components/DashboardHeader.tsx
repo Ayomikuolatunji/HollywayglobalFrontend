@@ -131,7 +131,6 @@ export default function DashboardHeader({
             aria-label="Notifications"
           >
             <HeaderNotificationIcon />
-            <span className="absolute -right-0.5 -top-0.5 h-[7px] w-[7px] rounded-full border-2 border-[#14213d] bg-[#dd6b12]" />
           </Link>
           <ProfileMenu
             accountInitial={accountInitial}
@@ -170,7 +169,6 @@ export default function DashboardHeader({
             aria-label="Notifications"
           >
             <HeaderNotificationIcon />
-            <span className="absolute -right-0.5 -top-0.5 h-[7px] w-[7px] rounded-full border-2 border-[#f5f4f0] bg-[#dd6b12] dark:border-[#0b1220]" />
           </Link>
           <Link
             className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-[#dd6b12] px-3.5 text-[13px] font-semibold text-white hover:bg-[#b8560d]"

@@ -7,12 +7,22 @@ import {
   adminWhatsApp,
   audienceRelayBaseUrl,
   audienceRelayTokens,
+  channels,
   contactEmail,
-  facebookPage,
   whatsappChannel,
 } from "../data";
 
 type Status = "idle" | "sending" | "sent" | "error";
+
+function socialIconName(icon: string) {
+  if (icon === "WA") return "whatsapp";
+  if (icon === "IG") return "instagram";
+  if (icon === "X") return "x";
+  if (icon === "f") return "facebook";
+  if (icon === "in") return "linkedin";
+  if (icon === "tiktok") return "tiktok";
+  return "group";
+}
 
 export function NewsletterSection() {
   const [status, setStatus] = useState<Status>("idle");
@@ -178,50 +188,38 @@ export default function HomeContact() {
             href="tel:+2347015585967"
           />
         </div>
-        <div className="mt-6 flex flex-wrap gap-4 text-[10px] text-[#667085]">
-          <span>Follow Hollyway</span>
-          <a
-            className="inline-flex items-center gap-1 font-bold text-[#1453bb]"
-            href={whatsappChannel}
-            target="_blank"
-            rel="noreferrer"
-          >
-            <SocialIcon name="whatsapp" />
-            WhatsApp
-          </a>
-          <a
-            className="font-bold text-[#1453bb]"
-            href="https://www.instagram.com/hollywayglobal/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Instagram
-          </a>
-          <a
-            className="font-bold text-[#1453bb]"
-            href="https://www.tiktok.com/@hollywayglobal"
-            target="_blank"
-            rel="noreferrer"
-          >
-            TikTok
-          </a>
-          <a
-            className="font-bold text-[#1453bb]"
-            href={facebookPage}
-            target="_blank"
-            rel="noreferrer"
-          >
-            Facebook
-          </a>
-          <a
-            className="font-bold text-[#1453bb]"
-            href="https://x.com/hollywayglobal"
-            target="_blank"
-            rel="noreferrer"
-          >
-            X
-          </a>
-        </div>
+        <section className="mt-6 rounded-xl border border-[#dfe4ed] bg-white p-4" aria-labelledby="contact-social-title">
+          <div className="flex items-end justify-between gap-3">
+            <div>
+              <span className="text-[9px] font-extrabold tracking-[.14em] text-[#8995a8]">
+                SOCIAL CONTACT
+              </span>
+              <h3 className="mt-1 text-sm font-bold text-[#0b1830]" id="contact-social-title">
+                Find Hollyway across our official channels.
+              </h3>
+            </div>
+            <SocialIcon name="group" />
+          </div>
+          <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
+            {channels.map(([icon, title, text, href]) => (
+              <a
+                className="flex min-w-0 items-center gap-2 rounded-lg border border-[#eef1f4] bg-[#fbfcfe] p-2.5 hover:border-[#9fbbe4]"
+                href={href}
+                target="_blank"
+                rel="noreferrer"
+                key={title}
+              >
+                <span className="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-[#eef5ff] text-[#1453bb]">
+                  <SocialIcon name={socialIconName(icon)} />
+                </span>
+                <span className="min-w-0">
+                  <b className="block truncate text-[10px] text-[#0b1830]">{title}</b>
+                  <small className="mt-0.5 block truncate text-[8px] text-[#8490a4]">{text}</small>
+                </span>
+              </a>
+            ))}
+          </div>
+        </section>
       </div>
       <form
         onSubmit={submit}

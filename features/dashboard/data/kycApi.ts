@@ -36,6 +36,28 @@ export class KycApiError extends Error {
   }
 }
 
+function validationMessage(detail: unknown) {
+  if (!Array.isArray(detail)) {
+    const message = typeof detail === "string" ? detail : "";
+    return message.toLowerCase() === "field required" ? "Complete the required KYC fields before submitting." : message;
+  }
+  const first = detail.find((item) => item && typeof item === "object" && !Array.isArray(item));
+  if (!first || typeof first !== "object" || Array.isArray(first)) return "";
+
+  const item = first as Record<string, unknown>;
+  const message = typeof item.msg === "string" ? item.msg : "";
+  if (message.toLowerCase() !== "field required") return message;
+
+  const location = Array.isArray(item.loc) ? item.loc.map(String) : [];
+  const field = location[location.length - 1];
+  const fieldMessages: Record<string, string> = {
+    identity_type: "Choose NIN or BVN before continuing.",
+    identity_number: "Enter your 11-digit NIN or BVN before continuing.",
+    file: "Choose a clear front-facing selfie before submitting.",
+  };
+  return fieldMessages[field] || "Complete the required KYC fields before submitting.";
+}
+
 function normalizeServerStatus(value: unknown): KycServerStatus {
   if (value === "approved" || value === "pending_review") return "approved";
   if (value === "rejected" || value === "additional_review") return "rejected";
@@ -55,11 +77,8 @@ async function responsePayload(response: Response) {
     ? { ...rawSubmission, status: normalizeServerStatus(rawSubmission.status) } as KycServerSubmission
     : null;
   const detail = payload.detail;
-  const message = Array.isArray(detail)
-    ? detail.map((item) => (item && typeof item === "object" && "msg" in item ? String(item.msg) : "")).filter(Boolean)[0]
-    : typeof detail === "string" ? detail
-    : typeof data.message === "string" ? data.message
-    : "KYC request could not be completed.";
+  const message = validationMessage(detail)
+    || (typeof data.message === "string" ? data.message : "KYC request could not be completed.");
   throw new KycApiError(message, response.status, submission);
 }
 

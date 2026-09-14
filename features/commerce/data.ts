@@ -4,6 +4,14 @@ export const sellingRoutes = ["All selling routes", "Home & office decluttering"
 export const marketCategories = ["All markets", "Declutter Market", "Urgent Sale Market", "Relocation / Japa Market", "Importer / Container Market", "Campus & NYSC Market", "Business Clearance Market", "Estate Clearance Market", "Repair, Refurbish & Resell Market", "Trade-in & Upgrade Market", "Agro & Crafts Market", "Other Sales Market"];
 export const deliveryMethods = ["All delivery methods", "Dispatch rider", "Interstate waybill", "Logistics company", "Bulk minibus", "Pickup"];
 
+const marketDisplayNames: Record<string, string> = {
+  "Estate Clearance Market": "Full Home Clearance Market",
+};
+
+export function getMarketDisplayName(market: string) {
+  return marketDisplayNames[market] || market;
+}
+
 export function marketSlug(market: string) {
   return market.toLowerCase().replace(/&/g, "and").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 }

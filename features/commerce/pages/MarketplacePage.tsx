@@ -7,7 +7,7 @@ import Dropdown, { type DropdownOption } from "../../../components/forms/Dropdow
 import CommerceIcon from "../components/CommerceIcon";
 import MarketListingCard from "../components/MarketListingCard";
 import MarketplaceFilterDrawer from "../components/MarketplaceFilterDrawer";
-import { categories, conditions, deliveryMethods, getListingCategory, getListingDeliveryMethod, getListingMarket, listings, marketCategories } from "../data";
+import { categories, conditions, deliveryMethods, getListingCategory, getListingDeliveryMethod, getListingMarket, getMarketDisplayName, listings, marketCategories } from "../data";
 
 const marketDotColors = ["bg-[#dd6b12]", "bg-[#14213d]", "bg-[#b8560d]", "bg-[#1f7a5c]", "bg-[#3b4b6b]", "bg-[#7a5c00]", "bg-[#6b2545]"];
 const sortOptions: DropdownOption[] = [
@@ -20,7 +20,7 @@ const sortOptions: DropdownOption[] = [
 
 function options(values: readonly string[]): DropdownOption[] { return values.map((value) => ({ value, label: value })); }
 function amount(value: string) { return Number(value.replace(/,/g, "")) || 0; }
-function shortMarketName(value: string) { return value.replace(/ Market$/, ""); }
+function shortMarketName(value: string) { return getMarketDisplayName(value).replace(/ Market$/, ""); }
 
 export default function MarketplacePage() {
   const searchParams = useSearchParams();

@@ -4,7 +4,12 @@ import Link from "next/link";
 import { useEffect, useState, type FormEvent } from "react";
 import { Arrow } from "../../../components/ui/Arrow";
 import { getCustomerApiBaseUrl } from "../../../components/config/customerApi";
-import { AuthError, AuthField, AuthShell, AuthSuccess } from "../components/AuthShared";
+import {
+  AuthError,
+  AuthShell,
+  AuthSuccess,
+  PasswordField,
+} from "../components/AuthShared";
 
 export default function ResetPasswordPage() {
   const [token, setToken] = useState("");
@@ -42,5 +47,35 @@ export default function ResetPasswordPage() {
     }
   }
 
-  return <AuthShell kicker="RESET PASSWORD" title="Choose a new password." description="Set a new password for your Hollyway user account."><form className="mt-7 grid gap-4" onSubmit={submit}><AuthError message={error} /><AuthSuccess message={success} /><AuthField label="New password" name="password" type="password" autoComplete="new-password" /><AuthField label="Confirm new password" name="confirmPassword" type="password" autoComplete="new-password" /><button className="mt-2 flex h-12 items-center justify-center gap-2 rounded-lg bg-[#1453bb] text-sm font-extrabold text-white transition hover:bg-[#0b3f91] disabled:cursor-not-allowed disabled:opacity-60" type="submit" disabled={submitting || !token || Boolean(success)}>{submitting ? "Updating password…" : <>Update password <Arrow /></>}</button></form><p className="mt-6 text-center text-xs font-semibold text-[#53627a]"><Link className="font-extrabold text-[#1453bb] hover:underline" href="/login">Return to sign in</Link></p></AuthShell>;
+  return (
+    <AuthShell
+      kicker="RESET PASSWORD"
+      title="Choose a new password."
+      description="Set a new password for your Hollyway user account."
+    >
+      <form className="mt-7 grid gap-4" onSubmit={submit}>
+        <AuthError message={error} />
+        <AuthSuccess message={success} />
+        <PasswordField label="New password" name="password" autoComplete="new-password" minLength={8} />
+        <PasswordField
+          label="Confirm new password"
+          name="confirmPassword"
+          autoComplete="new-password"
+          minLength={8}
+        />
+        <button
+          className="mt-2 flex h-12 items-center justify-center gap-2 rounded-lg bg-[#1453bb] text-sm font-extrabold text-white transition hover:bg-[#0b3f91] disabled:cursor-not-allowed disabled:opacity-60"
+          type="submit"
+          disabled={submitting || !token || Boolean(success)}
+        >
+          {submitting ? "Updating password…" : <>Update password <Arrow /></>}
+        </button>
+      </form>
+      <p className="mt-6 text-center text-xs font-semibold text-[#53627a]">
+        <Link className="font-extrabold text-[#1453bb] hover:underline" href="/login">
+          Return to sign in
+        </Link>
+      </p>
+    </AuthShell>
+  );
 }
