@@ -2,7 +2,15 @@
 
 import { useState, type FormEvent } from "react";
 import Dropdown, { type DropdownOption } from "../../../components/forms/Dropdown";
-import { createSupportTicket, type HelpCategory, type HelpTicket } from "../data/helpApi";
+import {
+  createSupportTicket,
+  maxSupportAttachments,
+  maxSupportAttachmentBytes,
+  supportAttachmentAccept,
+  type HelpCategory,
+  type HelpTicket,
+  validateSupportAttachments,
+} from "../data/helpApi";
 import HelpIcon from "./HelpIcon";
 
 export default function SupportRequestForm({
@@ -28,6 +36,9 @@ export default function SupportRequestForm({
     const form = new FormData(formElement);
     const subject = String(form.get("subject") || "").trim();
     const message = String(form.get("message") || "").trim();
+    const attachments = form
+      .getAll("attachments")
+      .filter((value): value is File => value instanceof File && value.size > 0);
     if (!category) {
       setError("Choose a help topic.");
       return;
@@ -38,6 +49,11 @@ export default function SupportRequestForm({
       );
       return;
     }
+    const attachmentError = validateSupportAttachments(attachments);
+    if (attachmentError) {
+      setError(attachmentError);
+      return;
+    }
     setSaving(true);
     try {
       const ticket = await createSupportTicket({
@@ -45,6 +61,7 @@ export default function SupportRequestForm({
         subject,
         message,
         relatedReference: String(form.get("relatedReference") || "").trim(),
+        attachments,
       });
       onSubmitted(ticket);
       formElement.reset();
@@ -94,6 +111,21 @@ export default function SupportRequestForm({
             maxLength={160}
             required
           />
+        </label>
+        <label className="grid gap-2 text-[11px] font-extrabold text-[#31425e]">
+          <span>
+            Attachments <em className="font-medium not-italic text-[#8995a8]">(optional)</em>
+          </span>
+          <input
+            className="block w-full rounded-lg border border-dashed border-[#b9c8dd] bg-[#f8fafc] px-3 py-3 text-xs font-medium text-[#53627a] file:mr-3 file:rounded-md file:border-0 file:bg-[#edf4ff] file:px-3 file:py-2 file:text-[10px] file:font-bold file:text-[#1453bb]"
+            name="attachments"
+            type="file"
+            accept={supportAttachmentAccept}
+            multiple
+          />
+          <small className="font-medium leading-4 text-[#8995a8]">
+            Add up to {maxSupportAttachments} JPG, PNG, WEBP or PDF files. Each file must be {maxSupportAttachmentBytes / 1_000_000} MB or smaller.
+          </small>
         </label>
         <label className="grid gap-2 text-[11px] font-extrabold text-[#31425e]">
           <span>What happened?</span>

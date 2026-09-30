@@ -3,7 +3,9 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Arrow } from "../../../components/ui/Arrow";
-import BusinessUpgradeForm from "../components/BusinessUpgradeForm";
+import BusinessUpgradeForm, {
+  type SettlementVerificationState,
+} from "../components/BusinessUpgradeForm";
 import BusinessUpgradeLoadError from "../components/BusinessUpgradeLoadError";
 import BusinessUpgradeStatusPanel from "../components/BusinessUpgradeStatusPanel";
 import BusinessUpgradeStatusIntro from "../components/BusinessUpgradeStatusIntro";
@@ -15,6 +17,7 @@ import {
   saveBusinessUpgrade,
   type BusinessUpgrade,
 } from "../data/accountApi";
+import { verifySettlementAccount } from "../data/settlementApi";
 import {
   clearBusinessUpgradeDraft,
   draftFromBusinessUpgrade,
@@ -33,6 +36,12 @@ import {
 const MAX_DOCUMENT_SIZE = 10_000_000;
 const ALLOWED_DOCUMENT_TYPES = ["application/pdf", "image/jpeg", "image/png"];
 
+function settlementKey(companyName: string, bankName: string, accountNumber: string) {
+  return [companyName, bankName, accountNumber]
+    .map((value) => value.trim().toLowerCase())
+    .join("|");
+}
+
 export default function BusinessUpgradePage() {
   const { accountEmail } = useDashboard();
   const storageKey = getBusinessUpgradeStorageKey(accountEmail);
@@ -47,9 +56,11 @@ export default function BusinessUpgradePage() {
   const [consent, setConsent] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState<"draft" | "submit" | "">("");
+  const [verifyingSettlementAccount, setVerifyingSettlementAccount] = useState(false);
+  const [settlementVerification, setSettlementVerification] =
+    useState<SettlementVerificationState>({ status: "idle", key: "" });
   const [loadError, setLoadError] = useState("");
   const [formError, setFormError] = useState("");
-  const [message, setMessage] = useState("");
 
   useEffect(() => {
     setDraft(readBusinessUpgradeDraft(storageKey));
@@ -106,6 +117,9 @@ export default function BusinessUpgradePage() {
 
   function updateDraft(field: keyof BusinessUpgradeDraft, value: string) {
     setDraft((current) => ({ ...current, [field]: value }));
+    if (field === "companyName") {
+      setSettlementVerification({ status: "idle", key: "" });
+    }
     setFormError("");
   }
 
@@ -113,7 +127,50 @@ export default function BusinessUpgradePage() {
     if (field === "settlementBankName") setSettlementBankName(value);
     if (field === "settlementAccountNumber") setSettlementAccountNumber(value);
     if (field === "settlementAccountName") setSettlementAccountName(value);
+    setSettlementVerification({ status: "idle", key: "" });
     setFormError("");
+  }
+
+  async function verifyAccount() {
+    const key = settlementKey(draft.companyName, settlementBankName, settlementAccountNumber);
+    if (!draft.companyName.trim()) {
+      setFormError("Enter the registered company name before verifying the account.");
+      return;
+    }
+    if (!settlementBankName.trim()) {
+      setFormError("Enter the settlement bank name before verifying the account.");
+      return;
+    }
+    if (!/^\d{10}$/.test(settlementAccountNumber)) {
+      setFormError("Settlement account number must contain 10 digits.");
+      return;
+    }
+    setFormError("");
+    setSettlementVerification({ status: "verifying", key });
+    setVerifyingSettlementAccount(true);
+    try {
+      const result = await verifySettlementAccount({
+        bankName: settlementBankName,
+        accountNumber: settlementAccountNumber,
+        businessName: draft.companyName,
+      });
+      setSettlementAccountName(result.accountName);
+      setSettlementVerification({
+        status: "verified",
+        key,
+        accountName: result.accountName,
+        matchPercentage: result.matchPercentage,
+      });
+    } catch (requestError) {
+      setSettlementVerification({ status: "failed", key });
+      setFormError(
+        requestError instanceof Error
+          ? requestError.message
+          : "Settlement account could not be verified.",
+      );
+    } finally {
+      setVerifyingSettlementAccount(false);
+    }
   }
 
   function updateFile(kind: BusinessDocumentKind, file: File | null) {
@@ -137,7 +194,6 @@ export default function BusinessUpgradePage() {
 
   async function save(action: "draft" | "submit") {
     setFormError("");
-    setMessage("");
     if (action === "submit") {
       const hasCertificate =
         Boolean(certificate) ||
@@ -153,6 +209,15 @@ export default function BusinessUpgradePage() {
       }
       if (!consent) {
         setFormError("Confirm the business details before submitting.");
+        return;
+      }
+      if (
+        settlementAccountNumber &&
+        (settlementVerification.status !== "verified" ||
+          settlementVerification.key !==
+            settlementKey(draft.companyName, settlementBankName, settlementAccountNumber))
+      ) {
+        setFormError("Verify the settlement account before submitting.");
         return;
       }
     }
@@ -177,7 +242,6 @@ export default function BusinessUpgradePage() {
         directorIdentification,
       });
       setUpgrade(result.data);
-      setMessage(result.message);
       if (action === "submit") {
         clearBusinessUpgradeDraft(storageKey);
         setDraft(emptyBusinessUpgradeDraft);
@@ -185,6 +249,7 @@ export default function BusinessUpgradePage() {
         setSettlementBankName("");
         setSettlementAccountNumber("");
         setSettlementAccountName("");
+        setSettlementVerification({ status: "idle", key: "" });
         setCertificate(null);
         setDirectorIdentification(null);
         setConsent(false);
@@ -251,10 +316,12 @@ export default function BusinessUpgradePage() {
             existingDocuments={upgrade?.documents || []}
             consent={consent}
             saving={saving}
+            settlementVerification={settlementVerification}
+            verifyingSettlementAccount={verifyingSettlementAccount}
             error={formError}
-            message={message}
             onDraftChange={updateDraft}
             onSettlementChange={updateSettlement}
+            onVerifySettlementAccount={() => void verifyAccount()}
             onFileChange={updateFile}
             onConsentChange={setConsent}
             onSaveDraft={() => void save("draft")}

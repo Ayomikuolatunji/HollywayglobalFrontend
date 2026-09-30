@@ -6,8 +6,8 @@ import { useEffect, useState } from "react";
 import { Arrow } from "./ui/Arrow";
 import Brand from "./ui/Brand";
 import BrandIcon from "./ui/BrandIcon";
+import { adminWhatsApp } from "./config/contact";
 
-const adminWhatsApp = `https://wa.me/2347015585967?text=${encodeURIComponent("Hello Hollyway Admin, I would like to make an enquiry.")}`;
 const navLinks = [["Home", "/"], ["How it works", "#how"], ["Categories", "#categories"], ["Fees & requests", "#pricing"], ["Logistics", "#logistics"], ["About us", "/about"], ["Testimonials", "/testimonials"], ["Contact", "#contact"]] as const;
 
 export function SocialIcon({ name }: { name: string }) {

@@ -7,6 +7,7 @@ import DashboardPageHeader from "../../dashboard/components/DashboardPageHeader"
 import HelpArticleList from "../components/HelpArticleList";
 import HelpIcon from "../components/HelpIcon";
 import SupportRequestForm from "../components/SupportRequestForm";
+import SupportChannels from "../components/SupportChannels";
 import SupportTicketList from "../components/SupportTicketList";
 import {
   fetchHelpContent,
@@ -94,7 +95,8 @@ export default function HelpPage() {
         }
       />
       <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_360px]">
-        <section className="rounded-xl border border-[#e4e2da] bg-white p-5 shadow-[0_1px_2px_rgba(18,20,28,.03)] sm:p-6">
+        <div className="grid content-start gap-5">
+          <section className="rounded-xl border border-[#e4e2da] bg-white p-5 shadow-[0_1px_2px_rgba(18,20,28,.03)] sm:p-6">
           <div className="flex items-start gap-3">
             <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-[#edf4ff] text-[#1453bb] [&>svg]:h-4 [&>svg]:w-4">
               <HelpIcon name="book" />
@@ -161,7 +163,9 @@ export default function HelpPage() {
               />
             )}
           </div>
-        </section>
+          </section>
+          <SupportChannels />
+        </div>
         <aside className="grid content-start gap-5">
           <SupportRequestForm categories={categories} onSubmitted={addTicket} />
           <SupportTicketList

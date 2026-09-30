@@ -1,4 +1,5 @@
 import { getCustomerApiBaseUrl } from "../../../components/config/customerApi";
+import { apiFetch } from "../../../components/api/apiFetch";
 
 export const accountProfileUpdatedEvent = "hollyway-account-profile-updated";
 
@@ -73,7 +74,7 @@ export class AccountApiError extends Error {
   }
 }
 
-async function responsePayload(response: Response) {
+export async function responsePayload(response: Response) {
   const payload = (await response.json().catch(() => ({}))) as {
     detail?: unknown;
     data?: unknown;
@@ -96,11 +97,14 @@ async function responsePayload(response: Response) {
 export async function saveProfilePhoto(file: File): Promise<AccountProfile> {
   const form = new FormData();
   form.set("file", file, file.name);
-  const response = await fetch(`${getCustomerApiBaseUrl()}/api/v1/account/profile/photo`, {
-    method: "POST",
-    credentials: "include",
-    body: form,
-  });
+  const response = await apiFetch(
+    `${getCustomerApiBaseUrl()}/api/v1/account/profile/photo`,
+    { method: "POST", credentials: "include", body: form },
+    {
+      successMessage: "Profile picture updated.",
+      errorMessage: "Profile picture could not be updated. Please try again.",
+    },
+  );
   const payload = await responsePayload(response);
   const data = (payload.data || {}) as Partial<AccountProfile>;
   return {
@@ -156,12 +160,19 @@ export async function fetchAccountSettings(): Promise<AccountSettings> {
 export async function updateAccountSettings(
   changes: Partial<Omit<AccountSettings, "updated_at">>,
 ): Promise<AccountSettings> {
-  const response = await fetch(`${getCustomerApiBaseUrl()}/api/v1/account/settings`, {
-    method: "PATCH",
-    credentials: "include",
-    headers: { Accept: "application/json", "Content-Type": "application/json" },
-    body: JSON.stringify(changes),
-  });
+  const response = await apiFetch(
+    `${getCustomerApiBaseUrl()}/api/v1/account/settings`,
+    {
+      method: "PATCH",
+      credentials: "include",
+      headers: { Accept: "application/json", "Content-Type": "application/json" },
+      body: JSON.stringify(changes),
+    },
+    {
+      successMessage: "Settings saved successfully.",
+      errorMessage: "Settings could not be saved. Please try again.",
+    },
+  );
   const payload = await responsePayload(response);
   const data = (payload.data || {}) as Partial<AccountSettings>;
   return {
@@ -179,15 +190,22 @@ export async function changePassword(input: {
   currentPassword: string;
   newPassword: string;
 }): Promise<string> {
-  const response = await fetch(`${getCustomerApiBaseUrl()}/auth/change-password`, {
-    method: "POST",
-    credentials: "include",
-    headers: { Accept: "application/json", "Content-Type": "application/json" },
-    body: JSON.stringify({
-      current_password: input.currentPassword,
-      new_password: input.newPassword,
-    }),
-  });
+  const response = await apiFetch(
+    `${getCustomerApiBaseUrl()}/auth/change-password`,
+    {
+      method: "POST",
+      credentials: "include",
+      headers: { Accept: "application/json", "Content-Type": "application/json" },
+      body: JSON.stringify({
+        current_password: input.currentPassword,
+        new_password: input.newPassword,
+      }),
+    },
+    {
+      successMessage: "Password changed successfully.",
+      errorMessage: "Password could not be changed. Please try again.",
+    },
+  );
   const payload = await responsePayload(response);
   return typeof payload.message === "string" ? payload.message : "Your password has been changed.";
 }
@@ -253,11 +271,17 @@ export async function saveBusinessUpgrade(input: BusinessUpgradeInput) {
       input.directorIdentification.name,
     );
   }
-  const response = await fetch(`${getCustomerApiBaseUrl()}/api/v1/business-upgrade`, {
-    method: "POST",
-    credentials: "include",
-    body: form,
-  });
+  const response = await apiFetch(
+    `${getCustomerApiBaseUrl()}/api/v1/business-upgrade`,
+    { method: "POST", credentials: "include", body: form },
+    {
+      successMessage:
+        input.action === "submit"
+          ? "Business upgrade submitted successfully."
+          : "Business upgrade draft saved.",
+      errorMessage: "Business upgrade could not be saved. Please try again.",
+    },
+  );
   const payload = await responsePayload(response);
   const data = (payload.data || {}) as Partial<BusinessUpgrade>;
   return {

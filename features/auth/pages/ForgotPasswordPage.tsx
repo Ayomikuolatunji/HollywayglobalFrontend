@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState, type FormEvent } from "react";
 import { Arrow } from "../../../components/ui/Arrow";
+import { apiFetch } from "../../../components/api/apiFetch";
 import { getCustomerApiBaseUrl } from "../../../components/config/customerApi";
 import { AuthError, AuthField, AuthShell, AuthSuccess } from "../components/AuthShared";
 
@@ -18,11 +19,18 @@ export default function ForgotPasswordPage() {
     setSubmitting(true);
     const form = new FormData(event.currentTarget);
     try {
-      const response = await fetch(`${getCustomerApiBaseUrl()}/auth/forgot-password`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: form.get("email") }),
-      });
+      const response = await apiFetch(
+        `${getCustomerApiBaseUrl()}/auth/forgot-password`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: form.get("email") }),
+        },
+        {
+          successMessage: "If the account exists, a reset email was sent.",
+          errorMessage: "Unable to request a password reset. Please try again.",
+        },
+      );
       const payload = await response.json().catch(() => ({}));
       if (!response.ok)
         throw new Error(

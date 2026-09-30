@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState, type FormEvent } from "react";
 import { Arrow } from "../../../components/ui/Arrow";
+import { apiFetch } from "../../../components/api/apiFetch";
 import { getCustomerApiBaseUrl } from "../../../components/config/customerApi";
 import {
   AuthError,
@@ -11,6 +12,9 @@ import {
   AuthSuccess,
 } from "../components/AuthShared";
 
+function safeNext(value: string | null) {
+  return value && value.startsWith("/") && !value.startsWith("//") ? value : "/dashboard";
+}
 
 export default function VerifyEmailPage() {
   const [email, setEmail] = useState("");
@@ -20,10 +24,12 @@ export default function VerifyEmailPage() {
   const [verifying, setVerifying] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [verified, setVerified] = useState(false);
+  const [nextPath, setNextPath] = useState("/dashboard");
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     setEmail(params.get("email") || "");
+    setNextPath(safeNext(params.get("next")));
     const queryError = params.get("error");
     if (queryError) setError(queryError);
   }, []);
@@ -43,12 +49,19 @@ export default function VerifyEmailPage() {
     }
     setVerifying(true);
     try {
-      const response = await fetch(`${getCustomerApiBaseUrl()}/auth/verify-email`, {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: requestedEmail, otp }),
-      });
+      const response = await apiFetch(
+        `${getCustomerApiBaseUrl()}/auth/verify-email`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: requestedEmail, otp }),
+        },
+        {
+          successMessage: "Email verified successfully.",
+          errorMessage: "Email verification failed. Check the code and try again.",
+        },
+      );
       const payload = await response.json().catch(() => ({}));
       if (!response.ok) {
         throw new Error(
@@ -59,7 +72,7 @@ export default function VerifyEmailPage() {
       }
       setVerified(true);
       setSuccess("Your email has been verified. You are now signed in.");
-      window.location.assign("/dashboard");
+      window.location.assign(nextPath);
     } catch (requestError) {
       setError(
         requestError instanceof Error
@@ -81,11 +94,18 @@ export default function VerifyEmailPage() {
     }
     setSubmitting(true);
     try {
-      const response = await fetch(`${getCustomerApiBaseUrl()}/auth/resend-verification`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email: requestedEmail }),
-      });
+      const response = await apiFetch(
+        `${getCustomerApiBaseUrl()}/auth/resend-verification`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: requestedEmail }),
+        },
+        {
+          successMessage: "Verification code sent.",
+          errorMessage: "The verification code could not be sent. Please try again.",
+        },
+      );
       const payload = await response.json().catch(() => ({}));
       if (!response.ok) {
         throw new Error(

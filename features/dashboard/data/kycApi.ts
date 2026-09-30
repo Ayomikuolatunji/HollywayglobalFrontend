@@ -1,4 +1,5 @@
 import { getCustomerApiBaseUrl } from "../../../components/config/customerApi";
+import { apiFetch } from "../../../components/api/apiFetch";
 import type { KycServerStatus } from "./kyc";
 
 const minimumSelfieConfidence = 70;
@@ -106,11 +107,14 @@ export async function verifyKyc(input: {
   form.set("identity_number", input.identityNumber);
   form.set("file", input.selfie, input.selfie.name);
 
-  const response = await fetch(`${getCustomerApiBaseUrl()}/api/v1/kyc/verify`, {
-    method: "POST",
-    credentials: "include",
-    body: form,
-  });
+  const response = await apiFetch(
+    `${getCustomerApiBaseUrl()}/api/v1/kyc/verify`,
+    { method: "POST", credentials: "include", body: form },
+    {
+      successMessage: "Identity verification submitted.",
+      errorMessage: "Identity verification could not be completed. Please try again.",
+    },
+  );
   const payload = await responsePayload(response);
   const data = (payload.data || {}) as { message?: unknown; submission?: Partial<KycServerSubmission> };
   if (!data.submission || typeof data.submission !== "object" || Array.isArray(data.submission)) {

@@ -13,6 +13,13 @@ import {
   type BusinessUpgradeDraft,
 } from "../data/businessUpgrade";
 
+export type SettlementVerificationState = {
+  status: "idle" | "verifying" | "verified" | "failed";
+  key: string;
+  accountName?: string;
+  matchPercentage?: number;
+};
+
 type BusinessUpgradeFormProps = {
   draft: BusinessUpgradeDraft;
   settlementBankName: string;
@@ -24,10 +31,12 @@ type BusinessUpgradeFormProps = {
   existingDocuments: ReadonlyArray<{ kind: string; name: string }>;
   consent: boolean;
   saving: "draft" | "submit" | "";
+  settlementVerification: SettlementVerificationState;
+  verifyingSettlementAccount: boolean;
   error: string;
-  message: string;
   onDraftChange: (field: keyof BusinessUpgradeDraft, value: string) => void;
   onSettlementChange: (field: BusinessSettlementField, value: string) => void;
+  onVerifySettlementAccount: () => void;
   onFileChange: (kind: BusinessDocumentKind, file: File | null) => void;
   onConsentChange: (value: boolean) => void;
   onSaveDraft: () => void;
@@ -40,12 +49,20 @@ function SettlementFields({
   accountName,
   savedLast4,
   onChange,
+  verification,
+  verifying,
+  saving,
+  onVerify,
 }: {
   bankName: string;
   accountNumber: string;
   accountName: string;
   savedLast4?: string;
   onChange: (field: BusinessSettlementField, value: string) => void;
+  verification: SettlementVerificationState;
+  verifying: boolean;
+  saving: "draft" | "submit" | "";
+  onVerify: () => void;
 }) {
   const hasSavedAccount = Boolean(savedLast4);
   return (
@@ -83,6 +100,33 @@ function SettlementFields({
           required={!hasSavedAccount}
           onChange={(value) => onChange("settlementAccountName", value)}
         />
+        <div className="rounded-lg border border-[#e3eaf4] bg-[#f7faff] p-3 sm:col-span-2 dark:border-[#2d3c55] dark:bg-[#17243a]">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <p className="max-w-xl text-[10px] font-medium leading-4 text-[#53627a] dark:text-[#b7c3d6]">
+              Verify the account number against the registered company name before
+              submitting your business upgrade.
+            </p>
+            <button
+              className="inline-flex h-9 items-center rounded-lg border border-[#1453bb] px-3 text-[11px] font-extrabold text-[#1453bb] hover:bg-[#edf4ff] disabled:cursor-wait disabled:opacity-60 dark:hover:bg-[#202d44]"
+              type="button"
+              onClick={onVerify}
+              disabled={verifying || Boolean(saving)}
+            >
+              {verifying ? "Checking account…" : "Verify account"}
+            </button>
+          </div>
+          {verification.status === "verified" &&
+            verification.accountName &&
+            typeof verification.matchPercentage === "number" && (
+              <p
+                className="mt-2 text-[10px] font-bold leading-4 text-[#14733d] dark:text-[#9be1b9]"
+                role="status"
+              >
+                Verified: {verification.accountName} ·{" "}
+                {verification.matchPercentage}% match with the registered company name.
+              </p>
+            )}
+        </div>
       </div>
     </BusinessUpgradeSection>
   );
@@ -145,10 +189,12 @@ export default function BusinessUpgradeForm({
   existingDocuments,
   consent,
   saving,
+  settlementVerification,
+  verifyingSettlementAccount,
   error,
-  message,
   onDraftChange,
   onSettlementChange,
+  onVerifySettlementAccount,
   onFileChange,
   onConsentChange,
   onSaveDraft,
@@ -169,15 +215,6 @@ export default function BusinessUpgradeForm({
           {error}
         </p>
       )}
-      {message && (
-        <p
-          className="rounded-lg border border-[#bfe5d0] bg-[#f1fbf5] px-4 py-3 text-xs font-semibold leading-5 text-[#14733d] dark:border-[#315c4a] dark:bg-[#142b25] dark:text-[#9be1b9]"
-          role="status"
-        >
-          {message}
-        </p>
-      )}
-
       <BusinessUpgradeCompanyFields draft={draft} onChange={onDraftChange} />
 
       <SettlementFields
@@ -186,6 +223,10 @@ export default function BusinessUpgradeForm({
         accountName={settlementAccountName}
         savedLast4={savedSettlementLast4}
         onChange={onSettlementChange}
+        verification={settlementVerification}
+        verifying={verifyingSettlementAccount}
+        saving={saving}
+        onVerify={onVerifySettlementAccount}
       />
       <DocumentFields
         certificate={certificate}
@@ -216,14 +257,14 @@ export default function BusinessUpgradeForm({
           className="inline-flex h-11 items-center rounded-lg border border-[#dfe4ed] px-4 text-xs font-extrabold text-[#53627a] hover:border-[#1453bb] hover:text-[#1453bb] disabled:cursor-wait disabled:opacity-60 dark:border-[#33445f] dark:text-[#b7c3d6]"
           type="button"
           onClick={onSaveDraft}
-          disabled={Boolean(saving)}
+          disabled={Boolean(saving) || verifyingSettlementAccount}
         >
           {saving === "draft" ? "Saving draft…" : "Save as draft"}
         </button>
         <button
           className="inline-flex h-11 items-center gap-2 rounded-lg bg-[#1453bb] px-5 text-xs font-extrabold text-white hover:bg-[#0b3f91] disabled:cursor-wait disabled:opacity-60"
           type="submit"
-          disabled={Boolean(saving)}
+          disabled={Boolean(saving) || verifyingSettlementAccount}
         >
           {saving === "submit" ? "Submitting for review…" : "Submit for Admin verification"}
           <Arrow />

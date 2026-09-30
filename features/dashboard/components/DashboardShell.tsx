@@ -11,6 +11,7 @@ import {
 } from "react";
 import { usePathname } from "next/navigation";
 import { Arrow } from "../../../components/ui/Arrow";
+import { apiFetch } from "../../../components/api/apiFetch";
 import { getCustomerApiBaseUrl } from "../../../components/config/customerApi";
 import {
   getOrderCartItemCount,
@@ -270,10 +271,11 @@ export default function DashboardShell({ children }: { children: ReactNode }) {
   }, []);
 
   async function signOut() {
-    await fetch(`${getCustomerApiBaseUrl()}/auth/logout`, {
-      method: "POST",
-      credentials: "include",
-    }).catch(() => null);
+    await apiFetch(
+      `${getCustomerApiBaseUrl()}/auth/logout`,
+      { method: "POST", credentials: "include" },
+      { notify: false },
+    ).catch(() => null);
     window.location.assign("/login");
   }
 
@@ -303,7 +305,7 @@ export default function DashboardShell({ children }: { children: ReactNode }) {
         accountEmail={accountEmail}
         onClose={() => setSidebarOpen(false)}
       />
-      <section className="min-h-screen pb-20 lg:ml-[232px] lg:pb-0">
+      <section className="min-h-screen pb-20 lg:ml-[272px] lg:pb-0">
         <DashboardHeader
           title={dashboardPageTitle(pathname)}
           cartCount={cartCount}

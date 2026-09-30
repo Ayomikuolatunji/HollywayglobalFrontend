@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import ToastProvider from "../components/ui/ToastProvider";
 
 const siteUrl = "https://hollywayglobal.com";
 const siteName = "Hollyway Global Quick Sales";
@@ -130,7 +131,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en">
       <body className="min-h-screen overflow-x-hidden bg-[#eef1f5] font-[DM_Sans] text-[#0b1830]">
-        {children}
+        <ToastProvider>{children}</ToastProvider>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
       </body>
     </html>

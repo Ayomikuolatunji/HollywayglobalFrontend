@@ -1,10 +1,20 @@
-export const whatsappGroup = "https://chat.whatsapp.com/Ij8dR9bkwppHQq77srTSqx";
-export const whatsappChannel = "https://whatsapp.com/channel/0029VbDn9GO30LKWJNk81P2M";
-export const facebookPage = "https://www.facebook.com/Hollywayglobal/";
-export const adminWhatsApp = `https://wa.me/2347015585967?text=${encodeURIComponent("Hello Hollyway Admin, I would like to make an enquiry.")}`;
-export const sellWhatsApp = `https://wa.me/2347015585967?text=${encodeURIComponent("Hello Hollyway Admin, I want to sell an item.")}`;
-export const wantedWhatsApp = `https://wa.me/2347015585967?text=${encodeURIComponent("Hello Hollyway Admin, I want to post a wanted item request.")}`;
-export const contactEmail = "contact@hollywayglobal.com";
+import { adminWhatsApp, sellWhatsApp, socialChannels, wantedWhatsApp } from "../../components/config/contact";
+
+export {
+  adminPhone,
+  adminPhoneHref,
+  adminWhatsApp,
+  contactEmail,
+  facebookGroup,
+  facebookPage,
+  sellWhatsApp,
+  socialChannels,
+  supportEmail,
+  whatsappChannel,
+  whatsappGroup,
+  wantedWhatsApp,
+} from "../../components/config/contact";
+
 export const audienceRelayBaseUrl = (
   process.env.NEXT_PUBLIC_AUDIENCE_RELAY_BASE_URL || "https://staging.audiencerelay.com"
 ).replace(/\/$/, "");
@@ -113,18 +123,9 @@ export const feeRows = [
   ["Above ₦1,000,000", "1% of item value"],
 ];
 
-export const channels = [
-  ["WA", "WhatsApp marketplace", "Join the trading community", whatsappGroup],
-  ["WA", "WhatsApp channel", "Follow new updates", whatsappChannel],
-  ["IG", "Instagram", "@hollywayglobal", "https://www.instagram.com/hollywayglobal/"],
-  ["X", "X", "@hollywayglobal", "https://x.com/hollywayglobal"],
-  ["f", "Facebook", "Hollyway Global", facebookPage],
-  ["in", "LinkedIn", "Hollyway Global", "https://www.linkedin.com/in/hollyway-global/"],
-  ["tiktok", "TikTok", "@hollywayglobal", "https://www.tiktok.com/@hollywayglobal"],
-  [
-    "group",
-    "Facebook group",
-    "Open community marketplace",
-    "https://www.facebook.com/groups/hollywayglobal",
-  ],
-];
+export const channels = socialChannels.map(({ shortIcon, title, detail, href }) => [
+  shortIcon,
+  title,
+  detail,
+  href,
+] as const);

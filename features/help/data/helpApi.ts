@@ -1,4 +1,9 @@
 import { getCustomerApiBaseUrl } from "../../../components/config/customerApi";
+import { apiFetch } from "../../../components/api/apiFetch";
+
+export const supportAttachmentAccept = "image/jpeg,image/png,image/webp,application/pdf";
+export const maxSupportAttachments = 5;
+export const maxSupportAttachmentBytes = 10_000_000;
 
 export type HelpCategory = {
   id: string;
@@ -29,9 +34,33 @@ export type HelpTicket = {
   related_reference?: string | null;
   status: "open" | "in_progress" | "resolved" | "closed";
   support_response?: string | null;
+  attachments?: HelpAttachment[];
   created_at?: string;
   updated_at?: string;
 };
+
+export type HelpAttachment = {
+  id: string;
+  name: string;
+  mime_type: string;
+  byte_size: number;
+};
+
+export function validateSupportAttachments(files: File[]): string {
+  if (files.length > maxSupportAttachments) {
+    return `Attach no more than ${maxSupportAttachments} files.`;
+  }
+  const invalidType = files.find(
+    (file) => !["image/jpeg", "image/png", "image/webp", "application/pdf"].includes(file.type),
+  );
+  if (invalidType) return `${invalidType.name} must be a JPG, PNG, WEBP or PDF file.`;
+  const oversized = files.find((file) => file.size > maxSupportAttachmentBytes);
+  if (oversized) return `${oversized.name} must be 10 MB or smaller.`;
+  if (files.reduce((total, file) => total + file.size, 0) > maxSupportAttachmentBytes * 2) {
+    return "Attachments must be 20 MB or smaller in total.";
+  }
+  return "";
+}
 
 export class HelpApiError extends Error {
   status: number;
@@ -65,6 +94,19 @@ async function responsePayload(response: Response) {
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return Boolean(value) && typeof value === "object";
+}
+
+function parseAttachments(value: unknown): HelpAttachment[] {
+  if (!Array.isArray(value)) return [];
+  return value.flatMap((item) => {
+    if (!isRecord(item)) return [];
+    return [{
+      id: String(item.id || ""),
+      name: String(item.name || "attachment"),
+      mime_type: String(item.mime_type || "application/octet-stream"),
+      byte_size: typeof item.byte_size === "number" ? item.byte_size : 0,
+    }];
+  });
 }
 
 function parseContent(value: unknown): HelpContent {
@@ -107,7 +149,14 @@ export async function fetchSupportTickets(signal?: AbortSignal): Promise<HelpTic
   });
   const payload = await responsePayload(response);
   const data = isRecord(payload.data) ? payload.data : {};
-  return Array.isArray(data.tickets) ? (data.tickets as HelpTicket[]) : [];
+  if (!Array.isArray(data.tickets)) return [];
+  return data.tickets.flatMap((item) => {
+    if (!isRecord(item)) return [];
+    return [{
+      ...(item as HelpTicket),
+      attachments: parseAttachments(item.attachments),
+    }];
+  });
 }
 
 export async function createSupportTicket(input: {
@@ -115,18 +164,30 @@ export async function createSupportTicket(input: {
   subject: string;
   message: string;
   relatedReference?: string;
+  attachments?: File[];
 }): Promise<HelpTicket> {
-  const response = await fetch(`${getCustomerApiBaseUrl()}/api/v1/help/tickets`, {
-    method: "POST",
-    credentials: "include",
-    headers: { Accept: "application/json", "Content-Type": "application/json" },
-    body: JSON.stringify({
-      category: input.category,
-      subject: input.subject,
-      message: input.message,
-      related_reference: input.relatedReference || null,
-    }),
-  });
+  const form = new FormData();
+  form.set("category", input.category);
+  form.set("subject", input.subject);
+  form.set("message", input.message);
+  form.set("related_reference", input.relatedReference || "");
+  for (const attachment of input.attachments || []) {
+    form.append("attachments", attachment, attachment.name);
+  }
+  const response = await apiFetch(
+    `${getCustomerApiBaseUrl()}/api/v1/help/tickets`,
+    {
+      method: "POST",
+      credentials: "include",
+      headers: { Accept: "application/json" },
+      body: form,
+    },
+    {
+      successMessage: "Support request sent successfully.",
+      errorMessage: "Support request could not be sent. Please try again.",
+    },
+  );
   const payload = await responsePayload(response);
-  return payload.data as HelpTicket;
+  const ticket = (payload.data || {}) as HelpTicket & { attachments?: unknown };
+  return { ...ticket, attachments: parseAttachments(ticket.attachments) };
 }

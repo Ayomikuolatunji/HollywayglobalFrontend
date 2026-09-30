@@ -1,14 +1,18 @@
 "use client";
 
 import { FormEvent, useState } from "react";
+import { apiFetch } from "../../../components/api/apiFetch";
 import { Arrow, SocialIcon } from "./HomeIcons";
 import Dropdown from "../../../components/forms/Dropdown";
 import {
+  adminPhone,
+  adminPhoneHref,
   adminWhatsApp,
   audienceRelayBaseUrl,
   audienceRelayTokens,
   channels,
   contactEmail,
+  supportEmail,
   whatsappChannel,
 } from "../data";
 
@@ -178,14 +182,14 @@ export default function HomeContact() {
           <ContactLink
             icon="WA"
             title="Admin WhatsApp DM"
-            text="+234 701 558 5967"
+            text={adminPhone}
             href={adminWhatsApp}
           />
           <ContactLink
             icon="☎"
             title="Phone support"
-            text="+234 701 558 5967"
-            href="tel:+2347015585967"
+            text={adminPhone}
+            href={adminPhoneHref}
           />
         </div>
         <section className="mt-6 rounded-xl border border-[#dfe4ed] bg-white p-4" aria-labelledby="contact-social-title">
@@ -342,9 +346,13 @@ function ContactLink({
 async function submitForm(type: "contact" | "newsletter", data: Record<string, string | boolean>) {
   const token = audienceRelayTokens[type];
   if (!token) throw new Error("AudienceRelay form token is not configured");
-  const response = await fetch(
+  const response = await apiFetch(
     `${audienceRelayBaseUrl}/api/v1/forms/${encodeURIComponent(token)}/submissions`,
     { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) },
+    {
+      successMessage: type === "contact" ? "Message sent successfully." : "Subscription saved successfully.",
+      errorMessage: type === "contact" ? "Message could not be sent. Please try again." : "Subscription could not be saved. Please try again.",
+    },
   );
   if (!response.ok) throw new Error("AudienceRelay submission failed");
 }

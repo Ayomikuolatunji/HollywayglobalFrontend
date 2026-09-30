@@ -53,14 +53,14 @@ function SidebarBrand() {
 function SidebarLink({ item, pathname, onNavigate, account = false }: { item: NavItem; pathname: string; onNavigate: () => void; account?: boolean }) {
   const [label, href, icon] = item;
   const active = account ? isAccountPath(pathname, href) : isActivePath(pathname, href);
-  return <Link className={`mb-px flex min-h-9 items-center gap-2.5 rounded-lg px-2 text-[13px] font-medium transition ${active ? "bg-[#dd6b12]/15 text-white" : "text-[#c9d0e2] hover:bg-white/[.06] hover:text-white"}`} href={href} onClick={onNavigate}><span className={`h-4 w-4 shrink-0 [&>svg]:h-full [&>svg]:w-full [&>svg]:fill-none ${active ? "text-[#dd6b12]" : "text-[#c9d0e2]/85"}`}><DashboardIcon name={icon} /></span><span>{label}</span>{active && <i className="ml-auto h-1.5 w-1.5 rounded-full bg-[#dd6b12]" />}</Link>;
+  return <Link className={`mb-px flex min-h-9 items-center gap-2.5 rounded-lg px-2 text-[13px] font-medium transition ${active ? "bg-[#dd6b12]/15 text-white" : "text-[#c9d0e2] hover:bg-white/[.06] hover:text-white"}`} href={href} onClick={onNavigate}><span className={`h-4 w-4 shrink-0 [&>svg]:h-full [&>svg]:w-full [&>svg]:fill-none ${active ? "text-[#dd6b12]" : "text-[#c9d0e2]/85"}`}><DashboardIcon name={icon} /></span><span className="whitespace-nowrap">{label}</span>{active && <i className="ml-auto h-1.5 w-1.5 rounded-full bg-[#dd6b12]" />}</Link>;
 }
 
 type DashboardSidebarProps = { open: boolean; pathname: string; accountName: string; accountEmail: string; onClose: () => void };
 
 export default function DashboardSidebar({ open, pathname, accountName, accountEmail, onClose }: DashboardSidebarProps) {
   return (
-    <aside className={`fixed inset-y-0 left-0 z-40 flex h-screen max-h-[100dvh] w-[232px] -translate-x-full flex-col overflow-y-auto overscroll-contain bg-[#14213d] px-[18px] pb-[calc(18px+env(safe-area-inset-bottom))] pt-6 text-[#c9d0e2] transition-transform lg:translate-x-0 ${open ? "translate-x-0" : ""}`}>
+    <aside className={`fixed inset-y-0 left-0 z-40 flex h-screen max-h-[100dvh] w-[min(86vw,272px)] lg:w-[272px] -translate-x-full flex-col overflow-y-auto overscroll-contain bg-[#14213d] px-[18px] pb-[calc(18px+env(safe-area-inset-bottom))] pt-6 text-[#c9d0e2] transition-transform lg:translate-x-0 ${open ? "translate-x-0" : ""}`}>
       <div className="shrink-0 border-b border-white/[.09] pb-[18px]"><div className="flex items-center gap-2"><SidebarBrand /><span className="min-w-0 flex-1 leading-tight"><strong className="block truncate text-[11px] font-semibold text-white">{accountName}</strong><small className="mt-1 block truncate text-[9px] text-[#c9d0e2]/60">{accountEmail || "Personal workspace"}</small></span><button className="grid h-8 w-8 shrink-0 place-items-center rounded-lg text-white/75 hover:bg-white/[.06] lg:hidden" type="button" onClick={onClose} aria-label="Close navigation"><CloseIcon /></button></div></div>
       <nav className="shrink-0 pt-[18px]" aria-label="Dashboard navigation">
         <SidebarLink item={["Overview", "/dashboard", "grid"]} pathname={pathname} onNavigate={onClose} />

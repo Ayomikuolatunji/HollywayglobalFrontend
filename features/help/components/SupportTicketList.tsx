@@ -74,6 +74,11 @@ export default function SupportTicketList({
               <p className="mt-2 text-[10px] text-[#8995a8]">
                 {ticket.reference} · {formatDate(ticket.created_at)}
               </p>
+              {ticket.attachments?.length ? (
+                <p className="mt-2 text-[10px] font-semibold text-[#53627a]">
+                  Attachments: {ticket.attachments.map((attachment) => attachment.name).join(", ")}
+                </p>
+              ) : null}
               {ticket.support_response && (
                 <div className="mt-3 rounded-lg bg-[#f8f7f3] p-3 text-xs leading-5 text-[#5c5f6b]">
                   <strong className="block text-[10px] uppercase tracking-[.08em] text-[#14213d]">

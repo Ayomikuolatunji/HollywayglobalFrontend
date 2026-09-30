@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-type HelpIconName = "book" | "search" | "message" | "shield" | "ticket";
+type HelpIconName = "book" | "search" | "message" | "shield" | "ticket" | "mail" | "phone";
 
 function Icon({ children }: { children: ReactNode }) {
   return (
@@ -59,6 +59,25 @@ export default function HelpIcon({ name }: { name: HelpIconName }) {
           strokeLinejoin="round"
         />
         <path d="M12 8v8" strokeLinecap="round" strokeDasharray="1.5 2" />
+      </Icon>
+    );
+  }
+  if (name === "mail") {
+    return (
+      <Icon>
+        <rect x="3.5" y="5.5" width="17" height="13" rx="2" />
+        <path d="m4.5 7 7.5 5.5L19.5 7" strokeLinecap="round" strokeLinejoin="round" />
+      </Icon>
+    );
+  }
+  if (name === "phone") {
+    return (
+      <Icon>
+        <path
+          d="M7.2 4.5 9.5 4l1.7 4-2.1 1.7a14.3 14.3 0 0 0 5.2 5.2l1.7-2.1 4 1.7-.5 2.3a2.4 2.4 0 0 1-2.7 1.8C11 17.7 6.3 13 5.4 7.2a2.4 2.4 0 0 1 1.8-2.7Z"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
       </Icon>
     );
   }
