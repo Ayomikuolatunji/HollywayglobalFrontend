@@ -165,6 +165,21 @@ export async function acceptFundingInvitation(token: string) {
   return parseTransaction(payload.data);
 }
 
+export async function acceptFundingForEscrow(reference: string, termsAccepted: boolean) {
+  const response = await apiFetch(
+    `${getCustomerApiBaseUrl()}/api/v1/escrow/${encodeURIComponent(reference)}/funding-acceptance`,
+    {
+      method: "POST",
+      credentials: "include",
+      headers: { Accept: "application/json", "Content-Type": "application/json" },
+      body: JSON.stringify({ terms_accepted: termsAccepted }),
+    },
+    { notify: false },
+  );
+  const payload = await responsePayload(response);
+  return parseTransaction(payload.data);
+}
+
 export async function submitEscrowPaymentProof(
   reference: string,
   input: {

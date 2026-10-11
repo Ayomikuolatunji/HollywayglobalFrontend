@@ -90,6 +90,8 @@ export type EscrowManualPayment = {
   amount_minor: number;
   currency: string;
   instruction: string;
+  admin_whatsapp_number: string | null;
+  admin_whatsapp_url: string | null;
 };
 
 export type EscrowRequest = {
@@ -125,6 +127,7 @@ export type EscrowRequest = {
   funding_invitation: EscrowFundingInvitation | null;
   payments: EscrowPayment[];
   status_events: EscrowStatusEvent[];
+  can_accept_funding?: boolean;
   manual_payment?: EscrowManualPayment;
   manual_payment_unavailable?: string;
   created_at: string;
