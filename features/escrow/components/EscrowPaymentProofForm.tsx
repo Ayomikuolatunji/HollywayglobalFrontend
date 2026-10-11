@@ -73,7 +73,7 @@ export default function EscrowPaymentProofForm({ request, onUpdated }: {
 
   return <section className="rounded-xl border border-[#cfe0f7] bg-[#f4f8ff] p-4 sm:p-5">
     <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-start">
-      <div><span className="text-[9px] font-extrabold tracking-[.14em] text-[#1453bb]">MANUAL BANK TRANSFER</span><h2 className="mt-1 text-base font-extrabold text-[#0b1830]">Transfer, then upload your receipt</h2><p className="mt-1 max-w-xl text-[10px] leading-5 text-[#53627a]">Do not pay a personal account. Hollyway Admin checks the uploaded record against the bank record and marks it received or rejected.</p></div>
+      <div><span className="text-[9px] font-extrabold tracking-[.14em] text-[#1453bb]">MAKE PAYMENT</span><h2 className="mt-1 text-base font-extrabold text-[#0b1830]">Transfer to Hollyway, then send the receipt</h2><p className="mt-1 max-w-xl text-[10px] leading-5 text-[#53627a]">Use only the official details below. Admin checks the uploaded record against the bank record and marks it received or rejected.</p></div>
       {payment && <span className="rounded-full bg-white px-2.5 py-1 text-[9px] font-extrabold uppercase tracking-[.08em] text-[#1453bb]">{payment.status === "proof_submitted" ? "Under review" : payment.status === "received" ? "Received" : payment.status === "rejected" ? "Upload again" : "Awaiting proof"}</span>}
     </div>
     <div className="mt-4 grid gap-2 rounded-lg border border-[#dbe7f7] bg-white p-3 text-xs sm:grid-cols-3">
