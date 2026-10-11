@@ -109,6 +109,17 @@ export default function ProfileMenu({
 
           <div className="border-t border-[#eeeae1] p-1.5 dark:border-[#2a374e]">
             <button
+              className="w-full rounded-lg px-3 py-2.5 text-left text-xs font-bold text-[#3b4b6b] hover:bg-[#f5f4f0] dark:text-[#c9d2e2] dark:hover:bg-[#1b2a43]"
+              type="button"
+              role="menuitem"
+              onClick={() => {
+                closeMenu();
+                void onSignOut();
+              }}
+            >
+              Switch account
+            </button>
+            <button
               className="w-full rounded-lg px-3 py-2.5 text-left text-xs font-bold text-[#b8560d] hover:bg-[#fff4eb] dark:text-[#f2a06a] dark:hover:bg-[#2a2030]"
               type="button"
               role="menuitem"
