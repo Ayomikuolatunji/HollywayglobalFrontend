@@ -13,10 +13,10 @@ import { acceptFundingForEscrow, fetchEscrowTransaction } from "../data/escrowAp
 
 const stages = [
   ["Request submitted", "The parties and written conditions are recorded."],
-  ["Hollyway review", "Hollyway confirms the reference, fee and agreement."],
-  ["Funding confirmed", "The accepted funding party transfers to Hollyway and uploads proof."],
-  ["Fulfilment", "The item, service or agreement follows the recorded terms."],
-  ["Acceptance", "The receiving party checks the agreed conditions."],
+  ["Funding responsibility", "The person paying accepts the terms and responsibility for the transfer."],
+  ["Transfer to Hollyway", "Use the official Hollyway account and exact amount shown here."],
+  ["Receipt review", "Upload the transfer record; Hollyway Admin checks and confirms the payment."],
+  ["Fulfilment and acceptance", "The item, service or agreement follows the recorded terms."],
   ["Release or close", "Hollyway records release, refund or completion."],
 ] as const;
 
@@ -24,14 +24,14 @@ const stageIndexes: Partial<Record<EscrowStatus, number>> = {
   draft: 0,
   pending_review: 1,
   approved: 2,
-  awaiting_party_acceptance: 2,
-  awaiting_funder: 2,
+  awaiting_party_acceptance: 1,
+  awaiting_funder: 1,
   payment_pending: 2,
-  payment_verified: 2,
-  payment_proof_submitted: 2,
-  payment_received: 3,
-  dispatch_booked: 3,
-  in_transit: 3,
+  payment_verified: 4,
+  payment_proof_submitted: 3,
+  payment_received: 4,
+  dispatch_booked: 4,
+  in_transit: 4,
   delivered: 4,
   inspection: 4,
   buyer_confirmed: 5,
@@ -114,7 +114,7 @@ export default function EscrowDetailsPage() {
       <div><span className="text-[9px] font-extrabold tracking-[.14em] text-[#8b97a9]">{request.purpose_label.toUpperCase()}</span><h2 className="mt-1 font-[Manrope] text-lg font-extrabold text-[#0b1830]">{request.subject || "Untitled escrow agreement"}</h2><p className="mt-1 text-[10px] text-[#8490a4]">Created {dateLabel(request.created_at)} · Updated {dateLabel(request.updated_at)}</p></div>
       <EscrowStatusPill status={request.status} />
     </section>
-    {request.can_accept_funding && request.funding_invitation?.status === "pending" && <section className="rounded-lg border border-[#cfe0f7] bg-[#f4f8ff] p-4"><div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center"><div><span className="text-[9px] font-extrabold tracking-[.14em] text-[#1453bb]">FUNDING INVITATION</span><h2 className="mt-1 text-sm font-extrabold text-[#0b1830]">You are invited to fund this escrow</h2><p className="mt-1 text-xs leading-5 text-[#53627a]">Accept responsibility for the transfer. After Hollyway Admin approves the request, the official account and exact amount will appear here.</p><label className="mt-3 flex items-start gap-2 text-[11px] font-semibold leading-5 text-[#53627a]"><input className="mt-1 h-4 w-4 accent-[#1453bb]" type="checkbox" checked={fundingTermsAccepted} onChange={(event) => setFundingTermsAccepted(event.currentTarget.checked)} /><span>I accept the written escrow terms and understand that Hollyway Admin confirms the transfer.</span></label></div><button className="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-lg bg-[#1453bb] px-4 text-xs font-extrabold text-white disabled:opacity-60" disabled={acceptingFunding || !fundingTermsAccepted} onClick={() => void acceptFunding()} type="button">{acceptingFunding ? "Accepting…" : "Accept and continue"} <Arrow /></button></div></section>}
+    {request.can_accept_funding && request.funding_invitation?.status === "pending" && <section className="rounded-lg border border-[#cfe0f7] bg-[#f4f8ff] p-4"><div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center"><div><span className="text-[9px] font-extrabold tracking-[.14em] text-[#1453bb]">FUNDING INVITATION</span><h2 className="mt-1 text-sm font-extrabold text-[#0b1830]">You are responsible for this payment</h2><p className="mt-1 text-xs leading-5 text-[#53627a]">Accept the escrow terms to reveal Hollyway’s official account and exact payment amount. Admin reviews the receipt after you transfer.</p><label className="mt-3 flex items-start gap-2 text-[11px] font-semibold leading-5 text-[#53627a]"><input className="mt-1 h-4 w-4 accent-[#1453bb]" type="checkbox" checked={fundingTermsAccepted} onChange={(event) => setFundingTermsAccepted(event.currentTarget.checked)} /><span>I accept the written escrow terms and will transfer the exact amount to Hollyway, then upload the receipt.</span></label></div><button className="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-lg bg-[#1453bb] px-4 text-xs font-extrabold text-white disabled:opacity-60" disabled={acceptingFunding || !fundingTermsAccepted} onClick={() => void acceptFunding()} type="button">{acceptingFunding ? "Accepting…" : "Accept and view payment details"} <Arrow /></button></div></section>}
     <section className="rounded-lg border border-[#dfe4ed] bg-white p-4">
       <span className="text-[9px] font-extrabold tracking-[.14em] text-[#1453bb]">PROTECTED FLOW</span>
       <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{stages.map(([title, description], index) => <article className={"rounded-lg border p-3 " + (index < currentStage ? "border-[#bfe5d0] bg-[#f5fcf7]" : index === currentStage ? "border-[#cfe0f7] bg-[#f4f8ff]" : "border-[#eef1f4] bg-[#fafbfc]")} key={title}><div className="flex items-center gap-2"><span className={"grid h-6 w-6 place-items-center rounded-full text-[9px] font-extrabold " + (index <= currentStage ? "bg-[#1453bb] text-white" : "bg-[#eef1f4] text-[#8490a4]")}>{index < currentStage ? "✓" : String(index + 1).padStart(2, "0")}</span><h3 className="text-xs font-extrabold text-[#0b1830]">{title}</h3></div><p className="mt-2 text-[10px] leading-4 text-[#8490a4]">{description}</p></article>)}</div>

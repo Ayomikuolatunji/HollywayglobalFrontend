@@ -137,7 +137,7 @@ export type EscrowRequest = {
 export const escrowProcessSteps = [
   { number: "01", title: "Agree terms", description: "Confirm the parties, value and written conditions." },
   { number: "02", title: "Submit request", description: "Send the HWE request to Hollyway." },
-  { number: "03", title: "Transfer funds", description: "Use only the Hollyway account shown after approval." },
+  { number: "03", title: "Accept and transfer", description: "The paying party accepts responsibility, then transfers to the official Hollyway account." },
   { number: "04", title: "Upload proof", description: "Send the receipt on the escrow page for Admin review." },
   { number: "05", title: "Fulfil and accept", description: "Follow the written delivery, service or agreement terms." },
   { number: "06", title: "Release funds", description: "Funds move on after the agreed acceptance conditions." },
@@ -145,7 +145,7 @@ export const escrowProcessSteps = [
 
 export const escrowStatusLabels: Record<EscrowStatus, string> = {
   draft: "Draft",
-  pending_review: "Pending review",
+  pending_review: "Awaiting funding",
   approved: "Approved",
   awaiting_party_acceptance: "Awaiting party acceptance",
   awaiting_funder: "Awaiting funding party",

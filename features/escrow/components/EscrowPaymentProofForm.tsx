@@ -27,7 +27,7 @@ export default function EscrowPaymentProofForm({ request, onUpdated }: {
   const [error, setError] = useState("");
 
   if (!instructions) {
-    return <section className="rounded-xl border border-[#dfe4ed] bg-white p-4"><h2 className="text-sm font-extrabold text-[#0b1830]">Bank transfer instructions</h2><p className="mt-2 text-xs leading-5 text-[#687895]">{request.manual_payment_unavailable || "The official bank details appear only to the accepted funding party after Hollyway approves this request."}</p></section>;
+    return <section className="rounded-xl border border-[#dfe4ed] bg-white p-4"><h2 className="text-sm font-extrabold text-[#0b1830]">Bank transfer instructions</h2><p className="mt-2 text-xs leading-5 text-[#687895]">{request.manual_payment_unavailable || "Accept funding responsibility to reveal the official Hollyway account and payment amount."}</p></section>;
   }
 
   const alreadyReceived = payment?.status === "received";

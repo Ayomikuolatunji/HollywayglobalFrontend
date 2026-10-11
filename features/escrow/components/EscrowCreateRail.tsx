@@ -36,7 +36,7 @@ export default function EscrowCreateRail({ transactionValue, draftSaved }: Escro
         <p className="mt-2 text-[10px] leading-4 text-[#687895]">A draft stays private until you submit it for Hollyway review.</p>
       </section>
 
-      <p className="rounded-xl border border-[#f1d8a9] bg-[#fffaf1] p-4 text-[10px] leading-5 text-[#6b5a3d]"><strong>Payment safety:</strong> no payment is requested on this form. Transfer only after approval, using the Hollyway account shown to the accepted funding party.</p>
+      <p className="rounded-xl border border-[#f1d8a9] bg-[#fffaf1] p-4 text-[10px] leading-5 text-[#6b5a3d]"><strong>Payment safety:</strong> no payment is requested on this form. The paying party accepts funding responsibility first, then transfers only to the official Hollyway account shown on the request.</p>
     </aside>
   );
 }

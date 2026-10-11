@@ -107,7 +107,7 @@ export default function MyEscrowPage() {
           </div>
         )}
       </section>
-      <p className="rounded-lg border border-[#f1d8a9] bg-[#fffaf1] p-3 text-[10px] leading-5 text-[#6b5a3d]"><strong>Payment safety:</strong> Transfer only after approval, using the Hollyway bank details shown to the accepted funding party. Upload the receipt here; Admin must mark it received before the escrow continues.</p>
+      <p className="rounded-lg border border-[#f1d8a9] bg-[#fffaf1] p-3 text-[10px] leading-5 text-[#6b5a3d]"><strong>Payment safety:</strong> The paying party must accept funding responsibility and use the Hollyway bank details shown on the request. Upload the receipt here; Admin reviews it and marks the payment received or rejected.</p>
     </div>
   );
 }

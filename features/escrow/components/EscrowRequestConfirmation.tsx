@@ -38,7 +38,7 @@ export default function EscrowRequestConfirmation({ request, onCreateAnother }: 
       { label: "Parties", value: parties },
       { label: "Release conditions", value: request.release_conditions || "To be confirmed" },
     ],
-    note: "No payment was taken when this request was submitted. If approved, the accepted funding party will see official Hollyway bank instructions and upload the transfer proof for Admin review.",
+    note: "No payment was taken when this request was submitted. The paying party sees the official Hollyway bank instructions after accepting responsibility, then uploads the transfer proof for Admin review.",
   };
 
   return (
@@ -47,7 +47,7 @@ export default function EscrowRequestConfirmation({ request, onCreateAnother }: 
         <div>
           <span className="grid h-9 w-9 place-items-center rounded-full bg-[#20bd61] text-lg font-extrabold text-white">✓</span>
           <h3 className="mt-4 font-[Manrope] text-xl font-extrabold tracking-[-.04em] text-[#0b1830]">Escrow request submitted</h3>
-          <p className="mt-1 max-w-xl text-xs leading-5 text-[#53627a]">Hollyway has recorded the agreement. Keep the HWE reference; no transfer should be made until the request is approved.</p>
+          <p className="mt-1 max-w-xl text-xs leading-5 text-[#53627a]">Hollyway has recorded the agreement. Keep the HWE reference; the paying party must accept responsibility and use the official payment details shown on the request.</p>
         </div>
         <EscrowStatusPill status={request.status} />
       </div>
@@ -55,7 +55,7 @@ export default function EscrowRequestConfirmation({ request, onCreateAnother }: 
         <div className="rounded-lg border border-[#dfeee3] bg-white p-3"><span className="text-[9px] font-extrabold tracking-[.12em] text-[#8b97a9]">REQUEST REFERENCE</span><strong className="mt-1 block font-[Manrope] text-base font-extrabold text-[#1453bb]">{request.reference}</strong></div>
         <div className="rounded-lg border border-[#dfeee3] bg-white p-3"><span className="text-[9px] font-extrabold tracking-[.12em] text-[#8b97a9]">SUBMITTED</span><strong className="mt-1 block text-xs font-extrabold text-[#0b1830]">{dateLabel(request.created_at)}</strong></div>
       </div>
-      <p className="mt-4 rounded-lg border border-[#f1d8a9] bg-[#fffaf1] p-3 text-[10px] font-semibold leading-5 text-[#6b5a3d]">No payment was initiated. Only the accepted funding party will see the Hollyway account details after approval. Upload the bank receipt on the escrow page; Admin must mark it received.</p>
+      <p className="mt-4 rounded-lg border border-[#f1d8a9] bg-[#fffaf1] p-3 text-[10px] font-semibold leading-5 text-[#6b5a3d]">No payment was initiated. The paying party will see the Hollyway account details after accepting funding responsibility. Upload the bank receipt on the escrow page; Admin reviews the receipt and marks the payment received or rejected.</p>
       <OrderCopyActions copy={copy} />
       <div className="mt-5 flex flex-wrap gap-2">
         <Link className="inline-flex h-10 items-center gap-2 rounded-lg bg-[#1453bb] px-4 text-xs font-extrabold text-white" href={"/dashboard/escrow/" + encodeURIComponent(request.reference)}>View request <Arrow /></Link>

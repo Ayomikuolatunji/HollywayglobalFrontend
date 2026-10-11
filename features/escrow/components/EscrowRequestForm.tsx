@@ -44,8 +44,8 @@ const courierOptions: DropdownOption[] = [
   { value: "self_arranged", label: "Self-arranged handover", tip: "The parties arrange collection or handover themselves." },
 ];
 const funderOptions: DropdownOption[] = [
-  { value: "initiator", label: "I will fund it", tip: "Your signed-in account will transfer the approved amount." },
-  { value: "counterparty", label: "The other party will fund it", tip: "The verified counterparty will transfer the approved amount." },
+  { value: "initiator", label: "I will fund it", tip: "Your signed-in account will transfer the confirmed amount shown on the request." },
+  { value: "counterparty", label: "The other party will fund it", tip: "The verified counterparty will accept responsibility and transfer the confirmed amount." },
   { value: "other", label: "Invite another Hollyway user", tip: "Hollyway emails an invitation; that user must sign in and verify email before funding." },
 ];
 
@@ -213,7 +213,7 @@ export default function EscrowRequestForm({ initialRequest, onDraftSaved, onSubm
 
     <section className="grid gap-4 rounded-xl border border-[#dfe4ed] bg-white p-4 sm:grid-cols-2 sm:p-5">
       <div className="sm:col-span-2"><TextArea label="Release or acceptance conditions" value={releaseConditions} onChange={setReleaseConditions} placeholder="Explain exactly what must happen before Hollyway records release, refund or completion." hint="This applies to item, service and general agreements." required /></div>
-      <Dropdown label="Who will fund the approved amount?" options={funderOptions} value={fundingParty} onChange={(value) => setFundingParty(value as EscrowFundingParty)} required={false} />
+      <Dropdown label="Who will make the payment?" options={funderOptions} value={fundingParty} onChange={(value) => setFundingParty(value as EscrowFundingParty)} required={false} hint="The paying party accepts responsibility, sees Hollyway&apos;s account details and uploads the transfer receipt." />
       {fundingParty === "other" && <TextField label="Funding party's Hollyway email" value={fundingPartyEmail} onChange={setFundingPartyEmail} placeholder="funder@example.com" hint="They must sign in, verify email and accept the terms before transfer." required />}
       <label className="flex items-start gap-3 text-[11px] font-semibold leading-5 text-[#53627a] sm:col-span-2"><input className="mt-1 h-4 w-4 accent-[#1453bb]" type="checkbox" checked={termsAccepted} onChange={(event) => setTermsAccepted(event.currentTarget.checked)} /><span>I confirm the parties and written conditions are accurate and agree to Hollyway&apos;s escrow terms.</span></label>
     </section>
