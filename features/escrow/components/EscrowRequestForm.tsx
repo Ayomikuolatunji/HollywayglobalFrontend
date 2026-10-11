@@ -6,7 +6,6 @@ import { showToast } from "../../../components/ui/ToastProvider";
 import {
   amountToMinor,
   formatEscrowAmountInput,
-  formatMinorNaira,
   parseEscrowAmount,
   type EscrowFeeCoverage,
   type EscrowFundingParty,
@@ -93,6 +92,7 @@ export default function EscrowRequestForm({ initialRequest, onDraftSaved, onSubm
   const [fundingParty, setFundingParty] = useState<EscrowFundingParty>(initialRequest?.funding_party_type || "initiator");
   const [fundingPartyEmail, setFundingPartyEmail] = useState(initialRequest?.funding_party_email || "");
   const [counterpartyEmail, setCounterpartyEmail] = useState(initialCounterparty(initialRequest));
+  const [counterpartyConfirmed, setCounterpartyConfirmed] = useState(false);
   const [initiatorRole, setInitiatorRole] = useState<EscrowPartyRole>(initialRequest?.initiator_role || "buyer");
   const [termsAccepted, setTermsAccepted] = useState(Boolean(initialRequest?.terms_accepted_at));
   const [saving, setSaving] = useState(false);
@@ -121,7 +121,7 @@ export default function EscrowRequestForm({ initialRequest, onDraftSaved, onSubm
     if (!description.trim()) return "Describe the item, service or agreement.";
     if (parseEscrowAmount(amount) < 1_000) return "Enter an agreed value of at least ₦1,000.";
     if (!feeCoverage) return "Choose who will pay the Hollyway escrow fee.";
-    if (!counterpartyEmail) return "Find the other party's active Hollyway account.";
+    if (!counterpartyEmail || !counterpartyConfirmed) return "Find and add the other party's active Hollyway account before submitting.";
     if (purpose === "service_agreement" && (!scope.trim() || !deliverables.trim())) return "Add the service scope and deliverables.";
     if (deliveryRequired && (!deliveryFeeCoverage || !deliveryAddress.trim())) return "Add the delivery fee arrangement and full delivery address.";
     if (fundingParty === "other" && !fundingPartyEmail.trim()) return "Enter the funding party's email.";
@@ -186,7 +186,7 @@ export default function EscrowRequestForm({ initialRequest, onDraftSaved, onSubm
         <Dropdown label="What should Hollyway protect?" options={purposeOptions} value={purpose} onChange={changePurpose} required={false} hint="Choose the agreement type; the form changes to match it." />
         <TextField label="Subject" value={subject} onChange={setSubject} placeholder="e.g. Samsung TV purchase or design project" hint="Use a short title both parties will recognise." />
         <div className="sm:col-span-2"><TextArea label={purpose === "goods_sale" ? "Describe the item and agreement" : purpose === "service_agreement" ? "Describe the service agreement" : "Describe the general agreement"} value={description} onChange={setDescription} placeholder="Write what the parties agreed, what is included and what should happen next." /></div>
-        <TextField label="Agreed value (₦)" value={amount} onChange={(value) => setAmount(formatEscrowAmountInput(value))} placeholder="1,000" hint={amount ? "Hollyway fee is shown above · " + formatMinorNaira(amountToMinor(amount)) : "Enter the amount to calculate the Hollyway fee."} />
+        <TextField label="Agreed value (₦)" value={amount} onChange={(value) => setAmount(formatEscrowAmountInput(value))} placeholder="1,000" hint={amount ? "The Hollyway fee is calculated in the summary." : "Enter the amount to calculate the Hollyway fee."} />
         <Dropdown label="Who pays the Hollyway fee?" options={feeOptions} value={feeCoverage} onChange={(value) => setFeeCoverage(value as EscrowFeeCoverage)} required={false} />
       </div>
     </section>
@@ -209,7 +209,7 @@ export default function EscrowRequestForm({ initialRequest, onDraftSaved, onSubm
       </div>}
     </section>}
 
-    <EscrowPartySelector purpose={purpose} initialRole={initiatorRole} initialOtherEmail={counterpartyEmail} onChange={(parties) => { setInitiatorRole(parties.initiatorRole); setCounterpartyEmail(parties.counterpartyEmail); }} />
+    <EscrowPartySelector purpose={purpose} initialRole={initiatorRole} initialOtherEmail={counterpartyEmail} onChange={(parties) => { setInitiatorRole(parties.initiatorRole); setCounterpartyEmail(parties.counterpartyEmail); setCounterpartyConfirmed(parties.counterpartyConfirmed); }} />
 
     <section className="grid gap-4 rounded-xl border border-[#dfe4ed] bg-white p-4 sm:grid-cols-2 sm:p-5">
       <div className="sm:col-span-2"><TextArea label="Release or acceptance conditions" value={releaseConditions} onChange={setReleaseConditions} placeholder="Explain exactly what must happen before Hollyway records release, refund or completion." hint="This applies to item, service and general agreements." required /></div>
@@ -223,6 +223,5 @@ export default function EscrowRequestForm({ initialRequest, onDraftSaved, onSubm
       <button className="inline-flex h-10 items-center justify-center rounded-lg border border-[#cfe0f7] px-4 text-xs font-extrabold text-[#1453bb] hover:bg-[#edf4ff] disabled:opacity-60" disabled={saving} onClick={() => void persist("draft")} type="button">{saving ? "Saving…" : "Save as draft"}</button>
       <button className="inline-flex h-10 items-center justify-center rounded-lg bg-[#1453bb] px-4 text-xs font-extrabold text-white hover:bg-[#0b3f91] disabled:opacity-60" disabled={saving} type="submit">{saving ? "Submitting…" : "Submit escrow request"}</button>
     </div>
-    <p className="text-right text-[10px] leading-4 text-[#8995a8]">No payment is taken here. If approved, the accepted funding party will see Hollyway&apos;s bank details and upload the transfer receipt for Admin review.</p>
   </form>;
 }

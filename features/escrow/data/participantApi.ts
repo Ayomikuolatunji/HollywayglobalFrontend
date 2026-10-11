@@ -60,14 +60,14 @@ export async function fetchCurrentEscrowParticipant(): Promise<EscrowParticipant
   return { ...participant, name: "", phone: "", identityVerified: false };
 }
 
-export async function findEscrowParticipant(email: string): Promise<EscrowParticipant> {
+export async function findEscrowParticipant(searchTerm: string): Promise<EscrowParticipant> {
   const response = await apiFetch(
     `${getCustomerApiBaseUrl()}/api/v1/escrow/participants/resolve`,
     {
       method: "POST",
       credentials: "include",
       headers: { Accept: "application/json", "Content-Type": "application/json" },
-      body: JSON.stringify({ participant_email: email.trim().toLowerCase() }),
+      body: JSON.stringify({ participant_search: searchTerm.trim() }),
     },
     { notify: false },
   );
