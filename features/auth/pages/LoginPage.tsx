@@ -7,6 +7,7 @@ import { apiFetch } from "../../../components/api/apiFetch";
 import { getCustomerApiBaseUrl } from "../../../components/config/customerApi";
 import { showToast } from "../../../components/ui/ToastProvider";
 import { captureReferralCode } from "../../referrals/data/referralAttribution";
+import { registerCurrentCustomerSession } from "../data/accountSwitch";
 import {
   AuthError,
   AuthField,
@@ -24,15 +25,19 @@ export default function LoginPage() {
   const [submitting, setSubmitting] = useState(false);
   const [referralCode, setReferralCode] = useState("");
   const [nextPath, setNextPath] = useState("/dashboard");
+  const [addingAccount, setAddingAccount] = useState(false);
 
   useEffect(() => {
     const controller = new AbortController();
     setReferralCode(captureReferralCode());
     const params = new URLSearchParams(window.location.search);
     const next = safeNext(params.get("next"));
+    const isAddingAccount = params.get("add_account") === "1";
     setNextPath(next);
+    setAddingAccount(isAddingAccount);
     const message = params.get("error");
     if (message) setError(message.replace(/\+/g, " "));
+    if (isAddingAccount) return () => controller.abort();
     fetch(getCustomerApiBaseUrl() + "/dashboard", {
       credentials: "include",
       signal: controller.signal,
@@ -72,6 +77,7 @@ export default function LoginPage() {
         }
         throw new Error(detail || "Unable to sign in.");
       }
+      await registerCurrentCustomerSession().catch(() => null);
       showToast("success", "Signed in successfully.");
       window.location.assign(nextPath);
     } catch (requestError) {
@@ -83,7 +89,15 @@ export default function LoginPage() {
   const signupHref = nextPath === "/dashboard" ? "/signup" : "/signup?next=" + encodeURIComponent(nextPath);
 
   return (
-    <AuthShell kicker="USER SIGN IN" title="Welcome back." description="Sign in to your Hollyway user account.">
+    <AuthShell
+      kicker={addingAccount ? "ADD ACCOUNT" : "USER SIGN IN"}
+      title={addingAccount ? "Add another account." : "Welcome back."}
+      description={
+        addingAccount
+          ? "Sign in to keep this account available in your Hollyway account switcher."
+          : "Sign in to your Hollyway user account."
+      }
+    >
       <GoogleButton referralCode={referralCode} nextPath={nextPath} />
       <div className="relative my-7 border-t border-[#dfe4ed] text-center"><span className="relative -top-2.5 bg-white px-3 text-[10px] font-bold text-[#8b97a9]">or use your email</span></div>
       <form className="grid gap-4" onSubmit={submit}>
@@ -91,7 +105,7 @@ export default function LoginPage() {
         <AuthField label="Email address" name="email" type="email" autoComplete="email" />
         <PasswordField label="Password" name="password" autoComplete="current-password" />
         <div className="text-right text-xs font-bold"><Link className="text-[#1453bb] hover:underline" href="/forgot-password">Forgot password?</Link></div>
-        <button className="mt-2 flex h-12 items-center justify-center gap-2 rounded-lg bg-[#1453bb] text-sm font-extrabold text-white transition hover:bg-[#0b3f91] disabled:cursor-not-allowed disabled:opacity-60" type="submit" disabled={submitting}>{submitting ? "Signing in…" : <>Sign in <Arrow /></>}</button>
+        <button className="mt-2 flex h-12 items-center justify-center gap-2 rounded-lg bg-[#1453bb] text-sm font-extrabold text-white transition hover:bg-[#0b3f91] disabled:cursor-not-allowed disabled:opacity-60" type="submit" disabled={submitting}>{submitting ? "Signing in…" : <>{addingAccount ? "Add account" : "Sign in"} <Arrow /></>}</button>
       </form>
       <p className="mt-6 text-center text-xs font-semibold text-[#53627a]">New to Hollyway?{" "}<Link className="font-extrabold text-[#1453bb] hover:underline" href={signupHref}>Create an account</Link></p>
     </AuthShell>

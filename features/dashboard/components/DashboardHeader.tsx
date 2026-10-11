@@ -64,6 +64,7 @@ type DashboardHeaderProps = {
   title: string;
   cartCount: number;
   accountInitial: string;
+  accountId: string;
   accountName: string;
   accountEmail: string;
   profilePictureUrl: string;
@@ -75,6 +76,7 @@ export default function DashboardHeader({
   title,
   cartCount,
   accountInitial,
+  accountId,
   accountName,
   accountEmail,
   profilePictureUrl,
@@ -134,6 +136,7 @@ export default function DashboardHeader({
           </Link>
           <ProfileMenu
             accountInitial={accountInitial}
+            accountId={accountId}
             accountName={accountName}
             accountEmail={accountEmail}
             profilePictureUrl={profilePictureUrl}
@@ -178,6 +181,7 @@ export default function DashboardHeader({
           </Link>
           <ProfileMenu
             accountInitial={accountInitial}
+            accountId={accountId}
             accountName={accountName}
             accountEmail={accountEmail}
             profilePictureUrl={profilePictureUrl}

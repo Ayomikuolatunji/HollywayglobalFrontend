@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { apiFetch } from "../../../components/api/apiFetch";
 import { getCustomerApiBaseUrl } from "../../../components/config/customerApi";
+import { registerCurrentCustomerSession } from "../data/accountSwitch";
 
 type GoogleCredentialResponse = {
   credential: string;
@@ -117,6 +118,7 @@ export function GoogleButton({
                     : "Unable to complete Google sign-in.",
                 );
               }
+              await registerCurrentCustomerSession().catch(() => null);
               window.location.assign(nextPath || "/dashboard");
             } catch (requestError) {
               if (cancelled) return;

@@ -19,6 +19,10 @@ import {
   readOrderCart,
 } from "../../commerce/data/orderCart";
 import { accountProfileUpdatedEvent, fetchAccountSettings } from "../data/accountApi";
+import {
+  rememberCustomerAccount,
+  registerCurrentCustomerSession,
+} from "../../auth/data/accountSwitch";
 import { fetchKycStatus } from "../data/kycApi";
 import {
   getKycStorageKey,
@@ -33,7 +37,7 @@ import DashboardSidebar, { dashboardPageTitle } from "./DashboardSidebar";
 import KycDraftBanner from "./KycDraftBanner";
 import KycPromptModal from "./KycPromptModal";
 
-type CustomerAccount = { name: string; email: string };
+type CustomerAccount = { id: string; name: string; email: string };
 export type DashboardTheme = "light" | "dark";
 
 type DashboardContextValue = {
@@ -165,10 +169,14 @@ export default function DashboardShell({ children }: { children: ReactNode }) {
         setAccountPhotoPath("");
         setAccountPhotoUrl("");
       }
-      setAccount({
+      const currentAccount = {
+        id: String(payload.user?.id || ""),
         name: String(payload.user?.name || "Hollyway user"),
         email: String(payload.user?.email || ""),
-      });
+      };
+      setAccount(currentAccount);
+      rememberCustomerAccount(currentAccount);
+      void registerCurrentCustomerSession().catch(() => null);
       setSessionState("authenticated");
     } catch (error) {
       if (error instanceof DOMException && error.name === "AbortError") return;
@@ -343,6 +351,7 @@ export default function DashboardShell({ children }: { children: ReactNode }) {
           title={dashboardPageTitle(pathname)}
           cartCount={cartCount}
           accountInitial={accountInitial}
+          accountId={account?.id || ""}
           accountName={accountName}
           accountEmail={accountEmail}
           profilePictureUrl={accountPhotoUrl}

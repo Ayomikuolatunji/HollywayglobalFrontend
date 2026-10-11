@@ -2,9 +2,16 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
+import { showToast } from "../../../components/ui/ToastProvider";
+import {
+  activateCustomerAccount,
+  readSavedCustomerAccounts,
+  type SavedCustomerAccount,
+} from "../../auth/data/accountSwitch";
 
 type ProfileMenuProps = {
   accountInitial: string;
+  accountId: string;
   accountName: string;
   accountEmail: string;
   profilePictureUrl: string;
@@ -13,6 +20,7 @@ type ProfileMenuProps = {
 
 export default function ProfileMenu({
   accountInitial,
+  accountId,
   accountName,
   accountEmail,
   profilePictureUrl,
@@ -20,9 +28,17 @@ export default function ProfileMenu({
 }: ProfileMenuProps) {
   const [open, setOpen] = useState(false);
   const [imageFailed, setImageFailed] = useState(false);
+  const [savedAccounts, setSavedAccounts] = useState<SavedCustomerAccount[]>([]);
+  const [switchingAccountId, setSwitchingAccountId] = useState("");
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => setImageFailed(false), [profilePictureUrl]);
+
+  useEffect(() => {
+    setSavedAccounts(
+      readSavedCustomerAccounts().filter((account) => account.id !== accountId),
+    );
+  }, [accountId, open]);
 
   useEffect(() => {
     if (!open) return;
@@ -45,6 +61,31 @@ export default function ProfileMenu({
 
   function closeMenu() {
     setOpen(false);
+  }
+
+  async function switchAccount(account: SavedCustomerAccount) {
+    setSwitchingAccountId(account.id);
+    try {
+      const response = await activateCustomerAccount(account.id);
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok) {
+        throw new Error(
+          typeof payload.detail === "string"
+            ? payload.detail
+            : "That account could not be opened on this browser.",
+        );
+      }
+      closeMenu();
+      window.location.assign("/dashboard");
+    } catch (error) {
+      showToast(
+        "error",
+        error instanceof Error
+          ? error.message
+          : "That account could not be opened on this browser.",
+      );
+      setSwitchingAccountId("");
+    }
   }
 
   return (
@@ -107,18 +148,52 @@ export default function ProfileMenu({
             </Link>
           </nav>
 
-          <div className="border-t border-[#eeeae1] p-1.5 dark:border-[#2a374e]">
+          <div className="border-t border-[#eeeae1] px-1.5 py-2 dark:border-[#2a374e]">
+            <p className="px-3 pb-1 text-[9px] font-extrabold tracking-[.12em] text-[#9498a3] dark:text-[#8290a8]">
+              SWITCH ACCOUNT
+            </p>
+            {savedAccounts.length > 0 ? (
+              savedAccounts.map((account) => (
+                <button
+                  className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left hover:bg-[#f5f4f0] disabled:cursor-wait disabled:opacity-60 dark:hover:bg-[#1b2a43]"
+                  key={account.id}
+                  type="button"
+                  role="menuitem"
+                  disabled={Boolean(switchingAccountId)}
+                  onClick={() => void switchAccount(account)}
+                >
+                  <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-[#e8eef8] text-[10px] font-extrabold text-[#1453bb] dark:bg-[#263752] dark:text-[#c9d2e2]">
+                    {account.name.trim().charAt(0).toUpperCase() || account.email.charAt(0).toUpperCase()}
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block truncate text-xs font-bold text-[#3b4b6b] dark:text-[#c9d2e2]">
+                      {switchingAccountId === account.id ? "Opening account…" : account.name || "Hollyway account"}
+                    </span>
+                    <span className="block truncate text-[10px] text-[#7a7d88] dark:text-[#9eabc0]">
+                      {account.email}
+                    </span>
+                  </span>
+                </button>
+              ))
+            ) : (
+              <p className="px-3 py-1 text-[10px] leading-4 text-[#7a7d88] dark:text-[#9eabc0]">
+                Add another sign-in to switch between accounts here.
+              </p>
+            )}
             <button
-              className="w-full rounded-lg px-3 py-2.5 text-left text-xs font-bold text-[#3b4b6b] hover:bg-[#f5f4f0] dark:text-[#c9d2e2] dark:hover:bg-[#1b2a43]"
+              className="mt-1 w-full rounded-lg px-3 py-2.5 text-left text-xs font-bold text-[#1453bb] hover:bg-[#f4f8ff] dark:text-[#9fc2ff] dark:hover:bg-[#1b2a43]"
               type="button"
               role="menuitem"
               onClick={() => {
                 closeMenu();
-                void onSignOut();
+                window.location.assign("/login?add_account=1");
               }}
             >
-              Switch account
+              + Add another account
             </button>
+          </div>
+
+          <div className="border-t border-[#eeeae1] p-1.5 dark:border-[#2a374e]">
             <button
               className="w-full rounded-lg px-3 py-2.5 text-left text-xs font-bold text-[#b8560d] hover:bg-[#fff4eb] dark:text-[#f2a06a] dark:hover:bg-[#2a2030]"
               type="button"

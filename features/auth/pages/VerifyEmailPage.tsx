@@ -11,6 +11,7 @@ import {
   AuthShell,
   AuthSuccess,
 } from "../components/AuthShared";
+import { registerCurrentCustomerSession } from "../data/accountSwitch";
 
 function safeNext(value: string | null) {
   return value && value.startsWith("/") && !value.startsWith("//") ? value : "/dashboard";
@@ -70,6 +71,7 @@ export default function VerifyEmailPage() {
             : "That verification code is invalid or expired.",
         );
       }
+      await registerCurrentCustomerSession().catch(() => null);
       setVerified(true);
       setSuccess("Your email has been verified. You are now signed in. Open your workspace when you are ready.");
     } catch (requestError) {
