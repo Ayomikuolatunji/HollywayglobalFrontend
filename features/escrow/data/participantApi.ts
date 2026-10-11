@@ -9,8 +9,15 @@ export type EscrowParticipant = {
   identityVerified: boolean;
 };
 
-function participantFromData(data: Record<string, unknown>) {
-  const participant = (data.participant || data) as Record<string, unknown>;
+function record(value: unknown): value is Record<string, unknown> {
+  return Boolean(value) && typeof value === "object";
+}
+
+function participantFromData(value: unknown) {
+  if (!record(value)) {
+    throw new ApiResponseError("Participant lookup returned an invalid result.", 502);
+  }
+  const participant = record(value.participant) ? value.participant : value;
   if (
     typeof participant.email !== "string" ||
     typeof participant.name !== "string"
@@ -28,6 +35,21 @@ function participantFromData(data: Record<string, unknown>) {
     phone,
     identityVerified: participant.identity_verified === true,
   } satisfies EscrowParticipant;
+}
+
+function participantsFromData(value: unknown): EscrowParticipant[] {
+  if (!record(value)) {
+    throw new ApiResponseError("Participant lookup returned an invalid result.", 502);
+  }
+  const candidates = Array.isArray(value.participants)
+    ? value.participants
+    : value.participant
+      ? [value.participant]
+      : [value];
+  if (!candidates.length) {
+    throw new ApiResponseError("No participant matches were returned.", 502);
+  }
+  return candidates.map(participantFromData);
 }
 
 export async function fetchCurrentEscrowParticipant(): Promise<EscrowParticipant> {
@@ -60,7 +82,7 @@ export async function fetchCurrentEscrowParticipant(): Promise<EscrowParticipant
   return { ...participant, name: "", phone: "", identityVerified: false };
 }
 
-export async function findEscrowParticipant(searchTerm: string): Promise<EscrowParticipant> {
+export async function findEscrowParticipants(searchTerm: string): Promise<EscrowParticipant[]> {
   const response = await apiFetch(
     `${getCustomerApiBaseUrl()}/api/v1/escrow/participants/resolve`,
     {
@@ -72,5 +94,5 @@ export async function findEscrowParticipant(searchTerm: string): Promise<EscrowP
     { notify: false },
   );
   const payload = await responsePayload(response);
-  return participantFromData((payload.data || {}) as Record<string, unknown>);
+  return participantsFromData(payload.data || {});
 }
