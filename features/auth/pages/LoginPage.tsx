@@ -5,6 +5,7 @@ import { useEffect, useState, type FormEvent } from "react";
 import { Arrow } from "../../../components/ui/Arrow";
 import { apiFetch } from "../../../components/api/apiFetch";
 import { getCustomerApiBaseUrl } from "../../../components/config/customerApi";
+import { showToast } from "../../../components/ui/ToastProvider";
 import { captureReferralCode } from "../../referrals/data/referralAttribution";
 import {
   AuthError,
@@ -48,6 +49,7 @@ export default function LoginPage() {
     setError("");
     setSubmitting(true);
     const form = new FormData(event.currentTarget);
+    const email = String(form.get("email") || "").trim().toLowerCase();
     try {
       const response = await apiFetch(
         getCustomerApiBaseUrl() + "/auth/login",
@@ -55,15 +57,22 @@ export default function LoginPage() {
           method: "POST",
           credentials: "include",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: form.get("email"), password: form.get("password") }),
+          body: JSON.stringify({ email, password: form.get("password") }),
         },
         {
-          successMessage: "Signed in successfully.",
-          errorMessage: "Unable to sign in. Check your details and try again.",
+          notify: false,
         },
       );
       const payload = await response.json().catch(() => ({}));
-      if (!response.ok) throw new Error(typeof payload.detail === "string" ? payload.detail : "Unable to sign in.");
+      const detail = typeof payload.detail === "string" ? payload.detail : "";
+      if (!response.ok) {
+        if (response.status === 403 && detail === "Verify your email before signing in.") {
+          window.location.assign(`/verify-email?email=${encodeURIComponent(email)}&next=${encodeURIComponent(nextPath)}`);
+          return;
+        }
+        throw new Error(detail || "Unable to sign in.");
+      }
+      showToast("success", "Signed in successfully.");
       window.location.assign(nextPath);
     } catch (requestError) {
       setError(requestError instanceof Error ? requestError.message : "Unable to sign in.");
