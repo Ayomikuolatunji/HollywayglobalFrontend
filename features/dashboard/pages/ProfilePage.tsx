@@ -20,7 +20,6 @@ import {
   kycStatusLabel,
   readKycLocalState,
   resolveKycStatus,
-  type KycDraft,
   type KycStatus,
 } from "../data/kyc";
 
@@ -53,7 +52,6 @@ export default function ProfilePage() {
   const storageKey = getKycStorageKey(accountEmail);
   const [kycStatus, setKycStatus] = useState<KycStatus>("not-started");
   const [kycSubmission, setKycSubmission] = useState<KycServerSubmission | null>(null);
-  const [kycDraft, setKycDraft] = useState<KycDraft>(readKycLocalState().draft);
   const [businessUpgrade, setBusinessUpgrade] = useState<BusinessUpgrade | null>(null);
   const [loading, setLoading] = useState(true);
   const [businessLoading, setBusinessLoading] = useState(true);
@@ -63,7 +61,6 @@ export default function ProfilePage() {
   const loadKyc = useCallback(async () => {
     if (!accountEmail) return;
     const local = readKycLocalState(storageKey);
-    setKycDraft(local.draft);
     setKycStatus(local.status);
     setStatusError("");
     setLoading(true);
@@ -111,9 +108,6 @@ export default function ProfilePage() {
   const identityName = kycSubmission?.legal_full_name || unavailableIdentityDetail;
   const displayName = kycSubmission?.legal_full_name?.trim() || "Hollyway user";
   const identityPhone = kycSubmission?.phone_e164 || unavailableIdentityDetail;
-  const identityAddress =
-    [kycDraft.address, kycDraft.city, kycDraft.state].filter(Boolean).join(", ") ||
-    "Not provided";
   const statusStyles = complete
     ? {
         card: "border-[#bfe5d0] bg-[#f5fcf7] dark:border-[#315c4a] dark:bg-[#142b25]",
@@ -255,9 +249,8 @@ export default function ProfilePage() {
             <ProfileValue label="REACHABLE PHONE" value={identityPhone} />
             <ProfileValue
               label="IDENTITY RECORD"
-              value={kycSubmission?.identity_type || kycDraft.identityType || "Not provided"}
+              value={kycSubmission?.identity_type || "Not provided"}
             />
-            <ProfileValue label="ADDRESS" value={identityAddress} />
           </dl>
         )}
         <p className="mt-4 rounded-lg border border-[#cfe0f7] bg-[#f4f8ff] p-2.5 text-[10px] leading-4 text-[#53627a] dark:border-[#334b72] dark:bg-[#14243d] dark:text-[#b7c3d6]">

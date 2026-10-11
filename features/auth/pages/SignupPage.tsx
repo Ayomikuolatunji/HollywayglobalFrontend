@@ -6,7 +6,8 @@ import { Arrow } from "../../../components/ui/Arrow";
 import { apiFetch } from "../../../components/api/apiFetch";
 import { getCustomerApiBaseUrl } from "../../../components/config/customerApi";
 import { captureReferralCode } from "../../referrals/data/referralAttribution";
-import { AuthError, AuthField, AuthShell, GoogleButton, PasswordField } from "../components/AuthShared";
+import { AuthError, AuthField, AuthShell, PasswordField } from "../components/AuthShared";
+import { GoogleButton } from "../components/GoogleButton";
 
 function safeNext(value: string | null) {
   return value && value.startsWith("/") && !value.startsWith("//") ? value : "";
@@ -62,10 +63,6 @@ export default function SignupPage() {
       const payload = await response.json().catch(() => ({}));
       if (!response.ok) {
         const detail = typeof payload.detail === "string" ? payload.detail : "Unable to create your account.";
-        if (response.status === 503) {
-          window.location.assign(verificationHref(email, detail));
-          return;
-        }
         throw new Error(detail);
       }
       window.location.assign(verificationHref(String(payload.email || email)));
@@ -79,7 +76,7 @@ export default function SignupPage() {
 
   return (
     <AuthShell kicker="CREATE ACCOUNT" title="Start with Hollyway." description="Create your user account to manage listings, requests, orders, and services.">
-      <GoogleButton referralCode={referralCode} />
+      <GoogleButton referralCode={referralCode} nextPath={nextPath || "/dashboard"} />
       {referralCode && <p className="mt-3 rounded-lg bg-[#f4f8ff] px-3 py-2 text-center text-[10px] font-bold text-[#31527f]">Referral code applied: {referralCode}</p>}
       <div className="relative my-7 border-t border-[#dfe4ed] text-center"><span className="relative -top-2.5 bg-white px-3 text-[10px] font-bold text-[#8b97a9]">or use your email</span></div>
       <form className="grid gap-4" onSubmit={submit}>

@@ -10,9 +10,9 @@ import {
   AuthError,
   AuthField,
   AuthShell,
-  GoogleButton,
   PasswordField,
 } from "../components/AuthShared";
+import { GoogleButton } from "../components/GoogleButton";
 
 function safeNext(value: string | null) {
   return value && value.startsWith("/") && !value.startsWith("//") ? value : "/dashboard";
@@ -25,15 +25,22 @@ export default function LoginPage() {
   const [nextPath, setNextPath] = useState("/dashboard");
 
   useEffect(() => {
+    const controller = new AbortController();
     setReferralCode(captureReferralCode());
     const params = new URLSearchParams(window.location.search);
     const next = safeNext(params.get("next"));
     setNextPath(next);
     const message = params.get("error");
     if (message) setError(message.replace(/\+/g, " "));
-    fetch(getCustomerApiBaseUrl() + "/dashboard", { credentials: "include" })
-      .then((response) => { if (response.ok) window.location.assign(next); })
+    fetch(getCustomerApiBaseUrl() + "/dashboard", {
+      credentials: "include",
+      signal: controller.signal,
+    })
+      .then((response) => {
+        if (!controller.signal.aborted && response.ok) window.location.assign(next);
+      })
       .catch(() => null);
+    return () => controller.abort();
   }, []);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
@@ -68,7 +75,7 @@ export default function LoginPage() {
 
   return (
     <AuthShell kicker="USER SIGN IN" title="Welcome back." description="Sign in to your Hollyway user account.">
-      <GoogleButton referralCode={referralCode} />
+      <GoogleButton referralCode={referralCode} nextPath={nextPath} />
       <div className="relative my-7 border-t border-[#dfe4ed] text-center"><span className="relative -top-2.5 bg-white px-3 text-[10px] font-bold text-[#8b97a9]">or use your email</span></div>
       <form className="grid gap-4" onSubmit={submit}>
         <AuthError message={error} />

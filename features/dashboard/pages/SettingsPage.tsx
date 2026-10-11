@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import DashboardPageHeader from "../components/DashboardPageHeader";
 import SettingsForm, { type NotificationKey } from "../components/SettingsForm";
 import { useDashboard } from "../components/DashboardShell";
@@ -30,9 +30,12 @@ export default function SettingsPage() {
   const [passwordError, setPasswordError] = useState("");
   const [passwordMessage, setPasswordMessage] = useState("");
   const [passwordSaving, setPasswordSaving] = useState(false);
+  const saveSequence = useRef(0);
 
   useEffect(() => {
+    if (!accountEmail) return;
     let active = true;
+    setLoading(true);
     fetchAccountSettings()
       .then((remote) => {
         if (!active) return;
@@ -53,12 +56,13 @@ export default function SettingsPage() {
     return () => {
       active = false;
     };
-  }, [setTheme]);
+  }, [accountEmail, setTheme]);
 
   async function saveSetting(
     key: "theme" | NotificationKey,
     changes: Partial<Omit<AccountSettings, "updated_at">>,
   ) {
+    const requestId = ++saveSequence.current;
     const previous = settings;
     setSettings((current) => ({ ...current, ...changes }));
     if (changes.theme) setTheme(changes.theme);
@@ -66,9 +70,11 @@ export default function SettingsPage() {
     setLoadError("");
     try {
       const remote = await updateAccountSettings(changes);
+      if (requestId !== saveSequence.current) return;
       setSettings(remote);
       if (changes.theme) setTheme(remote.theme);
     } catch (requestError) {
+      if (requestId !== saveSequence.current) return;
       setSettings(previous);
       if (changes.theme) setTheme(previous.theme);
       setLoadError(
@@ -77,7 +83,7 @@ export default function SettingsPage() {
           : "That setting could not be saved. Please try again.",
       );
     } finally {
-      setSavingKey("");
+      if (requestId === saveSequence.current) setSavingKey("");
     }
   }
 

@@ -49,10 +49,8 @@ export const metadata: Metadata = {
   applicationName: siteName,
   creator: "Hollyway Global",
   publisher: "Hollyway Global",
-  alternates: { canonical: "/" },
   openGraph: {
     type: "website",
-    url: siteUrl,
     siteName,
     title: "Sell Unwanted Items in Nigeria | Hollyway Global Quick Sales",
     description:

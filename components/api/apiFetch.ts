@@ -19,8 +19,15 @@ export async function apiFetch(
 ): Promise<Response> {
   const method = String(init.method || "GET").toUpperCase();
   const shouldNotify = options.notify !== false && isMutationMethod(method);
+  const isFormDataBody = typeof FormData !== "undefined" && init.body instanceof FormData;
   try {
-    const response = await fetch(input, init);
+    const response = await fetch(input, {
+      ...init,
+      headers: {
+        ...(init.body && !isFormDataBody ? { "Content-Type": "application/json" } : {}),
+        ...init.headers,
+      },
+    });
     if (shouldNotify) {
       showToast(
         response.ok ? "success" : "error",

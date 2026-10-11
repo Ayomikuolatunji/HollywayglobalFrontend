@@ -23,8 +23,12 @@ export async function responsePayload(response: Response) {
           item && typeof item === "object" && "msg" in item ? String(item.msg) : "",
         )
         .filter(Boolean)[0]
-    : typeof detail === "string"
+      : typeof detail === "string"
       ? detail
-      : "Hollyway could not complete that request.";
+      : typeof payload.message === "string"
+        ? payload.message
+        : payload.data && typeof payload.data === "object" && !Array.isArray(payload.data) && "message" in payload.data && typeof (payload.data as { message?: unknown }).message === "string"
+          ? String((payload.data as { message: string }).message)
+          : "Hollyway could not complete that request.";
   throw new ApiResponseError(message, response.status);
 }

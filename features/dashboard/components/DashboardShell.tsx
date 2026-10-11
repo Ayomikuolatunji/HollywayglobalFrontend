@@ -106,17 +106,23 @@ function DashboardAccessState({
   );
 }
 
+function DashboardLoadingState() {
+  return <section className="grid min-h-[70vh] place-items-center p-6"><div className="rounded-xl border border-[#e4e2da] bg-white px-6 py-5 text-sm font-bold text-[#53627a] shadow-sm">Checking your Hollyway session…</div></section>;
+}
+
 export default function DashboardShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sessionState, setSessionState] = useState<
-    "authenticated" | "unauthenticated" | "error"
-  >("authenticated");
+    "loading" | "authenticated" | "unauthenticated" | "error"
+  >("loading");
   const [account, setAccount] = useState<CustomerAccount | null>(null);
   const [kycComplete, setKycComplete] = useState(false);
   const [kycIdentityName, setKycIdentityName] = useState("");
   const [cartCount, setCartCount] = useState(0);
   const [showKycPrompt, setShowKycPrompt] = useState(false);
+  const [kycStatusLoaded, setKycStatusLoaded] = useState(false);
+  const [kycHasSubmission, setKycHasSubmission] = useState(false);
   const [theme, setThemeState] = useState<DashboardTheme>("light");
   const [accountPhotoUrl, setAccountPhotoUrl] = useState("");
   const [accountPhotoPath, setAccountPhotoPath] = useState("");
@@ -131,12 +137,16 @@ export default function DashboardShell({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  const loadCustomerSession = useCallback(async () => {
+  const loadCustomerSession = useCallback(async (signal?: AbortSignal) => {
     try {
       const response = await fetch(`${getCustomerApiBaseUrl()}/dashboard`, {
         credentials: "include",
+        signal,
       });
       if (response.status === 401) {
+        setAccount(null);
+        setAccountPhotoUrl("");
+        setAccountPhotoPath("");
         setSessionState("unauthenticated");
         return;
       }
@@ -160,20 +170,27 @@ export default function DashboardShell({ children }: { children: ReactNode }) {
         email: String(payload.user?.email || ""),
       });
       setSessionState("authenticated");
-    } catch {
+    } catch (error) {
+      if (error instanceof DOMException && error.name === "AbortError") return;
+      setAccount(null);
+      setAccountPhotoUrl("");
+      setAccountPhotoPath("");
       setSessionState("error");
     }
   }, []);
 
   useEffect(() => {
-    void loadCustomerSession();
+    const controller = new AbortController();
+    void loadCustomerSession(controller.signal);
+    return () => controller.abort();
   }, [loadCustomerSession]);
 
   useEffect(() => {
     if (!accountPhotoPath) return;
     let active = true;
     let objectUrl = "";
-    fetch(accountPhotoPath, { credentials: "include" })
+    const controller = new AbortController();
+    fetch(accountPhotoPath, { credentials: "include", signal: controller.signal })
       .then((response) => {
         if (!response.ok) throw new Error("Profile picture request failed");
         return response.blob();
@@ -183,11 +200,13 @@ export default function DashboardShell({ children }: { children: ReactNode }) {
         if (active) setAccountPhotoUrl(objectUrl);
         else URL.revokeObjectURL(objectUrl);
       })
-      .catch(() => {
+      .catch((error) => {
+        if (error instanceof DOMException && error.name === "AbortError") return;
         if (active) setAccountPhotoUrl("");
       });
     return () => {
       active = false;
+      controller.abort();
       if (objectUrl) URL.revokeObjectURL(objectUrl);
     };
   }, [accountPhotoPath]);
@@ -208,17 +227,19 @@ export default function DashboardShell({ children }: { children: ReactNode }) {
     if (!accountEmail) {
       setKycIdentityName("");
       setShowKycPrompt(false);
+      setKycStatusLoaded(false);
+      setKycHasSubmission(false);
       return;
     }
     setKycIdentityName("");
+    setKycStatusLoaded(false);
     const localStatus = readKycLocalState(getKycStorageKey(accountEmail)).status;
     const localComplete = isKycComplete(localStatus);
     setKycComplete(localComplete);
-    if (pathname === "/dashboard") {
-      setShowKycPrompt(!localComplete && !hasKycSubmission(localStatus));
-    }
+    setKycHasSubmission(hasKycSubmission(localStatus));
     let active = true;
-    fetchKycStatus()
+    const controller = new AbortController();
+    fetchKycStatus(controller.signal)
       .then((remote) => {
         if (!active) return;
         const nextStatus = resolveKycStatus(remote.status, localStatus);
@@ -227,15 +248,27 @@ export default function DashboardShell({ children }: { children: ReactNode }) {
         );
         const remoteComplete = isKycComplete(nextStatus);
         setKycComplete(remoteComplete);
-        if (pathname === "/dashboard") {
-          setShowKycPrompt(!remoteComplete && !hasKycSubmission(nextStatus));
-        }
+        setKycHasSubmission(hasKycSubmission(nextStatus));
+        setKycStatusLoaded(true);
       })
-      .catch(() => null);
+      .catch((error) => {
+        if (!(error instanceof DOMException && error.name === "AbortError") && active) {
+          setKycStatusLoaded(true);
+        }
+      });
     return () => {
       active = false;
+      controller.abort();
     };
-  }, [accountEmail, pathname]);
+  }, [accountEmail]);
+
+  useEffect(() => {
+    if (!accountEmail || !kycStatusLoaded) {
+      setShowKycPrompt(false);
+      return;
+    }
+    setShowKycPrompt(pathname === "/dashboard" && !kycComplete && !kycHasSubmission);
+  }, [accountEmail, kycComplete, kycHasSubmission, kycStatusLoaded, pathname]);
 
   useEffect(() => {
     if (!accountEmail) return;
@@ -329,6 +362,8 @@ export default function DashboardShell({ children }: { children: ReactNode }) {
           >
             {children}
           </DashboardContext.Provider>
+        ) : sessionState === "loading" ? (
+          <DashboardLoadingState />
         ) : (
           <DashboardAccessState
             status={sessionState}

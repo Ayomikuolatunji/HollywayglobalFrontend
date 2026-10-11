@@ -16,13 +16,15 @@ export default function KycStatusSummary({ compact = false, overviewStyle = fals
 
   useEffect(() => {
     if (!accountEmail) return;
+    const controller = new AbortController();
     const localStatus = readKycLocalState(storageKey).status;
     setStatus(localStatus);
-    let active = true;
-    fetchKycStatus().then((remote) => {
-      if (active) setStatus(resolveKycStatus(remote.status, localStatus));
-    }).catch(() => null);
-    return () => { active = false; };
+    fetchKycStatus(controller.signal).then((remote) => {
+      setStatus(resolveKycStatus(remote.status, localStatus));
+    }).catch((error) => {
+      if (!(error instanceof DOMException && error.name === "AbortError")) return;
+    });
+    return () => controller.abort();
   }, [accountEmail, storageKey]);
 
   const complete = isKycComplete(status);

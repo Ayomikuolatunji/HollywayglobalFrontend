@@ -7,8 +7,10 @@ export function getKycStorageKey(accountEmail?: string) {
 
 export type KycServerStatus =
   | "not_submitted"
+  | "pending_review"
   | "approved"
-  | "rejected";
+  | "rejected"
+  | "additional_review";
 
 export type KycStatus = "not-started" | "draft" | "submitted" | KycServerStatus;
 
@@ -16,9 +18,6 @@ export type KycDraft = {
   identityType: string;
   identityNumber: string;
   selfieName: string;
-  address: string;
-  city: string;
-  state: string;
   consent: boolean;
 };
 
@@ -26,17 +25,10 @@ export const emptyKycDraft: KycDraft = {
   identityType: "NIN",
   identityNumber: "",
   selfieName: "",
-  address: "",
-  city: "",
-  state: "",
   consent: false,
 };
 
-export const kycSteps = ["Identity record", "Face verification", "Address", "Review"] as const;
-
-function text(value: unknown) {
-  return typeof value === "string" ? value : "";
-}
+export const kycSteps = ["Identity record", "Face verification", "Review"] as const;
 
 export function normalizeKycStatus(value: unknown): KycStatus {
   if (value === "draft") return "draft";
@@ -45,8 +37,8 @@ export function normalizeKycStatus(value: unknown): KycStatus {
   if (value === "rejected") return "rejected";
   // Legacy browser state is not proof of a server-side verification result.
   // The API remains the only authority for an approved account.
-  if (value === "pending_review") return "draft";
-  if (value === "additional_review") return "rejected";
+  if (value === "pending_review") return "pending_review";
+  if (value === "additional_review") return "additional_review";
   // "submitted" was used by the old local-only screen. It was never sent to
   // Hollyway, so reopen it as a draft instead of showing a false review state.
   return value === "submitted" ? "draft" : "not-started";
@@ -76,13 +68,17 @@ export function kycStatusLabel(status: KycStatus) {
       return "Approved";
     case "rejected":
       return "Rejected";
+    case "pending_review":
+      return "Pending Review";
+    case "additional_review":
+      return "Additional Review";
     default:
       return "Not Submitted";
   }
 }
 
 export function kycStatusAction(status: KycStatus) {
-  if (status === "rejected") return "Review and resubmit";
+  if (status === "rejected" || status === "additional_review") return "Review and resubmit";
   if (isKycComplete(status) || hasKycSubmission(status)) return "Review verification";
   if (status === "draft") return "Continue verification";
   return "Start verification";
@@ -94,6 +90,10 @@ export function kycStatusDescription(status: KycStatus) {
       return "Your identity verification is complete and available for KYC-protected actions.";
     case "rejected":
       return "The last verification attempt was not successful. Check the details and resubmit.";
+    case "pending_review":
+      return "Your verification was received and is being processed.";
+    case "additional_review":
+      return "Hollyway needs another review before this verification can be completed.";
     case "draft":
       return "Continue the saved form. Your identity number and selfie are never saved in this browser.";
     default:
@@ -114,17 +114,13 @@ export function readKycLocalState(storageKey = kycStorageKey): { draft: KycDraft
       // Never hydrate the raw identity number from an older local draft.
       identityNumber: "",
       selfieName: "",
-      address: text(source.address),
-      city: text(source.city),
-      state: text(source.state),
       consent: source.consent === true,
     };
     const storedStatus = normalizeKycStatus(parsed.status);
-    const hasProgress = [draft.address, draft.city, draft.state].some(Boolean);
     // Approved status must come from the API. This prevents a cleared server
     // record or a failed status request from leaving a false local success.
     const localStatus = storedStatus === "approved" ? "not-started" : storedStatus;
-    const status = localStatus === "not-started" && hasProgress ? "draft" : localStatus;
+    const status = localStatus;
     if ("identityNumber" in source || "documentNumber" in source || "documentName" in source || "selfieName" in source) {
       persistKycLocalState(draft, status, storageKey);
     }
@@ -146,9 +142,6 @@ export function persistKycLocalState(draft: KycDraft, status: KycStatus, storage
       status: localStatus,
       draft: {
         identityType: draft.identityType,
-        address: draft.address,
-        city: draft.city,
-        state: draft.state,
         consent: draft.consent,
       },
     }),

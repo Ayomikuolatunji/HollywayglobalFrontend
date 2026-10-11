@@ -37,14 +37,15 @@ export default function KycPage() {
   const [statusError, setStatusError] = useState("");
   const [message, setMessage] = useState("");
 
-  const loadStatus = useCallback(async (fallback: KycStatus = "not-started") => {
+  const loadStatus = useCallback(async (fallback: KycStatus = "not-started", signal?: AbortSignal) => {
     setLoadingStatus(true);
     setStatusError("");
     try {
-      const remote = await fetchKycStatus();
+      const remote = await fetchKycStatus(signal);
       setSubmission(remote.status === "not_submitted" ? null : remote);
       setStatus(resolveKycStatus(remote.status, fallback));
     } catch (requestError) {
+      if (requestError instanceof DOMException && requestError.name === "AbortError") return;
       if (!(requestError instanceof KycApiError && requestError.status === 401)) {
         setStatusError(requestError instanceof Error ? requestError.message : "KYC status could not be loaded.");
       }
@@ -55,11 +56,13 @@ export default function KycPage() {
 
   useEffect(() => {
     if (!accountEmail) return;
+    const controller = new AbortController();
     const local = readKycLocalState(storageKey);
     setDraft(local.draft);
     setStatus(local.status);
     setReady(true);
-    void loadStatus(local.status);
+    void loadStatus(local.status, controller.signal);
+    return () => controller.abort();
   }, [accountEmail, loadStatus, storageKey]);
 
   useEffect(() => {
@@ -82,11 +85,7 @@ export default function KycPage() {
       setError("Capture a clear front-facing selfie before continuing.");
       return false;
     }
-    if (step === 2 && (!draft.address.trim() || !draft.city.trim() || !draft.state.trim())) {
-      setError("Complete your full address, city and state before continuing.");
-      return false;
-    }
-    if (step === 3 && !draft.consent) {
+    if (step === 2 && !draft.consent) {
       setError("Confirm that your KYC details are accurate before submitting.");
       return false;
     }
@@ -99,7 +98,7 @@ export default function KycPage() {
   }
 
   function nextStep() {
-    if (validateStep()) setStep((current) => Math.min(current + 1, 3));
+    if (validateStep()) setStep((current) => Math.min(current + 1, 2));
   }
 
   function saveDraft() {
@@ -130,9 +129,8 @@ export default function KycPage() {
         );
       }
       clearVerificationAttempt();
-      setStep(result.submission.status === "rejected" ? 0 : 3);
+      setStep(result.submission.status === "rejected" ? 0 : 2);
     } catch (requestError) {
-      clearVerificationAttempt();
       if (
         requestError instanceof KycApiError &&
         requestError.status === 422 &&
@@ -141,6 +139,7 @@ export default function KycPage() {
         setSubmission(requestError.submission);
         setStatus("rejected");
         setMessage(requestError.message);
+        clearVerificationAttempt();
         setStep(0);
         return;
       }

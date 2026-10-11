@@ -71,8 +71,7 @@ export default function VerifyEmailPage() {
         );
       }
       setVerified(true);
-      setSuccess("Your email has been verified. You are now signed in.");
-      window.location.assign(nextPath);
+      setSuccess("Your email has been verified. You are now signed in. Open your workspace when you are ready.");
     } catch (requestError) {
       setError(
         requestError instanceof Error
@@ -138,7 +137,10 @@ export default function VerifyEmailPage() {
       }
     >
       {verified ? (
-        <AuthSuccess message={success} />
+        <>
+          <AuthSuccess message={success} />
+          <Link className="mt-5 inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-[#1453bb] text-sm font-extrabold text-white hover:bg-[#0b3f91]" href={nextPath}>Open workspace <Arrow /></Link>
+        </>
       ) : (
         <>
           <AuthError message={error} />

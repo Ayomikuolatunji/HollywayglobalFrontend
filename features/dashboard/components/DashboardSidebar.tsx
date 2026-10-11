@@ -26,7 +26,10 @@ export function dashboardPageTitle(pathname: string) {
   if (pathname.startsWith("/dashboard/notifications")) return "Notifications";
   if (pathname.startsWith("/dashboard/help")) return "Help centre";
   if (pathname.startsWith("/dashboard/referrals")) return "Referrals & reseller";
-  return new Map(navigationGroups.flatMap(({ items }) => items).map(([label, href]) => [href, label])).get(pathname) || "Overview";
+  const exact = new Map(navigationGroups.flatMap(({ items }) => items).map(([label, href]) => [href, label])).get(pathname);
+  if (exact) return exact;
+  if (isAccountPath(pathname, "/dashboard/profile")) return "Profile & KYC";
+  return "Overview";
 }
 
 function CloseIcon() { return <svg className="h-5 w-5" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" /></svg>; }

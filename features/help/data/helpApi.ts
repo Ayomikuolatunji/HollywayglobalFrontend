@@ -88,7 +88,9 @@ async function responsePayload(response: Response) {
         .filter(Boolean)[0]
     : typeof detail === "string"
       ? detail
-      : "Help request could not be completed.";
+      : typeof payload.message === "string"
+        ? payload.message
+        : "Help request could not be completed.";
   throw new HelpApiError(message, response.status);
 }
 

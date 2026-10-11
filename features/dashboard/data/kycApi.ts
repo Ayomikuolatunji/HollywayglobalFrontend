@@ -2,7 +2,7 @@ import { getCustomerApiBaseUrl } from "../../../components/config/customerApi";
 import { apiFetch } from "../../../components/api/apiFetch";
 import type { KycServerStatus } from "./kyc";
 
-const minimumSelfieConfidence = 70;
+const minimumSelfieConfidence = 90;
 
 export type KycServerSubmission = {
   id?: string;
@@ -60,8 +60,7 @@ function validationMessage(detail: unknown) {
 }
 
 function normalizeServerStatus(value: unknown): KycServerStatus {
-  if (value === "approved" || value === "pending_review") return "approved";
-  if (value === "rejected" || value === "additional_review") return "rejected";
+  if (value === "approved" || value === "pending_review" || value === "additional_review" || value === "rejected") return value;
   return "not_submitted";
 }
 

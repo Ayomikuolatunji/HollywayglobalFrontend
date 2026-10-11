@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 
 const siteUrl = "https://hollywayglobal.com";
-const lastModified = "2026-08-26";
+const lastModified = new Date();
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [

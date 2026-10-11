@@ -1,12 +1,7 @@
 import Link from "next/link";
-import { useEffect, useState, type ChangeEventHandler, type ReactNode } from "react";
+import { useState, type ChangeEventHandler, type ReactNode } from "react";
 import { Arrow } from "../../../components/ui/Arrow";
 import Brand from "../../../components/ui/Brand";
-import BrandIcon from "../../../components/ui/BrandIcon";
-import {
-  getCustomerApiBaseUrl,
-  productionCustomerApiBaseUrl,
-} from "../../../components/config/customerApi";
 
 export function AuthShell({
   kicker,
@@ -204,21 +199,4 @@ export function AuthSuccess({ message }: { message: string }) {
       {message}
     </p>
   ) : null;
-}
-
-export function GoogleButton({ referralCode = "" }: { referralCode?: string }) {
-  const [apiBaseUrl, setApiBaseUrl] = useState(productionCustomerApiBaseUrl);
-  useEffect(() => setApiBaseUrl(getCustomerApiBaseUrl()), []);
-  const query = referralCode
-    ? `?referral_code=${encodeURIComponent(referralCode)}`
-    : "";
-  return (
-    <a
-      className="mt-7 flex h-12 items-center justify-center gap-3 rounded-lg border border-[#dfe4ed] bg-white text-sm font-extrabold text-[#0b1830] transition hover:border-[#1453bb] hover:bg-[#f8fafc]"
-      href={`${apiBaseUrl}/auth/google${query}`}
-    >
-      <BrandIcon name="google" className="h-5 w-5" />
-      Continue with Google
-    </a>
-  );
 }

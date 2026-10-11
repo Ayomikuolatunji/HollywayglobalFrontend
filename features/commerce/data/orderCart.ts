@@ -12,15 +12,27 @@ export function readOrderCart(): OrderCartItem[] {
   if (typeof window === "undefined") return [];
   try {
     const saved = JSON.parse(window.localStorage.getItem(orderCartStorageKey) || "[]") as OrderCartItem[];
-    return Array.isArray(saved) ? saved.filter((item) => item?.code && item?.name) : [];
+    if (!Array.isArray(saved)) return [];
+    return saved.flatMap((item) => {
+      if (!item || typeof item.code !== "string" || !item.code.trim() || typeof item.name !== "string" || !item.name.trim()) return [];
+      const price = Number(item.price);
+      const quantity = Number(item.quantity);
+      if (!Number.isFinite(price) || price < 0 || !Number.isFinite(quantity) || quantity < 1) return [];
+      return [{ code: item.code.trim(), name: item.name.trim(), price, quantity: Math.floor(quantity) }];
+    });
   } catch {
     return [];
   }
 }
 
 export function writeOrderCart(items: OrderCartItem[]) {
-  window.localStorage.setItem(orderCartStorageKey, JSON.stringify(items));
-  window.dispatchEvent(new CustomEvent(orderCartUpdatedEvent));
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(orderCartStorageKey, JSON.stringify(items));
+    window.dispatchEvent(new CustomEvent(orderCartUpdatedEvent));
+  } catch {
+    // A full or restricted browser store must not break the marketplace UI.
+  }
 }
 
 export function clearOrderCart() {
@@ -28,6 +40,7 @@ export function clearOrderCart() {
 }
 
 export function addOrderCartItem(item: Omit<OrderCartItem, "quantity">) {
+  if (!Number.isFinite(item.price) || item.price < 0 || !item.code.trim() || !item.name.trim()) return;
   const current = readOrderCart();
   const existing = current.find((entry) => entry.code === item.code);
   if (existing) existing.quantity += 1;
@@ -40,7 +53,8 @@ export function removeOrderCartItem(code: string) {
 }
 
 export function updateOrderCartQuantity(code: string, quantity: number) {
-  writeOrderCart(readOrderCart().map((item) => item.code === code ? { ...item, quantity: Math.max(1, quantity) } : item));
+  const nextQuantity = Number.isFinite(quantity) ? Math.floor(quantity) : 1;
+  writeOrderCart(readOrderCart().map((item) => item.code === code ? { ...item, quantity: Math.max(1, nextQuantity) } : item));
 }
 
 export function getOrderCartItemCount(items: OrderCartItem[]) {

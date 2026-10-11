@@ -10,7 +10,11 @@ export default function AddToOrderButton({ item }: { item: Omit<OrderCartItem, "
     const sync = () => setAdded(readOrderCart().some((entry) => entry.code === item.code));
     sync();
     window.addEventListener(orderCartUpdatedEvent, sync);
-    return () => window.removeEventListener(orderCartUpdatedEvent, sync);
+    window.addEventListener("storage", sync);
+    return () => {
+      window.removeEventListener(orderCartUpdatedEvent, sync);
+      window.removeEventListener("storage", sync);
+    };
   }, [item.code]);
 
   function addItem() {
