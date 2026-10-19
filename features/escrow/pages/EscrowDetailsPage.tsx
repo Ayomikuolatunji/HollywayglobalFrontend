@@ -8,8 +8,9 @@ import { showToast } from "../../../components/ui/ToastProvider";
 import DashboardPageHeader from "../../dashboard/components/DashboardPageHeader";
 import EscrowAgreementDetails from "../components/EscrowAgreementDetails";
 import EscrowFundingAction from "../components/EscrowFundingAction";
+import EscrowLifecycleActions from "../components/EscrowLifecycleActions";
 import EscrowStatusPill from "../components/EscrowStatusPill";
-import { type EscrowRequest, type EscrowStatus } from "../data/escrow";
+import { shouldShowEscrowPaymentAction, type EscrowRequest, type EscrowStatus } from "../data/escrow";
 import { acceptFundingForEscrow, fetchEscrowTransaction } from "../data/escrowApi";
 
 const stages = [
@@ -146,7 +147,7 @@ export default function EscrowDetailsPage() {
   if (loading) return <div className="w-full p-4 sm:p-6 lg:p-8"><section className="rounded-xl border border-[#dfe4ed] bg-white p-6 text-sm font-semibold text-[#53627a]">Loading escrow request…</section></div>;
   if (!request) return <div className="w-full p-4 sm:p-6 lg:p-8"><section className="rounded-xl border border-[#f1d8a9] bg-[#fffaf1] p-6 text-center"><h2 className="font-[Manrope] text-xl font-extrabold text-[#0b1830]">Escrow request unavailable</h2><p className="mt-2 text-xs leading-5 text-[#6b5a3d]">{error || "This request could not be found."}</p><Link className="mt-5 inline-flex h-10 items-center gap-2 rounded-lg bg-[#1453bb] px-4 text-xs font-extrabold text-white" href="/dashboard/escrow">Back to my escrow <Arrow /></Link></section></div>;
 
-  const payerView = Boolean(request.can_accept_funding || request.manual_payment || request.manual_payment_unavailable);
+  const payerView = shouldShowEscrowPaymentAction(request);
 
   return (
     <div className="w-full space-y-4 p-4 sm:p-6 lg:p-8">
@@ -192,6 +193,7 @@ export default function EscrowDetailsPage() {
           <EscrowProgress request={request} />
           <EscrowAgreementDetails request={request} />
           <FundingRecord request={request} />
+          <EscrowLifecycleActions request={request} onUpdated={setRequest} />
           <EscrowActivity request={request} />
         </>
       )}

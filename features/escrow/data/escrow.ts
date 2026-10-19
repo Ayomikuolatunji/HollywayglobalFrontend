@@ -31,7 +31,104 @@ export type EscrowParticipantRecord = {
   user_id: string;
   role: EscrowPartyRole | "funder";
   email: string | null;
+  name?: string | null;
+  phone_e164?: string | null;
+  identity_verified?: boolean;
   accepted_at: string | null;
+};
+
+export type EscrowFulfilment = {
+  id: string;
+  status: string;
+  carrier_name: string | null;
+  tracking_reference: string | null;
+  dispatch_note: string | null;
+  dispatched_at: string | null;
+  delivered_at: string | null;
+  accepted_at: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type EscrowInspection = {
+  id: string;
+  decision: "pending" | "accepted" | "disputed";
+  inspected_by_user_id: string | null;
+  note: string | null;
+  deadline_at: string | null;
+  submitted_at: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type EscrowDispute = {
+  id: string;
+  opened_by_user_id: string;
+  status: string;
+  reason: string;
+  details: string;
+  decision: "release" | "refund" | "close" | null;
+  resolution_note: string | null;
+  evidence_deadline_at: string | null;
+  response_deadline_at: string | null;
+  resolved_at: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type EscrowEvidence = {
+  id: string;
+  dispute_id: string | null;
+  uploaded_by_user_id: string;
+  kind: string;
+  name: string;
+  mime_type: string;
+  byte_size: number;
+  created_at: string;
+};
+
+export type EscrowPayout = {
+  id: string;
+  recipient_participant_id: string | null;
+  amount_minor: number;
+  status: "pending" | "ready" | "released" | "refunded";
+  reference: string;
+  admin_note: string | null;
+  released_at: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type EscrowSettlementAccount = {
+  bank_name: string;
+  account_last4: string;
+  account_name: string;
+  match_percentage: number | null;
+  verified_at: string;
+};
+
+export type EscrowViewer = {
+  roles: string[];
+  can_book_dispatch: boolean;
+  can_mark_in_transit: boolean;
+  can_mark_delivered: boolean;
+  can_start_inspection: boolean;
+  can_accept: boolean;
+  can_open_dispute: boolean;
+  can_request_release: boolean;
+  has_pending_release_request: boolean;
+};
+
+export type EscrowReleaseRequest = {
+  id: string;
+  requested_by_user_id: string;
+  requested_by_role: string | null;
+  status: "pending" | "approved" | "rejected" | "info_requested";
+  details: string;
+  review_note: string | null;
+  reviewed_at: string | null;
+  created_at: string;
+  updated_at: string;
 };
 
 export type EscrowFundingInvitation = {
@@ -127,12 +224,30 @@ export type EscrowRequest = {
   funding_invitation: EscrowFundingInvitation | null;
   payments: EscrowPayment[];
   status_events: EscrowStatusEvent[];
+  fulfilment?: EscrowFulfilment | null;
+  inspection?: EscrowInspection | null;
+  disputes?: EscrowDispute[];
+  evidence?: EscrowEvidence[];
+  payout?: EscrowPayout | null;
+  release_requests?: EscrowReleaseRequest[];
+  settlement_account?: EscrowSettlementAccount | null;
+  viewer?: EscrowViewer;
   can_accept_funding?: boolean;
   manual_payment?: EscrowManualPayment;
   manual_payment_unavailable?: string;
   created_at: string;
   updated_at: string;
 };
+
+export function shouldShowEscrowPaymentAction(request: {
+  status: EscrowStatus;
+  can_accept_funding?: boolean;
+  manual_payment?: unknown;
+  manual_payment_unavailable?: string;
+}) {
+  if (request.status === "payment_received") return false;
+  return Boolean(request.can_accept_funding || request.manual_payment || request.manual_payment_unavailable);
+}
 
 export const escrowProcessSteps = [
   { number: "01", title: "Agree terms", description: "Confirm the parties, value and written conditions." },

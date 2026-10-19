@@ -10,8 +10,13 @@ function roleLabel(role: string) {
   return role.replace("_", " ").replace(/\b\w/g, (letter) => letter.toUpperCase());
 }
 
+function coverageLabel(value: string | null | undefined) {
+  return value === "initiator" ? "Person who started the request" : value === "counterparty" ? "Other party" : value === "split" ? "Shared equally" : "To be agreed";
+}
+
 export default function EscrowAgreementDetails({ request }: { request: EscrowRequest }) {
   const parties = request.participants.filter((item) => item.role !== "funder");
+  const funder = request.participants.find((item) => item.role === "funder");
 
   return (
     <div className="space-y-3">
@@ -31,9 +36,11 @@ export default function EscrowAgreementDetails({ request }: { request: EscrowReq
         </div>
         <dl className="mt-4 grid gap-x-5 gap-y-3 border-t border-[#eef1f4] pt-4 text-xs sm:grid-cols-2">
           <Info label="Hollyway fee" value={feeLabel(request)} />
-          <Info label="Fee coverage" value={request.fee_coverage || "To be agreed"} />
+          <Info label="Fee paid by" value={coverageLabel(request.fee_coverage)} />
           <Info label="Delivery" value={request.delivery_required ? request.courier_method || "Method to be confirmed" : "Not included"} />
+          {request.delivery_required && <Info label="Delivery fee paid by" value={coverageLabel(request.delivery_fee_coverage)} />}
           <Info label="Payment status" value={request.status_label} />
+          {request.settlement_account && <Info label="Settlement account" value={`${request.settlement_account.bank_name} · •••• ${request.settlement_account.account_last4}`} />}
         </dl>
       </section>
 
@@ -44,12 +51,15 @@ export default function EscrowAgreementDetails({ request }: { request: EscrowReq
             <div className="flex items-center justify-between gap-3 py-2 text-xs first:pt-0" key={party.id}>
               <span className="text-[#687895]">{roleLabel(party.role)}</span>
               <span className="text-right font-extrabold text-[#0b1830]">
-                {party.email || "Hollyway user"}
+                {party.name || party.email || "Hollyway user"}
+                {party.name && <small className="block text-[10px] font-medium text-[#687895]">{party.email}</small>}
+                {party.phone_e164 && <small className="block text-[10px] font-medium text-[#687895]">{party.phone_e164}</small>}
                 {party.accepted_at && <small className="block text-[10px] font-medium text-[#8490a4]">Accepted</small>}
               </span>
             </div>
           ))}
         </div>
+        {funder && <p className="mt-3 border-t border-[#eef1f4] pt-3 text-xs text-[#53627a]"><strong className="text-[#0b1830]">Funding party:</strong> {funder.name || funder.email || "Invited Hollyway account"}{funder.accepted_at ? " · Accepted" : " · Awaiting acceptance"}</p>}
       </section>
 
       <section className="rounded-lg border border-[#dfe4ed] bg-white p-4">
@@ -62,6 +72,7 @@ export default function EscrowAgreementDetails({ request }: { request: EscrowReq
           {request.deliverables && <p><strong className="text-[#0b1830]">Deliverables:</strong> {request.deliverables}</p>}
           <p><strong className="text-[#0b1830]">Release conditions:</strong> {request.release_conditions || "To be confirmed."}</p>
           {request.delivery_address && <p><strong className="text-[#0b1830]">Delivery address:</strong> {request.delivery_address}</p>}
+          {request.inspection && <p><strong className="text-[#0b1830]">Inspection status:</strong> {request.inspection.decision.replaceAll("_", " ")}{request.inspection.deadline_at ? ` · respond by ${new Date(request.inspection.deadline_at).toLocaleString("en-NG", { dateStyle: "medium", timeStyle: "short" })}` : ""}</p>}
         </div>
       </section>
     </div>

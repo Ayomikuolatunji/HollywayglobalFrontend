@@ -15,8 +15,9 @@ export default function EscrowPaymentProofForm({ request, onUpdated }: {
   request: EscrowRequest;
   onUpdated: (request: EscrowRequest) => void;
 }) {
-  const instructions = request.manual_payment;
   const payment = request.payments[0];
+  const instructions = request.manual_payment;
+  const alreadyReceived = payment?.status === "received";
   const [amount, setAmount] = useState(instructions ? formatEscrowAmountInput(String(Math.floor(instructions.amount_minor / 100))) : "");
   const [receipt, setReceipt] = useState<File | null>(null);
   const [transferReference, setTransferReference] = useState("");
@@ -26,11 +27,18 @@ export default function EscrowPaymentProofForm({ request, onUpdated }: {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
+  if (alreadyReceived) {
+    return <section className="rounded-xl border border-[#bfe5d0] bg-[#f5fcf7] p-4 sm:p-5">
+      <span className="text-[9px] font-extrabold tracking-[.14em] text-[#14733d]">PAYMENT RECEIVED</span>
+      <h2 className="mt-1 text-base font-extrabold text-[#0b1830]">Hollyway confirmed this transfer</h2>
+      <p className="mt-2 text-xs leading-5 text-[#53627a]">Admin checked the transfer record and marked the payment received. Keep the receipt and HWE reference for your records, then follow the recorded fulfilment terms.</p>
+    </section>;
+  }
+
   if (!instructions) {
     return <section className="rounded-xl border border-[#dfe4ed] bg-white p-4"><h2 className="text-sm font-extrabold text-[#0b1830]">Bank transfer instructions</h2><p className="mt-2 text-xs leading-5 text-[#687895]">{request.manual_payment_unavailable || "Accept funding responsibility to reveal the official Hollyway account and payment amount."}</p></section>;
   }
 
-  const alreadyReceived = payment?.status === "received";
   const waitingForReview = payment?.status === "proof_submitted";
   const whatsappHref = instructions?.admin_whatsapp_url || "https://wa.me/" + adminPhone.replace(/\D/g, "") + "?text=" + encodeURIComponent("Hollyway escrow " + request.reference + ": I uploaded my transfer receipt. Please review it in Admin.");
   const whatsappLabel = instructions?.admin_whatsapp_number ? "Send receipt to Admin WhatsApp (" + instructions.admin_whatsapp_number + ")" : "Send receipt to Admin WhatsApp";

@@ -57,6 +57,18 @@ function parseTransaction(value: unknown): EscrowRequest {
     status_events: Array.isArray(value.status_events)
       ? value.status_events as EscrowRequest["status_events"]
       : [],
+    fulfilment: record(value.fulfilment) ? value.fulfilment as EscrowRequest["fulfilment"] : null,
+    inspection: record(value.inspection) ? value.inspection as EscrowRequest["inspection"] : null,
+    disputes: Array.isArray(value.disputes) ? value.disputes as EscrowRequest["disputes"] : [],
+    evidence: Array.isArray(value.evidence) ? value.evidence as EscrowRequest["evidence"] : [],
+    payout: record(value.payout) ? value.payout as EscrowRequest["payout"] : null,
+    release_requests: Array.isArray(value.release_requests)
+      ? value.release_requests as EscrowRequest["release_requests"]
+      : [],
+    settlement_account: record(value.settlement_account)
+      ? value.settlement_account as EscrowRequest["settlement_account"]
+      : null,
+    viewer: record(value.viewer) ? value.viewer as EscrowRequest["viewer"] : undefined,
   };
 }
 
@@ -216,4 +228,99 @@ export async function submitEscrowPaymentProof(
     transaction: parseTransaction(payload.data),
     payment: responseBody.payment as EscrowRequest["payments"][number],
   };
+}
+
+export async function updateEscrowFulfilment(
+  reference: string,
+  input: {
+    action: "book_dispatch" | "mark_in_transit" | "mark_delivered" | "start_inspection";
+    carrierName?: string;
+    trackingReference?: string;
+    note?: string;
+  },
+) {
+  const response = await apiFetch(
+    `${getCustomerApiBaseUrl()}/api/v1/escrow/${encodeURIComponent(reference)}/fulfilment`,
+    {
+      method: "POST",
+      credentials: "include",
+      headers: { Accept: "application/json", "Content-Type": "application/json" },
+      body: JSON.stringify({
+        action: input.action,
+        carrier_name: input.carrierName || null,
+        tracking_reference: input.trackingReference || null,
+        note: input.note || null,
+      }),
+    },
+    { notify: false },
+  );
+  const payload = await responsePayload(response);
+  return parseTransaction(payload.data);
+}
+
+export async function updateEscrowInspection(reference: string, decision: "accepted" | "disputed", note: string) {
+  const response = await apiFetch(
+    `${getCustomerApiBaseUrl()}/api/v1/escrow/${encodeURIComponent(reference)}/inspection`,
+    {
+      method: "POST",
+      credentials: "include",
+      headers: { Accept: "application/json", "Content-Type": "application/json" },
+      body: JSON.stringify({ decision, note }),
+    },
+    { notify: false },
+  );
+  const payload = await responsePayload(response);
+  return parseTransaction(payload.data);
+}
+
+export async function requestEscrowRelease(reference: string, details: string) {
+  const response = await apiFetch(
+    `${getCustomerApiBaseUrl()}/api/v1/escrow/${encodeURIComponent(reference)}/release-requests`,
+    {
+      method: "POST",
+      credentials: "include",
+      headers: { Accept: "application/json", "Content-Type": "application/json" },
+      body: JSON.stringify({ details }),
+    },
+    { notify: false },
+  );
+  const payload = await responsePayload(response);
+  return parseTransaction(payload.data);
+}
+
+export async function openEscrowDispute(reference: string, reason: string, details: string) {
+  const response = await apiFetch(
+    `${getCustomerApiBaseUrl()}/api/v1/escrow/${encodeURIComponent(reference)}/disputes`,
+    {
+      method: "POST",
+      credentials: "include",
+      headers: { Accept: "application/json", "Content-Type": "application/json" },
+      body: JSON.stringify({ reason, details }),
+    },
+    { notify: false },
+  );
+  const payload = await responsePayload(response);
+  return parseTransaction(payload.data);
+}
+
+export async function uploadEscrowEvidence(
+  reference: string,
+  disputeId: string,
+  input: { kind: string; file: File },
+) {
+  const form = new FormData();
+  form.set("kind", input.kind);
+  form.set("evidence", input.file, input.file.name);
+  const response = await apiFetch(
+    `${getCustomerApiBaseUrl()}/api/v1/escrow/${encodeURIComponent(reference)}/disputes/${encodeURIComponent(disputeId)}/evidence`,
+    {
+      method: "POST",
+      credentials: "include",
+      headers: { Accept: "application/json" },
+      body: form,
+    },
+    { notify: false },
+  );
+  const payload = await responsePayload(response);
+  return payload.data;
 }

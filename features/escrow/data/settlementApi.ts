@@ -52,3 +52,18 @@ export async function verifySellerSettlementAccount(input: {
     matchPercentage: data.match_percentage,
   };
 }
+
+export async function saveEscrowSettlementAccount(reference: string, input: { bankName: string; accountNumber: string }) {
+  const response = await apiFetch(
+    `${getCustomerApiBaseUrl()}/api/v1/escrow/${encodeURIComponent(reference)}/settlement-account`,
+    {
+      method: "POST",
+      credentials: "include",
+      headers: { Accept: "application/json", "Content-Type": "application/json" },
+      body: JSON.stringify({ bank_name: input.bankName, account_number: input.accountNumber.replace(/\D/g, "") }),
+    },
+    { notify: false },
+  );
+  const payload = await responsePayload(response);
+  return payload.data;
+}

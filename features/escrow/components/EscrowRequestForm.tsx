@@ -24,7 +24,7 @@ type Props = {
 };
 
 const purposeOptions: DropdownOption[] = [
-  { value: "goods_sale", label: "Item sale", tip: "Protect an item purchase or sale with optional delivery and inspection terms." },
+  { value: "goods_sale", label: "Item sale", tip: "Protect an item purchase or sale. Delivery is optional, but record how the buyer will test and accept the item." },
   { value: "service_agreement", label: "Service agreement", tip: "Protect payment for defined work, deliverables and acceptance terms." },
   { value: "general_agreement", label: "General agreement", tip: "Protect a deposit or agreement that is not an item sale or service." },
 ];
@@ -122,6 +122,7 @@ export default function EscrowRequestForm({ initialRequest, onDraftSaved, onSubm
     if (parseEscrowAmount(amount) < 1_000) return "Enter an agreed value of at least ₦1,000.";
     if (!feeCoverage) return "Choose who will pay the Hollyway escrow fee.";
     if (!counterpartyEmail || !counterpartyConfirmed) return "Find and add the other party's active Hollyway account before submitting.";
+    if (purpose === "goods_sale" && !inspectionTerms.trim()) return "Write the testing and inspection terms for this item.";
     if (purpose === "service_agreement" && (!scope.trim() || !deliverables.trim())) return "Add the service scope and deliverables.";
     if (deliveryRequired && (!deliveryFeeCoverage || !deliveryAddress.trim())) return "Add the delivery fee arrangement and full delivery address.";
     if (fundingParty === "other" && !fundingPartyEmail.trim()) return "Enter the funding party's email.";
@@ -193,7 +194,7 @@ export default function EscrowRequestForm({ initialRequest, onDraftSaved, onSubm
 
     {purpose === "goods_sale" && <section className="grid gap-4 rounded-xl border border-[#dfe4ed] bg-white p-4 sm:grid-cols-2 sm:p-5">
       <TextArea label="Item condition (optional)" value={itemCondition} onChange={setItemCondition} placeholder="New, used, defects, included accessories or known issues." />
-      <TextArea label="Inspection terms (optional)" value={inspectionTerms} onChange={setInspectionTerms} placeholder="What must the buyer check before confirming the release?" />
+      <TextArea label="Testing and inspection terms" value={inspectionTerms} onChange={setInspectionTerms} placeholder="What must the buyer check before confirming acceptance?" hint="Required for item sales so both parties agree what will be inspected." required />
     </section>}
     {purpose === "service_agreement" && <section className="grid gap-4 rounded-xl border border-[#dfe4ed] bg-white p-4 sm:grid-cols-2 sm:p-5">
       <TextArea label="Service scope" value={scope} onChange={setScope} placeholder="What work is included and what is outside the agreement?" required />
