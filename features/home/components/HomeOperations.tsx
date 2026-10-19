@@ -1,10 +1,42 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { Arrow } from "./HomeIcons";
-import { feeRows, logistics, requestPoints, wantedWhatsApp } from "../data";
+import { usePublicContact } from "../../../components/config/PublicContactProvider";
+import { logistics, requestPoints } from "../data";
+import { fetchPublicFeePolicy, type PublicFeePolicy } from "../../fees/data/publicFeesApi";
 
 const shell = "mx-auto w-[calc(100%-40px)] max-w-[1180px] py-20 lg:w-[calc(100%-64px)] lg:py-24";
 const heading = "mb-8 flex flex-col justify-between gap-5 lg:flex-row lg:items-end";
 
+function money(amountMinor: number) {
+  return `₦${(amountMinor / 100).toLocaleString("en-NG")}`;
+}
+
+function usePublicFees() {
+  const [fees, setFees] = useState<PublicFeePolicy | null>(null);
+  const [error, setError] = useState(false);
+  useEffect(() => {
+    let active = true;
+    void fetchPublicFeePolicy()
+      .then((next) => { if (active) setFees(next); })
+      .catch(() => { if (active) setError(true); });
+    return () => { active = false; };
+  }, []);
+  return { fees, error };
+}
+
+function feeRange(band: PublicFeePolicy["escrow"]["bands"][number]) {
+  if (band.fee_rate_percentage) return `${band.fee_rate_percentage}% of value`;
+  if (band.fee_max_minor === null || band.fee_max_minor === band.fee_min_minor) return money(band.fee_min_minor);
+  return `${money(band.fee_min_minor)}–${money(band.fee_max_minor)}`;
+}
+
 export function RequestSection() {
+  const { contact } = usePublicContact();
+  const { fees, error } = usePublicFees();
+  const requestFee = fees ? money(fees.wanted_request.amount_minor) : "Loading…";
+  const renewalFee = fees ? money(fees.wanted_request.renewal_amount_minor) : "Loading…";
   return (
     <section id="pricing" className="bg-[#fff8ed]">
       <div className={shell}>
@@ -22,19 +54,20 @@ export function RequestSection() {
             channels so matching sellers can respond.
           </p>
         </div>
+        {error && <p className="mb-4 rounded-lg border border-[#f1c8c3] bg-[#fff5f3] p-3 text-xs font-semibold text-[#a32929]" role="alert">Current request fees are temporarily unavailable. Please try again shortly.</p>}
         <div className="grid gap-4 lg:grid-cols-[1.25fr_.75fr]">
           <div className="rounded-xl bg-white p-7 shadow-lg shadow-orange-950/5">
             <div className="flex flex-wrap items-center gap-3 rounded-lg bg-gradient-to-r from-[#f47700] to-[#ffae1a] p-5 text-white">
-              <strong className="font-[Manrope] text-3xl font-extrabold">₦200</strong>
-              <span className="text-[10px]">per request · active for 7 days</span>
+              <strong className="font-[Manrope] text-3xl font-extrabold">{requestFee}</strong>
+              <span className="text-[10px]">{fees ? `per request · active for ${fees.wanted_request.duration_days} days` : "Current request fee"}</span>
               <b className="ml-auto max-w-32 text-right text-[9px] leading-4">
-                Renew for ₦100 if you need another 7 days
+                {fees ? `Renew for ${renewalFee} if you need another ${fees.wanted_request.duration_days} days` : "Renewal fee will be shown here"}
               </b>
             </div>
             <div className="grid grid-cols-2 gap-4 py-7 sm:grid-cols-3 lg:grid-cols-6">
               {[
                 "Submit details",
-                "Pay ₦200",
+                "Pay request fee",
                 "Review & code",
                 "Broadcast",
                 "Seller response",
@@ -47,7 +80,7 @@ export function RequestSection() {
               ))}
             </div>
             <p className="border-l-4 border-[#ff8a00] bg-[#fff9f0] p-4 text-[10px] leading-5 text-[#7a5b2f]">
-              <strong>Important:</strong> the ₦200 covers review, coding and broadcast. It does not
+              <strong>Important:</strong> the displayed request fee covers review, coding and broadcast. It does not
               guarantee that a seller will have the item or accept your budget. If you complete the
               purchase through Hollyway Escrow, the request fee is deducted from your final escrow
               fee.
@@ -70,9 +103,9 @@ export function RequestSection() {
             </ol>
             <a
               className="flex min-h-11 items-center justify-center gap-2 rounded-lg bg-gradient-to-br from-[#ff8a00] to-[#ffb01c] px-4 text-[10px] font-extrabold text-[#17223a]"
-              href={wantedWhatsApp}
-              target="_blank"
-              rel="noreferrer"
+              href={contact?.wanted_whatsapp_url || "#contact"}
+              target={contact?.wanted_whatsapp_url ? "_blank" : undefined}
+              rel={contact?.wanted_whatsapp_url ? "noreferrer" : undefined}
             >
               Message admin to post <Arrow />
             </a>
@@ -143,6 +176,7 @@ export function LogisticsSection() {
 }
 
 export function FeesSection() {
+  const { fees, error } = usePublicFees();
   return (
     <section className="bg-[#f5f7fa]">
       <div className={shell}>
@@ -166,23 +200,25 @@ export function FeesSection() {
               <span>Item value</span>
               <span>Escrow fee</span>
             </div>
-            {feeRows.map(([value, fee]) => (
+            {fees?.escrow.bands.map((band) => (
               <div
                 className="grid min-h-11 grid-cols-2 items-center border-b border-[#dfe4ed] px-5 text-[10px] text-[#667085] last:border-0"
-                key={value}
+                key={band.label}
               >
-                <span>{value}</span>
-                <b className="text-[#ff8a00]">{fee}</b>
+                <span>{band.label}</span>
+                <b className="text-[#ff8a00]">{feeRange(band)}</b>
               </div>
             ))}
+            {!fees && !error && <p className="p-5 text-xs text-[#667085]">Loading the current escrow fee schedule…</p>}
+            {error && <p className="p-5 text-xs font-semibold text-[#a32929]" role="alert">The current fee schedule could not be loaded.</p>}
           </div>
           <div className="rounded-xl border border-[#dfe4ed] bg-white p-6">
             <h3 className="text-lg font-bold text-[#0b1830]">Service fees</h3>
-            {[
-              ["Standard item listing", "FREE"],
-              ["Wanted request · 7 days", "₦200"],
-              ["Wanted request renewal", "₦100"],
-              ["Featured promotion", "Quoted"],
+            {fees && [
+              ["Standard item listing", fees.listing.label],
+              [`Wanted request · ${fees.wanted_request.duration_days} days`, money(fees.wanted_request.amount_minor)],
+              ["Wanted request renewal", money(fees.wanted_request.renewal_amount_minor)],
+              ...fees.featured_packages.filter((item) => item.id !== "none").map((item) => [item.name, money(item.amount_minor)]),
             ].map(([name, fee]) => (
               <div
                 className="flex min-h-10 items-center justify-between border-b border-[#eef1f4] text-[10px] text-[#667085]"
@@ -192,6 +228,8 @@ export function FeesSection() {
                 <b className="text-[#1453bb]">{fee}</b>
               </div>
             ))}
+            {!fees && !error && <p className="py-3 text-xs text-[#667085]">Loading the current service fees…</p>}
+            {error && <p className="py-3 text-xs font-semibold text-[#a32929]" role="alert">The current service fees could not be loaded.</p>}
             <small className="mt-4 block text-[9px] leading-4 text-[#98a2b3]">
               Confirm fees, carriers and delivery arrangements with Hollyway Admin before payment.
             </small>

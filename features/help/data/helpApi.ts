@@ -1,5 +1,6 @@
 import { getCustomerApiBaseUrl } from "../../../components/config/customerApi";
 import { apiFetch } from "../../../components/api/apiFetch";
+import { fetchAllPages } from "../../../components/api/pagination";
 
 export const supportAttachmentAccept = "image/jpeg,image/png,image/webp,application/pdf";
 export const maxSupportAttachments = 5;
@@ -44,6 +45,11 @@ export type HelpAttachment = {
   name: string;
   mime_type: string;
   byte_size: number;
+};
+
+type SupportTicketPage = {
+  items: HelpTicket[];
+  hasNext: boolean;
 };
 
 export function validateSupportAttachments(files: File[]): string {
@@ -143,22 +149,50 @@ export async function fetchHelpContent(signal?: AbortSignal): Promise<HelpConten
   return parseContent(payload.data);
 }
 
-export async function fetchSupportTickets(signal?: AbortSignal): Promise<HelpTicket[]> {
-  const response = await fetch(`${getCustomerApiBaseUrl()}/api/v1/help/tickets`, {
-    credentials: "include",
-    headers: { Accept: "application/json" },
-    signal,
-  });
-  const payload = await responsePayload(response);
-  const data = isRecord(payload.data) ? payload.data : {};
-  if (!Array.isArray(data.tickets)) return [];
-  return data.tickets.flatMap((item) => {
+function parseTicketList(value: unknown): HelpTicket[] {
+  if (!Array.isArray(value)) return [];
+  return value.flatMap((item) => {
     if (!isRecord(item)) return [];
     return [{
       ...(item as HelpTicket),
       attachments: parseAttachments(item.attachments),
     }];
   });
+}
+
+function parseTicketPage(value: unknown): SupportTicketPage {
+  if (Array.isArray(value)) return { items: parseTicketList(value), hasNext: false };
+  if (!isRecord(value)) return { items: [], hasNext: false };
+  return {
+    items: parseTicketList(value.items),
+    hasNext: value.has_next === true,
+  };
+}
+
+async function fetchSupportTicketPage(
+  page: number,
+  pageSize: number,
+  signal?: AbortSignal,
+): Promise<SupportTicketPage> {
+  const response = await fetch(
+    `${getCustomerApiBaseUrl()}/api/v1/help/tickets?page=${page}&page_size=${pageSize}`,
+    {
+    credentials: "include",
+    headers: { Accept: "application/json" },
+    signal,
+    },
+  );
+  const payload = await responsePayload(response);
+  const data = isRecord(payload.data) ? payload.data : {};
+  return parseTicketPage(data.items ?? data.tickets);
+}
+
+export async function fetchSupportTickets(signal?: AbortSignal): Promise<HelpTicket[]> {
+  const first = await fetchSupportTicketPage(1, 100, signal);
+  return fetchAllPages(async (page, pageSize) => {
+    if (page === 1) return first;
+    return fetchSupportTicketPage(page, pageSize, signal);
+  }, 100);
 }
 
 export async function createSupportTicket(input: {

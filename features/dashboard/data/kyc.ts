@@ -17,18 +17,16 @@ export type KycStatus = "not-started" | "draft" | "submitted" | KycServerStatus;
 export type KycDraft = {
   identityType: string;
   identityNumber: string;
-  selfieName: string;
   consent: boolean;
 };
 
 export const emptyKycDraft: KycDraft = {
   identityType: "NIN",
   identityNumber: "",
-  selfieName: "",
   consent: false,
 };
 
-export const kycSteps = ["Identity record", "Face verification", "Review"] as const;
+export const kycSteps = ["Identity record", "Review"] as const;
 
 export function normalizeKycStatus(value: unknown): KycStatus {
   if (value === "draft") return "draft";
@@ -95,7 +93,7 @@ export function kycStatusDescription(status: KycStatus) {
     case "additional_review":
       return "Hollyway needs another review before this verification can be completed.";
     case "draft":
-      return "Continue the saved form. Your identity number and selfie are never saved in this browser.";
+      return "Continue the saved form. Your identity number is never saved in this browser.";
     default:
       return "Complete KYC before higher-value transactions and account actions that require verification.";
   }
@@ -113,7 +111,6 @@ export function readKycLocalState(storageKey = kycStorageKey): { draft: KycDraft
       identityType: source.identityType === "BVN" ? "BVN" : "NIN",
       // Never hydrate the raw identity number from an older local draft.
       identityNumber: "",
-      selfieName: "",
       consent: source.consent === true,
     };
     const storedStatus = normalizeKycStatus(parsed.status);
@@ -121,7 +118,7 @@ export function readKycLocalState(storageKey = kycStorageKey): { draft: KycDraft
     // record or a failed status request from leaving a false local success.
     const localStatus = storedStatus === "approved" ? "not-started" : storedStatus;
     const status = localStatus;
-    if ("identityNumber" in source || "documentNumber" in source || "documentName" in source || "selfieName" in source) {
+    if ("identityNumber" in source || "documentNumber" in source || "documentName" in source) {
       persistKycLocalState(draft, status, storageKey);
     }
     return { draft, status };
@@ -133,8 +130,8 @@ export function readKycLocalState(storageKey = kycStorageKey): { draft: KycDraft
 
 export function persistKycLocalState(draft: KycDraft, status: KycStatus, storageKey = kycStorageKey) {
   if (typeof window === "undefined") return;
-  // Keep only resumable, non-document fields in browser storage. NIN/BVN and
-  // the uploaded selfie remain in memory until the authenticated submission.
+  // Keep only resumable, non-document fields in browser storage. NIN/BVN
+  // remains in memory until the authenticated submission.
   const localStatus = status === "approved" ? "not-started" : status;
   window.localStorage.setItem(
     storageKey,

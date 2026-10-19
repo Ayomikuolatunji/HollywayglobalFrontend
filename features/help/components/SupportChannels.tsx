@@ -1,42 +1,17 @@
+"use client";
+
 import BrandIcon from "../../../components/ui/BrandIcon";
-import {
-  adminPhone,
-  adminPhoneHref,
-  adminWhatsApp,
-  contactEmail,
-  socialChannels,
-  supportEmail,
-} from "../../../components/config/contact";
+import { usePublicContact } from "../../../components/config/PublicContactProvider";
 import HelpIcon from "./HelpIcon";
 
-const contactMethods = [
-  {
-    icon: "mail" as const,
-    label: "General enquiries",
-    value: contactEmail,
-    href: `mailto:${contactEmail}`,
-  },
-  {
-    icon: "mail" as const,
-    label: "Support email",
-    value: supportEmail,
-    href: `mailto:${supportEmail}`,
-  },
-  {
-    icon: "phone" as const,
-    label: "Phone support",
-    value: adminPhone,
-    href: adminPhoneHref,
-  },
-  {
-    icon: "whatsapp" as const,
-    label: "WhatsApp support",
-    value: adminPhone,
-    href: adminWhatsApp,
-  },
-];
-
 export default function SupportChannels() {
+  const { contact, loading } = usePublicContact();
+  const contactMethods = contact ? [
+    { icon: "mail" as const, label: "General enquiries", value: contact.contact_email || "Unavailable", href: contact.contact_email ? `mailto:${contact.contact_email}` : "#" },
+    { icon: "mail" as const, label: "Support email", value: contact.support_email || "Unavailable", href: contact.support_email ? `mailto:${contact.support_email}` : "#" },
+    { icon: "phone" as const, label: "Phone support", value: contact.admin_phone || "Unavailable", href: contact.admin_phone_href || "#" },
+    { icon: "whatsapp" as const, label: "WhatsApp support", value: contact.admin_phone || "Unavailable", href: contact.admin_whatsapp_url || "#" },
+  ] : [];
   return (
     <section
       className="rounded-xl border border-[#e4e2da] bg-white p-3 shadow-[0_1px_2px_rgba(18,20,28,.03)] sm:p-4"
@@ -60,7 +35,7 @@ export default function SupportChannels() {
       </div>
 
       <div className="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
-        {contactMethods.map((method) => (
+        {loading ? <p className="text-xs text-[#687895]">Loading official contact details…</p> : contactMethods.map((method) => (
           <a
             className="flex min-w-0 items-center gap-2 rounded-lg border border-[#eef1f4] bg-[#fbfcfe] px-2.5 py-2 transition hover:border-[#9fbbe4]"
             href={method.href}
@@ -84,19 +59,19 @@ export default function SupportChannels() {
           OFFICIAL SOCIALS
         </span>
         <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-4 lg:grid-cols-8">
-          {socialChannels.map((channel) => (
+          {(contact?.social_channels || []).map((channel) => (
             <a
               className="flex min-w-0 items-center gap-2 rounded-lg border border-[#eef1f4] px-2 py-2 transition hover:border-[#9fbbe4] hover:bg-[#fbfcfe]"
-              href={channel.href}
+              href={channel.url}
               target="_blank"
               rel="noreferrer"
-              key={channel.title}
+              key={channel.key}
             >
               <span className="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-[#f3f4f7] text-[#14213d] [&>svg]:h-4 [&>svg]:w-4">
-                <BrandIcon name={channel.icon} />
+                <BrandIcon name={channel.icon as "whatsapp" | "instagram" | "facebook" | "x" | "linkedin" | "tiktok" | "group"} />
               </span>
               <span className="min-w-0">
-                <strong className="block truncate text-[9px] font-bold text-[#12141c]">{channel.title}</strong>
+                <strong className="block truncate text-[9px] font-bold text-[#12141c]">{channel.label}</strong>
                 <span className="mt-0.5 block truncate text-[8px] text-[#687895]">{channel.detail}</span>
               </span>
             </a>

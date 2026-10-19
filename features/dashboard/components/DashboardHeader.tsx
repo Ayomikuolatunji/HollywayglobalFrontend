@@ -63,6 +63,7 @@ function HeaderNotificationIcon() {
 type DashboardHeaderProps = {
   title: string;
   cartCount: number;
+  notificationCount: number;
   accountInitial: string;
   accountId: string;
   accountName: string;
@@ -75,6 +76,7 @@ type DashboardHeaderProps = {
 export default function DashboardHeader({
   title,
   cartCount,
+  notificationCount,
   accountInitial,
   accountId,
   accountName,
@@ -133,6 +135,7 @@ export default function DashboardHeader({
             aria-label="Notifications"
           >
             <HeaderNotificationIcon />
+            {notificationCount > 0 && <span className="absolute -right-1 -top-1 grid h-4 min-w-4 place-items-center rounded-full bg-[#dd6b12] px-1 text-[8px] font-bold text-white">{notificationCount > 99 ? "99+" : notificationCount}</span>}
           </Link>
           <ProfileMenu
             accountInitial={accountInitial}
@@ -172,6 +175,7 @@ export default function DashboardHeader({
             aria-label="Notifications"
           >
             <HeaderNotificationIcon />
+            {notificationCount > 0 && <span className="absolute -right-1 -top-1 grid h-4 min-w-4 place-items-center rounded-full bg-[#dd6b12] px-1 text-[8px] font-bold text-white">{notificationCount > 99 ? "99+" : notificationCount}</span>}
           </Link>
           <Link
             className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-[#dd6b12] px-3.5 text-[13px] font-semibold text-white hover:bg-[#b8560d]"

@@ -185,7 +185,7 @@ export default function EscrowRequestForm({ initialRequest, onDraftSaved, onSubm
     <section className="rounded-xl border border-[#dfe4ed] bg-white p-4 sm:p-5">
       <div className="grid gap-4 sm:grid-cols-2">
         <Dropdown label="What should Hollyway protect?" options={purposeOptions} value={purpose} onChange={changePurpose} required={false} hint="Choose the agreement type; the form changes to match it." />
-        <TextField label="Subject" value={subject} onChange={setSubject} placeholder="e.g. Samsung TV purchase or design project" hint="Use a short title both parties will recognise." />
+        <TextField label="Subject" value={subject} onChange={setSubject} placeholder="Item, service or agreement title" hint="Use a short title both parties will recognise." />
         <div className="sm:col-span-2"><TextArea label={purpose === "goods_sale" ? "Describe the item and agreement" : purpose === "service_agreement" ? "Describe the service agreement" : "Describe the general agreement"} value={description} onChange={setDescription} placeholder="Write what the parties agreed, what is included and what should happen next." /></div>
         <TextField label="Agreed value (₦)" value={amount} onChange={(value) => setAmount(formatEscrowAmountInput(value))} placeholder="1,000" hint={amount ? "The Hollyway fee is calculated in the summary." : "Enter the amount to calculate the Hollyway fee."} />
         <Dropdown label="Who pays the Hollyway fee?" options={feeOptions} value={feeCoverage} onChange={(value) => setFeeCoverage(value as EscrowFeeCoverage)} required={false} />

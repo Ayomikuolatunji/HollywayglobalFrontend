@@ -1,5 +1,5 @@
 const referralStorageKey = "hollyway-referral-code";
-const referralCodePattern = /^HWP-[0-9]{6,}$/;
+const referralCodePattern = /^HWP-[A-Z0-9]{6,}$/;
 
 export function normalizeReferralCode(value: string | null | undefined) {
   const code = value?.trim().toUpperCase() || "";

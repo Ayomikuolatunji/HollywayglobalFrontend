@@ -206,6 +206,7 @@ export type EscrowRequest = {
   amount_minor: number | null;
   escrow_fee_min_minor: number | null;
   escrow_fee_max_minor: number | null;
+  loyalty_discount_percentage: number;
   fee_coverage: EscrowFeeCoverage | null;
   delivery_required: boolean;
   delivery_fee_coverage: EscrowFeeCoverage | null;

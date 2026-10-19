@@ -1,3 +1,8 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { amountToMinor } from "../data/escrow";
+import { fetchEscrowFeeQuote, type EscrowFeeQuote } from "../data/escrowApi";
 import EscrowFeeSummary from "./EscrowFeeSummary";
 import { escrowProcessSteps } from "../data/escrow";
 
@@ -7,9 +12,44 @@ type EscrowCreateRailProps = {
 };
 
 export default function EscrowCreateRail({ transactionValue, draftSaved }: EscrowCreateRailProps) {
+  const [quote, setQuote] = useState<EscrowFeeQuote | null>(null);
+  const [quoteLoading, setQuoteLoading] = useState(false);
+  const [quoteError, setQuoteError] = useState(false);
+
+  useEffect(() => {
+    if (transactionValue < 1_000) {
+      setQuote(null);
+      setQuoteLoading(false);
+      setQuoteError(false);
+      return;
+    }
+    const controller = new AbortController();
+    setQuote(null);
+    setQuoteError(false);
+    setQuoteLoading(true);
+    const timer = window.setTimeout(() => {
+      setQuoteError(false);
+      void fetchEscrowFeeQuote(amountToMinor(String(transactionValue)), controller.signal)
+        .then(setQuote)
+        .catch((reason) => {
+          if (!(reason instanceof DOMException && reason.name === "AbortError")) {
+            setQuote(null);
+            setQuoteError(true);
+          }
+        })
+        .finally(() => {
+          if (!controller.signal.aborted) setQuoteLoading(false);
+        });
+    }, 250);
+    return () => {
+      window.clearTimeout(timer);
+      controller.abort();
+    };
+  }, [transactionValue]);
+
   return (
     <aside className="grid content-start gap-3 lg:sticky lg:top-6" aria-label="Escrow request guidance">
-      <EscrowFeeSummary transactionValue={transactionValue} />
+      <EscrowFeeSummary error={quoteError} loading={quoteLoading} quote={quote} transactionValue={transactionValue} />
 
       <section className="rounded-xl border border-[#dfe4ed] bg-white p-4">
         <p className="text-[10px] font-extrabold text-[#1453bb]">What happens next</p>

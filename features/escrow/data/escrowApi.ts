@@ -1,5 +1,6 @@
 import { apiFetch } from "../../../components/api/apiFetch";
 import { ApiResponseError, responsePayload } from "../../../components/api/apiResponse";
+import { fetchAllPages } from "../../../components/api/pagination";
 import { getCustomerApiBaseUrl } from "../../../components/config/customerApi";
 import type {
   EscrowFeeCoverage,
@@ -32,6 +33,14 @@ export type EscrowSaveInput = {
   termsAccepted: boolean;
 };
 
+export type EscrowFeeQuote = {
+  amount_minor: number;
+  escrow_fee_min_minor: number | null;
+  escrow_fee_max_minor: number | null;
+  loyalty_discount_percentage: number;
+  currency: string;
+};
+
 function record(value: unknown): value is Record<string, unknown> {
   return Boolean(value) && typeof value === "object";
 }
@@ -46,6 +55,7 @@ function parseTransaction(value: unknown): EscrowRequest {
     purpose_label: String(value.purpose_label || "Escrow agreement"),
     status: String(value.status || "draft") as EscrowRequest["status"],
     status_label: String(value.status_label || "Draft"),
+    loyalty_discount_percentage: typeof value.loyalty_discount_percentage === "number" ? value.loyalty_discount_percentage : 0,
     counterparty_email: typeof value.counterparty_email === "string" ? value.counterparty_email : null,
     participants: Array.isArray(value.participants)
       ? value.participants as EscrowRequest["participants"]
@@ -119,14 +129,36 @@ export async function saveEscrow(input: EscrowSaveInput, reference?: string) {
   return saveResponse(response);
 }
 
-export async function fetchEscrowTransactions(): Promise<EscrowRequest[]> {
-  const response = await fetch(`${getCustomerApiBaseUrl()}/api/v1/escrow`, {
-    credentials: "include",
-    headers: { Accept: "application/json" },
-  });
+export async function fetchEscrowFeeQuote(amountMinor: number, signal?: AbortSignal): Promise<EscrowFeeQuote> {
+  const response = await fetch(
+    `${getCustomerApiBaseUrl()}/api/v1/escrow/fee-quote?amount_minor=${amountMinor}`,
+    { credentials: "include", headers: { Accept: "application/json" }, signal },
+  );
   const payload = await responsePayload(response);
-  const data = record(payload.data) ? payload.data.transactions : [];
-  return Array.isArray(data) ? data.map(parseTransaction) : [];
+  const value = payload.data;
+  if (!record(value) || typeof value.amount_minor !== "number") {
+    throw new ApiResponseError("Hollyway fee quote returned an invalid response.", 502);
+  }
+  return {
+    amount_minor: value.amount_minor,
+    escrow_fee_min_minor: typeof value.escrow_fee_min_minor === "number" ? value.escrow_fee_min_minor : null,
+    escrow_fee_max_minor: typeof value.escrow_fee_max_minor === "number" ? value.escrow_fee_max_minor : null,
+    loyalty_discount_percentage: typeof value.loyalty_discount_percentage === "number" ? value.loyalty_discount_percentage : 0,
+    currency: typeof value.currency === "string" ? value.currency : "NGN",
+  };
+}
+
+export async function fetchEscrowTransactions(): Promise<EscrowRequest[]> {
+  return fetchAllPages(async (page, pageSize) => {
+    const response = await fetch(`${getCustomerApiBaseUrl()}/api/v1/escrow?page=${page}&page_size=${pageSize}`, {
+      credentials: "include",
+      headers: { Accept: "application/json" },
+    });
+    const payload = await responsePayload(response);
+    const data = record(payload.data) ? payload.data : {};
+    const items = Array.isArray(data.items) ? data.items.map(parseTransaction) : [];
+    return { items, hasNext: data.has_next === true };
+  });
 }
 
 export async function fetchEscrowTransaction(reference: string) {

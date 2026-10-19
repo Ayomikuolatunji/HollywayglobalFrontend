@@ -9,6 +9,7 @@ export type FundingInvitationPreview = {
   amount_minor: number | null;
   escrow_fee_min_minor: number | null;
   escrow_fee_max_minor: number | null;
+  loyalty_discount_percentage?: number;
   invited_email: string;
   expires_at: string;
 };

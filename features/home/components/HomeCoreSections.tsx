@@ -1,13 +1,9 @@
+"use client";
+
 import Link from "next/link";
 import { Arrow } from "./HomeIcons";
-import {
-  adminWhatsApp,
-  categories,
-  audiences,
-  sellWhatsApp,
-  steps,
-  wantedWhatsApp,
-} from "../data";
+import { usePublicContact } from "../../../components/config/PublicContactProvider";
+import { categories, audiences, steps } from "../data";
 
 const sectionShell =
   "mx-auto w-[calc(100%-40px)] max-w-[1180px] py-20 lg:w-[calc(100%-64px)] lg:py-28";
@@ -89,6 +85,9 @@ export function ProcessSection() {
 }
 
 export function AudienceSection() {
+  const { contact } = usePublicContact();
+  const sellHref = contact?.sell_whatsapp_url || "#contact";
+  const wantedHref = contact?.wanted_whatsapp_url || "#contact";
   return (
     <section className={sectionShell}>
       <div className={sectionHeader}>
@@ -122,14 +121,14 @@ export function AudienceSection() {
           label="SELLERS"
           title="Have something taking up space?"
           text="List your furniture, electronics, vehicles, appliances, fashion or stock for free."
-          href={sellWhatsApp}
+          href={sellHref}
           action="Chat with admin to sell"
         />
         <ActionCard
           label="BUYERS"
           title="Looking for something specific?"
           text="Send a wanted request and let potential sellers know exactly what you need."
-          href={wantedWhatsApp}
+          href={wantedHref}
           action="Message admin to request"
         />
       </div>
@@ -157,8 +156,8 @@ function ActionCard({
       <p className="mt-2 max-w-md text-[11px] leading-5 text-[#667085]">{text}</p>
       <a
         href={href}
-        target="_blank"
-        rel="noreferrer"
+        target={href.startsWith("http") ? "_blank" : undefined}
+        rel={href.startsWith("http") ? "noreferrer" : undefined}
         className="mt-4 inline-flex items-center gap-2 text-[10px] font-extrabold text-[#1453bb]"
       >
         {action} <Arrow />
@@ -168,6 +167,8 @@ function ActionCard({
 }
 
 export function WhySection() {
+  const { contact } = usePublicContact();
+  const adminHref = contact?.admin_whatsapp_url || "#contact";
   const benefits = [
     [
       "FREE",
@@ -219,9 +220,9 @@ export function WhySection() {
           Buy, sell, request a service, or get help from the Hollyway Admin desk.
         </p>
         <a
-          href={adminWhatsApp}
-          target="_blank"
-          rel="noreferrer"
+          href={adminHref}
+          target={adminHref.startsWith("http") ? "_blank" : undefined}
+          rel={adminHref.startsWith("http") ? "noreferrer" : undefined}
           className="mt-4 inline-flex items-center gap-2 text-[10px] font-extrabold text-[#ffae1a]"
         >
           Start a conversation <Arrow />

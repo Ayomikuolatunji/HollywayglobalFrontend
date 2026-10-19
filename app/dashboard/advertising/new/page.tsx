@@ -1,3 +1,5 @@
-import AdvertisingPage from "../../../../features/advertising/pages/AdvertisingPage";
+import { notFound } from "next/navigation";
 
-export default AdvertisingPage;
+export default function RemovedAdvertisingPage(): never {
+  notFound();
+}

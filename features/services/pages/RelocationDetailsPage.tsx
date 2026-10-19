@@ -1,0 +1,34 @@
+"use client";
+
+import Link from "next/link";
+import { useEffect, useState, type ReactNode } from "react";
+import { ApiResponseError } from "../../../components/api/apiResponse";
+import { Arrow } from "../../../components/ui/Arrow";
+import WalletServicePaymentButton from "../../dashboard/components/WalletServicePaymentButton";
+import ServicePageHeader from "../components/ServicePageHeader";
+import { acceptRelocationQuote, fetchRelocation, formatRelocationMoney, type RelocationRequest } from "../data/relocation";
+
+function date(value: string | null) { return value ? new Date(value).toLocaleDateString("en-NG", { dateStyle: "medium" }) : "Not set"; }
+function dateTime(value: string) { return new Date(value).toLocaleString("en-NG", { dateStyle: "medium", timeStyle: "short" }); }
+
+export default function RelocationDetailsPage({ reference }: { reference: string }) {
+  const [item, setItem] = useState<RelocationRequest | null>(null);
+  const [error, setError] = useState("");
+  const [busy, setBusy] = useState("");
+  useEffect(() => { void fetchRelocation(reference).then(setItem).catch((reason) => setError(reason instanceof ApiResponseError ? reason.message : "The relocation could not be loaded.")); }, [reference]);
+  async function accept(quoteId: string) { setBusy(quoteId); setError(""); try { setItem(await acceptRelocationQuote(reference, quoteId)); } catch (reason) { setError(reason instanceof Error ? reason.message : "The quotation could not be accepted."); } finally { setBusy(""); } }
+  async function reload() { setItem(await fetchRelocation(reference)); }
+  if (error) return <div className="mx-auto max-w-[1120px] p-4 sm:p-7"><p className="rounded-lg border border-[#f1c8c3] bg-[#fff5f3] p-4 text-xs font-semibold text-[#a32929]">{error}</p><Link className="mt-4 inline-flex items-center gap-2 text-xs font-extrabold text-[#1453bb]" href="/dashboard/relocation"><Arrow />Back to relocations</Link></div>;
+  if (!item) return <div className="mx-auto max-w-[1120px] p-4 text-xs font-bold text-[#687895] sm:p-7">Loading relocation…</div>;
+
+  return <div className="mx-auto max-w-[1120px] space-y-5 p-4 sm:p-7"><ServicePageHeader kicker={item.reference} title="Relocation request" description={`${item.status_label} · ${item.vehicle_type_label}`} action={<div className="flex flex-wrap gap-3"><Link className="inline-flex items-center gap-2 text-xs font-extrabold text-[#1453bb]" href="/dashboard/relocation"><Arrow />Back to relocations</Link>{["draft", "needs_information"].includes(item.status) && <Link className="inline-flex h-9 items-center rounded-lg bg-[#1453bb] px-3 text-xs font-extrabold text-white" href={`/dashboard/relocation/new?reference=${encodeURIComponent(item.reference)}`}>Continue Draft</Link>}</div>} />
+    {item.status === "draft" && <p className="rounded-lg border border-[#f2ddb1] bg-[#fffaf0] p-3 text-xs font-semibold text-[#86621d]">This request is private Draft content. Complete KYC before submitting it for Hollyway review.</p>}
+    <div className="grid gap-4 lg:grid-cols-2"><Panel title="Move route"><Info label="Current pick-up address" value={item.pickup_address || "Not set"} /><Info label="New destination address" value={item.destination_address || "Not set"} /><Info label="Moving date" value={date(item.moving_at)} /></Panel><Panel title="Move requirements"><Info label="Property size" value={`${item.apartment_size_label} · ${item.floor_levels || "Floor levels not set"}`} /><Info label="Vehicle" value={item.vehicle_type_label} /><Info label="Loaders and packing/wrapping" value={item.loaders_packing ? "Requested" : "Not requested"} /><Info label="Temporary transit storage" value={item.storage_required ? `${item.storage_duration_days || "Duration pending"} day(s)` : "Not required"} /></Panel></div>
+    <Panel title="Vehicle and crew coordination"><div className="grid gap-4 sm:grid-cols-3"><Info label="Vehicle details" value={item.vehicle_details || "Hollyway will confirm after booking."} /><Info label="Crew details" value={item.crew_details || "Hollyway will confirm after booking."} /><Info label="Tracking reference" value={item.tracking_reference || "Not assigned yet"} /></div></Panel>
+    <Panel title="Current quotation"><p className="text-xs leading-5 text-[#687895]">Hollyway quotations are based on route, property size, bulky items, vehicle type, crew support, storage and moving date.</p>{item.quotes.length ? <div className="mt-4 space-y-3">{item.quotes.map((quote) => <div className="rounded-lg border border-[#eef1f4] p-4" key={quote.id}><div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"><div><p className="text-sm font-extrabold text-[#0b1830]">{quote.carrier_name} · {formatRelocationMoney(quote.amount_minor)}</p><p className="mt-1 text-xs text-[#687895]">{quote.service_label}{quote.estimated_days ? ` · about ${quote.estimated_days} day${quote.estimated_days === 1 ? "" : "s"}` : ""}</p>{quote.details && <p className="mt-2 text-xs leading-5 text-[#53627a]">{quote.details}</p>}</div>{item.status === "quoted" && quote.status === "proposed" && <button className="h-9 rounded-lg bg-[#1453bb] px-3 text-xs font-extrabold text-white disabled:opacity-50" disabled={Boolean(busy)} onClick={() => void accept(quote.id)} type="button">{busy === quote.id ? "Accepting…" : "Accept quotation"}</button>}</div>{item.status === "quote_accepted" && quote.status === "accepted" && <WalletServicePaymentButton amountMinor={quote.amount_minor} onPaid={() => void reload()} reference={item.reference} service="relocation" />}</div>)}</div> : <p className="mt-4 text-xs font-semibold text-[#687895]">No current quotation yet. Hollyway will update this request.</p>}</Panel>
+    <Panel title="Request timeline"><div className="space-y-4">{item.status_events.map((event) => <div className="relative pl-5" key={event.id}><span className="absolute left-0 top-1.5 h-2 w-2 rounded-full bg-[#1453bb]" /><p className="text-xs font-extrabold text-[#0b1830]">{event.to_status_label}</p><p className="mt-1 text-[11px] leading-4 text-[#687895]">{event.reason || "Status updated"} · {dateTime(event.created_at)}</p></div>)}</div></Panel>{item.admin_note && <p className="rounded-lg border border-[#dfe4ed] bg-[#f8fbff] p-3 text-xs leading-5 text-[#53627a]">Hollyway note: {item.admin_note}</p>}
+  </div>;
+}
+
+function Panel({ title, children }: { title: string; children: ReactNode }) { return <section className="rounded-xl border border-[#dfe4ed] bg-white p-4 shadow-sm sm:p-5"><h2 className="font-[Manrope] text-base font-extrabold text-[#0b1830]">{title}</h2><div className="mt-4">{children}</div></section>; }
+function Info({ label, value }: { label: string; value: string }) { return <div><span className="text-[9px] font-black uppercase tracking-[.12em] text-[#8290a8]">{label}</span><p className="mt-1 text-xs font-semibold leading-5 text-[#31425e]">{value}</p></div>; }

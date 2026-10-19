@@ -1,16 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { Arrow } from "../../../components/ui/Arrow";
 import DashboardIcon from "../components/DashboardIcon";
 import KycStatusSummary from "../components/KycStatusSummary";
 import { useDashboard } from "../components/DashboardShell";
-
-const stats = [
-  ["ACTIVE LISTINGS", "0", "No listings yet", "box", "/dashboard/listings?status=Active", "border-t-[#14213d]"],
-  ["OPEN REQUESTS", "0", "Nothing to track", "search", "/dashboard/requests?status=Active", "border-t-[#dd6b12]"],
-  ["ORDERS", "0", "No active orders", "shield", "/dashboard/orders", "border-t-[#1f7a5c]"],
-] as const;
+import { fetchDashboardOverview, type DashboardOverview } from "../data/overviewApi";
 
 const services = [
   ["Professional services", "Verified help for repairs and specialist work.", "tool", "/dashboard/services"],
@@ -20,8 +16,8 @@ const services = [
   ["Escrow", "Protected transactions and release steps.", "shield", "/dashboard/escrow"],
   ["Referrals", "Invite new customers with your HWP link.", "users", "/dashboard/referrals"],
   ["Reseller", "Prepare customer orders and markups.", "store", "/dashboard/reseller"],
-  ["Ads & promotions", "Promote listings, stock and business offers.", "grid", "/dashboard/advertising"],
   ["Wallet & payouts", "Settlement balances and payout activity.", "wallet", "/dashboard/wallet"],
+  ["Solar", "Plan a home, shop or commercial energy system.", "sun", "/dashboard/solar"],
 ] as const;
 
 const quickActions = [
@@ -33,6 +29,14 @@ const quickActions = [
 
 export default function OverviewPage() {
   const { accountName } = useDashboard();
+  const [overview, setOverview] = useState<DashboardOverview | null>(null);
+  const [error, setError] = useState("");
+  useEffect(() => { void fetchDashboardOverview().then(setOverview).catch((reason) => setError(reason instanceof Error ? reason.message : "Dashboard activity could not be loaded.")); }, []);
+  const stats = overview ? [
+    ["ACTIVE LISTINGS", String(overview.counts.active_listings), overview.counts.active_listings ? "Published or under review" : "No listings yet", "box", "/dashboard/listings", "border-t-[#14213d]"],
+    ["OPEN REQUESTS", String(overview.counts.open_requests), overview.counts.open_requests ? "Requests in progress" : "Nothing to track", "search", "/dashboard/requests", "border-t-[#dd6b12]"],
+    ["ORDERS", String(overview.counts.orders), overview.counts.orders ? "Buyer orders in progress" : "No active orders", "shield", "/dashboard/orders", "border-t-[#1f7a5c]"],
+  ] as const : [];
 
   return (
     <div className="w-full space-y-4 px-4 pb-16 pt-1 sm:px-6 lg:px-8">
@@ -42,9 +46,10 @@ export default function OverviewPage() {
       </section>
 
       <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4" aria-label="Account summary">
-        {stats.map(([label, value, note, icon, href, accent]) => <Link className={`flex items-center gap-3 rounded-xl border border-t-[3px] border-[#e4e2da] bg-white p-3.5 shadow-[0_1px_2px_rgba(18,20,28,.03)] transition hover:-translate-y-0.5 hover:shadow-md ${accent}`} href={href} key={label}><span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-[#edeff5] text-[#14213d] [&>svg]:h-4 [&>svg]:w-4"><DashboardIcon name={icon} /></span><span className="min-w-0 flex-1"><small className="block text-[9px] font-bold tracking-[.1em] text-[#9498a3]">{label}</small><span className="mt-0.5 flex items-baseline gap-2"><strong className="font-[Manrope] text-lg font-bold text-[#12141c]">{value}</strong><span className="truncate text-[10px] text-[#5c5f6b]">{note}</span></span></span><Arrow /></Link>)}
+        {stats.length ? stats.map(([label, value, note, icon, href, accent]) => <Link className={`flex items-center gap-3 rounded-xl border border-t-[3px] border-[#e4e2da] bg-white p-3.5 shadow-[0_1px_2px_rgba(18,20,28,.03)] transition hover:-translate-y-0.5 hover:shadow-md ${accent}`} href={href} key={label}><span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-[#edeff5] text-[#14213d] [&>svg]:h-4 [&>svg]:w-4"><DashboardIcon name={icon} /></span><span className="min-w-0 flex-1"><small className="block text-[9px] font-bold tracking-[.1em] text-[#9498a3]">{label}</small><span className="mt-0.5 flex items-baseline gap-2"><strong className="font-[Manrope] text-lg font-bold text-[#12141c]">{value}</strong><span className="truncate text-[10px] text-[#5c5f6b]">{note}</span></span></span><Arrow /></Link>) : ["LISTINGS", "REQUESTS", "ORDERS"].map((label) => <div className="flex items-center gap-3 rounded-xl border border-t-[3px] border-[#e4e2da] bg-white p-3.5" key={label}><span className="h-8 w-8 animate-pulse rounded-lg bg-[#edeff5]" /><span><small className="block text-[9px] font-bold tracking-[.1em] text-[#9498a3]">{label}</small><strong className="mt-1 block text-xs text-[#9498a3]">Loading…</strong></span></div>)}
         <KycStatusSummary compact overviewStyle />
       </section>
+      {error && <p className="rounded-lg border border-[#f1c8c3] bg-[#fff5f3] p-3 text-xs font-semibold text-[#a32929]" role="alert">{error}</p>}
 
       <section className="rounded-[14px] border border-[#e4e2da] bg-white p-4 shadow-[0_1px_2px_rgba(18,20,28,.03)] sm:p-5">
         <div className="flex items-end justify-between gap-4"><div><span className="text-[9px] font-bold uppercase tracking-[.12em] text-[#9498a3]">SERVICES</span><h3 className="mt-1 font-[Manrope] text-lg font-semibold text-[#12141c]">Hollyway services</h3><p className="mt-1 text-xs text-[#5c5f6b]">Open any service pathway directly from your workspace.</p></div><span className="hidden text-[10px] text-[#9498a3] sm:block">Scroll to explore</span></div>
@@ -52,7 +57,7 @@ export default function OverviewPage() {
       </section>
 
       <section className="grid gap-4 xl:grid-cols-[minmax(0,1.35fr)_minmax(300px,.65fr)]">
-        <article className="rounded-[14px] border border-[#e4e2da] bg-white p-4 shadow-[0_1px_2px_rgba(18,20,28,.03)] sm:p-5"><div><span className="text-[9px] font-bold uppercase tracking-[.12em] text-[#9498a3]">YOUR ACTIVITY</span><h3 className="mt-1 font-[Manrope] text-lg font-semibold text-[#12141c]">Recent activity</h3></div><div className="mt-4 flex min-h-28 items-center gap-4 rounded-xl border border-dashed border-[#d8d5ca] bg-[#f8f7f3] p-4"><span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-white text-[#14213d] shadow-sm [&>svg]:h-4 [&>svg]:w-4"><DashboardIcon name="grid" /></span><div className="min-w-0 flex-1"><strong className="block text-xs font-semibold text-[#12141c]">No activity yet</strong><p className="mt-1 text-[10px] leading-4 text-[#5c5f6b]">Listings, requests, orders and service updates will appear here.</p></div><Link className="shrink-0 text-[10px] font-bold text-[#b8560d] hover:underline" href="/dashboard/listings/new">Get started</Link></div></article>
+        <article className="rounded-[14px] border border-[#e4e2da] bg-white p-4 shadow-[0_1px_2px_rgba(18,20,28,.03)] sm:p-5"><div><span className="text-[9px] font-bold uppercase tracking-[.12em] text-[#9498a3]">YOUR ACTIVITY</span><h3 className="mt-1 font-[Manrope] text-lg font-semibold text-[#12141c]">Recent activity</h3></div>{overview?.recent_activity.length ? <div className="mt-3 divide-y divide-[#e4e2da]">{overview.recent_activity.slice(0, 5).map((activity) => <Link className="flex items-center justify-between gap-3 py-2.5 first:pt-0" href={activity.href} key={`${activity.type}-${activity.reference}`}><span className="min-w-0"><strong className="block truncate text-xs font-semibold text-[#12141c]">{activity.title}</strong><span className="mt-0.5 block truncate text-[10px] text-[#5c5f6b]">{activity.type} · {activity.status_label}</span></span><span className="shrink-0 text-[9px] text-[#9498a3]">{new Date(activity.updated_at).toLocaleDateString("en-NG")}</span></Link>)}</div> : <div className="mt-4 flex min-h-28 items-center gap-4 rounded-xl border border-dashed border-[#d8d5ca] bg-[#f8f7f3] p-4"><span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-white text-[#14213d] shadow-sm [&>svg]:h-4 [&>svg]:w-4"><DashboardIcon name="grid" /></span><div className="min-w-0 flex-1"><strong className="block text-xs font-semibold text-[#12141c]">{overview ? "No activity yet" : "Loading activity…"}</strong><p className="mt-1 text-[10px] leading-4 text-[#5c5f6b]">{overview ? "Listings, requests, orders and service updates will appear here." : "Your persisted workspace records are loading."}</p></div>{overview && <Link className="shrink-0 text-[10px] font-bold text-[#b8560d] hover:underline" href="/dashboard/listings/new">Get started</Link>}</div>}</article>
         <article className="rounded-[14px] border border-[#e4e2da] bg-white p-4 shadow-[0_1px_2px_rgba(18,20,28,.03)] sm:p-5"><span className="text-[9px] font-bold uppercase tracking-[.12em] text-[#9498a3]">QUICK ACTIONS</span><h3 className="mt-1 font-[Manrope] text-lg font-semibold text-[#12141c]">Start something</h3><div className="mt-3 grid grid-cols-2 gap-2">{quickActions.map(([title, text, icon, href]) => <Link className="group rounded-lg border border-[#e4e2da] p-2.5 hover:border-[#14213d]" href={href} key={title}><span className="flex items-center gap-2"><span className="h-4 w-4 text-[#b8560d] [&>svg]:h-full [&>svg]:w-full"><DashboardIcon name={icon} /></span><strong className="text-[10px] font-semibold text-[#12141c]">{title}</strong></span><small className="mt-1.5 block text-[9px] leading-4 text-[#9498a3]">{text}</small></Link>)}</div></article>
       </section>
 

@@ -9,11 +9,11 @@ type NavItem = readonly [string, string, string];
 type NavGroup = { label: string; items: readonly NavItem[] };
 
 const navigationGroups: readonly NavGroup[] = [
-  { label: "COMMERCE", items: [["Marketplace", "/dashboard/marketplace", "store"], ["My listings", "/dashboard/listings", "box"], ["My requests", "/dashboard/requests", "search"], ["My orders", "/dashboard/orders", "shield"], ["My escrow", "/dashboard/escrow", "shield"]] },
+  { label: "COMMERCE", items: [["Marketplace", "/dashboard/marketplace", "store"], ["Saved listings", "/dashboard/saved", "heart"], ["My listings", "/dashboard/listings", "box"], ["Sales", "/dashboard/sales", "box"], ["My requests", "/dashboard/requests", "search"], ["My orders", "/dashboard/orders", "shield"], ["My escrow", "/dashboard/escrow", "shield"]] },
   { label: "OPERATIONS", items: [["Deliveries", "/dashboard/logistics", "truck"], ["Relocations", "/dashboard/relocation", "truck"]] },
-  { label: "SERVICES", items: [["Professional services", "/dashboard/services", "tool"], ["Events", "/dashboard/events", "tool"]] },
+  { label: "SERVICES", items: [["Professional services", "/dashboard/services", "tool"], ["Events", "/dashboard/events", "tool"], ["Solar", "/dashboard/solar", "sun"]] },
   { label: "PARTNERSHIPS", items: [["Referrals", "/dashboard/referrals", "users"], ["Reseller", "/dashboard/reseller", "store"]] },
-  { label: "FINANCE", items: [["Ads & promotions", "/dashboard/advertising", "grid"], ["Wallet & payouts", "/dashboard/wallet", "wallet"]] },
+  { label: "FINANCE", items: [["Wallet & payouts", "/dashboard/wallet", "wallet"]] },
   { label: "ACCOUNT", items: [["Profile & KYC", "/dashboard/profile", "shield"], ["Business upgrade", "/dashboard/profile/business-upgrade", "store"], ["Settings", "/dashboard/settings", "settings"]] },
 ];
 
@@ -23,6 +23,7 @@ function isAccountPath(pathname: string, href: string) { return href === "/dashb
 export function dashboardPageTitle(pathname: string) {
   if (pathname.startsWith("/dashboard/marketplace/markets")) return "Marketplace";
   if (pathname.startsWith("/dashboard/marketplace/")) return "Listing details";
+  if (pathname.startsWith("/dashboard/sales/")) return "Sale details";
   if (pathname.startsWith("/dashboard/notifications")) return "Notifications";
   if (pathname.startsWith("/dashboard/help")) return "Help centre";
   if (pathname.startsWith("/dashboard/referrals")) return "Referrals & reseller";

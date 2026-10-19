@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Arrow } from "../../../components/ui/Arrow";
 import DashboardIcon from "../../dashboard/components/DashboardIcon";
 import DashboardPageHeader from "../../dashboard/components/DashboardPageHeader";
+import PartnerApplicationPanel from "../components/PartnerApplicationPanel";
 
 const steps = [
   ["Share", "Copy your HWP referral link and send it to someone who should use Hollyway."],
@@ -51,6 +52,7 @@ export default function ReferralGuidePage() {
           View my referral link <Arrow />
         </Link>
       </section>
+      <PartnerApplicationPanel />
     </div>
   );
 }

@@ -1,9 +1,10 @@
 import { apiFetch } from "../../../components/api/apiFetch";
 import { ApiResponseError, responsePayload } from "../../../components/api/apiResponse";
+import { fetchAllPages } from "../../../components/api/pagination";
 import { getCustomerApiBaseUrl } from "../../../components/config/customerApi";
 
 export type LogisticsStatus = "draft" | "pending_review" | "needs_information" | "quoting" | "quoted" | "quote_accepted" | "payment_pending" | "booked" | "picked_up" | "in_transit" | "delivered" | "completed" | "cancelled";
-export type LogisticsOption = "same_day_intracity" | "gbenga_minibus" | "interstate_waybill" | "international_air_express";
+export type LogisticsOption = "same_day_intracity" | "bulky_cargo_minibus" | "interstate_waybill" | "international_air_express";
 export type SizeClass = "small_parcel" | "medium_box" | "heavy_furniture" | "bulk_sacks";
 
 export type LogisticsQuote = {
@@ -16,6 +17,15 @@ export type LogisticsQuote = {
   status: string;
   created_at: string;
   updated_at: string;
+};
+export type LogisticsDeliveryProof = {
+  id: string;
+  name: string;
+  mime_type: string;
+  byte_size: number;
+  uploaded_by_admin_email: string;
+  created_at: string;
+  download_path: string;
 };
 export type LogisticsRequest = {
   id: string;
@@ -42,6 +52,7 @@ export type LogisticsRequest = {
   carrier_name: string | null;
   tracking_reference: string | null;
   admin_note: string | null;
+  proofs_of_delivery: LogisticsDeliveryProof[];
   quotes: LogisticsQuote[];
   status_events: Array<{ id: string; from_status: string | null; to_status: string; to_status_label: string; actor_admin_email: string | null; reason: string | null; created_at: string }>;
   created_at: string;
@@ -71,6 +82,9 @@ function parse(value: unknown): LogisticsRequest {
   if (!record(value) || typeof value.id !== "string" || typeof value.reference !== "string") throw new ApiResponseError("Logistics response returned an invalid request.", 502);
   return {
     ...(value as LogisticsRequest),
+    proofs_of_delivery: Array.isArray(value.proofs_of_delivery)
+      ? value.proofs_of_delivery as LogisticsDeliveryProof[]
+      : [],
     quotes: Array.isArray(value.quotes) ? value.quotes as LogisticsQuote[] : [],
     status_events: Array.isArray(value.status_events) ? value.status_events as LogisticsRequest["status_events"] : [],
   };
@@ -96,10 +110,13 @@ export async function saveLogistics(input: LogisticsSaveInput, reference?: strin
   return read(response);
 }
 export async function fetchLogistics() {
-  const response = await fetch(`${getCustomerApiBaseUrl()}/api/v1/logistics`, { credentials: "include", headers: { Accept: "application/json" } });
-  const payload = await responsePayload(response);
-  const items = record(payload.data) && Array.isArray(payload.data.items) ? payload.data.items : [];
-  return items.map(parse);
+  return fetchAllPages(async (page, pageSize) => {
+    const response = await fetch(`${getCustomerApiBaseUrl()}/api/v1/logistics?page=${page}&page_size=${pageSize}`, { credentials: "include", headers: { Accept: "application/json" } });
+    const payload = await responsePayload(response);
+    const data = record(payload.data) ? payload.data : {};
+    const items = Array.isArray(data.items) ? data.items.map(parse) : [];
+    return { items, hasNext: data.has_next === true };
+  });
 }
 export async function fetchLogisticsRequest(reference: string) {
   const response = await fetch(`${getCustomerApiBaseUrl()}/api/v1/logistics/${encodeURIComponent(reference)}`, { credentials: "include", headers: { Accept: "application/json" } });
@@ -112,3 +129,7 @@ export async function acceptLogisticsQuote(reference: string, quoteId: string) {
   return read(response);
 }
 export function formatLogisticsMoney(value: number | null) { return value === null ? "Not set" : `₦${(value / 100).toLocaleString("en-NG")}`; }
+
+export function logisticsProofUrl(proof: LogisticsDeliveryProof) {
+  return `${getCustomerApiBaseUrl()}${proof.download_path}`;
+}

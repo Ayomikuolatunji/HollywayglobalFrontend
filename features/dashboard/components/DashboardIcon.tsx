@@ -37,6 +37,13 @@ export default function DashboardIcon({ name }: { name: string }) {
       </Svg>
     );
   }
+  if (name === "heart") {
+    return (
+      <Svg>
+        <path d="M12 20.5S4 15.4 4 9.6A4.6 4.6 0 0 1 12 6a4.6 4.6 0 0 1 8 3.6c0 5.8-8 10.9-8 10.9Z" strokeLinejoin="round" />
+      </Svg>
+    );
+  }
   if (name === "cart") {
     return (
       <Svg>

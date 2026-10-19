@@ -21,8 +21,8 @@ export default function ResellerOrderReceipt({
           Reseller order saved as Draft
         </h2>
         <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-[#53627a]">
-          Your customer order and markup details are saved locally. They have not been sent for
-          server review or payment.
+          Your customer order and markup details are saved on Hollyway. Review status, payment and
+          delivery are still controlled by the server workflow.
         </p>
         <OrderCopyActions copy={copy} />
         <div className="mt-7 flex flex-wrap justify-center gap-3">

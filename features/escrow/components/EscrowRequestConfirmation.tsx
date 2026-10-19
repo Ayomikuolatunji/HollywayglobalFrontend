@@ -33,7 +33,7 @@ export default function EscrowRequestConfirmation({ request, onCreateAnother }: 
       { label: "Purpose", value: request.purpose_label },
       { label: "Subject", value: request.subject || "Not provided" },
       { label: "Agreed value", value: formatMinorNaira(request.amount_minor) },
-      { label: "Hollyway fee", value: feeLabel(request) },
+      { label: "Hollyway fee", value: `${feeLabel(request)}${request.loyalty_discount_percentage ? ` · ${request.loyalty_discount_percentage}% loyalty discount` : ""}` },
       { label: "Fee coverage", value: coverageLabel(request.fee_coverage) },
       { label: "Parties", value: parties },
       { label: "Release conditions", value: request.release_conditions || "To be confirmed" },

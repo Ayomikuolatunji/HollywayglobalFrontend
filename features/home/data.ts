@@ -1,34 +1,10 @@
-import { adminWhatsApp, sellWhatsApp, socialChannels, wantedWhatsApp } from "../../components/config/contact";
-
-export {
-  adminPhone,
-  adminPhoneHref,
-  adminWhatsApp,
-  contactEmail,
-  facebookGroup,
-  facebookPage,
-  sellWhatsApp,
-  socialChannels,
-  supportEmail,
-  whatsappChannel,
-  whatsappGroup,
-  wantedWhatsApp,
-} from "../../components/config/contact";
-
-export const audienceRelayBaseUrl = (
-  process.env.NEXT_PUBLIC_AUDIENCE_RELAY_BASE_URL || "https://staging.audiencerelay.com"
-).replace(/\/$/, "");
-export const audienceRelayTokens = {
-  contact: process.env.NEXT_PUBLIC_AUDIENCE_RELAY_CONTACT_FORM_TOKEN || "",
-  newsletter: process.env.NEXT_PUBLIC_AUDIENCE_RELAY_NEWSLETTER_FORM_TOKEN || "",
-};
-
 export const navLinks = [
   ["Home", "/"],
   ["How it works", "#how"],
   ["Categories", "#categories"],
   ["Fees & requests", "#pricing"],
   ["Logistics", "#logistics"],
+  ["Solar", "/solar"],
   ["About us", "/about"],
   ["Testimonials", "/testimonials"],
   ["Contact", "#contact"],
@@ -44,7 +20,7 @@ export const categories = [
 ];
 
 export const steps = [
-  ["01", "Tell us what you have", "List an item for free or send a wanted request for ₦200."],
+  ["01", "Tell us what you have", "List an item for free or send a wanted request."],
   [
     "02",
     "Reach the right people",
@@ -100,32 +76,17 @@ export const requestPoints = [
   "Reachable phone number",
 ];
 export const logistics = [
-  ["Same-day & local", "Fez Delivery, Kwik, Bolt, inDrive and Uber Delivery"],
+  ["Same-day & local", "Approved local dispatch partners confirmed for each request"],
   [
     "Dedicated bulk cargo",
-    "Mr. Gbenga minibus service for large furniture, appliances and whole-house moves",
+    "Manual bulky-cargo carrier coordination for furniture, appliances and whole-house moves",
   ],
   [
     "Nationwide waybill",
-    "GIG Logistics, Fez Delivery, Red Star Express, CourierPlus and Deluxe Express",
+    "Admin-coordinated waybill options based on the pickup, destination and parcel details",
   ],
   [
     "High-value & cross-border",
-    "DHL, FedEx and AfricanIES for specialised freight from the USA and China",
+    "Admin-coordinated freight options confirmed for the route and cargo requirements",
   ],
 ];
-export const feeRows = [
-  ["₦1,000–₦10,000", "₦150–₦550"],
-  ["₦10,001–₦50,000", "₦1,100"],
-  ["₦50,001–₦100,000", "₦2,200"],
-  ["₦100,001–₦500,000", "₦3,300"],
-  ["₦500,001–₦1,000,000", "₦10,500"],
-  ["Above ₦1,000,000", "1% of item value"],
-];
-
-export const channels = socialChannels.map(({ shortIcon, title, detail, href }) => [
-  shortIcon,
-  title,
-  detail,
-  href,
-] as const);

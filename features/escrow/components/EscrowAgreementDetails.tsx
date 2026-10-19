@@ -35,7 +35,7 @@ export default function EscrowAgreementDetails({ request }: { request: EscrowReq
           </div>
         </div>
         <dl className="mt-4 grid gap-x-5 gap-y-3 border-t border-[#eef1f4] pt-4 text-xs sm:grid-cols-2">
-          <Info label="Hollyway fee" value={feeLabel(request)} />
+          <Info label="Hollyway fee" value={`${feeLabel(request)}${request.loyalty_discount_percentage ? ` · ${request.loyalty_discount_percentage}% loyalty discount` : ""}`} />
           <Info label="Fee paid by" value={coverageLabel(request.fee_coverage)} />
           <Info label="Delivery" value={request.delivery_required ? request.courier_method || "Method to be confirmed" : "Not included"} />
           {request.delivery_required && <Info label="Delivery fee paid by" value={coverageLabel(request.delivery_fee_coverage)} />}

@@ -26,5 +26,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.6,
       images: [`${siteUrl}/site-logo.png`],
     },
+    {
+      url: `${siteUrl}/solar`,
+      lastModified,
+      changeFrequency: "weekly",
+      priority: 0.8,
+      images: [`${siteUrl}/site-logo.png`],
+    },
   ];
 }

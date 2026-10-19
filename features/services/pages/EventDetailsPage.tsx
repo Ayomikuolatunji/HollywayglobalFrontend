@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState, type ReactNode } from "react";
 import { ApiResponseError } from "../../../components/api/apiResponse";
 import { Arrow } from "../../../components/ui/Arrow";
+import EventProposalPanel from "../components/EventProposalPanel";
 import ServicePageHeader from "../components/ServicePageHeader";
 import { fetchEvent, formatEventMoney, reviewEvent, type EventRequest } from "../data/events";
 
@@ -50,12 +51,12 @@ export default function EventDetailsPage() {
       <ServicePageHeader
         kicker="EVENT REQUEST"
         title={`${event.event_type_label} · ${event.reference}`}
-        description="Hollyway keeps the request, quotations, vendor assignments and status history together for this event."
+        description="Hollyway keeps the request, quotations, vendor assignments, payment record and status history together for this event."
         action={<div className="flex flex-wrap items-center gap-3"><Link className="inline-flex items-center gap-2 text-xs font-extrabold text-[#1453bb]" href="/dashboard/events">Back to events <Arrow /></Link>{["draft", "needs_information"].includes(event.status) && <Link className="inline-flex h-9 items-center rounded-lg bg-[#1453bb] px-3 text-xs font-extrabold text-white" href={`/dashboard/events/new?reference=${encodeURIComponent(event.reference)}`}>Continue request</Link>}</div>}
       />
       {error && <p className="rounded-lg border border-[#f1c8c3] bg-[#fff5f3] p-3 text-xs font-semibold text-[#a32929]">{error}</p>}
       <div className="grid gap-4 lg:grid-cols-[1.1fr_.9fr]">
-        <section className="space-y-4"><RequestPanel event={event} /><ServicesPanel event={event} /><QuotesPanel event={event} /></section>
+        <section className="space-y-4"><RequestPanel event={event} /><ServicesPanel event={event} /><QuotesPanel event={event} /><EventProposalPanel event={event} onChange={setEvent} onError={setError} /></section>
         <aside className="space-y-4"><TimelinePanel event={event} /><AssignmentsPanel event={event} />{event.status === "completed" && !event.review && <ReviewPanel rating={rating} comment={comment} reviewing={reviewing} setRating={setRating} setComment={setComment} saveReview={saveReview} />}</aside>
       </div>
     </div>

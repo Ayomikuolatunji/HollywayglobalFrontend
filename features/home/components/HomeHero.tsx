@@ -1,8 +1,14 @@
-import Link from "next/link";
+"use client";
+
 import { Arrow, SocialIcon } from "./HomeIcons";
-import { adminWhatsApp, sellWhatsApp, wantedWhatsApp, whatsappChannel } from "../data";
+import { usePublicContact } from "../../../components/config/PublicContactProvider";
 
 export default function HomeHero() {
+  const { contact } = usePublicContact();
+  const sellHref = contact?.sell_whatsapp_url || "#contact";
+  const adminHref = contact?.admin_whatsapp_url || "#contact";
+  const channelHref = contact?.whatsapp_channel_url || "#contact";
+  const wantedHref = contact?.wanted_whatsapp_url || "#contact";
   return (
     <section className="relative overflow-visible bg-gradient-to-br from-[#04152f] via-[#082b61] to-[#0d3b7c] text-white">
       <div className="mx-auto grid min-h-[560px] w-[calc(100%-40px)] max-w-[1180px] items-center gap-12 py-16 lg:w-[calc(100%-64px)] lg:grid-cols-[1fr_.82fr] lg:gap-[70px]">
@@ -21,9 +27,9 @@ export default function HomeHero() {
           </p>
           <div className="flex flex-wrap gap-3">
             <a
-              href={sellWhatsApp}
-              target="_blank"
-              rel="noreferrer"
+              href={sellHref}
+              target={sellHref.startsWith("http") ? "_blank" : undefined}
+              rel={sellHref.startsWith("http") ? "noreferrer" : undefined}
               className="inline-flex min-h-11 items-center gap-3 rounded-lg bg-gradient-to-br from-[#ff8a00] to-[#ffb01c] px-4 py-3 text-[11px] font-extrabold text-[#142039] shadow-lg shadow-orange-950/20"
             >
               Sell an item free <Arrow />
@@ -69,22 +75,22 @@ export default function HomeHero() {
       </div>
       <div className="relative z-10 mx-auto grid w-[calc(100%-40px)] max-w-[1180px] translate-y-10 grid-cols-1 overflow-hidden rounded-xl bg-white text-[#0b1830] shadow-2xl sm:grid-cols-3 lg:w-[calc(100%-64px)]">
         <QuickLink
-          href={adminWhatsApp}
+          href={adminHref}
           icon="whatsapp"
           title="Chat with admin"
           text="Sell or ask for help"
         />
         <QuickLink
-          href={whatsappChannel}
+          href={channelHref}
           icon="whatsapp"
           title="WhatsApp channel"
           text="Follow new updates"
         />
         <QuickLink
-          href={wantedWhatsApp}
+          href={wantedHref}
           icon="search"
           title="Post a wanted request"
-          text="Message admin · ₦200"
+          text="Message admin to post"
         />
       </div>
     </section>
@@ -105,8 +111,8 @@ function QuickLink({
   return (
     <a
       href={href}
-      target="_blank"
-      rel="noreferrer"
+      target={href.startsWith("http") ? "_blank" : undefined}
+      rel={href.startsWith("http") ? "noreferrer" : undefined}
       className="flex items-center gap-3 border-b border-[#dfe4ed] p-4 last:border-0 hover:bg-[#f7f9fc] sm:border-b-0 sm:border-r sm:last:border-0"
     >
       <span

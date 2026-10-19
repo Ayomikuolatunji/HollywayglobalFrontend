@@ -1,7 +1,5 @@
 import type { BusinessUpgrade } from "./accountApi";
 
-export const businessUpgradeStorageKey = "hollyway-business-upgrade-draft";
-
 export type BusinessUpgradeDraft = {
   companyName: string;
   registrationNumber: string;
@@ -49,23 +47,6 @@ export function draftFromBusinessUpgrade(
   };
 }
 
-export function mergeBusinessUpgradeDraft(
-  local: BusinessUpgradeDraft,
-  remote: BusinessUpgradeDraft,
-): BusinessUpgradeDraft {
-  return {
-    companyName: remote.companyName || local.companyName,
-    registrationNumber: remote.registrationNumber || local.registrationNumber,
-    tin: remote.tin || local.tin,
-    companyEmail: remote.companyEmail || local.companyEmail,
-    companyPhone: remote.companyPhone || local.companyPhone,
-    position: remote.position || local.position,
-    addressStreet: remote.addressStreet || local.addressStreet,
-    addressCity: remote.addressCity || local.addressCity,
-    addressState: remote.addressState || local.addressState,
-  };
-}
-
 export function isBusinessUpgradeLocked(status?: string) {
   return (
     status === "verification_pending" ||
@@ -79,61 +60,6 @@ export function hasBusinessUpgradeDocument(
   kind: string,
 ) {
   return Boolean(upgrade?.documents?.some((document) => document.kind === kind));
-}
-
-export function getBusinessUpgradeStorageKey(accountEmail?: string) {
-  const normalizedEmail = typeof accountEmail === "string" ? accountEmail.trim().toLowerCase() : "";
-  return normalizedEmail
-    ? `${businessUpgradeStorageKey}:${encodeURIComponent(normalizedEmail)}`
-    : businessUpgradeStorageKey;
-}
-
-function text(value: unknown) {
-  return typeof value === "string" ? value : "";
-}
-
-export function readBusinessUpgradeDraft(storageKey = businessUpgradeStorageKey) {
-  if (typeof window === "undefined") return emptyBusinessUpgradeDraft;
-  try {
-    const parsed = JSON.parse(window.localStorage.getItem(storageKey) || "{}") as Record<
-      string,
-      unknown
-    >;
-    return {
-      companyName: text(parsed.companyName),
-      registrationNumber: text(parsed.registrationNumber),
-      tin: text(parsed.tin),
-      companyEmail: text(parsed.companyEmail),
-      companyPhone: text(parsed.companyPhone),
-      position: text(parsed.position),
-      addressStreet: text(parsed.addressStreet),
-      addressCity: text(parsed.addressCity),
-      addressState: text(parsed.addressState),
-    };
-  } catch {
-    return emptyBusinessUpgradeDraft;
-  }
-}
-
-export function persistBusinessUpgradeDraft(
-  draft: BusinessUpgradeDraft,
-  storageKey = businessUpgradeStorageKey,
-) {
-  if (typeof window === "undefined") return;
-  try {
-    window.localStorage.setItem(storageKey, JSON.stringify(draft));
-  } catch {
-    // A full or restricted browser store must not interrupt form editing.
-  }
-}
-
-export function clearBusinessUpgradeDraft(storageKey = businessUpgradeStorageKey) {
-  if (typeof window === "undefined") return;
-  try {
-    window.localStorage.removeItem(storageKey);
-  } catch {
-    // Ignore restricted browser storage during a successful submission.
-  }
 }
 
 export function businessStatusLabel(status: string) {

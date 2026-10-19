@@ -1,6 +1,6 @@
 import { showToast } from "../ui/ToastProvider";
 
-type MutationMethod = "POST" | "PUT" | "PATCH";
+type MutationMethod = "POST" | "PUT" | "PATCH" | "DELETE";
 
 export type ApiFetchOptions = {
   notify?: boolean;
@@ -9,7 +9,7 @@ export type ApiFetchOptions = {
 };
 
 function isMutationMethod(method: string): method is MutationMethod {
-  return method === "POST" || method === "PUT" || method === "PATCH";
+  return method === "POST" || method === "PUT" || method === "PATCH" || method === "DELETE";
 }
 
 export async function apiFetch(

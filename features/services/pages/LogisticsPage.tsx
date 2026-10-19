@@ -10,7 +10,7 @@ import { fetchLogisticsRequest, saveLogistics, type LogisticsOption, type Logist
 
 const options = [
   { value: "same_day_intracity", label: "Same-day intra-city", tip: "For pickup and delivery within the same city, coordinated with an approved local carrier." },
-  { value: "gbenga_minibus", label: "Mr. Gbenga minibus", tip: "For bulky appliances, furniture and larger loads around Lagos and nearby areas." },
+  { value: "bulky_cargo_minibus", label: "Bulky cargo / minibus", tip: "For bulky appliances, furniture and larger loads; Hollyway confirms the current carrier." },
   { value: "interstate_waybill", label: "Interstate waybill", tip: "For tracked terminal or doorstep delivery between states." },
   { value: "international_air_express", label: "International air express", tip: "For time-sensitive international cargo; Admin confirms carrier and current quotation." },
 ] as const;

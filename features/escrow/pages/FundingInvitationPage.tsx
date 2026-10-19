@@ -89,7 +89,7 @@ export default function FundingInvitationPage() {
               <section className="rounded-lg border border-[#dfe4ed] bg-white p-4">
                 <h2 className="text-sm font-extrabold text-[#0b1830]">Review before payment</h2>
                 <p className="mt-2 text-xs leading-5 text-[#53627a]">This request was created for you to fund. Confirm the value and Hollyway fee before accepting responsibility.</p>
-                <dl className="mt-4 grid gap-3 border-t border-[#eef1f4] pt-4 sm:grid-cols-2"><Info label="Reference" value={preview.reference} /><Info label="Protected value" value={formatAmount(preview.amount_minor)} /><Info label="Hollyway fee" value={formatFee(preview)} /><Info label="Payment" value="Manual transfer after acceptance" /></dl>
+                <dl className="mt-4 grid gap-3 border-t border-[#eef1f4] pt-4 sm:grid-cols-2"><Info label="Reference" value={preview.reference} /><Info label="Protected value" value={formatAmount(preview.amount_minor)} /><Info label="Hollyway fee" value={`${formatFee(preview)}${preview.loyalty_discount_percentage ? ` · ${preview.loyalty_discount_percentage}% loyalty discount` : ""}`} /><Info label="Payment" value="Manual transfer after acceptance" /></dl>
               </section>
               <EscrowInvitationAcceptance accepting={accepting} error={error} loginHref={loginHref} onAccept={() => void accept()} onTermsChange={setTermsAccepted} preview={preview} signInRequired={signInRequired} signupHref={signupHref} termsAccepted={termsAccepted} />
             </div>

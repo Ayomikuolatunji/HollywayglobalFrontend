@@ -1,20 +1,10 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { apiFetch } from "../../../components/api/apiFetch";
 import { Arrow, SocialIcon } from "./HomeIcons";
 import Dropdown from "../../../components/forms/Dropdown";
-import {
-  adminPhone,
-  adminPhoneHref,
-  adminWhatsApp,
-  audienceRelayBaseUrl,
-  audienceRelayTokens,
-  channels,
-  contactEmail,
-  supportEmail,
-  whatsappChannel,
-} from "../data";
+import { usePublicContact } from "../../../components/config/PublicContactProvider";
+import { submitContact, subscribeToNewsletter } from "../data/contactApi";
 
 type Status = "idle" | "sending" | "sent" | "error";
 
@@ -27,8 +17,8 @@ function socialIconName(icon: string) {
   if (icon === "tiktok") return "tiktok";
   return "group";
 }
-
 export function NewsletterSection() {
+  const { contact } = usePublicContact();
   const [status, setStatus] = useState<Status>("idle");
 
   async function submit(event: FormEvent<HTMLFormElement>) {
@@ -37,7 +27,7 @@ export function NewsletterSection() {
     const email = String(new FormData(form).get("email") || "");
     setStatus("sending");
     try {
-      await submitForm("newsletter", { email, marketing_consent: true });
+      await subscribeToNewsletter(email);
       form.reset();
       setStatus("sent");
     } catch {
@@ -104,7 +94,7 @@ export function NewsletterSection() {
             For instant updates,{" "}
             <a
               className="font-bold text-[#1453bb]"
-              href={whatsappChannel}
+              href={contact?.whatsapp_channel_url || "#contact"}
               target="_blank"
               rel="noreferrer"
             >
@@ -133,8 +123,8 @@ export function NewsletterSection() {
     </section>
   );
 }
-
 export default function HomeContact() {
+  const { contact, loading } = usePublicContact();
   const [status, setStatus] = useState<Status>("idle");
 
   async function submit(event: FormEvent<HTMLFormElement>) {
@@ -143,7 +133,7 @@ export default function HomeContact() {
     const values = new FormData(form);
     setStatus("sending");
     try {
-      await submitForm("contact", {
+      await submitContact({
         name: String(values.get("name") || ""),
         email: String(values.get("email") || ""),
         topic: String(values.get("topic") || "General enquiry"),
@@ -176,20 +166,20 @@ export default function HomeContact() {
           <ContactLink
             icon="✉"
             title="Email support"
-            text={contactEmail}
-            href={`mailto:${contactEmail}`}
+            text={contact?.contact_email || (loading ? "Loading contact details" : "Contact details unavailable")}
+            href={contact?.contact_email ? `mailto:${contact.contact_email}` : "#contact"}
           />
           <ContactLink
             icon="WA"
             title="Admin WhatsApp DM"
-            text={adminPhone}
-            href={adminWhatsApp}
+            text={contact?.admin_phone || (loading ? "Loading contact details" : "Contact details unavailable")}
+            href={contact?.admin_whatsapp_url || "#contact"}
           />
           <ContactLink
             icon="☎"
             title="Phone support"
-            text={adminPhone}
-            href={adminPhoneHref}
+            text={contact?.admin_phone || (loading ? "Loading contact details" : "Contact details unavailable")}
+            href={contact?.admin_phone_href || "#contact"}
           />
         </div>
         <section className="mt-6 rounded-xl border border-[#dfe4ed] bg-white p-4" aria-labelledby="contact-social-title">
@@ -205,20 +195,20 @@ export default function HomeContact() {
             <SocialIcon name="group" />
           </div>
           <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-3">
-            {channels.map(([icon, title, text, href]) => (
+            {(contact?.social_channels || []).map((channel) => (
               <a
                 className="flex min-w-0 items-center gap-2 rounded-lg border border-[#eef1f4] bg-[#fbfcfe] p-2.5 hover:border-[#9fbbe4]"
-                href={href}
+                href={channel.url}
                 target="_blank"
                 rel="noreferrer"
-                key={title}
+                key={channel.key}
               >
                 <span className="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-[#eef5ff] text-[#1453bb]">
-                  <SocialIcon name={socialIconName(icon)} />
+                  <SocialIcon name={socialIconName(channel.icon)} />
                 </span>
                 <span className="min-w-0">
-                  <b className="block truncate text-[10px] text-[#0b1830]">{title}</b>
-                  <small className="mt-0.5 block truncate text-[8px] text-[#8490a4]">{text}</small>
+                  <b className="block truncate text-[10px] text-[#0b1830]">{channel.label}</b>
+                  <small className="mt-0.5 block truncate text-[8px] text-[#8490a4]">{channel.detail}</small>
                 </span>
               </a>
             ))}
@@ -341,18 +331,4 @@ function ContactLink({
       </span>
     </a>
   );
-}
-
-async function submitForm(type: "contact" | "newsletter", data: Record<string, string | boolean>) {
-  const token = audienceRelayTokens[type];
-  if (!token) throw new Error("AudienceRelay form token is not configured");
-  const response = await apiFetch(
-    `${audienceRelayBaseUrl}/api/v1/forms/${encodeURIComponent(token)}/submissions`,
-    { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(data) },
-    {
-      successMessage: type === "contact" ? "Message sent successfully." : "Subscription saved successfully.",
-      errorMessage: type === "contact" ? "Message could not be sent. Please try again." : "Subscription could not be saved. Please try again.",
-    },
-  );
-  if (!response.ok) throw new Error("AudienceRelay submission failed");
 }

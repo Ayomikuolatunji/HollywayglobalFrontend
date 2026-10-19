@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import ToastProvider from "../components/ui/ToastProvider";
+import { PublicContactProvider } from "../components/config/PublicContactProvider";
 
 const siteUrl = "https://hollywayglobal.com";
 const siteName = "Hollyway Global Quick Sales";
@@ -87,20 +88,8 @@ const structuredData = {
         height: 1254,
       },
       image: socialImage.url,
-      email: "contact@hollywayglobal.com",
-      telephone: "+2347015585967",
       areaServed: { "@type": "Country", name: "Nigeria" },
       knowsAbout: ["Quick sales", "Decluttering", "Distress sales", "Relocation clearance", "Escrow and logistics"],
-      sameAs: [
-        "https://chat.whatsapp.com/Ij8dR9bkwppHQq77srTSqx",
-        "https://whatsapp.com/channel/0029VbDn9GO30LKWJNk81P2M",
-        "https://www.facebook.com/Hollywayglobal/",
-        "https://www.facebook.com/groups/hollywayglobal",
-        "https://www.instagram.com/hollywayglobal/",
-        "https://www.tiktok.com/@hollywayglobal",
-        "https://x.com/hollywayglobal",
-        "https://www.linkedin.com/in/hollyway-global/",
-      ],
     },
     {
       "@type": "WebSite",
@@ -129,7 +118,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en">
       <body className="min-h-screen overflow-x-hidden bg-[#eef1f5] font-[DM_Sans] text-[#0b1830]">
-        <ToastProvider>{children}</ToastProvider>
+        <PublicContactProvider>
+          <ToastProvider>{children}</ToastProvider>
+        </PublicContactProvider>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
       </body>
     </html>

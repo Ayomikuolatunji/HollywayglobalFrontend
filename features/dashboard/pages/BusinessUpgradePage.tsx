@@ -19,15 +19,10 @@ import {
 } from "../data/accountApi";
 import { verifySettlementAccount } from "../data/settlementApi";
 import {
-  clearBusinessUpgradeDraft,
   draftFromBusinessUpgrade,
   emptyBusinessUpgradeDraft,
-  getBusinessUpgradeStorageKey,
   hasBusinessUpgradeDocument,
   isBusinessUpgradeLocked,
-  mergeBusinessUpgradeDraft,
-  persistBusinessUpgradeDraft,
-  readBusinessUpgradeDraft,
   type BusinessDocumentKind,
   type BusinessSettlementField,
   type BusinessUpgradeDraft,
@@ -44,9 +39,7 @@ function settlementKey(companyName: string, bankName: string, accountNumber: str
 
 export default function BusinessUpgradePage() {
   const { accountEmail } = useDashboard();
-  const storageKey = getBusinessUpgradeStorageKey(accountEmail);
   const [draft, setDraft] = useState<BusinessUpgradeDraft>(emptyBusinessUpgradeDraft);
-  const [hydratedStorageKey, setHydratedStorageKey] = useState("");
   const [upgrade, setUpgrade] = useState<BusinessUpgrade | null>(null);
   const [settlementBankName, setSettlementBankName] = useState("");
   const [settlementAccountNumber, setSettlementAccountNumber] = useState("");
@@ -63,17 +56,6 @@ export default function BusinessUpgradePage() {
   const [formError, setFormError] = useState("");
 
   useEffect(() => {
-    setDraft(readBusinessUpgradeDraft(storageKey));
-    setHydratedStorageKey(storageKey);
-  }, [storageKey]);
-
-  useEffect(() => {
-    if (hydratedStorageKey === storageKey) {
-      persistBusinessUpgradeDraft(draft, storageKey);
-    }
-  }, [draft, hydratedStorageKey, storageKey]);
-
-  useEffect(() => {
     if (!accountEmail) {
       setLoading(false);
       return;
@@ -84,18 +66,10 @@ export default function BusinessUpgradePage() {
     fetchBusinessUpgrade()
       .then((remote) => {
         if (!active) return;
-        if (remote.status === "not_submitted") {
-          setUpgrade(null);
-          return;
-        }
+        if (remote.status === "not_submitted") { setUpgrade(null); setDraft(emptyBusinessUpgradeDraft); return; }
         setUpgrade(remote);
         if (remote.status === "draft" || remote.status === "rejected") {
-          const local = readBusinessUpgradeDraft(storageKey);
-          const nextDraft = mergeBusinessUpgradeDraft(
-            local,
-            draftFromBusinessUpgrade(remote),
-          );
-          setDraft(nextDraft);
+          setDraft(draftFromBusinessUpgrade(remote));
           setSettlementBankName(remote.settlement_bank_name || "");
         }
       })
@@ -113,7 +87,7 @@ export default function BusinessUpgradePage() {
     return () => {
       active = false;
     };
-  }, [accountEmail, storageKey]);
+  }, [accountEmail]);
 
   function updateDraft(field: keyof BusinessUpgradeDraft, value: string) {
     setDraft((current) => ({ ...current, [field]: value }));
@@ -243,9 +217,7 @@ export default function BusinessUpgradePage() {
       });
       setUpgrade(result.data);
       if (action === "submit") {
-        clearBusinessUpgradeDraft(storageKey);
         setDraft(emptyBusinessUpgradeDraft);
-        setHydratedStorageKey("");
         setSettlementBankName("");
         setSettlementAccountNumber("");
         setSettlementAccountName("");

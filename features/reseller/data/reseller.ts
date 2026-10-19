@@ -1,7 +1,8 @@
 export type ResellerMarkupType = "Fixed amount" | "Percentage";
-export type ResellerOrderStatus = "Draft";
+export type ResellerOrderStatus = "Draft" | "Pending review" | "Confirmed" | "Completed" | "Cancelled";
 
 export type ResellerOrder = {
+  id: string;
   reference: string;
   listingCode: string;
   itemName: string;
@@ -19,48 +20,23 @@ export type ResellerOrder = {
   deliveryAddress: string;
   notes: string;
   status: ResellerOrderStatus;
+  statusLabel: string;
+  adminNote: string | null;
   createdAt: string;
+  updatedAt: string;
 };
 
-export const resellerOrdersStorageKey = "hollyway-reseller-orders";
+export function parseAmount(value: string) { return Number(value.replace(/[^0-9.]/g, "")) || 0; }
+export function formatAmount(value: string) { const digits = value.replace(/\D/g, ""); return digits ? Number(digits).toLocaleString("en-NG") : ""; }
 
-export function parseAmount(value: string) {
-  return Number(value.replace(/[^0-9.]/g, "")) || 0;
-}
-
-export function formatAmount(value: string) {
-  const digits = value.replace(/\D/g, "");
-  return digits ? Number(digits).toLocaleString("en-NG") : "";
-}
-
-export function calculateResellerTotals(
-  baseUnitPrice: number,
-  quantity: number,
-  markupType: ResellerMarkupType,
-  markupValue: number,
-) {
+export function calculateResellerTotals(baseUnitPrice: number, quantity: number, markupType: ResellerMarkupType, markupValue: number) {
   const safeUnitPrice = Math.max(0, baseUnitPrice);
   const safeQuantity = Math.max(1, quantity || 1);
   const safeMarkup = Math.max(0, markupValue);
   const subtotal = safeUnitPrice * safeQuantity;
-  const markupTotal = markupType === "Percentage"
-    ? subtotal * (safeMarkup / 100)
-    : safeMarkup * safeQuantity;
+  const markupTotal = markupType === "Percentage" ? Math.round(subtotal * (safeMarkup / 100)) : safeMarkup * safeQuantity;
   return { subtotal, markupTotal, customerTotal: subtotal + markupTotal };
 }
 
-export function readResellerOrders() {
-  if (typeof window === "undefined") return [] as ResellerOrder[];
-  try {
-    const value = JSON.parse(window.localStorage.getItem(resellerOrdersStorageKey) || "[]");
-    return Array.isArray(value) ? value as ResellerOrder[] : [];
-  } catch {
-    return [] as ResellerOrder[];
-  }
-}
-
-export function saveResellerOrder(order: ResellerOrder) {
-  const orders = [order, ...readResellerOrders().filter((item) => item.reference !== order.reference)].slice(0, 50);
-  window.localStorage.setItem(resellerOrdersStorageKey, JSON.stringify(orders));
-  return orders;
-}
+export function toApiMarkupType(value: ResellerMarkupType) { return value === "Percentage" ? "percentage" : "fixed"; }
+export function fromApiStatus(value: string): ResellerOrderStatus { return value === "pending_review" ? "Pending review" : value === "confirmed" ? "Confirmed" : value === "completed" ? "Completed" : value === "cancelled" ? "Cancelled" : "Draft"; }

@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import {
   createContext,
   useCallback,
@@ -10,20 +9,23 @@ import {
   type ReactNode,
 } from "react";
 import { usePathname } from "next/navigation";
-import { Arrow } from "../../../components/ui/Arrow";
 import { apiFetch } from "../../../components/api/apiFetch";
 import { getCustomerApiBaseUrl } from "../../../components/config/customerApi";
 import {
   getOrderCartItemCount,
   orderCartUpdatedEvent,
   readOrderCart,
+  writeOrderCart,
 } from "../../commerce/data/orderCart";
+import { fetchCart } from "../../commerce/data/cartApi";
 import { accountProfileUpdatedEvent, fetchAccountSettings } from "../data/accountApi";
 import {
   rememberCustomerAccount,
   registerCurrentCustomerSession,
 } from "../../auth/data/accountSwitch";
 import { fetchKycStatus } from "../data/kycApi";
+import { fetchNotifications } from "../data/notificationsApi";
+import { fetchSavedListingCodes, toggleSavedListing as toggleSavedListingApi } from "../../commerce/data/savedListingsApi";
 import {
   getKycStorageKey,
   hasKycSubmission,
@@ -36,6 +38,7 @@ import DashboardMobileTabs from "./DashboardMobileTabs";
 import DashboardSidebar, { dashboardPageTitle } from "./DashboardSidebar";
 import KycDraftBanner from "./KycDraftBanner";
 import KycPromptModal from "./KycPromptModal";
+import { DashboardAccessState, DashboardLoadingState } from "./DashboardSessionState";
 
 type CustomerAccount = { id: string; name: string; email: string };
 export type DashboardTheme = "light" | "dark";
@@ -47,6 +50,8 @@ type DashboardContextValue = {
   theme: DashboardTheme;
   setTheme: (theme: DashboardTheme) => void;
   signOut: () => Promise<void>;
+  savedListingCodes: ReadonlySet<string>;
+  toggleSavedListing: (code: string) => Promise<void>;
 };
 
 const DashboardContext = createContext<DashboardContextValue | null>(null);
@@ -56,62 +61,6 @@ export function useDashboard() {
   const value = useContext(DashboardContext);
   if (!value) throw new Error("useDashboard must be used inside DashboardShell");
   return value;
-}
-
-function DashboardAccessState({
-  status,
-  onRetry,
-}: {
-  status: "unauthenticated" | "error";
-  onRetry: () => void;
-}) {
-  const unavailable = status === "error";
-
-  return (
-    <section className="grid min-h-[70vh] place-items-center p-6">
-      <div className="w-full max-w-lg rounded-2xl border border-[#e4e2da] bg-white p-8 text-center shadow-xl shadow-[#061936]/10">
-        <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#14213d] font-[Manrope] font-extrabold text-white">
-          H
-        </span>
-        <span className="mt-6 block text-[10px] font-extrabold tracking-[.2em] text-[#dd6b12]">
-          HOLLYWAY GLOBAL
-        </span>
-        <h2 className="mt-3 font-[Manrope] text-3xl font-extrabold tracking-[-.05em] text-[#12141c]">
-          {unavailable ? "Dashboard unavailable" : "Sign in to continue"}
-        </h2>
-        <p className="mx-auto mt-3 max-w-sm text-sm leading-6 text-[#5c5f6b]">
-          {unavailable
-            ? "We could not reach the Hollyway service. Check the API connection and try again."
-            : "Your dashboard is protected. Sign in with your Hollyway user account to continue."}
-        </p>
-        <div className="mt-7 flex flex-wrap justify-center gap-3">
-          {unavailable && (
-            <button
-              className="h-11 rounded-lg border border-[#e4e2da] px-4 text-xs font-extrabold text-[#3b4b6b]"
-              type="button"
-              onClick={onRetry}
-            >
-              Try again
-            </button>
-          )}
-          <Link
-            className="inline-flex h-11 items-center gap-2 rounded-lg bg-[#14213d] px-4 text-xs font-extrabold text-white"
-            href="/login"
-          >
-            {unavailable ? "Open sign in" : "Go to sign in"}
-            <Arrow />
-          </Link>
-        </div>
-        <Link className="mt-5 block text-xs font-bold text-[#14213d] hover:underline" href="/">
-          Return to Hollyway Global
-        </Link>
-      </div>
-    </section>
-  );
-}
-
-function DashboardLoadingState() {
-  return <section className="grid min-h-[70vh] place-items-center p-6"><div className="rounded-xl border border-[#e4e2da] bg-white px-6 py-5 text-sm font-bold text-[#53627a] shadow-sm">Checking your Hollyway session…</div></section>;
 }
 
 export default function DashboardShell({ children }: { children: ReactNode }) {
@@ -124,6 +73,8 @@ export default function DashboardShell({ children }: { children: ReactNode }) {
   const [kycComplete, setKycComplete] = useState(false);
   const [kycIdentityName, setKycIdentityName] = useState("");
   const [cartCount, setCartCount] = useState(0);
+  const [notificationCount, setNotificationCount] = useState(0);
+  const [savedListingCodes, setSavedListingCodes] = useState<Set<string>>(new Set());
   const [showKycPrompt, setShowKycPrompt] = useState(false);
   const [kycStatusLoaded, setKycStatusLoaded] = useState(false);
   const [kycHasSubmission, setKycHasSubmission] = useState(false);
@@ -131,6 +82,18 @@ export default function DashboardShell({ children }: { children: ReactNode }) {
   const [accountPhotoUrl, setAccountPhotoUrl] = useState("");
   const [accountPhotoPath, setAccountPhotoPath] = useState("");
   const accountEmail = account?.email || "";
+
+  const toggleSavedListing = useCallback(async (code: string) => {
+    const normalized = code.trim().toUpperCase();
+    const currentlySaved = savedListingCodes.has(normalized);
+    await toggleSavedListingApi(normalized, currentlySaved);
+    setSavedListingCodes((current) => {
+      const next = new Set(current);
+      if (currentlySaved) next.delete(normalized);
+      else next.add(normalized);
+      return next;
+    });
+  }, [savedListingCodes]);
 
   const setTheme = useCallback((nextTheme: DashboardTheme) => {
     setThemeState(nextTheme);
@@ -237,6 +200,7 @@ export default function DashboardShell({ children }: { children: ReactNode }) {
       setShowKycPrompt(false);
       setKycStatusLoaded(false);
       setKycHasSubmission(false);
+      setSavedListingCodes(new Set());
       return;
     }
     setKycIdentityName("");
@@ -268,6 +232,33 @@ export default function DashboardShell({ children }: { children: ReactNode }) {
       active = false;
       controller.abort();
     };
+  }, [accountEmail]);
+
+  useEffect(() => {
+    if (!accountEmail) return;
+    let active = true;
+    fetchSavedListingCodes()
+      .then((codes) => { if (active) setSavedListingCodes(new Set(codes)); })
+      .catch(() => { if (active) setSavedListingCodes(new Set()); });
+    return () => { active = false; };
+  }, [accountEmail]);
+
+  useEffect(() => {
+    if (!accountEmail) return;
+    let active = true;
+    fetchCart()
+      .then((items) => { if (active) writeOrderCart(items); })
+      .catch(() => null);
+    return () => { active = false; };
+  }, [accountEmail]);
+
+  useEffect(() => {
+    if (!accountEmail) { setNotificationCount(0); return; }
+    let active = true;
+    fetchNotifications("all", 1)
+      .then((page) => { if (active) setNotificationCount(page.unread_count); })
+      .catch(() => { if (active) setNotificationCount(0); });
+    return () => { active = false; };
   }, [accountEmail]);
 
   useEffect(() => {
@@ -350,6 +341,7 @@ export default function DashboardShell({ children }: { children: ReactNode }) {
         <DashboardHeader
           title={dashboardPageTitle(pathname)}
           cartCount={cartCount}
+          notificationCount={notificationCount}
           accountInitial={accountInitial}
           accountId={account?.id || ""}
           accountName={accountName}
@@ -367,7 +359,7 @@ export default function DashboardShell({ children }: { children: ReactNode }) {
           )}
         {sessionState === "authenticated" ? (
           <DashboardContext.Provider
-            value={{ accountName, accountEmail, accountPhotoUrl, theme, setTheme, signOut }}
+            value={{ accountName, accountEmail, accountPhotoUrl, theme, setTheme, signOut, savedListingCodes, toggleSavedListing }}
           >
             {children}
           </DashboardContext.Provider>

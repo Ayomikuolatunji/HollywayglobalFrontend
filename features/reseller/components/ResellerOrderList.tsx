@@ -45,8 +45,9 @@ export default function ResellerOrderList({
               className="justify-self-start text-[10px] font-bold text-[#1453bb] hover:underline sm:justify-self-end"
               type="button"
               onClick={() => onContinue(order)}
+              disabled={order.status !== "Draft" && order.status !== "Cancelled"}
             >
-              Continue draft
+              {order.status === "Draft" || order.status === "Cancelled" ? "Continue order" : "View status"}
             </button>
           </article>
         ))}

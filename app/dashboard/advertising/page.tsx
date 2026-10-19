@@ -1,3 +1,5 @@
-import MyCampaignsPage from "../../../features/advertising/pages/MyCampaignsPage";
+import { notFound } from "next/navigation";
 
-export default MyCampaignsPage;
+export default function RemovedAdvertisingPage(): never {
+  notFound();
+}

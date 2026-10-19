@@ -107,7 +107,7 @@ export default function ProfilePhotoEditor({
           Profile picture
         </p>
         <p className="mt-1 text-[11px] leading-4 text-[#53627a] dark:text-[#b7c3d6]">
-          Use your Google photo, verified selfie or upload another.
+          Use your Google photo or upload another.
         </p>
         <div className="mt-2 flex flex-wrap items-center gap-2">
           <label className="inline-flex h-8 cursor-pointer items-center rounded-lg border border-[#1453bb] px-3 text-[10px] font-extrabold text-[#1453bb] hover:bg-[#f4f8ff] dark:border-[#8bb8ff] dark:text-[#8bb8ff] dark:hover:bg-[#202d44]">

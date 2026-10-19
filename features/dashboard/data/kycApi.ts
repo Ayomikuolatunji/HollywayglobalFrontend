@@ -2,8 +2,6 @@ import { getCustomerApiBaseUrl } from "../../../components/config/customerApi";
 import { apiFetch } from "../../../components/api/apiFetch";
 import type { KycServerStatus } from "./kyc";
 
-const minimumSelfieConfidence = 90;
-
 export type KycServerSubmission = {
   id?: string;
   user_id?: string;
@@ -15,9 +13,6 @@ export type KycServerSubmission = {
   country_code?: string;
   identity_type?: string;
   identity_last4?: string;
-  liveness_passed?: boolean;
-  selfie_match?: boolean;
-  selfie_confidence?: number;
   document_type?: string;
   document_name?: string;
   rejection_reason?: string | null;
@@ -54,7 +49,6 @@ function validationMessage(detail: unknown) {
   const fieldMessages: Record<string, string> = {
     identity_type: "Choose NIN or BVN before continuing.",
     identity_number: "Enter your 11-digit NIN or BVN before continuing.",
-    file: "Choose a clear front-facing selfie before submitting.",
   };
   return fieldMessages[field] || "Complete the required KYC fields before submitting.";
 }
@@ -99,12 +93,10 @@ export async function fetchKycStatus(signal?: AbortSignal): Promise<KycServerSub
 export async function verifyKyc(input: {
   identityType: string;
   identityNumber: string;
-  selfie: File;
 }) {
   const form = new FormData();
   form.set("identity_type", input.identityType);
   form.set("identity_number", input.identityNumber);
-  form.set("file", input.selfie, input.selfie.name);
 
   const response = await apiFetch(
     `${getCustomerApiBaseUrl()}/api/v1/kyc/verify`,
@@ -121,15 +113,6 @@ export async function verifyKyc(input: {
   }
   const submission = data.submission;
   const normalizedStatus = normalizeServerStatus(submission.status);
-  if (
-    normalizedStatus === "approved" &&
-    (submission.liveness_passed !== true ||
-      submission.selfie_match !== true ||
-      typeof submission.selfie_confidence !== "number" ||
-      submission.selfie_confidence < minimumSelfieConfidence)
-  ) {
-    throw new KycApiError("Verification did not pass the required face checks. Please try again.", response.status);
-  }
   return {
     message: typeof data.message === "string" ? data.message : "Your identity verification result is available.",
     submission: {

@@ -1,5 +1,6 @@
 import { apiFetch } from "../../../components/api/apiFetch";
 import { ApiResponseError, responsePayload } from "../../../components/api/apiResponse";
+import { fetchAllPages } from "../../../components/api/pagination";
 import { getCustomerApiBaseUrl } from "../../../components/config/customerApi";
 
 export type EventStatus =
@@ -10,6 +11,7 @@ export type EventStatus =
   | "quotations_ready"
   | "vendor_assigned"
   | "payment_pending"
+  | "payment_proof_submitted"
   | "confirmed"
   | "in_progress"
   | "completed"
@@ -56,6 +58,36 @@ export type EventAssignment = {
   assigned_at: string;
   completed_at: string | null;
 };
+export type EventPayment = {
+  id: string;
+  provider_reference: string;
+  provider: string;
+  amount_minor: number;
+  currency: string;
+  status: "pending" | "proof_submitted" | "received" | "rejected";
+  transfer_reference: string | null;
+  submitted_amount_minor: number | null;
+  transferred_at: string | null;
+  sender_name: string | null;
+  submitted_note: string | null;
+  reviewed_at: string | null;
+  admin_note: string | null;
+  failure_reason: string | null;
+  paid_at: string | null;
+  proof: { original_name: string; mime_type: string; byte_size: number } | null;
+};
+export type EventManualPayment = {
+  configured: boolean;
+  method?: "manual_bank_transfer";
+  bank_name?: string;
+  account_name?: string;
+  account_number?: string;
+  amount_minor?: number;
+  currency?: string;
+  instruction?: string;
+  admin_whatsapp_number?: string | null;
+  admin_whatsapp_url?: string | null;
+};
 export type EventRequest = {
   id: string;
   reference: string;
@@ -70,6 +102,9 @@ export type EventRequest = {
   target_budget_minor: number | null;
   terms_accepted_at: string | null;
   escrow_reference: string | null;
+  proposal_status: "pending" | "accepted" | "declined";
+  proposal_decided_at: string | null;
+  proposal_note: string | null;
   services: EventService[];
   quotes: EventQuote[];
   assignments: EventAssignment[];
@@ -83,6 +118,8 @@ export type EventRequest = {
     created_at: string;
   }>;
   review: { id: string; rating: number; comment: string; created_at: string } | null;
+  payment: EventPayment | null;
+  manual_payment?: EventManualPayment;
   created_at: string;
   updated_at: string;
   owner?: { id: string; email: string; name: string; phone: string };
@@ -118,6 +155,10 @@ function parseEvent(value: unknown): EventRequest {
     review: record(value.review)
       ? (value.review as EventRequest["review"])
       : null,
+    payment: record(value.payment) ? (value.payment as EventPayment) : null,
+    manual_payment: record(value.manual_payment)
+      ? (value.manual_payment as EventManualPayment)
+      : undefined,
   };
 }
 
@@ -156,13 +197,16 @@ export async function saveEvent(input: EventSaveInput, reference?: string) {
 }
 
 export async function fetchEvents(): Promise<EventRequest[]> {
-  const response = await fetch(`${getCustomerApiBaseUrl()}/api/v1/events`, {
-    credentials: "include",
-    headers: { Accept: "application/json" },
+  return fetchAllPages(async (page, pageSize) => {
+    const response = await fetch(`${getCustomerApiBaseUrl()}/api/v1/events?page=${page}&page_size=${pageSize}`, {
+      credentials: "include",
+      headers: { Accept: "application/json" },
+    });
+    const payload = await responsePayload(response);
+    const data = record(payload.data) ? payload.data : {};
+    const items = Array.isArray(data.items) ? data.items.map(parseEvent) : [];
+    return { items, hasNext: data.has_next === true };
   });
-  const payload = await responsePayload(response);
-  const items = record(payload.data) && Array.isArray(payload.data.items) ? payload.data.items : [];
-  return items.map(parseEvent);
 }
 
 export async function fetchEvent(reference: string) {
@@ -186,6 +230,52 @@ export async function reviewEvent(reference: string, rating: number, comment: st
   );
   const payload = await responsePayload(response);
   return payload.data;
+}
+
+export async function decideEventProposal(
+  reference: string,
+  decision: "accept" | "decline",
+  note: string,
+) {
+  const response = await apiFetch(
+    `${getCustomerApiBaseUrl()}/api/v1/events/${encodeURIComponent(reference)}/proposal`,
+    {
+      method: "POST",
+      credentials: "include",
+      headers: { Accept: "application/json", "Content-Type": "application/json" },
+      body: JSON.stringify({ decision, note }),
+    },
+    { successMessage: decision === "accept" ? "Proposal accepted." : "Changes requested." },
+  );
+  return read(response);
+}
+
+export async function submitEventPaymentProof(
+  reference: string,
+  input: {
+    idempotencyKey: string;
+    amountMinor: number;
+    receipt: File;
+    transferReference: string;
+    transferredAt: string;
+    senderName: string;
+    submittedNote: string;
+  },
+) {
+  const form = new FormData();
+  form.set("idempotency_key", input.idempotencyKey);
+  form.set("amount_minor", String(input.amountMinor));
+  form.set("receipt", input.receipt);
+  form.set("transfer_reference", input.transferReference);
+  form.set("transferred_at", input.transferredAt);
+  form.set("sender_name", input.senderName);
+  form.set("submitted_note", input.submittedNote);
+  const response = await apiFetch(
+    `${getCustomerApiBaseUrl()}/api/v1/events/${encodeURIComponent(reference)}/payment-proof`,
+    { method: "POST", credentials: "include", headers: { Accept: "application/json" }, body: form },
+    { successMessage: "Payment proof uploaded for Admin review." },
+  );
+  return read(response);
 }
 
 export function formatEventMoney(value: number | null) {

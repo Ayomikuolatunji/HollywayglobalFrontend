@@ -28,7 +28,6 @@ export default function KycPage() {
   const [draft, setDraft] = useState<KycDraft>(emptyKycDraft);
   const [status, setStatus] = useState<KycStatus>("not-started");
   const [submission, setSubmission] = useState<KycServerSubmission | null>(null);
-  const [selfieFile, setSelfieFile] = useState<File | null>(null);
   const [step, setStep] = useState(0);
   const [ready, setReady] = useState(false);
   const [loadingStatus, setLoadingStatus] = useState(false);
@@ -81,11 +80,7 @@ export default function KycPage() {
       setError(`Enter your 11-digit ${draft.identityType} before continuing.`);
       return false;
     }
-    if (step === 1 && !selfieFile) {
-      setError("Capture a clear front-facing selfie before continuing.");
-      return false;
-    }
-    if (step === 2 && !draft.consent) {
+    if (step === 1 && !draft.consent) {
       setError("Confirm that your KYC details are accurate before submitting.");
       return false;
     }
@@ -93,22 +88,21 @@ export default function KycPage() {
   }
 
   function clearVerificationAttempt() {
-    setDraft((current) => ({ ...current, identityNumber: "", selfieName: "" }));
-    setSelfieFile(null);
+    setDraft((current) => ({ ...current, identityNumber: "" }));
   }
 
   function nextStep() {
-    if (validateStep()) setStep((current) => Math.min(current + 1, 2));
+    if (validateStep()) setStep((current) => Math.min(current + 1, 1));
   }
 
   function saveDraft() {
     setStatus((current) => (isKycComplete(current) ? current : "draft"));
-    setMessage("Draft saved on this device. Your identity number and selfie are not stored in browser storage.");
+    setMessage("Draft saved on this device. Your identity number is not stored in browser storage.");
     setError("");
   }
 
   async function submit() {
-    if (!validateStep() || !selfieFile) return;
+    if (!validateStep()) return;
     setSubmitting(true);
     setError("");
     setMessage("");
@@ -116,7 +110,6 @@ export default function KycPage() {
       const result = await verifyKyc({
         identityType: draft.identityType,
         identityNumber: draft.identityNumber,
-        selfie: selfieFile,
       });
       setSubmission(result.submission);
       setStatus(result.submission.status);
@@ -129,7 +122,7 @@ export default function KycPage() {
         );
       }
       clearVerificationAttempt();
-      setStep(result.submission.status === "rejected" ? 0 : 2);
+      setStep(result.submission.status === "rejected" ? 0 : 1);
     } catch (requestError) {
       if (
         requestError instanceof KycApiError &&
@@ -154,7 +147,6 @@ export default function KycPage() {
     clearKycLocalState(storageKey);
     setDraft(emptyKycDraft);
     setSubmission(null);
-    setSelfieFile(null);
     setStatus("not-started");
     setStep(0);
     setError("");
@@ -165,5 +157,5 @@ export default function KycPage() {
 
   const complete = isKycComplete(status);
   const showStatus = Boolean(submission && hasKycSubmission(status) && status !== "rejected");
-  return <div className="mx-auto w-full max-w-[1180px] space-y-6 p-5 sm:p-8"><DashboardPageHeader kicker="ACCOUNT" title="Identity verification" description="Verify your identity for high-value transactions and account actions that require KYC." action={<Link className="inline-flex h-10 items-center gap-2 rounded-lg border border-[#dfe4ed] px-4 text-xs font-extrabold text-[#53627a] hover:border-[#1453bb] hover:text-[#1453bb]" href="/dashboard/profile">Back to profile <Arrow /></Link>} />{statusError && <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-[#f1d8a9] bg-[#fffaf1] px-4 py-3 text-xs leading-5 text-[#6b5a3d]" role="alert"><span>{statusError} You can continue a saved draft.</span><button className="font-extrabold text-[#b8560d] hover:underline" type="button" onClick={() => void loadStatus(status)}>Retry</button></div>}{message && <p className={`rounded-lg border px-4 py-3 text-xs font-semibold leading-5 ${complete ? "border-[#bfe5d0] bg-[#f1fbf5] text-[#14733d]" : "border-[#cfe0f7] bg-[#f4f8ff] text-[#31527f]"}`} role="status">{message}</p>}{status === "rejected" && submission?.rejection_reason && <div className="rounded-lg border border-[#f3caca] bg-[#fff5f5] px-4 py-3 text-xs leading-5 text-[#8d2c2c]"><strong>Reason for rejection:</strong> {submission.rejection_reason}</div>}{showStatus && submission ? <KycStatusPanel submission={submission} loading={loadingStatus} onRefresh={() => void loadStatus(status)} /> : <KycForm draft={draft} step={step} selfieFile={selfieFile} error={error} submitting={submitting} onUpdate={update} onSelfieChange={setSelfieFile} onNext={nextStep} onPrevious={() => { setError(""); setStep((current) => Math.max(current - 1, 0)); }} onSave={saveDraft} onSubmit={submit} />}{status === "rejected" && <button className="text-xs font-extrabold text-[#b8560d] hover:underline" type="button" onClick={startNewDraft}>Start a new verification draft</button>}</div>;
+  return <div className="mx-auto w-full max-w-[1180px] space-y-6 p-5 sm:p-8"><DashboardPageHeader kicker="ACCOUNT" title="Identity verification" description="Verify your identity for high-value transactions and account actions that require KYC." action={<Link className="inline-flex h-10 items-center gap-2 rounded-lg border border-[#dfe4ed] px-4 text-xs font-extrabold text-[#53627a] hover:border-[#1453bb] hover:text-[#1453bb]" href="/dashboard/profile">Back to profile <Arrow /></Link>} />{statusError && <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-[#f1d8a9] bg-[#fffaf1] px-4 py-3 text-xs leading-5 text-[#6b5a3d]" role="alert"><span>{statusError} You can continue a saved draft.</span><button className="font-extrabold text-[#b8560d] hover:underline" type="button" onClick={() => void loadStatus(status)}>Retry</button></div>}{message && <p className={`rounded-lg border px-4 py-3 text-xs font-semibold leading-5 ${complete ? "border-[#bfe5d0] bg-[#f1fbf5] text-[#14733d]" : "border-[#cfe0f7] bg-[#f4f8ff] text-[#31527f]"}`} role="status">{message}</p>}{status === "rejected" && submission?.rejection_reason && <div className="rounded-lg border border-[#f3caca] bg-[#fff5f5] px-4 py-3 text-xs leading-5 text-[#8d2c2c]"><strong>Reason for rejection:</strong> {submission.rejection_reason}</div>}{showStatus && submission ? <KycStatusPanel submission={submission} loading={loadingStatus} onRefresh={() => void loadStatus(status)} /> : <KycForm draft={draft} step={step} error={error} submitting={submitting} onUpdate={update} onNext={nextStep} onPrevious={() => { setError(""); setStep((current) => Math.max(current - 1, 0)); }} onSave={saveDraft} onSubmit={submit} />}{status === "rejected" && <button className="text-xs font-extrabold text-[#b8560d] hover:underline" type="button" onClick={startNewDraft}>Start a new verification draft</button>}</div>;
 }

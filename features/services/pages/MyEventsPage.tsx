@@ -40,7 +40,7 @@ export default function MyEventsPage() {
       <ServicePageHeader
         kicker="EVENT PLANNING"
         title="My events"
-        description="Keep event requests, vendor quotations, assignments and the related escrow reference in one place."
+        description="Keep event requests, vendor quotations, assignments and the event payment record in one place."
         action={<Link className="inline-flex h-10 items-center gap-2 rounded-lg bg-[#1453bb] px-4 text-xs font-extrabold text-white" href="/dashboard/events/new">Plan an event <Arrow /></Link>}
       />
       {error && <p className="rounded-lg border border-[#f1c8c3] bg-[#fff5f3] p-3 text-xs font-semibold text-[#a32929]" role="alert">{error}</p>}

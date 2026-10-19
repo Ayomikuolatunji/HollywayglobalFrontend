@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { adminPhone } from "../../../components/config/contact";
+import { usePublicContact } from "../../../components/config/PublicContactProvider";
 import { showToast } from "../../../components/ui/ToastProvider";
 import {
   amountToMinor,
@@ -15,6 +15,7 @@ export default function EscrowPaymentProofForm({ request, onUpdated }: {
   request: EscrowRequest;
   onUpdated: (request: EscrowRequest) => void;
 }) {
+  const { contact } = usePublicContact();
   const payment = request.payments[0];
   const instructions = request.manual_payment;
   const alreadyReceived = payment?.status === "received";
@@ -40,8 +41,8 @@ export default function EscrowPaymentProofForm({ request, onUpdated }: {
   }
 
   const waitingForReview = payment?.status === "proof_submitted";
-  const whatsappHref = instructions?.admin_whatsapp_url || "https://wa.me/" + adminPhone.replace(/\D/g, "") + "?text=" + encodeURIComponent("Hollyway escrow " + request.reference + ": I uploaded my transfer receipt. Please review it in Admin.");
-  const whatsappLabel = instructions?.admin_whatsapp_number ? "Send receipt to Admin WhatsApp (" + instructions.admin_whatsapp_number + ")" : "Send receipt to Admin WhatsApp";
+  const whatsappHref = instructions?.admin_whatsapp_url || contact?.admin_whatsapp_url || "#contact";
+  const whatsappLabel = instructions?.admin_whatsapp_number ? "Send receipt to Admin WhatsApp (" + instructions.admin_whatsapp_number + ")" : contact?.admin_phone ? `Send receipt to Admin WhatsApp (${contact.admin_phone})` : "Contact Hollyway about this receipt";
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
