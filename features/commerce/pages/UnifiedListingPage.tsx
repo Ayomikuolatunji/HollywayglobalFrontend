@@ -24,6 +24,11 @@ const routes = [
   ["trade-in", "Smart trade-in & upgrade"], ["agro-crafts", "Agro products or handmade crafts"],
   ["other", "Other item for sale"],
 ] as const;
+
+function routeId(value: string, fallback: string) {
+  return routes.find(([id, label]) => id === value || label === value)?.[0] || fallback;
+}
+
 const categories = [
   "Vehicles & machinery", "Home & kitchen appliances", "Household essentials & utensils",
   "Living room & electronics", "Gadgets & computing", "Furniture & interior decor",
@@ -133,7 +138,7 @@ function hydrateListingForm(form: HTMLFormElement, listing: Listing) {
     if (field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement) field.value = value;
   });
   const dropdowns: Record<string, string> = {
-    selling_route: routes.find(([id]) => id === listing.selling_route)?.[1] || listing.selling_route,
+    selling_route: routes.find(([id, label]) => id === listing.selling_route || label === listing.selling_route)?.[1] || listing.selling_route,
     category: listing.category,
     condition: listing.condition,
     repaired_before: listing.repaired_before,
@@ -180,7 +185,7 @@ export default function UnifiedListingPage() {
     setEditingLoading(true);
     fetchListing(editingReference).then((listing) => {
       if (!active) return;
-      setRoute(listing.selling_route || initialRoute);
+      setRoute(routeId(listing.selling_route, initialRoute));
       setCategory(listing.category);
       setAdditionalItems(listing.additional_items.map((item) => ({ id: item.id, name: item.item_name, category: item.category, quantity: String(item.quantity), price: item.unit_price_minor === null ? "" : String(item.unit_price_minor / 100) })));
       setFeaturedPackage(isFeaturedPackageId(listing.visibility_package) ? listing.visibility_package : "none");
