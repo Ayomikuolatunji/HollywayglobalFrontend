@@ -76,7 +76,11 @@ const tips: Record<string, string> = {
 type SelectProps = Omit<ComponentProps<typeof Dropdown>, "options"> & { options: string[] | readonly string[] };
 
 function SelectField({ options, ...props }: SelectProps) {
-  return <Dropdown {...props} options={options.map((label) => ({ value: label, label }))} tips={tips} compact />;
+  const routeField = props.name === "selling_route";
+  const dropdownOptions = routeField ? routes.map(([value, label]) => ({ value, label })) : options.map((label) => ({ value: label, label }));
+  const selectedValue = routeField ? routes.find(([id, label]) => id === props.value || label === props.value)?.[0] || props.value : props.value;
+  const handleChange = routeField ? (value: string) => props.onChange?.(routes.find(([id]) => id === value)?.[1] || value) : props.onChange;
+  return <Dropdown {...props} options={dropdownOptions} value={selectedValue} onChange={handleChange} tips={tips} compact />;
 }
 
 function Section({ title, note, children }: { title: string; note?: string; children: ReactNode }) {
@@ -137,8 +141,19 @@ function hydrateListingForm(form: HTMLFormElement, listing: Listing) {
     const field = form.elements.namedItem(name);
     if (field instanceof HTMLInputElement || field instanceof HTMLTextAreaElement) field.value = value;
   });
+  const sellingRoute = routes.find(([id, label]) => id === listing.selling_route || label === listing.selling_route);
   const dropdowns: Record<string, string> = {
-    selling_route: routes.find(([id, label]) => id === listing.selling_route || label === listing.selling_route)?.[1] || listing.selling_route,
+    selling_route: sellingRoute?.[0] || listing.selling_route,
+    category: listing.category,
+    condition: listing.condition,
+    repaired_before: listing.repaired_before,
+    proof_available: listing.proof_available,
+    preferred_delivery_method: listing.preferred_delivery_method,
+    delivery_fee_coverage: listing.delivery_fee_coverage,
+    escrow_fee_coverage: listing.escrow_fee_coverage,
+  };
+  const labels: Record<string, string> = {
+    selling_route: sellingRoute?.[1] || listing.selling_route,
     category: listing.category,
     condition: listing.condition,
     repaired_before: listing.repaired_before,
@@ -152,7 +167,7 @@ function hydrateListingForm(form: HTMLFormElement, listing: Listing) {
     if (!(field instanceof HTMLInputElement)) return;
     field.value = value;
     const label = field.parentElement?.querySelector("button > span");
-    if (label) label.textContent = value || "Select an option";
+    if (label) label.textContent = labels[name] || "Select an option";
   });
   const terms = form.elements.namedItem("terms_accepted");
   if (terms instanceof HTMLInputElement) terms.checked = Boolean(listing.terms_accepted_at);
@@ -175,24 +190,23 @@ export default function UnifiedListingPage() {
   const [saved, setSaved] = useState<Listing | null>(null);
   const [savedAction, setSavedAction] = useState<"draft" | "submit">("draft");
   const editingReference = searchParams.get("reference")?.trim() || "";
+  const [editingListing, setEditingListing] = useState<Listing | null>(null);
   const [editingLoading, setEditingLoading] = useState(Boolean(editingReference));
 
   useEffect(() => { setRoute(initialRoute); }, [initialRoute]);
 
   useEffect(() => {
-    if (!editingReference) { setEditingLoading(false); return; }
+    if (!editingReference) { setEditingListing(null); setEditingLoading(false); return; }
     let active = true;
     setEditingLoading(true);
     fetchListing(editingReference).then((listing) => {
       if (!active) return;
+      setEditingListing(listing);
       setRoute(routeId(listing.selling_route, initialRoute));
       setCategory(listing.category);
       setAdditionalItems(listing.additional_items.map((item) => ({ id: item.id, name: item.item_name, category: item.category, quantity: String(item.quantity), price: item.unit_price_minor === null ? "" : String(item.unit_price_minor / 100) })));
       setFeaturedPackage(isFeaturedPackageId(listing.visibility_package) ? listing.visibility_package : "none");
       setEditingLoading(false);
-      window.setTimeout(() => {
-        if (active && formRef.current) hydrateListingForm(formRef.current, listing);
-      }, 0);
     }).catch((reason) => {
       if (!active) return;
       setError(reason instanceof ApiResponseError ? reason.message : "This listing could not be loaded for editing.");
@@ -200,6 +214,14 @@ export default function UnifiedListingPage() {
     });
     return () => { active = false; };
   }, [editingReference, initialRoute]);
+
+  useEffect(() => {
+    if (!editingListing) return;
+    const frame = window.requestAnimationFrame(() => {
+      if (formRef.current) hydrateListingForm(formRef.current, editingListing);
+    });
+    return () => window.cancelAnimationFrame(frame);
+  }, [editingListing]);
 
   async function persist(action: "draft" | "submit") {
     const form = formRef.current;
