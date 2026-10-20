@@ -8,7 +8,7 @@ export type WantedRequest = {
   id: string; reference: string; status: string; status_label: string; item_name: string; specification: string; quantity: number;
   preferred_condition: string; budget_min_minor: number | null; budget_max_minor: number | null; delivery_location: string;
   urgency: string; details: string; referral_code: string; duration_days?: number; request_fee_minor: number; request_payment_status: "pending_payment" | "paid"; renewal_fee_minor: number; expires_at: string | null; featured_package: string; featured_fee_minor: number; featured_payment_status: "not_required" | "pending_payment" | "paid";
-  rejection_reason: string | null; created_at: string; updated_at: string; status_events: CommerceStatusEvent[];
+  rejection_reason: string | null; terms_accepted_at: string | null; created_at: string; updated_at: string; status_events: CommerceStatusEvent[];
 };
 export type OrderItem = { id: string; listing_code: string; item_name: string; quantity: number; unit_price_minor: number; subtotal_minor: number };
 export type CustomerOrder = {
