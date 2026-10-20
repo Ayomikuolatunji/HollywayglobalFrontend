@@ -181,7 +181,7 @@ export default function EscrowRequestForm({ initialRequest, onDraftSaved, onSubm
     }
   }
 
-  return <form className="grid gap-4" onSubmit={(event) => void persist("submit", event)}>
+  return <form className="grid gap-4" noValidate onSubmit={(event) => void persist("submit", event)}>
     <section className="rounded-xl border border-[#dfe4ed] bg-white p-4 sm:p-5">
       <div className="grid gap-4 sm:grid-cols-2">
         <Dropdown label="What should Hollyway protect?" options={purposeOptions} value={purpose} onChange={changePurpose} required={false} hint="Choose the agreement type; the form changes to match it." />
