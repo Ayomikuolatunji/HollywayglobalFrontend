@@ -20,9 +20,35 @@ const navigationGroups: readonly NavGroup[] = [
 function isActivePath(pathname: string, href: string) { return href === "/dashboard" ? pathname === href : pathname === href || pathname.startsWith(`${href}/`); }
 function isAccountPath(pathname: string, href: string) { return href === "/dashboard/profile" ? pathname === href || pathname === "/dashboard/profile/kyc" : isActivePath(pathname, href); }
 
+const nestedPageTitles: readonly [string, string][] = [
+  ["/dashboard/cart", "Cart"],
+  ["/dashboard/listings/new", "List an item"],
+  ["/dashboard/requests/new", "Make a request"],
+  ["/dashboard/orders/interest", "Order request"],
+  ["/dashboard/escrow/new", "New escrow"],
+  ["/dashboard/logistics/new", "Arrange delivery"],
+  ["/dashboard/relocation/new", "Start relocation"],
+  ["/dashboard/services/new", "New professional service"],
+  ["/dashboard/services/register", "Register as provider"],
+  ["/dashboard/services/provider", "Provider workspace"],
+  ["/dashboard/events/new", "Plan an event"],
+  ["/dashboard/profile/kyc", "Identity verification"],
+];
+
 export function dashboardPageTitle(pathname: string) {
   if (pathname.startsWith("/dashboard/marketplace/markets")) return "Marketplace";
   if (pathname.startsWith("/dashboard/marketplace/")) return "Listing details";
+  for (const [path, title] of nestedPageTitles) {
+    if (pathname === path) return title;
+  }
+  if (pathname.startsWith("/dashboard/listings/")) return "Listing details";
+  if (pathname.startsWith("/dashboard/requests/")) return "Request details";
+  if (pathname.startsWith("/dashboard/orders/")) return "Order details";
+  if (pathname.startsWith("/dashboard/escrow/")) return "Escrow details";
+  if (pathname.startsWith("/dashboard/logistics/")) return "Delivery details";
+  if (pathname.startsWith("/dashboard/relocation/")) return "Relocation details";
+  if (pathname.startsWith("/dashboard/services/")) return "Service details";
+  if (pathname.startsWith("/dashboard/events/")) return "Event details";
   if (pathname.startsWith("/dashboard/sales/")) return "Sale details";
   if (pathname.startsWith("/dashboard/notifications")) return "Notifications";
   if (pathname.startsWith("/dashboard/help")) return "Help centre";
