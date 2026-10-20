@@ -1,4 +1,5 @@
 import Link from "next/link";
+import AddToOrderButton from "./AddToOrderButton";
 import MarketProductVisual from "./MarketProductVisual";
 import SaveListingButton from "./SaveListingButton";
 import { getListingMarket, getMarketDisplayName, type Listing } from "../data";
@@ -31,6 +32,10 @@ export default function MarketListingCard({ listing, detailsHref }: { listing: L
         <Link className="mt-1 block" href={detailsHref}><h3 className="line-clamp-1 text-xs font-semibold text-[#12141c] group-hover:text-[#b8560d]">{listing.name}</h3></Link>
         <p className="mt-1.5 flex items-center gap-1.5 text-[10px] text-[#5c5f6b]"><span className="truncate">{listing.location}</span><span className="h-0.5 w-0.5 shrink-0 rounded-full bg-[#9498a3]" /><span className="shrink-0">{listing.code}</span></p>
         <div className="mt-2 flex items-center justify-between border-t border-[#e4e2da] pt-2"><span className="rounded-full bg-[#edeff5] px-2 py-0.5 text-[9px] font-bold text-[#14213d]">{listing.condition}</span><span className="text-[9px] text-[#9498a3]">{listing.date}</span></div>
+        <div className="mt-3 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 border-t border-[#e4e2da] pt-3">
+          <Link className="inline-flex h-8 items-center justify-center rounded-md border border-[#dfe4ed] px-2.5 text-[9px] font-extrabold text-[#1453bb] hover:border-[#1453bb]" href={detailsHref}>View listing</Link>
+          <AddToOrderButton item={{ code: listing.code, name: listing.name, price: listing.price }} />
+        </div>
       </div>
     </article>
   );
