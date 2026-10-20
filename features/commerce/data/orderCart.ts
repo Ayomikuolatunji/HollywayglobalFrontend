@@ -5,6 +5,7 @@ export type OrderCartItem = {
   name: string;
   price: number;
   quantity: number;
+  availableQuantity?: number;
 };
 
 export const orderCartUpdatedEvent = "hollyway-order-cart-updated";

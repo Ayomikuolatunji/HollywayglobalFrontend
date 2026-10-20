@@ -2,7 +2,7 @@ import { apiFetch } from "../../../components/api/apiFetch";
 import { ApiResponseError, responsePayload } from "../../../components/api/apiResponse";
 import { getCustomerApiBaseUrl } from "../../../components/config/customerApi";
 
-export type RemoteCartItem = { code: string; name: string; price: number; quantity: number };
+export type RemoteCartItem = { code: string; name: string; price: number; quantity: number; availableQuantity: number };
 
 function record(value: unknown): value is Record<string, unknown> {
   return Boolean(value) && typeof value === "object";
@@ -17,7 +17,7 @@ function parseItems(value: unknown): RemoteCartItem[] {
     const priceMinor = typeof listing.unit_price_minor === "number" ? listing.unit_price_minor : 0;
     const quantity = typeof entry.quantity === "number" ? entry.quantity : 0;
     if (quantity < 1) return [];
-    return [{ code: listing.reference, name: listing.item_name, price: priceMinor / 100, quantity }];
+    return [{ code: listing.reference, name: listing.item_name, price: priceMinor / 100, quantity, availableQuantity: typeof listing.quantity === "number" ? Math.max(0, Math.floor(listing.quantity)) : quantity }];
   });
 }
 

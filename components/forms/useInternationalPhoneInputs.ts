@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 
 const phonePlaceholder = "Include country code, e.g. +234 801 234 5678";
-const phonePattern = "\\+[0-9][0-9 ()-]{6,20}";
+const phonePattern = "\\+[0-9][0-9\\(\\) \\x2d]{6,20}";
 
 export default function useInternationalPhoneInputs() {
   useEffect(() => {

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import CommerceIcon from "./CommerceIcon";
 import { addOrderCartItem, orderCartUpdatedEvent, readOrderCart, refreshOrderCart, type OrderCartItem } from "../data/orderCart";
 
 export default function AddToOrderButton({ item }: { item: Omit<OrderCartItem, "quantity"> }) {
@@ -32,5 +33,6 @@ export default function AddToOrderButton({ item }: { item: Omit<OrderCartItem, "
     }
   }
 
-  return <span className="inline-flex min-w-0 flex-col items-stretch gap-1"><button className={`inline-flex h-8 items-center justify-center rounded-md px-2.5 text-[9px] font-extrabold disabled:cursor-wait disabled:opacity-60 ${added ? "border border-[#bfe5d0] bg-[#f5fcf7] text-[#168046]" : "border border-[#1453bb] bg-white text-[#1453bb] hover:bg-[#edf4ff]"}`} type="button" onClick={() => void addItem()} disabled={busy}>{busy ? "Adding…" : added ? "Added to cart" : "Add to cart"}</button>{error && <small className="max-w-44 text-[9px] font-semibold leading-3 text-[#a32929]">{error}</small>}</span>;
+  const label = busy ? "Adding to cart" : added ? "In cart" : "Add to cart";
+  return <span className="inline-flex min-w-0 flex-col items-end gap-1"><button className={`inline-flex h-8 w-9 items-center justify-center rounded-md disabled:cursor-wait disabled:opacity-60 ${added ? "border border-[#bfe5d0] bg-[#f5fcf7] text-[#168046]" : "border border-[#1453bb] bg-white text-[#1453bb] hover:bg-[#edf4ff]"}`} type="button" aria-label={`${label}: ${item.name}`} title={`${label}: ${item.name}`} aria-pressed={added} onClick={() => void addItem()} disabled={busy}><CommerceIcon name="cart" className="h-4 w-4" /><span className="sr-only">{label}</span></button>{error && <small className="max-w-44 text-right text-[9px] font-semibold leading-3 text-[#a32929]">{error}</small>}</span>;
 }

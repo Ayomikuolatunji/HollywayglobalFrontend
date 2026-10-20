@@ -40,7 +40,7 @@ export default function EscrowTextField({
         inputMode={inputMode}
         name={name}
         onChange={onChange}
-        pattern={type === "tel" ? "\\+[0-9][0-9 ()-]{6,20}" : undefined}
+        pattern={type === "tel" ? "\\+[0-9][0-9\\(\\) \\x2d]{6,20}" : undefined}
         placeholder={placeholder}
         required={required}
         readOnly={readOnly}
