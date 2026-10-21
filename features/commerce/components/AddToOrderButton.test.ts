@@ -9,4 +9,6 @@ test("cart action uses the shared cart icon with an accessible label", async () 
   assert.match(source, /<CommerceIcon name="cart"/);
   assert.match(source, /aria-label=/);
   assert.match(source, /title=/);
+  assert.match(source, /disabled = false/);
+  assert.match(source, /disabled=\{busy \|\| disabled\}/);
 });

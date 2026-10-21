@@ -15,6 +15,7 @@ export type Listing = {
   deliveryMethod?: string;
   imageUrl?: string;
   description?: string;
+  isOwnedByRequester?: boolean;
   media?: Array<{ id: string; kind: "photo" | "video"; name: string; mime_type: string; byte_size: number; download_path: string }>;
 };
 

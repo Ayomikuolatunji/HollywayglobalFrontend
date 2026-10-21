@@ -13,9 +13,47 @@ import { fetchMarketplaceListing, formatListingMoney, listingMediaUrl } from "..
 export default function ListingDetailsPage({ code }: { code: string }) {
   const [listing, setListing] = useState<Listing | null>(null);
   const [error, setError] = useState("");
-  useEffect(() => { void fetchMarketplaceListing(code).then(({ card, raw }) => setListing({ ...card, description: raw.description, media: raw.media })).catch((reason) => setError(reason instanceof Error ? reason.message : "This listing could not be loaded.")); }, [code]);
-  if (error) return <div className="mx-auto max-w-[760px] p-5 sm:p-8"><section className="rounded-xl border border-[#dfe4ed] bg-white p-8 text-center shadow-sm"><h2 className="font-[Manrope] text-2xl font-extrabold text-[#0b1830]">Listing not found</h2><p className="mt-2 text-sm text-[#53627a]">{error}</p><Link className="mt-6 inline-flex items-center gap-2 text-xs font-extrabold text-[#1453bb]" href="/dashboard/marketplace">Back to marketplace <Arrow /></Link></section></div>;
+
+  useEffect(() => {
+    void fetchMarketplaceListing(code)
+      .then(({ card, raw }) => setListing({ ...card, description: raw.description, media: raw.media }))
+      .catch((reason) => setError(reason instanceof Error ? reason.message : "This listing could not be loaded."));
+  }, [code]);
+
+  if (error) return <ListingError message={error} />;
   if (!listing) return <div className="grid min-h-56 place-items-center p-6 text-xs font-semibold text-[#687895]">Loading listing…</div>;
+
   const market = getListingMarket(listing);
-  return <div className="w-full space-y-5 p-4 sm:p-6"><CommercePageHeader kicker="MARKETPLACE LISTING" title={listing.name} description="Review the published listing before sending an order request. Hollyway confirms payment and delivery instructions before you pay." action={<Link className="inline-flex items-center gap-2 text-xs font-extrabold text-[#1453bb] hover:underline" href="/dashboard/marketplace">Back to marketplace <Arrow /></Link>} /><section className="grid gap-4 lg:grid-cols-[1.1fr_.9fr]"><section className="rounded-xl border border-[#dfe4ed] bg-white p-4 shadow-sm sm:p-5"><MarketProductVisual listing={listing} />{listing.media?.length ? <div className="mt-3 grid grid-cols-2 gap-2">{listing.media.filter((media) => media.kind !== "photo").map((media) => <video className="w-full rounded-lg bg-[#0b1830]" controls key={media.id} src={listingMediaUrl(media)} />)}</div> : null}</section><section className="rounded-xl border border-[#dfe4ed] bg-white p-5 shadow-sm"><span className="text-[10px] font-extrabold uppercase tracking-[.12em] text-[#6b45c7]">{getMarketDisplayName(market)}</span><h2 className="mt-2 font-[Manrope] text-xl font-extrabold text-[#0b1830]">{listing.name}</h2><p className="mt-2 text-xs text-[#53627a]">{getListingCategory(listing)} · {listing.location} · {listing.condition}</p><strong className="mt-5 block font-[Manrope] text-2xl font-extrabold text-[#1453bb]">{formatListingMoney(Math.round(listing.price * 100))}</strong>{listing.description && <p className="mt-4 border-t border-[#eef1f4] pt-4 text-xs leading-5 text-[#53627a]">{listing.description}</p>}<dl className="mt-5 grid gap-3 border-y border-[#eef1f4] py-4 sm:grid-cols-2">{[["LISTING CODE", listing.code], ["QUANTITY", String(listing.quantity || "Available")], ["CONDITION", listing.condition], ["DELIVERY", listing.deliveryMethod || "To be confirmed"]].map(([label, value]) => <div key={label}><dt className="text-[9px] font-extrabold tracking-[.12em] text-[#8b97a9]">{label}</dt><dd className="mt-1 text-xs font-semibold text-[#31425e]">{value}</dd></div>)}</dl><div className="mt-5 grid gap-2 sm:grid-cols-2"><Link className="inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-[#dd6b12] px-4 text-xs font-extrabold text-white" href={`/dashboard/orders/interest?listing=${encodeURIComponent(listing.code)}`}>Order now <Arrow /></Link><AddToOrderButton item={{ code: listing.code, name: listing.name, price: listing.price }} /></div><p className="mt-4 text-center text-[10px] leading-5 text-[#8490a4]">Do not pay yet. Hollyway will confirm the order, delivery and escrow terms first.</p><ReportListingButton reference={listing.code} /></section></section></div>;
+  const available = (listing.quantity ?? 0) > 0;
+  return (
+    <div className="w-full space-y-5 p-4 pb-24 sm:p-6 sm:pb-24">
+      <CommercePageHeader kicker="MARKETPLACE LISTING" title={listing.name} description="Review the published listing before sending an order request. Hollyway confirms payment and delivery instructions before you pay." action={<Link className="inline-flex items-center gap-2 text-xs font-extrabold text-[#1453bb] hover:underline" href="/dashboard/marketplace">Back to marketplace <Arrow /></Link>} />
+      <section className="grid gap-4 lg:grid-cols-[1.1fr_.9fr]">
+        <section className="rounded-xl border border-[#dfe4ed] bg-white p-4 shadow-sm sm:p-5">
+          <MarketProductVisual listing={listing} />
+          {listing.media?.length ? <div className="mt-3 grid grid-cols-2 gap-2">{listing.media.filter((media) => media.kind !== "photo").map((media) => <video className="w-full rounded-lg bg-[#0b1830]" controls key={media.id} src={listingMediaUrl(media)} />)}</div> : null}
+        </section>
+        <section className="rounded-xl border border-[#dfe4ed] bg-white p-5 shadow-sm">
+          <span className="text-[10px] font-extrabold uppercase tracking-[.12em] text-[#6b45c7]">{getMarketDisplayName(market)}</span>
+          <h2 className="mt-2 font-[Manrope] text-xl font-extrabold text-[#0b1830]">{listing.name}</h2>
+          <p className="mt-2 text-xs text-[#53627a]">{getListingCategory(listing)} · {listing.location} · {listing.condition}</p>
+          <strong className="mt-5 block font-[Manrope] text-2xl font-extrabold text-[#1453bb]">{formatListingMoney(Math.round(listing.price * 100))}</strong>
+          {listing.description && <p className="mt-4 border-t border-[#eef1f4] pt-4 text-xs leading-5 text-[#53627a]">{listing.description}</p>}
+          <dl className="mt-5 grid gap-3 border-y border-[#eef1f4] py-4 sm:grid-cols-2">
+            {[["LISTING CODE", listing.code], ["QUANTITY", String(listing.quantity || "Available")], ["CONDITION", listing.condition], ["DELIVERY", listing.deliveryMethod || "To be confirmed"], ["VIEWS", String(listing.views ?? 0)]].map(([label, value]) => <div key={label}><dt className="text-[9px] font-extrabold tracking-[.12em] text-[#8b97a9]">{label}</dt><dd className="mt-1 text-xs font-semibold text-[#31425e]">{value}</dd></div>)}
+          </dl>
+          <div className="mt-5 grid gap-2 sm:grid-cols-2">
+            {listing.isOwnedByRequester ? <Link className="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-[#1453bb] px-4 text-xs font-extrabold text-[#1453bb]" href="/dashboard/listings">Manage your listing <Arrow /></Link> : available ? <Link className="inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-[#dd6b12] px-4 text-xs font-extrabold text-white" href={`/dashboard/orders/interest?listing=${encodeURIComponent(listing.code)}`}>Order now <Arrow /></Link> : <span className="inline-flex h-10 items-center justify-center rounded-lg bg-[#f5f4f0] px-4 text-xs font-extrabold text-[#7b7d86]">Currently unavailable</span>}
+            {listing.isOwnedByRequester ? <span className="inline-flex h-10 items-center justify-center rounded-lg bg-[#f5f4f0] px-3 text-center text-[10px] font-bold text-[#5c5f6b]">Your published listing</span> : <AddToOrderButton item={{ code: listing.code, name: listing.name, price: listing.price }} disabled={!available} />}
+          </div>
+          <p className="mt-4 text-center text-[10px] leading-5 text-[#8490a4]">Do not pay yet. Hollyway will confirm the order, delivery and escrow terms first.</p>
+          <ReportListingButton reference={listing.code} />
+        </section>
+      </section>
+    </div>
+  );
+}
+
+function ListingError({ message }: { message: string }) {
+  return <div className="mx-auto max-w-[760px] p-5 sm:p-8"><section className="rounded-xl border border-[#dfe4ed] bg-white p-8 text-center shadow-sm"><h2 className="font-[Manrope] text-2xl font-extrabold text-[#0b1830]">Listing not found</h2><p className="mt-2 text-sm text-[#53627a]">{message}</p><Link className="mt-6 inline-flex items-center gap-2 text-xs font-extrabold text-[#1453bb]" href="/dashboard/marketplace">Back to marketplace <Arrow /></Link></section></div>;
 }

@@ -18,6 +18,7 @@ export type Listing = {
   visibility_package: string; featured_payment_status: "not_required" | "pending_payment" | "paid"; rejection_reason: string | null; media: ListingMedia[]; additional_items: ListingAdditionalItem[]; status_events: ListingStatusEvent[];
   terms_accepted_at: string | null;
   created_at: string; updated_at: string;
+  is_owned_by_requester?: boolean;
 };
 
 export type ListingFormValues = Record<string, string | boolean | File | null | undefined>;
@@ -113,10 +114,11 @@ export function cardListing(value: unknown): MarketplaceCardListing {
     location,
     condition: typeof value.condition === "string" ? value.condition : "Not stated",
     date: typeof value.created_at === "string" ? new Date(value.created_at).toLocaleDateString("en-NG", { day: "numeric", month: "short" }) : "",
-    views: 0,
+    views: typeof value.views === "number" ? value.views : 0,
     mark: typeof value.category === "string" ? value.category.slice(0, 5).toUpperCase() : "ITEM",
     tone: "from-[#173d75] to-[#081a38]",
     featured: value.featured === true,
+    isOwnedByRequester: value.is_owned_by_requester === true,
     market: typeof value.market_label === "string" ? value.market_label : undefined,
     deliveryMethod: typeof value.preferred_delivery_method === "string" ? value.preferred_delivery_method : undefined,
     imageUrl: photo ? `${getCustomerApiBaseUrl()}${photo.download_path}` : undefined,

@@ -8,5 +8,7 @@ test("market listing cards expose the persisted cart action", async () => {
   assert.match(source, /import AddToOrderButton from "\.\/AddToOrderButton"/);
   assert.match(source, /<AddToOrderButton\s+item=\{\{\s*code: listing\.code/);
   assert.match(source, /line-clamp-2/);
-  assert.match(source, /min-h-10/);
+  assert.match(source, /break-inside-avoid/);
+  assert.match(source, /getListingCategory/);
+  assert.match(source, /visualAspect/);
 });

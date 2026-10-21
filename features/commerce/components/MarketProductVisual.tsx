@@ -50,12 +50,12 @@ function ProductIllustration({ category }: { category: string }) {
   );
 }
 
-export default function MarketProductVisual({ listing }: { listing: Listing }) {
+export default function MarketProductVisual({ listing, aspectClass = "aspect-[4/3]" }: { listing: Listing; aspectClass?: string }) {
   const category = getListingCategory(listing);
   const [imageFailed, setImageFailed] = useState(false);
 
   return (
-    <div className={`relative grid aspect-[4/3] place-items-center overflow-hidden bg-gradient-to-br text-white ${listing.tone}`}>
+    <div className={`relative grid ${aspectClass} place-items-center overflow-hidden bg-gradient-to-br text-white ${listing.tone}`}>
       {!imageFailed && getListingImageUrl(listing) && <img className="absolute inset-0 h-full w-full object-cover transition duration-300 group-hover:scale-[1.02]" src={getListingImageUrl(listing)} alt={listing.name} loading="lazy" onError={() => setImageFailed(true)} />}
       {(imageFailed || !getListingImageUrl(listing)) && <><div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_20%,rgba(255,255,255,.22),transparent_32%)]" /><div className="relative drop-shadow-sm"><ProductIllustration category={category} /></div></>}
     </div>
